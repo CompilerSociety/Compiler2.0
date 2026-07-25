@@ -35,6 +35,15 @@
       "batch": "25",
       "highScore": 128,
       "achievedAt": "2026-07-09T07:32:40.777Z"
+    },
+    "24I-6516": {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:51:37.308Z"
     }
   },
   "leaderboard": [
@@ -73,6 +82,15 @@
       "batch": "25",
       "highScore": 6,
       "achievedAt": "2026-07-08T22:51:23.466Z"
+    },
+    {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:51:37.308Z"
     }
   ]
 }
