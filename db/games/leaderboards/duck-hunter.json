@@ -42,8 +42,8 @@
       "section": "C",
       "department": "AI",
       "batch": "24",
-      "highScore": 2,
-      "achievedAt": "2026-07-25T18:51:37.308Z"
+      "highScore": 7,
+      "achievedAt": "2026-07-25T18:51:45.928Z"
     }
   },
   "leaderboard": [
@@ -75,6 +75,15 @@
       "achievedAt": "2026-07-08T22:53:06.767Z"
     },
     {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 7,
+      "achievedAt": "2026-07-25T18:51:45.928Z"
+    },
+    {
       "nuid": "25I-0632",
       "name": "Wajeeh Imran",
       "section": "G",
@@ -82,15 +91,6 @@
       "batch": "25",
       "highScore": 6,
       "achievedAt": "2026-07-08T22:51:23.466Z"
-    },
-    {
-      "nuid": "24I-6516",
-      "name": "Afaq Ahsan",
-      "section": "C",
-      "department": "AI",
-      "batch": "24",
-      "highScore": 2,
-      "achievedAt": "2026-07-25T18:51:37.308Z"
     }
   ]
 }
