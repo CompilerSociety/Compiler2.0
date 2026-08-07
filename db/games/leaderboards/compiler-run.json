@@ -71,6 +71,15 @@
       "batch": "24",
       "highScore": 798,
       "achievedAt": "2026-07-25T18:52:30.493Z"
+    },
+    "25I-2556": {
+      "nuid": "25I-2556",
+      "name": "Ahmad Burhan",
+      "section": "A",
+      "department": "BS DS",
+      "batch": "25",
+      "highScore": 35,
+      "achievedAt": "2026-08-07T12:03:39.050Z"
     }
   },
   "leaderboard": [
@@ -145,6 +154,15 @@
       "batch": "24",
       "highScore": 111,
       "achievedAt": "2026-07-25T18:49:39.628Z"
+    },
+    {
+      "nuid": "25I-2556",
+      "name": "Ahmad Burhan",
+      "section": "A",
+      "department": "BS DS",
+      "batch": "25",
+      "highScore": 35,
+      "achievedAt": "2026-08-07T12:03:39.050Z"
     }
   ]
 }
