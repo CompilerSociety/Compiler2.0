@@ -4,7 +4,7 @@
 
 const SCHOOLS = {
   computing: {
-    id: "1ZQJqdArlwCS965uw4sbJrB6j8rEPfZerMT7X8qkXSzY",
+    id: "1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",
     tabs: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
     format: "matrix"
   },
@@ -158,7 +158,7 @@ const LAB_SLOT_COLS = {
   1: "08:30-11:15", 11: "11:30-02:15", 21: "02:30-05:15", 31: "05:20-08:05",
 };
 
-const BATCH_MAP = { "25": "2025", "24": "2024", "23": "2023", "22": "2022" };
+const BATCH_MAP = { "26": "2026", "25": "2025", "24": "2024", "23": "2023", "22": "2022" };
 const COMPUTING_PROGRAM_CODES = new Set(["AI", "CS", "CY", "DS", "SE"]);
 
 const CELL_REGEX = /(.+?)\s*\(([A-Z]+(?:\s*[\/,]\s*(?!GP?\b)[A-Z]+)*)(?:-([A-Z0-9]+))?(?:,\s*(?:Gp?-([IV]+)|(\d{2})))?\s*\)/i;

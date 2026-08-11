@@ -747,7 +747,7 @@ function isLabFloor(floorName){
    - Refreshes every 10 minutes without redeploying on Vercel
 ══════════════════════════════════════════ */
 const SCHOOLS={
-  computing:{id:"1ZQJqdArlwCS965uw4sbJrB6j8rEPfZerMT7X8qkXSzY",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday"],label:"Computing (FSC)"},
+  computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday"],label:"Computing (FSC)"},
   engineering:{id:"1S3mWYvoM7HbIeiqAbt65FngdmYDUA8MWOQSjcUYsFXU",tabs:["Monday"],label:"Engineering (FSE)"},
   business:{id:"1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw",tabs:["Monday"],label:"Business (FSM)"},
 };
@@ -1274,7 +1274,7 @@ const REPEAT_DEPT_LABEL='Repeat Courses (Yellow)';
 // Batch keys that hold yellow "repeat" classes. 'REPEAT' is written by the
 // updated generator; '2026' is the legacy auto-detected yellow bucket kept
 // for backward compatibility with data generated before that change.
-const REPEAT_BATCH_KEYS=['REPEAT','2026'];
+const REPEAT_BATCH_KEYS=['REPEAT'];
 
 function buildRepeatIndex(){
   const rows=[];
