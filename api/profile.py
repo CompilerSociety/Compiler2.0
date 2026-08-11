@@ -46,8 +46,8 @@ def _get_profile_file_for_nuid(nuid: str) -> Path:
     match = re.match(r"^(\d{2})", str(nuid or "").strip())
     year = match.group(1) if match else ""
     if year in {"22", "23", "24", "25", "26"}:
-        return DB_DIR / f"{year}.json"
-    return DB_DIR / "seating-plan.json"
+        return DB_DIR / "students" / f"{year}.json"
+    return DB_DIR / "seating" / "plan.json"
 
 
 def save_student_profile(payload: dict[str, Any]) -> dict[str, Any]:

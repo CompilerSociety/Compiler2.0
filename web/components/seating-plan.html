@@ -1,0 +1,10 @@
+<div class="panel" id="p4" role="tabpanel" aria-labelledby="nc4" aria-hidden="true">
+      <h2 class="sr-only">Seating Plan</h2>
+      <div class="sp-search-row">
+        <input class="sp-search-input" id="sp-query" type="text" placeholder="ENTER YOUR NAME OR NUID..." maxlength="80" onkeydown="if(event.key==='Enter')searchSeatingPlan()">
+        <button class="sp-search-btn" id="sp-search-btn" onclick="searchSeatingPlan()">&#9658; FIND SEAT</button>
+      </div>
+      <div class="sp-hint">SEARCH BY FULL NAME OR NUID (e.g. 21L-1234)</div>
+      <div class="sp-status" id="sp-status"></div>
+      <div class="sp-result-wrap" id="sp-result"></div>
+    </div>

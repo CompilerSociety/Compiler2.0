@@ -27,3 +27,7 @@ package-lock.json
 .vscode/
 .claude/
 .orchids/
+
+service-account*.json
+
+python/generate_timetable/runtime/

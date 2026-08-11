@@ -1,0 +1,141 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+   {
+  	"source": "/robots.txt",
+  	"destination": "/web/robots.txt"
+   },
+   {
+  	"source": "/sitemap.xml",
+  	"destination": "/web/sitemap.xml"
+    },
+    {
+      "source": "/",
+      "destination": "/web/index.html"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "/web/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/web/js/:path*"
+    },
+    {
+      "source": "/components/:path*",
+      "destination": "/web/components/:path*"
+    },
+    {
+      "source": "/modals/:path*",
+      "destination": "/web/modals/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/web/assets/:path*"
+    },
+    {
+      "source": "/icons/:path*",
+      "destination": "/web/icons/:path*"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/web/manifest.json"
+    },
+    {
+      "source": "/service-worker.js",
+      "destination": "/web/service-worker.js"
+    },
+    {
+      "source": "/db/22.json",
+      "destination": "/db/students/22.json"
+    },
+    {
+      "source": "/db/23.json",
+      "destination": "/db/students/23.json"
+    },
+    {
+      "source": "/db/24.json",
+      "destination": "/db/students/24.json"
+    },
+    {
+      "source": "/db/25.json",
+      "destination": "/db/students/25.json"
+    },
+    {
+      "source": "/db/26.json",
+      "destination": "/db/students/26.json"
+    },
+    {
+      "source": "/db/class-notify-state.json",
+      "destination": "/db/metadata/notifications/class-notify-state.json"
+    },
+    {
+      "source": "/db/exam-schedule-business.json",
+      "destination": "/db/exams/business.json"
+    },
+    {
+      "source": "/db/exam-schedule-computing.json",
+      "destination": "/db/exams/computing.json"
+    },
+    {
+      "source": "/db/exam-schedule-engineering.json",
+      "destination": "/db/exams/engineering.json"
+    },
+    {
+      "source": "/db/faculty_data.json",
+      "destination": "/db/faculty/data.json"
+    },
+    {
+      "source": "/db/leaderboard.json",
+      "destination": "/db/games/leaderboards/compiler-run.json"
+    },
+    {
+      "source": "/db/leaderboard-duck-hunter.json",
+      "destination": "/db/games/leaderboards/duck-hunter.json"
+    },
+    {
+      "source": "/db/leaderboard-flappy-bird.json",
+      "destination": "/db/games/leaderboards/flappy-bird.json"
+    },
+    {
+      "source": "/db/push-exam-state.json",
+      "destination": "/db/metadata/notifications/push-exam-state.json"
+    },
+    {
+      "source": "/db/push-state.json",
+      "destination": "/db/metadata/notifications/push-state.json"
+    },
+    {
+      "source": "/db/push-subscriptions.json",
+      "destination": "/db/metadata/notifications/push-subscriptions.json"
+    },
+    {
+      "source": "/db/repeat-computing.json",
+      "destination": "/db/timetables/repeat-computing.json"
+    },
+    {
+      "source": "/db/seating-plan.json",
+      "destination": "/db/seating/plan.json"
+    },
+    {
+      "source": "/db/showup-notify-state.json",
+      "destination": "/db/metadata/notifications/showup-notify-state.json"
+    },
+    {
+      "source": "/db/showup-schedule-computing.json",
+      "destination": "/db/showup/computing.json"
+    },
+    {
+      "source": "/db/timetable-business.json",
+      "destination": "/db/timetables/business.json"
+    },
+    {
+      "source": "/db/timetable-computing.json",
+      "destination": "/db/timetables/computing.json"
+    },
+    {
+      "source": "/db/timetable-engineering.json",
+      "destination": "/db/timetables/engineering.json"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 // Vercel Node serverless function.
-// Stores a push subscription (+ NU ID) in db/push-subscriptions.json in the repo
+// Stores a push subscription (+ NU ID) in db/metadata/notifications/push-subscriptions.json in the repo
 // via the GitHub Contents API, because Vercel's own filesystem is read-only.
 //
 // Required environment variables (set in Vercel project settings):
@@ -7,7 +7,7 @@
 //   GH_REPO   - "owner/name" (optional, defaults below)
 //   GH_BRANCH - branch to write to (optional, default "main")
 
-const SUBS_PATH = 'db/push-subscriptions.json';
+const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
 
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }

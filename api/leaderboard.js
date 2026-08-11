@@ -1,7 +1,7 @@
 // api/leaderboard.js
 // Vercel serverless function backing the Compiler Run shared leaderboard.
 //
-// Persistence: db/leaderboard.json in the GitHub repo, read/written via the
+// Persistence: db/games/leaderboards/compiler-run.json in the GitHub repo, read/written via the
 // GitHub Contents API (same pattern as api/subscribe.js) — Vercel's own
 // filesystem is read-only and /tmp is wiped on cold starts/redeploys, so the
 // repo file is the durable store. Keeps each player's best score; serves the
@@ -13,9 +13,9 @@
 const MAX_ENTRIES = 10;
 // Each game has its OWN leaderboard JSON file in the repo.
 const LB_FILES = {
-  compiler_run: 'db/leaderboard.json',
-  duck_hunter: 'db/leaderboard-duck-hunter.json',
-  flappy_bird: 'db/leaderboard-flappy-bird.json',
+  compiler_run: 'db/games/leaderboards/compiler-run.json',
+  duck_hunter: 'db/games/leaderboards/duck-hunter.json',
+  flappy_bird: 'db/games/leaderboards/flappy-bird.json',
 };
 
 function gameOf(req, body) {

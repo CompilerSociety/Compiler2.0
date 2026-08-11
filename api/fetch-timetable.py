@@ -3,13 +3,13 @@ Vercel Serverless Function / GitHub Actions CLI: fetch-timetable
 
 Fetches the latest matching Gmail message and routes it by subject keyword:
   - subject contains "seating"  -> parses the attached seating-plan PDF into
-    db/seating-plan.json
+    db/seating/plan.json
   - subject contains "schedule" -> parses the attached Final Exam Schedule
     .xlsx workbook (date/time-slot matrix layout) into
-    db/exam-schedule-<school>.json
+    db/exams/<school>.json
   - subject contains "showup"   -> parses the attached Show Up Schedule .xlsx
     workbook (plain one-row-per-section table, different layout) into
-    db/showup-schedule-<school>.json. The school edits this data
+    db/showup/<school>.json. The school edits this data
     directly in a linked Google Sheet rather than resending email, so this
     module also extracts that sheet's link from the email body once (see
     maybe_bootstrap_showup_sheet_source) and `--poll-showup` (run via
@@ -56,9 +56,9 @@ GMAIL_IMAP_PORT = 993
 # against the email subject; kept broad so "Seating Plan", "seatingplan",
 # "Schedule of Final Examination", etc. all match.
 SUBJECT_ROUTES: dict[str, tuple[str, str]] = {
-    "seating": ("seating", "db/seating-plan.json"),
-    "schedule": ("exam_schedule", "db/exam-schedule-computing.json"),
-    "showup": ("showup_schedule", "db/showup-schedule-computing.json"),
+    "seating": ("seating", "db/seating/plan.json"),
+    "schedule": ("exam_schedule", "db/exams/computing.json"),
+    "showup": ("showup_schedule", "db/showup/computing.json"),
 }
 
 # For the multi-school xlsx routes, the per-school output path is
@@ -1149,7 +1149,7 @@ def parse_showup_schedule_workbook(xlsx_bytes: bytes, subject: str, filename: st
 # the live sheet directly on a tight schedule (see
 # .github/workflows/poll-showup-sheet.yml), independent of email entirely.
 
-SHOWUP_SHEET_SOURCE_PATH = "db/showup-sheet-source.json"
+SHOWUP_SHEET_SOURCE_PATH = "db/showup/source.json"
 GOOGLE_SHEET_LINK_RE = re.compile(r"https://docs\.google\.com/spreadsheets/d/([a-zA-Z0-9_-]+)")
 
 
@@ -1322,7 +1322,7 @@ class handler(BaseHTTPRequestHandler):
                 prefix = SCHEDULE_FILE_PREFIX[kind]
                 github_results = {}
                 for school, doc in documents.items():
-                    path = f"db/{prefix}-{school}.json"
+                    path = f"db/{prefix.replace('exam-schedule', 'exams').replace('showup-schedule', 'showup')}/{school}.json"
                     github_results[school] = commit_json_to_github(doc, path)
                 json_response(
                     self, 200,
@@ -1379,7 +1379,7 @@ def run_cli() -> int:
         documents = parser(attachment, subject, attachment_filename)
         prefix = SCHEDULE_FILE_PREFIX[kind]
         for school, doc in documents.items():
-            path = f"db/{prefix}-{school}.json"
+            path = f"db/{prefix.replace('exam-schedule', 'exams').replace('showup-schedule', 'showup')}/{school}.json"
             # Each new schedule email fully REPLACES the previous one - the
             # latest emailed schedule is the current one. (A dept/section
             # schedule like the Final/Sessional populates "exams"; a room-grid
@@ -1412,7 +1412,7 @@ def run_showup_poll_cli() -> int:
         xlsx_bytes, subject="Live Google Sheet poll", filename=f"Google Sheet ({sheet_id})",
     )
     for school, doc in documents.items():
-        path = f"db/showup-schedule-{school}.json"
+        path = f"db/showup/{school}.json"
         _write_json_file(path, doc)
         print(f"Wrote {path}: {doc['count']} exam entries (polled live sheet {sheet_id!r})")
     return 0

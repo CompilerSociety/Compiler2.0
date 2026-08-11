@@ -1,0 +1,51 @@
+<div class="panel on" id="p0" role="tabpanel" aria-labelledby="nc0" aria-hidden="false">
+      <div class="tt-shell">
+        <div class="tt-hero">
+          <div>
+            <div class="tt-kicker">Fast Islamabad · bachelor timetable</div>
+            <h2 class="tt-title">Class timetable</h2>
+            <div class="tt-copy">Choose your department, batch year, day, and section to load the timetable from the live Google Sheet.</div>
+          </div>
+          <div class="tt-live-badge">Synced ✓</div>
+        </div>
+
+        <div class="tt-form">
+          <div class="tt-grid">
+            <div>
+              <label class="flabel">SCHOOL</label>
+              <select class="rsel" id="school">
+                <option value="computing">Computing (FSC)</option>
+                <option value="engineering">Engineering (FSE)</option>
+                <option value="business">Business (FSM)</option>
+              </select>
+            </div>
+            <div>
+              <label class="flabel">DEPARTMENT</label>
+              <select class="rsel" id="dept"><option value="">Select Department</option></select>
+              <label class="flabel" id="repeat-course-label" style="display:none">REPEAT COURSE</label>
+            </div>
+            <div>
+              <label class="flabel" id="batch-label">BATCH YEAR</label>
+              <select class="rsel" id="batch"><option value="">Select Batch Year</option></select>
+              <select class="rsel" id="repeat-course" style="display:none"><option value="">Select Course</option></select>
+            </div>
+            <div>
+              <label class="flabel">DAY</label>
+              <select class="rsel" id="day"><option value="">Select Day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select>
+            </div>
+            <div id="sec-cell">
+              <label class="flabel">SECTION</label>
+              <select class="rsel" id="sec"><option value="">Select Section</option></select>
+            </div>
+          </div>
+          <div class="tt-actions">
+            <button class="go" onclick="loadTT()">&#9658; Get timetable</button>
+            <div class="tt-hint">Selections are remembered automatically on this device.</div>
+          </div>
+        </div>
+
+        <div class="tt-out" id="tt-out">
+          <div class="tt-empty-card"><svg class="tt-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="tt-empty-title">Ready for your timetable</div><div class="tt-empty-copy">Choose school, department, batch, day, and section to load the current schedule.</div></div>
+        </div>
+      </div>
+    </div>

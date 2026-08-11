@@ -33,14 +33,14 @@ jobs:
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           VAPID_SUBJECT: mailto:compilersociety@gmail.com
         run: |
-          npm install web-push --no-save --silent
-          node scripts/send-exam-push.mjs
+          npm ci --silent
+          node scripts/notifications/send-exam-push.mjs
 
       - name: Commit notification state
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          [ -e db/push-exam-state.json ] && git add db/push-exam-state.json
+          [ -e db/metadata/notifications/push-exam-state.json ] && git add db/metadata/notifications/push-exam-state.json
           if git diff --cached --quiet; then
             echo "No state changes to commit"
             exit 0

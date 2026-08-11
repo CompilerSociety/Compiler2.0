@@ -1,0 +1,246 @@
+<div class="cr-overlay" id="cr-overlay">
+  <div class="cr-modal">
+    <div class="cr-head">
+      <div>
+        <div class="cr-title">&#128421; COMPILER RUN</div>
+        <div class="cr-sub">JUMP OVER THE VIRUS &#129440; &nbsp;·&nbsp; DUCK UNDER THE AI</div>
+      </div>
+      <button class="cr-close" onclick="closeCompilerRun()">&#10005; ESC</button>
+    </div>
+    <div class="cr-canvas-wrap">
+      <canvas id="cr-canvas" width="720" height="220"></canvas>
+    </div>
+    <div class="cr-lb" id="cr-lb">
+      <div class="cr-lb-head">
+        <div class="cr-lb-title">&#127942; LEADERBOARD</div>
+        <div class="cr-lb-status" id="cr-lb-status">Loading...</div>
+      </div>
+      <table class="cr-lb-table">
+        <thead>
+          <tr><th>Rank</th><th>Name</th><th>Section</th><th style="text-align:right">Score</th></tr>
+        </thead>
+        <tbody id="cr-lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Game picker (double-click the logo) -->
+<div class="cr-overlay" id="game-picker">
+  <div class="cr-modal" style="max-width:520px">
+    <div class="cr-head">
+      <div>
+        <div class="cr-title">&#127918; ARCADE</div>
+        <div class="cr-sub">PICK A GAME</div>
+      </div>
+      <button class="cr-close" onclick="closeGamePicker()">&#10005; ESC</button>
+    </div>
+    <div class="game-pick-grid">
+      <button class="game-pick-card" type="button" onclick="closeGamePicker();openCompilerRun()">
+        <div class="game-pick-emoji">&#128421;</div>
+        <div class="game-pick-name">COMPILER RUN</div>
+        <div class="game-pick-desc">Jump the virus, duck the AI</div>
+      </button>
+      <button class="game-pick-card" type="button" onclick="closeGamePicker();openDuckHunter()">
+        <div class="game-pick-emoji">&#129414;</div>
+        <div class="game-pick-name">DUCK HUNTER</div>
+        <div class="game-pick-desc">Shoot the ducks, don't miss</div>
+      </button>
+      <button class="game-pick-card" type="button" onclick="closeGamePicker();openFlappy()">
+        <div class="game-pick-emoji">&#128038;</div>
+        <div class="game-pick-name">FLAPPY BYTE</div>
+        <div class="game-pick-desc">Tap to fly through the pipes</div>
+      </button>
+      <button class="game-pick-card" type="button" onclick="closeGamePicker();openChessModePicker()">
+        <div class="game-pick-emoji">&#9819;</div>
+        <div class="game-pick-name">COMPILER CHESS</div>
+        <div class="game-pick-desc">Choose how to play</div>
+      </button>
+    </div>
+    <div class="game-soon-msg" id="game-soon-msg" hidden>&#128679; Compiler Chess &mdash; stay tuned, coming soon!</div>
+  </div>
+</div>
+
+<!-- Compiler Chess: mode picker -->
+<div class="cr-overlay" id="chess-mode-picker">
+  <div class="cr-modal" style="max-width:520px">
+    <div class="cr-head">
+      <div>
+        <div class="cr-title">&#9819; COMPILER CHESS</div>
+        <div class="cr-sub">CHOOSE HOW TO PLAY</div>
+      </div>
+      <button class="cr-close" onclick="closeChessModePicker()">&#10005; ESC</button>
+    </div>
+    <div class="game-pick-grid" style="grid-template-columns:1fr">
+      <button class="game-pick-card" type="button" onclick="showChessComingSoon('1v1 on this device')">
+        <div class="game-pick-emoji">&#9823;</div>
+        <div class="game-pick-name">1V1</div>
+        <div class="game-pick-desc">Two players, one device</div>
+      </button>
+      <button class="game-pick-card" type="button" onclick="showChessComingSoon('Play with a friend')">
+        <div class="game-pick-emoji">&#129309;</div>
+        <div class="game-pick-name">PLAY WITH FRIEND</div>
+        <div class="game-pick-desc">Invite a friend to a match</div>
+      </button>
+      <button class="game-pick-card" type="button" onclick="showChessComingSoon('the Compiler Chess Engine')">
+        <div class="game-pick-emoji">&#129302;</div>
+        <div class="game-pick-name">VS COMPILER ENGINE</div>
+        <div class="game-pick-desc">Play against the computer</div>
+      </button>
+    </div>
+    <div class="game-soon-msg" id="chess-soon-msg" hidden></div>
+  </div>
+</div>
+
+<!-- Duck Hunter game -->
+<div class="cr-overlay" id="dh-overlay">
+  <div class="cr-modal">
+    <div class="cr-head">
+      <div>
+        <div class="cr-title">&#129414; DUCK HUNTER</div>
+        <div class="cr-sub">CLICK / TAP THE DUCKS &nbsp;·&nbsp; DON'T LET THEM ESCAPE</div>
+      </div>
+      <button class="cr-close" onclick="closeDuckHunter()">&#10005; ESC</button>
+    </div>
+    <div class="cr-canvas-wrap">
+      <canvas id="dh-canvas" width="720" height="220"></canvas>
+    </div>
+    <div class="cr-lb" id="dh-lb">
+      <div class="cr-lb-head">
+        <div class="cr-lb-title">&#127942; DUCK HUNTER LEADERBOARD</div>
+        <div class="cr-lb-status" id="dh-lb-status">Loading...</div>
+      </div>
+      <table class="cr-lb-table">
+        <thead>
+          <tr><th>Rank</th><th>Name</th><th>Section</th><th style="text-align:right">Score</th></tr>
+        </thead>
+        <tbody id="dh-lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Flappy Byte game -->
+<div class="cr-overlay" id="fb-overlay">
+  <div class="cr-modal">
+    <div class="cr-head">
+      <div>
+        <div class="cr-title">&#128038; FLAPPY BYTE</div>
+        <div class="cr-sub">TAP / SPACE TO FLY &nbsp;·&nbsp; MIND THE PIPES</div>
+      </div>
+      <button class="cr-close" onclick="closeFlappy()">&#10005; ESC</button>
+    </div>
+    <div class="cr-canvas-wrap">
+      <canvas id="fb-canvas" width="720" height="220"></canvas>
+    </div>
+    <div class="cr-lb" id="fb-lb">
+      <div class="cr-lb-head">
+        <div class="cr-lb-title">&#127942; FLAPPY BYTE LEADERBOARD</div>
+        <div class="cr-lb-status" id="fb-lb-status">Loading...</div>
+      </div>
+      <table class="cr-lb-table">
+        <thead>
+          <tr><th>Rank</th><th>Name</th><th>Section</th><th style="text-align:right">Score</th></tr>
+        </thead>
+        <tbody id="fb-lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="corner c-tl"></div><div class="corner c-tr"></div>
+<div class="corner c-bl"></div><div class="corner c-br"></div>
+<button class="profile-launcher" id="profile-launcher" type="button" aria-label="Open student profile" title="Open student profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></button>
+<div class="profile-modal-backdrop" id="profile-modal-backdrop" hidden>
+  <div class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+    <div class="profile-modal-head">
+      <div>
+        <div class="profile-modal-kicker">Student profile</div>
+        <div class="profile-modal-title" id="profile-modal-title">Make your profile</div>
+      </div>
+      <button class="profile-close" type="button" onclick="closeProfileModal()" aria-label="Close profile">×</button>
+    </div>
+    <div class="profile-modal-body">
+      <div class="profile-help" id="profile-sync-help">You only need to enter your NU ID to sync your profile.</div>
+      <div class="profile-input-row" id="profile-sync-row">
+        <input class="profile-input" id="profile-nuid" type="text" placeholder="Enter NU ID (e.g. 25I-0000)" maxlength="20" onkeydown="if(event.key==='Enter')syncProfile()">
+        <button class="profile-sync-btn" type="button" onclick="syncProfile()">Sync</button>
+      </div>
+      <div class="profile-status" id="profile-status">Type your NU ID and press sync.</div>
+      <div class="profile-form" id="profile-registration" hidden>
+        <div class="profile-form-title">Add your profile</div>
+        <div class="profile-help">We could not find your NU ID yet. Enter your details below.</div>
+        <div class="profile-form-grid">
+          <div class="profile-item">
+            <label class="profile-label" for="profile-name">Name</label>
+            <input class="profile-input" id="profile-name" type="text" placeholder="Enter full name">
+          </div>
+          <div class="profile-item">
+            <label class="profile-label" for="profile-section-input">Section</label>
+            <input class="profile-input" id="profile-section-input" type="text" placeholder="e.g. A">
+          </div>
+          <div class="profile-item">
+            <label class="profile-label" for="profile-department-input">Department</label>
+            <input class="profile-input" id="profile-department-input" type="text" placeholder="e.g. CS">
+          </div>
+          <div class="profile-item">
+            <label class="profile-label" for="profile-batch-input">Batch</label>
+            <input class="profile-input" id="profile-batch-input" type="text" placeholder="Detected from NU ID" disabled>
+          </div>
+        </div>
+        <button class="profile-save-btn" type="button" onclick="registerProfile()">Save profile</button>
+      </div>
+      <div class="profile-card" id="profile-card" hidden>
+        <div class="profile-card-top" id="profile-card-top">Student</div>
+        <div class="profile-card-grid">
+          <div class="profile-item">
+            <div class="profile-label">NU ID</div>
+            <div class="profile-value" id="profile-nuid-display">-</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">Section</div>
+            <div class="profile-value" id="profile-section">-</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">Batch</div>
+            <div class="profile-value" id="profile-batch">-</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">Department</div>
+            <div class="profile-value" id="profile-department">-</div>
+          </div>
+        </div>
+        <div class="profile-actions" id="profile-actions" hidden>
+          <button class="profile-save-btn" id="profile-save-btn" type="button" onclick="saveProfileCookie()">Save profile</button>
+          <button class="profile-bell-btn" id="profile-bell-btn" type="button" onclick="enableSeatAlerts()">🔔 Enable notifications</button>
+          <button class="profile-delete-btn" id="profile-delete-btn" type="button" onclick="deleteSavedProfile()">Delete profile</button>
+        </div>
+        <div class="profile-status" id="profile-push-status" style="margin-top:6px;margin-bottom:0"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="profile-success-toast" id="profile-success-toast" hidden>
+  <div class="profile-success-icon">✓</div>
+  <div class="profile-success-text" id="profile-success-text">Your profile has been saved</div>
+</div>
+
+<!-- Install (Add to Home Screen) prompt -->
+<div class="pwa-install-bar" id="pwa-install-bar" hidden>
+  <img class="pwa-install-icon" src="/icons/icon-192.png" alt="V Table app icon">
+  <div class="pwa-install-text">
+    <span class="pwa-install-title">Download V Table app</span>
+    <span class="pwa-install-sub">Install it on your phone for quick access & notifications.</span>
+  </div>
+  <button class="pwa-install-btn" id="pwa-install-btn" type="button">Install</button>
+  <button class="pwa-install-close" id="pwa-install-close" type="button" aria-label="Dismiss">×</button>
+</div>
+<div class="pwa-ios-sheet" id="pwa-ios-sheet" hidden>
+  <div class="pwa-ios-card">
+    <h3>Install V Table</h3>
+    <div class="pwa-ios-step"><span>1.</span><div>Tap the <b>Share</b> button in Safari’s toolbar (the square with an ↑ arrow).</div></div>
+    <div class="pwa-ios-step"><span>2.</span><div>Scroll down and tap <b>Add to Home Screen</b>.</div></div>
+    <div class="pwa-ios-step"><span>3.</span><div>Tap <b>Add</b> — then open <b>V Table</b> from your home screen to enable notifications.</div></div>
+    <button class="pwa-ios-close" id="pwa-ios-close" type="button">Got it</button>
+  </div>
+</div>
+<div class="shell">
+  

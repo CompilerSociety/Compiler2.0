@@ -1,0 +1,96 @@
+{
+  "players": {
+    "25I-0632": {
+      "nuid": "25I-0632",
+      "name": "Wajeeh Imran",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-07-08T22:58:33.593Z"
+    },
+    "25I-0656": {
+      "nuid": "25I-0656",
+      "name": "Ali Raza",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-07-09T11:44:53.576Z"
+    },
+    "25I-0789": {
+      "nuid": "25I-0789",
+      "name": "Aazan Mustafa",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 4,
+      "achievedAt": "2026-07-09T07:29:33.731Z"
+    },
+    "25I-0816": {
+      "nuid": "25I-0816",
+      "name": "Hammad Rehan",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 3,
+      "achievedAt": "2026-07-24T19:35:14.031Z"
+    },
+    "24I-0767": {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:50:06.282Z"
+    }
+  },
+  "leaderboard": [
+    {
+      "nuid": "25I-0789",
+      "name": "Aazan Mustafa",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 4,
+      "achievedAt": "2026-07-09T07:29:33.731Z"
+    },
+    {
+      "nuid": "25I-0816",
+      "name": "Hammad Rehan",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 3,
+      "achievedAt": "2026-07-24T19:35:14.031Z"
+    },
+    {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:50:06.282Z"
+    },
+    {
+      "nuid": "25I-0632",
+      "name": "Wajeeh Imran",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-07-08T22:58:33.593Z"
+    },
+    {
+      "nuid": "25I-0656",
+      "name": "Ali Raza",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-07-09T11:44:53.576Z"
+    }
+  ]
+}

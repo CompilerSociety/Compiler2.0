@@ -1,0 +1,26 @@
+<div class="panel" id="p3" role="tabpanel" aria-labelledby="nc3" aria-hidden="true">
+      <h2 class="sr-only">Exam Schedule</h2>
+      <div class="exam-filters">
+        <div>
+          <label class="flabel">DEPARTMENT</label>
+          <select class="rsel" id="ex-dept" onchange="onExamDeptChange()">
+            <option value="">Select Department</option>
+            <option value="CS">BS CS</option>
+            <option value="AI">BS AI</option>
+            <option value="DS">BS DS</option>
+            <option value="SE">BS SE</option>
+            <option value="CY">BS CY</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">BATCH YEAR</label>
+          <select class="rsel" id="ex-batch" onchange="onExamBatchChange()">
+            <option value="">Select Batch Year</option>
+            <option>2022</option><option>2023</option><option>2024</option><option>2025</option>
+          </select>
+        </div>
+      </div>
+      <div class="exam-header-badge fin" id="exam-source-badge" style="display:inline-block;margin-bottom:12px">✎ FINAL EXAM SCHEDULE</div>
+      <div id="exam-flat-out"></div>
+      <div id="exam-out"></div>
+    </div>

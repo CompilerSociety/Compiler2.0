@@ -1,0 +1,31 @@
+<div class="panel" id="p2" role="tabpanel" aria-labelledby="nc2" aria-hidden="true">
+      <h2 class="sr-only">Show Up Schedule</h2>
+      <div class="exam-filters">
+        <div>
+          <label class="flabel">DEPARTMENT</label>
+          <select class="rsel" id="su-dept" onchange="onShowupDeptChange()">
+            <option value="">Select Department</option>
+            <option value="CS">BS CS</option>
+            <option value="AI">BS AI</option>
+            <option value="DS">BS DS</option>
+            <option value="SE">BS SE</option>
+            <option value="CY">BS CY</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">BATCH YEAR</label>
+          <select class="rsel" id="su-batch" onchange="onShowupBatchChange()">
+            <option value="">Select Batch Year</option>
+            <option>2022</option><option>2023</option><option>2024</option><option>2025</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">SECTION</label>
+          <select class="rsel" id="su-sec" onchange="renderShowupSchedule()">
+            <option value="">Select Section</option>
+          </select>
+        </div>
+      </div>
+      <div class="exam-header-badge fin" id="showup-source-badge" style="display:inline-block;margin-bottom:12px">◫ SHOW UP SCHEDULE</div>
+      <div id="showup-out"></div>
+    </div>

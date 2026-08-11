@@ -1,0 +1,48 @@
+<div class="panel" id="p1" role="tabpanel" aria-labelledby="nc1" aria-hidden="true">
+      <h2 class="sr-only">Free Rooms</h2>
+      <div class="time-banner">
+        <div class="time-banner-left">
+          <div class="live-dot"></div>
+          <div>
+            <div class="time-big" id="r-time">--:--</div>
+            <div class="time-day-txt" id="r-day-div">LOADING...</div>
+          </div>
+        </div>
+        <div class="time-banner-right">
+          <div class="time-slot" id="r-slot">CURRENT SLOT: --</div>
+          <div class="rooms-free-badge" id="r-free-count" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-box active-step" id="sb1">
+          <div class="step-num">STEP 01 — BLOCK</div>
+          <label class="flabel" style="margin-top:6px">SELECT BLOCK</label>
+          <select class="rsel" id="r-block" onchange="onBlockChange()">
+            <option value="">Select Block</option>
+            <option value="A">Block A</option>
+            <option value="B">Block B</option>
+            <option value="C">Block C</option>
+            <option value="D">Block D</option>
+          </select>
+        </div>
+        <div class="divider"></div>
+        <div class="step-box" id="sb2">
+          <div class="step-num">STEP 02 — FLOOR</div>
+          <label class="flabel" style="margin-top:6px">SELECT FLOOR</label>
+          <select class="rsel" id="r-floor" onchange="onFloorChange()" disabled>
+            <option value="">Select Block First</option>
+          </select>
+        </div>
+        <div class="divider"></div>
+        <div class="step-box" id="sb3">
+          <div class="step-num">STEP 03 — DAY</div>
+          <label class="flabel" style="margin-top:6px">SELECT DAY</label>
+          <select class="rsel" id="r-day-sel" onchange="onDayChange()" disabled>
+            <option value="">Select Floor First</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="rooms-result"></div>
+    </div>

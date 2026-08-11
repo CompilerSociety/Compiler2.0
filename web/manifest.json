@@ -1,0 +1,31 @@
+{
+  "name": "V Table \u2014 FAST NUCES Islamabad",
+  "short_name": "V Table",
+  "description": "Class timetable, free rooms, seating plan, exam & show-up schedule, and faculty vault for FAST NUCES Islamabad.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f7f0",
+  "theme_color": "#0a7a3a",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

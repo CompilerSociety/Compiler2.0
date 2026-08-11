@@ -1,0 +1,60 @@
+<div class="panel" id="p5" role="tabpanel" aria-labelledby="nc5" aria-hidden="true">
+      <div class="fv-top-bar">
+        <h2 class="fv-top-label">◭ FACULTY VAULT</h2>
+      </div>
+      <div class="fv-form">
+        <div class="fv-grid">
+          <div>
+            <label class="flabel">SCHOOL</label>
+            <select class="rsel" id="fv-school" onchange="onFvSchoolChange()">
+              <option value="">Select School</option>
+              <option value="School of computing">School of computing</option>
+              <option value="Sciences and Humanities">Sciences and Humanities</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">DEPARTMENT</label>
+            <select class="rsel" id="fv-dept" onchange="onFvDeptChange()">
+              <!-- Will be loaded dynamically -->
+            </select>
+          </div>
+          <div>
+            <label class="flabel">SEARCH TEACHER</label>
+            <input type="text" class="fv-search-input" id="fv-search" placeholder="Type teacher name..." oninput="onSearchInput()">
+          </div>
+        </div>
+      </div>
+
+      <div class="fv-contact-card">
+        <div class="fv-contact-header">
+          <span class="fv-contact-title">&#128188; LEADERSHIP DIRECTORY</span>
+        </div>
+        <div class="fv-contact-body">
+          <div class="fv-leader-section">
+            <div class="fv-leader-title">HEAD OF SCHOOL (HOS)</div>
+            <div class="fv-leader-details">
+              <div><span class="fv-contact-label">NAME:</span> <span class="fv-contact-value" id="fv-hos-name">-</span></div>
+              <div class="fv-email-line"><span class="fv-contact-label">EMAIL:</span> <span class="fv-contact-value" id="fv-hos-email">-</span> <button type="button" class="fv-copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmailById('fv-hos-email',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H6C4.9 1 4 1.9 4 3v12h2V3h10V1zm3 4H10C8.9 5 8 5.9 8 7v14c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16h-9V7h9v14z"/></svg></button></div>
+              <div><span class="fv-contact-label">ROOM:</span> <span class="fv-contact-value" id="fv-hos-room">-</span></div>
+            </div>
+          </div>
+          <div class="fv-leader-section">
+            <div class="fv-leader-title">HEAD OF DEPARTMENT (HOD)</div>
+            <div class="fv-leader-details">
+              <div><span class="fv-contact-label">NAME:</span> <span class="fv-contact-value" id="fv-hod-name">-</span></div>
+              <div class="fv-email-line"><span class="fv-contact-label">EMAIL:</span> <span class="fv-contact-value" id="fv-hod-email">-</span> <button type="button" class="fv-copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmailById('fv-hod-email',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H6C4.9 1 4 1.9 4 3v12h2V3h10V1zm3 4H10C8.9 5 8 5.9 8 7v14c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16h-9V7h9v14z"/></svg></button></div>
+              <div><span class="fv-contact-label">ROOM:</span> <span class="fv-contact-value" id="fv-hod-room">-</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fv-results-header">
+        <span class="fv-results-label">FACULTY DIRECTORY</span>
+        <span class="fv-results-count" id="fv-results-count">0 MEMBERS</span>
+      </div>
+
+      <div class="fv-teacher-grid" id="fv-teacher-grid">
+        <!-- Will be loaded dynamically -->
+      </div>
+    </div>

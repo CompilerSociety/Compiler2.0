@@ -50,8 +50,8 @@ jobs:
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           VAPID_SUBJECT: mailto:compilersociety@gmail.com
         run: |
-          npm install web-push --no-save --silent
-          node scripts/send-seating-push.mjs
+          npm ci --silent
+          node scripts/notifications/send-seating-push.mjs
 
       - name: Commit and push
         run: |
@@ -61,7 +61,7 @@ jobs:
           # feature has synced at least once (e.g. showup-sheet-source.json is
           # created only after a show-up email's sheet link is discovered), and
           # a plain "git add" of a missing path aborts the whole step.
-          for f in db/seating-plan.json db/exam-schedule-*.json db/showup-schedule-*.json db/showup-sheet-source.json db/push-subscriptions.json db/push-state.json; do
+          for f in db/seating/plan.json db/exams/*.json db/showup/*.json db/showup/source.json db/metadata/notifications/push-subscriptions.json db/metadata/notifications/push-state.json; do
             [ -e "$f" ] && git add "$f"
           done
           if git diff --cached --quiet; then

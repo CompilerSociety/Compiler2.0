@@ -8,7 +8,7 @@ name: Poll live Show Up Schedule sheet
 #
 # The sheet's link is discovered automatically from the one show-up-schedule
 # email's body by the OTHER workflow (sync-seating-plan.yml) and stored in
-# db/showup-sheet-source.json - this workflow just polls whatever sheet
+# db/showup/source.json - this workflow just polls whatever sheet
 # is on record there. If that file doesn't exist yet, this run is a no-op.
 
 on:
@@ -40,7 +40,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in db/showup-schedule-*.json; do
+          for f in db/showup/*.json; do
             [ -e "$f" ] && git add "$f"
           done
           if git diff --cached --quiet; then
