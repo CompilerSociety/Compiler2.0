@@ -45,6 +45,15 @@ function loadCompatibilityRuntime() {
 // preserve the required initialization sequence without duplicate startup.
 function initializeRouting() {}
 function initializeNavigation() {}
+function initializeTheme() {
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+  toggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+}
 function initializeClocks() {}
 function initializeBackground() {}
 function initializeProfile() {}
@@ -63,6 +72,7 @@ async function startApplication() {
   verifyRequiredElements();
   initializeRouting();
   initializeNavigation();
+  initializeTheme();
   initializeClocks();
   initializeBackground();
   initializeProfile();

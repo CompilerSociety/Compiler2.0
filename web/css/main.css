@@ -536,6 +536,13 @@ h2.fv-top-label{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight
 .profile-launcher{position:fixed;top:16px;left:16px;z-index:45;width:46px;height:46px;border:none;border-radius:50%;display:grid;place-items:center;background:#ffffff;border:2px solid rgba(10,122,58,0.24);box-shadow:0 8px 24px rgba(10,122,58,0.16);color:#0a7a3a;font-size:22px;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .profile-launcher:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(10,122,58,0.2)}
 .profile-launcher:focus-visible{outline:3px solid rgba(10,122,58,0.28);outline-offset:2px}
+.theme-toggle{position:fixed;top:16px;right:16px;z-index:45;width:46px;height:46px;border:none;border-radius:50%;display:grid;place-items:center;background:#ffffff;border:2px solid rgba(10,122,58,0.24);box-shadow:0 8px 24px rgba(10,122,58,0.16);color:#0a7a3a;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.theme-toggle:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(10,122,58,0.2)}
+.theme-toggle:focus-visible{outline:3px solid rgba(10,122,58,0.28);outline-offset:2px}
+.theme-toggle-moon{display:none}
+html[data-theme="dark"] .theme-toggle-sun{display:none}
+html[data-theme="dark"] .theme-toggle-moon{display:block}
+@media(max-width:560px){.theme-toggle{top:12px;right:12px;width:42px;height:42px}}
 .profile-modal-backdrop{position:fixed;inset:0;background:rgba(4,20,10,0.68);z-index:55;display:flex;align-items:center;justify-content:center;padding:16px}
 .profile-modal-backdrop[hidden]{display:none}
 .profile-modal{width:min(100%,380px);background:#fff;border:2px solid rgba(10,122,58,0.24);border-radius:14px;box-shadow:0 12px 40px rgba(10,122,58,0.22);overflow:hidden}
@@ -638,3 +645,130 @@ h2.fv-top-label{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight
 @media(max-width:560px){ .game-pick-grid{grid-template-columns:1fr} }
 .game-soon-msg{margin-top:12px;text-align:center;font-family:'VT323',monospace;font-size:20px;letter-spacing:1px;color:#b3261e;background:rgba(179,38,30,0.08);border:1px solid rgba(179,38,30,0.3);border-radius:10px;padding:10px 12px}
 .game-soon-msg[hidden]{display:none}
+
+/* ══════════════ Dark mode ══════════════ */
+html[data-theme="dark"]{
+  --accent:#2fbf6f;--accent-strong:#4ade80;--text:#e7f5ec;--muted:#93b9a3;--muted-light:#6f9880;
+  --surface:#0d1912;--surface-strong:#16281c;--border:rgba(120,220,160,0.18);
+  --success:#2fbf6f;--warning:#e8a13a;--danger:#f2564a;--info:#5b8fe0;
+}
+html[data-theme="dark"] body{background:#0a140e}
+html[data-theme="dark"] #app{box-shadow:0 16px 48px rgba(0,0,0,0.45)}
+html[data-theme="dark"] .hdr,
+html[data-theme="dark"] .nav-card,
+html[data-theme="dark"] .content{background:var(--surface-strong)}
+html[data-theme="dark"] .nav-card:hover:not(.active){background:#1b3325}
+html[data-theme="dark"] .nav-card.active{background:#1c3626}
+
+/* card / panel surfaces that were literal white or pale-green */
+html[data-theme="dark"] .tt-form,
+html[data-theme="dark"] .tt-out,
+html[data-theme="dark"] .step-box,
+html[data-theme="dark"] .time-slot,
+html[data-theme="dark"] .events-range,
+html[data-theme="dark"] .ev-card,
+html[data-theme="dark"] .ev-modal,
+html[data-theme="dark"] .exam-type-btn,
+html[data-theme="dark"] .sp-card,
+html[data-theme="dark"] .fv-form,
+html[data-theme="dark"] .fv-search-input,
+html[data-theme="dark"] .fv-contact-card,
+html[data-theme="dark"] .fv-teacher-card,
+html[data-theme="dark"] .profile-launcher,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .profile-modal,
+html[data-theme="dark"] .profile-close,
+html[data-theme="dark"] .profile-form,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .profile-item,
+html[data-theme="dark"] .pwa-install-bar,
+html[data-theme="dark"] .pwa-ios-card,
+html[data-theme="dark"] .cr-modal,
+html[data-theme="dark"] .cr-canvas-wrap,
+html[data-theme="dark"] .cr-lb,
+html[data-theme="dark"] .game-pick-card,
+html[data-theme="dark"] .sp-search-input,
+html[data-theme="dark"] .profile-input{background:var(--surface-strong)}
+
+html[data-theme="dark"] .tt-hero{background:linear-gradient(180deg,rgba(22,40,28,.96),rgba(13,25,18,.88))}
+html[data-theme="dark"] .tt-empty-card{background:linear-gradient(180deg,#12241a 0%,#0d1912 100%)}
+html[data-theme="dark"] .tt-live-badge,
+html[data-theme="dark"] .tt-result-table thead th,
+html[data-theme="dark"] .tbl th,
+html[data-theme="dark"] .time-banner,
+html[data-theme="dark"] .events-date-banner,
+html[data-theme="dark"] .ev-info-box,
+html[data-theme="dark"] .exam-countdown.upcoming,
+html[data-theme="dark"] .sp-seat-value,
+html[data-theme="dark"] .fv-copy-btn,
+html[data-theme="dark"] .profile-modal-head,
+html[data-theme="dark"] .cr-lb-head{background:#152a1d}
+html[data-theme="dark"] .tt-empty-icon{background:#182f20}
+
+html[data-theme="dark"] .tt-result-table tr:nth-child(even) td,
+html[data-theme="dark"] .tbl tr:nth-child(even) td,
+html[data-theme="dark"] .exam-tbl tr:nth-child(even) td{background:#122318}
+html[data-theme="dark"] .tt-result-table tr:hover td,
+html[data-theme="dark"] .tbl tr:hover td,
+html[data-theme="dark"] .exam-type-btn:hover,
+html[data-theme="dark"] .exam-tbl tr:hover td{background:#1a3322}
+
+/* body / dark-green text colours -> light text */
+html[data-theme="dark"] .nav-badge,
+html[data-theme="dark"] .tt-kicker,
+html[data-theme="dark"] .header-live-item,
+html[data-theme="dark"] .header-live{color:var(--muted)}
+html[data-theme="dark"] .nav-title,
+html[data-theme="dark"] .nav-card.active .nav-desc,
+html[data-theme="dark"] .tt-copy,
+html[data-theme="dark"] .tt-hint,
+html[data-theme="dark"] .tt-day,
+html[data-theme="dark"] .tt-empty-copy,
+html[data-theme="dark"] .tbl td,
+html[data-theme="dark"] .ev-modal,
+html[data-theme="dark"] .ev-highlight-item,
+html[data-theme="dark"] .exam-tbl td,
+html[data-theme="dark"] .sp-search-input,
+html[data-theme="dark"] .sp-spotlight-value,
+html[data-theme="dark"] .fv-search-input,
+html[data-theme="dark"] .fv-contact-value,
+html[data-theme="dark"] .fv-teacher-room,
+html[data-theme="dark"] .fv-teacher-tag,
+html[data-theme="dark"] .header-campus,
+html[data-theme="dark"] .profile-help,
+html[data-theme="dark"] .pwa-ios-step,
+html[data-theme="dark"] .profile-input,
+html[data-theme="dark"] .profile-value,
+html[data-theme="dark"] .cr-lb-table td{color:var(--text)}
+html[data-theme="dark"] .nav-desc{color:var(--muted)}
+
+/* tinted exam headers */
+html[data-theme="dark"] .exam-tbl th.s1{background:#1a2440;color:#7d9dee}
+html[data-theme="dark"] .exam-tbl th.s2{background:#301a35;color:#d187d1}
+html[data-theme="dark"] .exam-tbl th.fin{background:#3a1a1a;color:#e88a8a}
+html[data-theme="dark"] .exam-countdown.soon{background:rgba(232,161,58,0.15);color:#e8a13a;border-color:rgba(232,161,58,0.4)}
+html[data-theme="dark"] .exam-countdown.past{background:#1a1f1c;color:#7f978a;border-color:#2a332c}
+html[data-theme="dark"] .tt-course.tt-repeat{background:rgba(232,161,58,0.15);color:#e8a13a;border-color:rgba(232,161,58,0.4)}
+
+/* inputs */
+html[data-theme="dark"] .rsel{background:#12241a;border-color:rgba(120,220,160,0.28)}
+html[data-theme="dark"] .rsel:disabled{opacity:.5}
+html[data-theme="dark"] .profile-input[disabled]{background:#101f16;color:#6f9880}
+html[data-theme="dark"] .profile-bell-btn{background:#122a1c;border-color:#22452f;color:#4ade80}
+html[data-theme="dark"] .profile-bell-btn:hover{background:#173420}
+html[data-theme="dark"] .profile-delete-btn{background:#3a1616;border-color:#5a2323;color:#f2938c}
+html[data-theme="dark"] .profile-delete-btn:hover{background:#471a1a}
+html[data-theme="dark"] .profile-success-toast{background:rgba(47,191,111,0.18);border-color:rgba(47,191,111,0.4);color:#4ade80}
+html[data-theme="dark"] .profile-success-toast.is-error{background:rgba(242,86,74,0.18);border-color:rgba(242,86,74,0.4);color:#f2938c}
+
+/* misc small surfaces */
+html[data-theme="dark"] .no-rooms,
+html[data-theme="dark"] .no-events,
+html[data-theme="dark"] .exam-no-data,
+html[data-theme="dark"] .sp-empty,
+html[data-theme="dark"] .fv-empty{color:var(--muted)}
+
+/* keep coloured badge/type surfaces (event types, exam pills, room-status cards)
+   as-is — they already carry sufficient contrast (white text on saturated bg)
+   in both themes. */
+
