@@ -600,6 +600,18 @@ html[data-theme="dark"] .theme-toggle-moon{display:block}
 .profile-success-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#1f8f4c;color:#fff;font-weight:700;font-size:16px}
 .profile-success-toast.is-error .profile-success-icon{background:#c02626}
 .profile-success-text{font-family:'VT323',monospace;font-size:18px;letter-spacing:1px}
+.global-error-toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:90;width:min(calc(100vw - 24px),640px);display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:16px;background:rgba(201,51,34,0.12);backdrop-filter:blur(8px);border:1px solid rgba(201,51,34,0.28);box-shadow:0 16px 36px rgba(120,20,20,0.22);color:#9f1d15}
+.global-error-toast[hidden]{display:none}
+.global-error-copy{min-width:0;flex:1}
+.global-error-title{font-family:'VT323',monospace;font-size:28px;letter-spacing:2px;line-height:1;color:#a01818;margin-bottom:4px}
+.global-error-message{font-size:13px;line-height:1.55;font-weight:600;word-break:break-word}
+.global-error-details{margin-top:8px;font-size:12px;line-height:1.5}
+.global-error-details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:#7f241b}
+.global-error-details pre{margin-top:8px;white-space:pre-wrap;word-break:break-word;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.45;color:#6f1d15;background:rgba(255,255,255,0.48);border:1px solid rgba(201,51,34,0.18);border-radius:10px;padding:10px;max-height:180px;overflow:auto}
+.global-error-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
+.global-error-btn{border:none;border-radius:999px;padding:10px 14px;font-family:var(--font-sans);font-size:12px;font-weight:700;cursor:pointer;color:#fff;background:#a01818;box-shadow:0 6px 16px rgba(160,24,24,0.18)}
+.global-error-btn.ghost{background:rgba(160,24,24,0.12);color:#a01818;border:1px solid rgba(160,24,24,0.2);box-shadow:none}
+.global-error-btn:focus-visible{outline:3px solid rgba(160,24,24,0.28);outline-offset:2px}
 .profile-card{border:1.5px solid rgba(10,122,58,0.18);border-radius:10px;padding:12px;background:#f9fffa}
 .profile-card-top{font-family:'VT323',monospace;font-size:22px;letter-spacing:1px;color:#0a7a3a;margin-bottom:10px}
 .profile-card-grid{display:grid;gap:8px}
@@ -766,6 +778,12 @@ html[data-theme="dark"] .profile-delete-btn{background:#3a1616;border-color:#5a2
 html[data-theme="dark"] .profile-delete-btn:hover{background:#471a1a}
 html[data-theme="dark"] .profile-success-toast{background:rgba(47,191,111,0.18);border-color:rgba(47,191,111,0.4);color:#4ade80}
 html[data-theme="dark"] .profile-success-toast.is-error{background:rgba(242,86,74,0.18);border-color:rgba(242,86,74,0.4);color:#f2938c}
+html[data-theme="dark"] .global-error-toast{background:rgba(242,86,74,0.14);border-color:rgba(242,86,74,0.34);color:#f8b4ac;box-shadow:0 16px 36px rgba(0,0,0,0.26)}
+html[data-theme="dark"] .global-error-title{color:#f87171}
+html[data-theme="dark"] .global-error-details summary{color:#fca5a5}
+html[data-theme="dark"] .global-error-details pre{background:rgba(8,17,11,0.58);border-color:rgba(242,86,74,0.22);color:#f8b4ac}
+html[data-theme="dark"] .global-error-btn{background:#b91c1c;color:#fff}
+html[data-theme="dark"] .global-error-btn.ghost{background:rgba(242,86,74,0.12);color:#f8b4ac;border-color:rgba(242,86,74,0.24)}
 
 /* misc small surfaces */
 html[data-theme="dark"] .no-rooms,
@@ -777,4 +795,3 @@ html[data-theme="dark"] .fv-empty{color:var(--muted)}
 /* keep coloured badge/type surfaces (event types, exam pills, room-status cards)
    as-is — they already carry sufficient contrast (white text on saturated bg)
    in both themes. */
-

@@ -1054,6 +1054,11 @@ module.exports = async (req, res) => {
       source: `google-sheet-${schoolParam}`
     });
   } catch (err) {
-    return res.status(500).json({ ok: false, error: err.message || String(err) });
+    console.error('timetable API error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Internal error',
+      message: err?.message || String(err),
+    });
   }
 };

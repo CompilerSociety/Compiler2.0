@@ -24,6 +24,15 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[s
     handler.wfile.write(body)
 
 
+def _api_error_response(handler: BaseHTTPRequestHandler, exc: Exception, status: int = 500) -> None:
+    payload = {
+        "ok": False,
+        "error": "Internal error" if status >= 500 else str(exc),
+        "message": str(exc),
+    }
+    _json_response(handler, status, payload)
+
+
 def _read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
@@ -108,26 +117,34 @@ class handler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self) -> None:
-        if self.path.startswith("/api/profile"):
-            length = int(self.headers.get("Content-Length", "0"))
-            body = self.rfile.read(length).decode("utf-8")
-            try:
-                payload = json.loads(body or "{}") if body else {}
-                if not isinstance(payload, dict):
-                    raise ValueError("Expected a JSON object")
-                result = save_student_profile(payload)
-                _json_response(self, 200, result)
-            except Exception as exc:
-                _json_response(self, 400, {"ok": False, "error": str(exc)})
-            return
+        try:
+            if self.path.startswith("/api/profile"):
+                length = int(self.headers.get("Content-Length", "0"))
+                body = self.rfile.read(length).decode("utf-8")
+                try:
+                    payload = json.loads(body or "{}") if body else {}
+                    if not isinstance(payload, dict):
+                        raise ValueError("Expected a JSON object")
+                    result = save_student_profile(payload)
+                    _json_response(self, 200, result)
+                except ValueError as exc:
+                    _api_error_response(self, exc, 400)
+                except Exception as exc:
+                    _api_error_response(self, exc, 500)
+                return
 
-        _json_response(self, 404, {"ok": False, "error": "Not found"})
+            _json_response(self, 404, {"ok": False, "error": "Not found"})
+        except Exception as exc:
+            _api_error_response(self, exc, 500)
 
     def do_GET(self) -> None:
-        if self.path.startswith("/api/profile"):
-            _json_response(self, 200, {"ok": True, "message": "Profile endpoint is active"})
-            return
-        super().do_GET()
+        try:
+            if self.path.startswith("/api/profile"):
+                _json_response(self, 200, {"ok": True, "message": "Profile endpoint is active"})
+                return
+            super().do_GET()
+        except Exception as exc:
+            _api_error_response(self, exc, 500)
 
     def log_message(self, format: str, *args: Any) -> None:
         return
