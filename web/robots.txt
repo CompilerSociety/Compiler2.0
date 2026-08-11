@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://compiler2-0.vercel.app/sitemap.xml
