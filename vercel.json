@@ -136,6 +136,10 @@
     {
       "source": "/db/timetable-engineering.json",
       "destination": "/db/timetables/engineering.json"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/web/index.html"
     }
   ]
 }
