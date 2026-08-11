@@ -1207,11 +1207,6 @@
               "time": "02:30-03:50"
             },
             {
-              "name": "PDC",
-              "location": "D-411",
-              "time": "02:30-03:50"
-            },
-            {
               "name": "OOP Lab",
               "location": "C-RAWAL 1",
               "time": "02:30-05:15"
@@ -1234,11 +1229,6 @@
               "name": "MG Elective",
               "location": "D-404",
               "time": "02:30-03:50"
-            },
-            {
-              "name": "PDC",
-              "location": "D-411",
-              "time": "02:30-03:50"
             }
           ],
           "Friday": [
@@ -1260,11 +1250,6 @@
               "name": "COAL",
               "location": "C-402",
               "time": "03:55-05:15"
-            },
-            {
-              "name": "PDC",
-              "location": "D-406",
-              "time": "01:00-02:20"
             }
           ],
           "Tuesday": [
@@ -1284,11 +1269,6 @@
               "name": "COAL",
               "location": "C-403",
               "time": "03:55-05:15"
-            },
-            {
-              "name": "PDC",
-              "location": "D-406",
-              "time": "02:30-03:50"
             }
           ],
           "Thursday": [
@@ -1314,11 +1294,6 @@
         "C": {
           "Monday": [
             {
-              "name": "PDC",
-              "location": "D-406",
-              "time": "02:30-03:50"
-            },
-            {
               "name": "OOP Lab",
               "location": "C-RAWAL 1",
               "time": "02:30-05:15"
@@ -1329,13 +1304,6 @@
               "name": "OOP",
               "location": "C-307",
               "time": "02:30-03:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "PDC",
-              "location": "D-406",
-              "time": "03:55-05:15"
             }
           ],
           "Thursday": [
@@ -1352,11 +1320,6 @@
               "name": "OOP",
               "location": "C-307",
               "time": "03:55-05:15"
-            },
-            {
-              "name": "PDC",
-              "location": "D-411",
-              "time": "01:00-02:20"
             }
           ],
           "Wednesday": [
@@ -1371,11 +1334,6 @@
               "name": "OOP",
               "location": "C-308",
               "time": "03:55-05:15"
-            },
-            {
-              "name": "PDC",
-              "location": "D-411",
-              "time": "01:00-02:20"
             }
           ]
         }
@@ -1833,6 +1791,72 @@
               "name": "App HCI",
               "location": "C-404",
               "time": "01:00-02:20"
+            }
+          ]
+        }
+      },
+      "2023": {
+        "B": {
+          "Monday": [
+            {
+              "name": "PDC",
+              "location": "D-406",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "PDC",
+              "location": "D-406",
+              "time": "02:30-03:50"
+            }
+          ]
+        },
+        "C": {
+          "Monday": [
+            {
+              "name": "PDC",
+              "location": "D-406",
+              "time": "02:30-03:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "PDC",
+              "location": "D-406",
+              "time": "03:55-05:15"
+            }
+          ]
+        },
+        "D": {
+          "Tuesday": [
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "01:00-02:20"
+            }
+          ]
+        },
+        "A": {
+          "Tuesday": [
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "02:30-03:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "02:30-03:50"
             }
           ]
         }
@@ -5839,5 +5863,5 @@
     }
   },
   "count": 968,
-  "generatedAt": "2026-08-11T12:28:16.036722+00:00"
+  "generatedAt": "2026-08-11T12:48:12.756959+00:00"
 }

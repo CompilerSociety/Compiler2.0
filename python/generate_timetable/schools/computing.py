@@ -321,11 +321,13 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 if not section:
                     continue
                 
-                # Yellow cells are repeat classes: route them to a dedicated
-                # REPEAT bucket (regardless of the year they'd otherwise map
-                # to) so they surface under the frontend's "Repeat Courses"
-                # department instead of polluting a normal batch.
-                store_batch = REPEAT_BATCH_KEY if is_yellow(cell_colour) else batch
+                # Yellow normally marks a repeat class. The current FSC sheet
+                # also uses that highlight for CS batch-2023 offerings (for
+                # example, "PDC (CS-B, 23)"). Keep these in the regular 2023
+                # bucket; otherwise the site has no CS/2023 option at all.
+                store_batch = batch if batch == "2023" else (
+                    REPEAT_BATCH_KEY if is_yellow(cell_colour) else batch
+                )
                 for dept_key in depts_to_add:
                     if add_course(tt, dept_key, store_batch, section,
                                   day, parsed["course"], room,
