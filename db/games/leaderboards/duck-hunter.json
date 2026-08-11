@@ -15,8 +15,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 44,
-      "achievedAt": "2026-07-08T22:53:06.767Z"
+      "highScore": 56,
+      "achievedAt": "2026-07-26T14:16:51.981Z"
     },
     "25I-0816": {
       "nuid": "25I-0816",
@@ -35,6 +35,15 @@
       "batch": "25",
       "highScore": 128,
       "achievedAt": "2026-07-09T07:32:40.777Z"
+    },
+    "24I-6516": {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 7,
+      "achievedAt": "2026-07-25T18:51:45.928Z"
     }
   },
   "leaderboard": [
@@ -62,8 +71,17 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 44,
-      "achievedAt": "2026-07-08T22:53:06.767Z"
+      "highScore": 56,
+      "achievedAt": "2026-07-26T14:16:51.981Z"
+    },
+    {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 7,
+      "achievedAt": "2026-07-25T18:51:45.928Z"
     },
     {
       "nuid": "25I-0632",

@@ -53,6 +53,33 @@
       "batch": "25",
       "highScore": 5646,
       "achievedAt": "2026-07-09T07:27:51.879Z"
+    },
+    "24I-0767": {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 111,
+      "achievedAt": "2026-07-25T18:49:39.628Z"
+    },
+    "24I-6516": {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 798,
+      "achievedAt": "2026-07-25T18:52:30.493Z"
+    },
+    "25I-2556": {
+      "nuid": "25I-2556",
+      "name": "Ahmad Burhan",
+      "section": "A",
+      "department": "BS DS",
+      "batch": "25",
+      "highScore": 705,
+      "achievedAt": "2026-08-07T12:04:50.190Z"
     }
   },
   "leaderboard": [
@@ -109,6 +136,33 @@
       "batch": "25",
       "highScore": 1086,
       "achievedAt": "2026-07-08T22:39:37.687Z"
+    },
+    {
+      "nuid": "24I-6516",
+      "name": "Afaq Ahsan",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "highScore": 798,
+      "achievedAt": "2026-07-25T18:52:30.493Z"
+    },
+    {
+      "nuid": "25I-2556",
+      "name": "Ahmad Burhan",
+      "section": "A",
+      "department": "BS DS",
+      "batch": "25",
+      "highScore": 705,
+      "achievedAt": "2026-08-07T12:04:50.190Z"
+    },
+    {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 111,
+      "achievedAt": "2026-07-25T18:49:39.628Z"
     }
   ]
 }

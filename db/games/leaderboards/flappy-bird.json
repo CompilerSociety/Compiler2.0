@@ -35,6 +35,15 @@
       "batch": "25",
       "highScore": 3,
       "achievedAt": "2026-07-24T19:35:14.031Z"
+    },
+    "24I-0767": {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:50:06.282Z"
     }
   },
   "leaderboard": [
@@ -55,6 +64,15 @@
       "batch": "25",
       "highScore": 3,
       "achievedAt": "2026-07-24T19:35:14.031Z"
+    },
+    {
+      "nuid": "24I-0767",
+      "name": "Rayyan Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 2,
+      "achievedAt": "2026-07-25T18:50:06.282Z"
     },
     {
       "nuid": "25I-0632",
