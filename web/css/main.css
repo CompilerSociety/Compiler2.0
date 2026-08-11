@@ -651,7 +651,9 @@ html[data-theme="dark"] .theme-toggle-moon{display:block}
 .game-soon-msg[hidden]{display:none}
 
 /* ══════════════ Dark mode ══════════════ */
+html[data-theme="light"]{color-scheme:light}
 html[data-theme="dark"]{
+  color-scheme:dark;
   --accent:#2fbf6f;--accent-strong:#4ade80;--text:#e7f5ec;--muted:#93b9a3;--muted-light:#6f9880;
   --surface:#0d1912;--surface-strong:#16281c;--border:rgba(120,220,160,0.18);
   --success:#2fbf6f;--warning:#e8a13a;--danger:#f2564a;--info:#5b8fe0;
