@@ -1387,7 +1387,15 @@ function onSchoolChange(){
   document.getElementById('dept').innerHTML='<option value="">-- Department --</option>';
   document.getElementById('batch').innerHTML='<option value="">-- Batch --</option>';
   document.getElementById('sec').innerHTML='<option value="">-- Section --</option>';
-  document.getElementById('tt-out').innerHTML='<div class="tt-empty-card"><div class="live-dot" style="margin:0 auto 10px"></div><div class="empty">LOADING TIMETABLE FOR<br>'+SCHOOLS[school].label+'...</div></div>';
+  const ttOut=document.getElementById('tt-out');
+  if(ttOut){
+    ttOut.innerHTML=renderUiState({
+      kind:'loading',
+      title:'Loading timetable',
+      message:`Fetching the latest timetable for ${SCHOOLS[school]?.label || 'the selected school'}.`,
+      note:'The latest sheet data usually appears within a moment.'
+    });
+  }
   refreshTimetableFromGoogleSheet();
 }
 function setupTTFilterListeners(){
@@ -1875,12 +1883,23 @@ function onBlockChange(){
   const daySel=document.getElementById('r-day-sel');
   document.getElementById('sb2').className='step-box'+(block?' active-step':'');
   document.getElementById('sb3').className='step-box';
-  document.getElementById('rooms-result').innerHTML='';
+  const res=document.getElementById('rooms-result');
   setRoomsFreeBadge(null);
   floorSel.innerHTML='<option value="">-- Choose Floor --</option>';
   daySel.innerHTML='<option value="">-- Choose Floor First --</option>';
   daySel.disabled=true;
-  if(!block){floorSel.disabled=true;return;}
+  if(!block){
+    floorSel.disabled=true;
+    if(res){
+      res.innerHTML=renderUiState({
+        kind:'empty',
+        title:'Select a block',
+        message:'Choose a block to unlock the available floors.',
+        note:'The room grid appears after block, floor, and day are selected.'
+      });
+    }
+    return;
+  }
   floorSel.disabled=false;
   sortFloorKeys(Object.keys(BLOCK_FLOORS[block])).forEach(f=>{
     const opt=document.createElement('option');
@@ -1895,10 +1914,21 @@ function onFloorChange(){
   const floor=document.getElementById('r-floor').value;
   const daySel=document.getElementById('r-day-sel');
   document.getElementById('sb3').className='step-box'+(floor?' active-step':'');
-  document.getElementById('rooms-result').innerHTML='';
+  const res=document.getElementById('rooms-result');
   setRoomsFreeBadge(null);
   daySel.innerHTML='<option value="">-- Choose Day --</option>';
-  if(!floor){daySel.disabled=true;return;}
+  if(!floor){
+    daySel.disabled=true;
+    if(res){
+      res.innerHTML=renderUiState({
+        kind:'empty',
+        title:'Select a floor',
+        message:'Pick a floor to unlock the day selector.',
+        note:'Floor availability updates from the live room schedule.'
+      });
+    }
+    return;
+  }
   daySel.disabled=false;
   DAYS.forEach(d=>{
     const opt=document.createElement('option');
@@ -1916,7 +1946,18 @@ function onDayChange(){
   const floor=document.getElementById('r-floor').value;
   const day=document.getElementById('r-day-sel').value;
   const res=document.getElementById('rooms-result');
-  if(!block||!floor||!day){res.innerHTML='';setRoomsFreeBadge(null);return;}
+  if(!block||!floor||!day){
+    if(res){
+      res.innerHTML=renderUiState({
+        kind:'empty',
+        title:'Choose block, floor, and day',
+        message:'Once all three selectors are set, the room timeline appears here.',
+        note:'Use today’s day selection to see current availability.'
+      });
+    }
+    setRoomsFreeBadge(null);
+    return;
+  }
 
   const allRooms=BLOCK_FLOORS[block][floor]||[];
   const isToday=selectedDayIsToday(day);
@@ -1924,12 +1965,22 @@ function onDayChange(){
   const hasUpcoming=!isToday||allRooms.some(room=>getUpcomingSlots(slotsForRoom(room)).length>0);
 
   if(!allRooms.length){
-    res.innerHTML=`<div class="no-rooms"><span class="no-rooms-icon" aria-hidden="true">&#9633;</span><div class="no-rooms-txt">NO ROOMS ON THIS FLOOR</div></div>`;
+    res.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No rooms on this floor',
+      message:'This block and floor combination does not have any room data.',
+      note:'Try a different floor or block.'
+    });
     setRoomsFreeBadge(null);
     return;
   }
   if(!hasUpcoming){
-    res.innerHTML=`<div class="no-rooms"><span class="no-rooms-icon" aria-hidden="true">&#9633;</span><div class="no-rooms-txt"><span class="blink">_</span> ALL SLOTS HAVE PASSED FOR TODAY<br>COME BACK TOMORROW</div></div>`;
+    res.innerHTML=renderUiState({
+      kind:'empty',
+      title:'All slots have passed for today',
+      message:'This floor has no remaining free slots for the selected day.',
+      note:'Come back tomorrow or switch to another day.'
+    });
     setRoomsFreeBadge(null);
     return;
   }
@@ -2056,7 +2107,12 @@ function loadRepeatTT(){
   const secVal=document.getElementById('sec')?.value||'';
   const currentSlot=getCurrentSlot();
   if(!course){
-      out.innerHTML='<div class="tt-empty-card"><svg class="tt-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="tt-empty-title">Choose a repeat course</div><div class="tt-empty-copy">Pick a repeat course to view its full schedule for the selected day.</div></div>';
+      out.innerHTML=renderUiState({
+        kind:'empty',
+        title:'Choose a repeat course',
+        message:'Pick a repeat course to view its full schedule for the selected day.',
+        note:'Repeat courses are listed under the virtual department in the dropdown.'
+      });
     return;
   }
   saveTTPrefs();
@@ -2074,7 +2130,12 @@ function loadRepeatTT(){
     try{return timeToNumber(a.time)-timeToNumber(b.time);}catch(e){return 0;}
   });
   if(!rows.length){
-    out.innerHTML='<div class="tt-empty-card"><div class="nav-icon" aria-hidden="true" style="font-size:36px;margin-bottom:8px;color:#3d7a55">&#9670;</div><div class="empty">NO REPEAT SESSIONS MATCH THIS SELECTION.</div></div>';
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No repeat sessions found',
+      message:'No repeat courses match the current selection.',
+      note:'Try another day, section, or course.'
+    });
     return;
   }
   out.innerHTML=`<table class="tt-result-table">
@@ -2249,7 +2310,7 @@ function saveShowupPrefs(){
 function refreshShowupSourceBadge(){
   const badge=document.getElementById('showup-source-badge');
   if(!badge) return;
-  badge.innerHTML='◫ SHOW UP SCHEDULE';
+  badge.textContent='SHOW UP SCHEDULE';
 }
 
 function refreshShowupSectionOptions(){
@@ -2273,7 +2334,12 @@ function renderShowupSchedule(){
   const out=document.getElementById('showup-out');
   if(!out) return;
   if(!dept||!batch){
-    out.innerHTML='<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9670;</span><h3 class="sr-only">No show up schedule</h3>SELECT DEPARTMENT &amp; BATCH YEAR TO VIEW THE SCHEDULE</div>';
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'Select department and batch year',
+      message:'Choose both filters to load the latest show-up schedule.',
+      note:'The schedule appears here after the synced data is available.'
+    });
     return;
   }
   saveShowupPrefs();
@@ -2282,7 +2348,12 @@ function renderShowupSchedule(){
   if(sec) data=data.filter(e=>(e.sections[dept]||[]).some(s=>baseSection(s)===sec));
 
   if(!data.length){
-    out.innerHTML='<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9670;</span>NO SHOW UP SCHEDULE DATA FOR THIS SELECTION</div>';
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No show-up schedule found',
+      message:'No entries match this department and batch year.',
+      note:'Try another batch or clear the section filter.'
+    });
     return;
   }
 
@@ -2322,6 +2393,8 @@ function renderShowupSchedule(){
 function initShowupSchedulePanel(){
   const prefs=readShowupPrefs();
   const deptSel=document.getElementById('su-dept'),batchSel=document.getElementById('su-batch'),secSel=document.getElementById('su-sec');
+  const out=document.getElementById('showup-out');
+  if(out) out.innerHTML=renderUiState({ kind:'loading', title:'Loading show-up schedule', message:'Fetching the latest synced schedule.' });
   loadShowupScheduleData().then(()=>{
     if(prefs.dept&&deptSel) deptSel.value=prefs.dept;
     if(prefs.batch&&batchSel) batchSel.value=prefs.batch;
@@ -2331,8 +2404,12 @@ function initShowupSchedulePanel(){
     renderShowupSchedule();
   }).catch(()=>{
     refreshShowupSourceBadge();
-    const out=document.getElementById('showup-out');
-    if(out) out.innerHTML='<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9888;</span>NO SHOW UP SCHEDULE SYNCED YET</div>';
+    if(out) out.innerHTML=renderUiState({
+      kind:'error',
+      title:'Could not load show-up schedule',
+      message:'The synced schedule source is unavailable right now.',
+      note:'Try again in a moment.'
+    });
   });
 }
 
@@ -2371,7 +2448,15 @@ function renderFlatExamSchedule(){
   const out=document.getElementById('exam-flat-out');
   if(!out) return;
   const flat=(_examData&&_examData.flat_exams)||[];
-  if(!flat.length){ out.innerHTML=''; return; }
+  if(!flat.length){
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No midterm schedule loaded',
+      message:'This section appears only when a midterm or sessional schedule is available.',
+      note:'Use the filters below to view the final exam schedule.'
+    });
+    return;
+  }
   const sorted=[...flat].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||''));
   const rows=sorted.map(e=>{
     const d=e.date?new Date(e.date+'T00:00:00'):null;
@@ -2422,7 +2507,7 @@ function saveExamPrefs(){
 function refreshExamSourceBadge(){
   const badge=document.getElementById('exam-source-badge');
   if(!badge) return;
-  badge.innerHTML='✎ EXAM SCHEDULE';
+  badge.textContent='FINAL EXAM SCHEDULE';
 }
 
 function onExamDeptChange(){ saveExamPrefs(); renderExamSchedule(); }
@@ -2445,14 +2530,24 @@ function renderExamSchedule(){
   const out=document.getElementById('exam-out');
   if(!out) return;
   if(!dept||!batch){
-    out.innerHTML='<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9956;</span>SELECT DEPARTMENT &amp; BATCH YEAR TO VIEW THE SCHEDULE</div>';
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'Select department and batch year',
+      message:'Choose both filters to load the latest exam schedule.',
+      note:'The results area fills as soon as both selectors are set.'
+    });
     return;
   }
   saveExamPrefs();
   const data=examsForDeptBatch(dept,batch);
 
   if(!data.length){
-    out.innerHTML=`<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9956;</span>NO EXAM DATA FOR THIS SELECTION</div>`;
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No exam data found',
+      message:'No exam entries match this department and batch year.',
+      note:'Try a different batch year or another department.'
+    });
     return;
   }
 
@@ -2490,6 +2585,10 @@ function renderExamSchedule(){
 function initExamSchedulePanel(){
   const prefs=readExamPrefs();
   const deptSel=document.getElementById('ex-dept'),batchSel=document.getElementById('ex-batch');
+  const out=document.getElementById('exam-out');
+  const flatOut=document.getElementById('exam-flat-out');
+  if(flatOut) flatOut.innerHTML=renderUiState({ kind:'loading', title:'Loading schedule', message:'Checking whether a sessional schedule is available.' });
+  if(out) out.innerHTML=renderUiState({ kind:'loading', title:'Loading exam schedule', message:'Fetching the latest exam data.' });
   loadExamScheduleData().then(()=>{
     if(prefs.dept&&deptSel) deptSel.value=prefs.dept;
     if(prefs.batch&&batchSel) batchSel.value=prefs.batch;
@@ -2497,8 +2596,12 @@ function initExamSchedulePanel(){
     renderFlatExamSchedule();
     renderExamSchedule();
   }).catch(()=>{
-    const out=document.getElementById('exam-out');
-    if(out) out.innerHTML='<div class="exam-no-data"><span aria-hidden="true" style="font-family:VT323,monospace;font-size:42px;color:#5a9a6a;display:block;margin-bottom:8px">&#9888;</span>COULD NOT LOAD EXAM SCHEDULE DATA</div>';
+    if(out) out.innerHTML=renderUiState({
+      kind:'error',
+      title:'Could not load exam schedule',
+      message:'The schedule data source is unavailable right now.',
+      note:'Try again once the data sync completes.'
+    });
   });
 }
 
@@ -2627,7 +2730,12 @@ function searchSeatingPlan(){
     if(!matches.length){
       status.textContent='NO MATCH FOUND — CHECK SPELLING OR TRY YOUR NUID';
       status.className='sp-status err';
-      result.innerHTML=`<div class="sp-empty"><span class="sp-empty-icon" aria-hidden="true">&#9635;</span><div class="sp-empty-txt">NO SEATING RECORD FOR "${escHtml(query.toUpperCase())}"</div></div>`;
+      result.innerHTML=renderUiState({
+        kind:'empty',
+        title:'No seating record found',
+        message:`No seating record matched "${query.toUpperCase()}".`,
+        note:'Check spelling or try your NU ID.'
+      });
       return;
     }
     status.textContent=matches.length>1?`${matches.length} MATCHES FOUND`:'SEAT FOUND';
@@ -2636,13 +2744,46 @@ function searchSeatingPlan(){
   }).catch(()=>{
     status.textContent='COULD NOT LOAD SEATING DATA — FILE MAY NOT BE SYNCED YET';
     status.className='sp-status err';
-      result.innerHTML=`<div class="sp-empty"><span class="sp-empty-icon" aria-hidden="true">&#9888;</span><div class="sp-empty-txt">SEATING DATA UNAVAILABLE</div></div>`;
+      result.innerHTML=renderUiState({
+        kind:'error',
+        title:'Seating data unavailable',
+        message:'The seating plan file could not be loaded right now.',
+        note:'Try again after the sync completes.'
+      });
   }).finally(()=>{
     btn.disabled=false;
   });
 }
 
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function renderUiState({ kind = 'empty', title = '', message = '', note = '' } = {}) {
+  const mode = kind === 'loading' ? 'loading' : kind === 'error' ? 'error' : 'empty';
+  const graphic = mode === 'loading'
+    ? '<div class="ui-state-graphic" aria-hidden="true"><span class="ui-state-spinner"></span></div>'
+    : mode === 'error'
+      ? '<div class="ui-state-graphic" aria-hidden="true"><svg class="ui-state-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></div>'
+      : '<div class="ui-state-graphic" aria-hidden="true"><svg class="ui-state-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></div>';
+  return `<div class="ui-state-card ${mode}" role="status" aria-live="polite" aria-busy="${mode === 'loading' ? 'true' : 'false'}">
+    ${graphic}
+    <div class="ui-state-body">
+      ${title ? `<div class="ui-state-title">${escHtml(title)}</div>` : ''}
+      ${message ? `<div class="ui-state-copy">${escHtml(message)}</div>` : ''}
+      ${note ? `<div class="ui-state-note">${escHtml(note)}</div>` : ''}
+    </div>
+  </div>`;
+}
+function setTextOrFallback(id, value, fallback = 'Not available') {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value && String(value).trim() ? value : fallback;
+}
+function setFacultyLeadershipValues(values) {
+  setTextOrFallback('fv-hos-name', values.hosName, 'Select a school');
+  setTextOrFallback('fv-hos-email', values.hosEmail, 'Select a school');
+  setTextOrFallback('fv-hos-room', values.hosRoom, 'Select a school');
+  setTextOrFallback('fv-hod-name', values.hodName, 'Select a department');
+  setTextOrFallback('fv-hod-email', values.hodEmail, 'Select a department');
+  setTextOrFallback('fv-hod-room', values.hodRoom, 'Select a department');
+}
 function showCopied(btn){
   if(!btn) return;
   btn.classList.add('copied');
@@ -3279,17 +3420,27 @@ function onFvSchoolChange() {
       deptSelect.appendChild(opt);
     });
     deptSelect.value = '';
+    setFacultyLeadershipValues({
+      hosName: FACULTY_DATA[school].hosName,
+      hosEmail: FACULTY_DATA[school].hosEmail,
+      hosRoom: FACULTY_DATA[school].hosRoom,
+      hodName: 'Select a department',
+      hodEmail: 'Select a department',
+      hodRoom: 'Select a department'
+    });
   } else {
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.textContent = 'Select School First';
     deptSelect.appendChild(placeholder);
-    document.getElementById('fv-hos-name').textContent = '-';
-    document.getElementById('fv-hos-email').textContent = '-';
-    document.getElementById('fv-hos-room').textContent = '-';
-    document.getElementById('fv-hod-name').textContent = '-';
-    document.getElementById('fv-hod-email').textContent = '-';
-    document.getElementById('fv-hod-room').textContent = '-';
+    setFacultyLeadershipValues({
+      hosName: 'Select a school',
+      hosEmail: 'Select a school',
+      hosRoom: 'Select a school',
+      hodName: 'Select a school',
+      hodEmail: 'Select a school',
+      hodRoom: 'Select a school'
+    });
   }
   renderFacultyVault();
 }
@@ -3297,37 +3448,63 @@ function onFvSchoolChange() {
 function onFvDeptChange() {
   const school = document.getElementById('fv-school').value;
   const dept = document.getElementById('fv-dept').value;
-  if (!school || !dept) {
-    document.getElementById('fv-hod-name').textContent = '-';
-    document.getElementById('fv-hod-email').textContent = '-';
-    document.getElementById('fv-hod-room').textContent = '-';
+  if (!school) {
+    setFacultyLeadershipValues({
+      hosName: 'Select a school',
+      hosEmail: 'Select a school',
+      hosRoom: 'Select a school',
+      hodName: 'Select a school',
+      hodEmail: 'Select a school',
+      hodRoom: 'Select a school'
+    });
+    renderFacultyVault();
+    return;
+  }
+  if (!dept) {
+    const schoolData = FACULTY_DATA[school];
+    setFacultyLeadershipValues({
+      hosName: schoolData?.hosName,
+      hosEmail: schoolData?.hosEmail,
+      hosRoom: schoolData?.hosRoom,
+      hodName: 'Select a department',
+      hodEmail: 'Select a department',
+      hodRoom: 'Select a department'
+    });
     renderFacultyVault();
     return;
   }
   
   const schoolData = FACULTY_DATA[school];
   if (schoolData) {
-    document.getElementById('fv-hos-name').textContent = schoolData.hosName || '-';
-    document.getElementById('fv-hos-email').textContent = schoolData.hosEmail || '-';
-    document.getElementById('fv-hos-room').textContent = schoolData.hosRoom || '-';
+    setFacultyLeadershipValues({
+      hosName: schoolData.hosName,
+      hosEmail: schoolData.hosEmail,
+      hosRoom: schoolData.hosRoom,
+      hodName: 'Not available',
+      hodEmail: 'Not available',
+      hodRoom: 'Not available'
+    });
     
     const deptData = schoolData.departments[dept];
     if (deptData) {
-      document.getElementById('fv-hod-name').textContent = deptData.hodName || '-';
-      document.getElementById('fv-hod-email').textContent = deptData.hodEmail || '-';
-      document.getElementById('fv-hod-room').textContent = deptData.hodRoom || '-';
-    } else {
-      document.getElementById('fv-hod-name').textContent = '-';
-      document.getElementById('fv-hod-email').textContent = '-';
-      document.getElementById('fv-hod-room').textContent = '-';
+      setFacultyLeadershipValues({
+        hosName: schoolData.hosName,
+        hosEmail: schoolData.hosEmail,
+        hosRoom: schoolData.hosRoom,
+        hodName: deptData.hodName,
+        hodEmail: deptData.hodEmail,
+        hodRoom: deptData.hodRoom
+      });
     }
   } else {
-    document.getElementById('fv-hos-name').textContent = '-';
-    document.getElementById('fv-hos-email').textContent = '-';
-    document.getElementById('fv-hos-room').textContent = '-';
-    document.getElementById('fv-hod-name').textContent = '-';
-    document.getElementById('fv-hod-email').textContent = '-';
-    document.getElementById('fv-hod-room').textContent = '-';
+    setFacultyLeadershipValues({
+      hosName: 'Select a school',
+      hosEmail: 'Select a school',
+      hosRoom: 'Select a school',
+      hodName: 'Select a school',
+      hodEmail: 'Select a school',
+      hodRoom: 'Select a school'
+    });
   }
   
   renderFacultyVault();
@@ -3349,15 +3526,25 @@ function renderFacultyVault() {
   
   const schoolData = FACULTY_DATA[school];
   if (!schoolData) {
-    grid.innerHTML = '<div class="fv-empty"><span class="fv-empty-icon" aria-hidden="true">◭</span><div class="fv-empty-txt">SELECT A SCHOOL TO BEGIN</div></div>';
-    countEl.textContent = '0 MEMBERS';
+    grid.innerHTML = renderUiState({
+      kind:'empty',
+      title:'Choose a school',
+      message:'Pick a school to browse faculty members, leadership contacts, room numbers, and email addresses.',
+      note:'Use the school selector above to start.'
+    });
+    countEl.textContent = 'Select a school';
     return;
   }
   
   const deptData = schoolData.departments[dept];
   if (!deptData) {
-    grid.innerHTML = '<div class="fv-empty"><span class="fv-empty-icon" aria-hidden="true">◭</span><div class="fv-empty-txt">SELECT A DEPARTMENT</div></div>';
-    countEl.textContent = '0 MEMBERS';
+    grid.innerHTML = renderUiState({
+      kind:'empty',
+      title:'Choose a department',
+      message:'Pick a department to view its faculty directory.',
+      note:'You can search once the department is selected.'
+    });
+    countEl.textContent = 'Select a department';
     return;
   }
   
@@ -3369,7 +3556,12 @@ function renderFacultyVault() {
   countEl.textContent = `${teachers.length} MEMBER${teachers.length !== 1 ? 'S' : ''}`;
   
   if (teachers.length === 0) {
-    grid.innerHTML = `<div class="fv-empty"><span class="fv-empty-icon" aria-hidden="true">&#128100;</span><div class="fv-empty-txt">NO TEACHERS FOUND MATCHING "${escHtml(search.toUpperCase())}"</div></div>`;
+    grid.innerHTML = renderUiState({
+      kind:'empty',
+      title:'No teachers matched',
+      message:`No faculty members match "${search.toUpperCase()}".`,
+      note:'Try another name or clear the search box.'
+    });
     return;
   }
   
@@ -3538,7 +3730,7 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
     const myNuid=profile && profile.nuid ? String(profile.nuid).toUpperCase() : null;
     // No saved profile -> scores are hidden behind a red "make your profile" prompt.
     if(!myNuid){
-      body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeCompilerRun();openProfileModal()">&#9888; Make your profile to join the leaderboard &mdash; tap here</td></tr>';
+      body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeCompilerRun();openProfileModal()">Create your profile to join the leaderboard &mdash; tap here</td></tr>';
       return;
     }
     if(!entries || entries.length===0){
@@ -3794,7 +3986,7 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
     if(!body) return; if(status) status.textContent=LB_STATUS;
     const profile=(typeof getProfileCookie==='function')?getProfileCookie():null;
     const myNuid=profile&&profile.nuid?String(profile.nuid).toUpperCase():null;
-    if(!myNuid){ body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeDuckHunter();openProfileModal()">&#9888; Make your profile to join the leaderboard &mdash; tap here</td></tr>'; return; }
+    if(!myNuid){ body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeDuckHunter();openProfileModal()">Create your profile to join the leaderboard &mdash; tap here</td></tr>'; return; }
     if(!entries||entries.length===0){ body.innerHTML='<tr><td colspan="4" class="cr-lb-empty">No scores yet &mdash; be the first!</td></tr>'; return; }
     body.innerHTML=entries.map((row,i)=>{
       const isMe=myNuid&&row.nuid&&String(row.nuid).toUpperCase()===myNuid;
@@ -3947,7 +4139,7 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
     if(!body) return; if(status) status.textContent=LB_STATUS;
     const profile=(typeof getProfileCookie==='function')?getProfileCookie():null;
     const myNuid=profile&&profile.nuid?String(profile.nuid).toUpperCase():null;
-    if(!myNuid){ body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeFlappy();openProfileModal()">&#9888; Make your profile to join the leaderboard &mdash; tap here</td></tr>'; return; }
+    if(!myNuid){ body.innerHTML='<tr><td colspan="4" class="cr-lb-cta" onclick="closeFlappy();openProfileModal()">Create your profile to join the leaderboard &mdash; tap here</td></tr>'; return; }
     if(!entries||entries.length===0){ body.innerHTML='<tr><td colspan="4" class="cr-lb-empty">No scores yet &mdash; be the first!</td></tr>'; return; }
     body.innerHTML=entries.map((row,i)=>{
       const isMe=myNuid&&row.nuid&&String(row.nuid).toUpperCase()===myNuid;
