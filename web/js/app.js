@@ -1372,7 +1372,7 @@ function refreshTTFilters(){
   fillSelectOptions(batchSel,batches,null,'-- Batch --');
   if(prefs.batch&&batches.includes(prefs.batch)) batchSel.value=prefs.batch;
   const bat=batchSel.value;
-  const secs=Object.keys(((TT[dep]||{})[bat])||{}).sort();
+  const secs=Object.keys(((TT[dep]||{})[bat])||{}).filter(sec=>sec!==BATCH_WIDE_SECTION).sort();
   fillSelectOptions(secSel,secs,null,'-- Section --');
   if(prefs.sec&&secs.includes(prefs.sec)) secSel.value=prefs.sec;
   else if(secs.length===1) secSel.value=secs[0];
@@ -1486,6 +1486,7 @@ const LAB_SLOT_COLS={
 
 // Batch mapping for Spring-2026: no suffix = 2023 (senior), 25/24/22 = batch
 const BATCH_MAP={"25":"2025","24":"2024","22":"2022"};
+const BATCH_WIDE_SECTION='ALL';
 
 // Cell regex: "OOP (CS-E)" or "PF (CS-C, 25)" or "AI Lab (AI/DS-A, 24)"
 // or "NLP (DS, Gp-I)" or "Civics (CS-D) 09:00-10:45 Extended till 11:20"
@@ -2164,7 +2165,8 @@ function loadTT(){
   const bat=document.getElementById('batch').value;
   const sec=document.getElementById('sec').value;
   const day=document.getElementById('day').value;
-  const rawData=(TT[dep]&&TT[dep][bat]&&TT[dep][bat][sec]&&TT[dep][bat][sec][day])||[];
+  const wideData=(TT[dep]&&TT[dep][bat]&&TT[dep][bat][BATCH_WIDE_SECTION]&&TT[dep][bat][BATCH_WIDE_SECTION][day])||[];
+  const rawData=[...wideData,...((TT[dep]&&TT[dep][bat]&&TT[dep][bat][sec]&&TT[dep][bat][sec][day])||[])];
   // A repeat (yellow) class must appear ONLY under "Repeat Courses", never in
   // the regular batch/section view. Drop any entry that matches a repeat one
   // for this dept+section+day (matched by time + room, or time + course name).

@@ -21,6 +21,8 @@ const SCHOOLS = {
 };
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+// Computing sheet sometimes omits a section letter and means the whole batch.
+const BATCH_WIDE_SECTION = "ALL";
 
 /* ── Text helpers ── */
 
@@ -412,8 +414,7 @@ function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMa
           const batch = lookupBatchForCol(colBatchMap, col, parsed.course, cell);
           if (!batch) continue;
           const depts = resolveDepartmentsForCell(parsed, headerInfo, batch);
-          const section = parsed.section || (depts.some((dept) => isMSContext(batch, dept)) ? "A" : "");
-          if (!section) continue;
+          const section = parsed.section || (depts.some((dept) => isMSContext(batch, dept)) ? "A" : BATCH_WIDE_SECTION);
           for (const dept of depts) {
             if (addCourseToTT(target, { dept, batch, section, day, course: parsed.course, room, time: block.slotMap[timeCol] })) added++;
           }
