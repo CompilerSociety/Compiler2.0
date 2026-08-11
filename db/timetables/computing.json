@@ -646,6 +646,11 @@
               "name": "DLD",
               "location": "C-307",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "02:30-03:50"
             }
           ],
           "Tuesday": [
@@ -658,6 +663,11 @@
               "name": "UHQ-I&II",
               "location": "C-311",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "C-RAWAL 1",
+              "time": "02:30-05:15"
             },
             {
               "name": "DLD Lab",
@@ -680,6 +690,11 @@
               "name": "DLD",
               "location": "C-307",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "02:30-03:50"
             }
           ],
           "Thursday": [
@@ -716,9 +731,19 @@
               "name": "LA",
               "location": "C-309",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "C-RAWAL 1",
+              "time": "02:30-05:15"
             }
           ],
           "Tuesday": [
+            {
+              "name": "OOP",
+              "location": "C-307",
+              "time": "02:30-03:50"
+            },
             {
               "name": "DLD",
               "location": "C-310",
@@ -759,6 +784,11 @@
               "time": "08:30-09:50"
             },
             {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "02:30-03:50"
+            },
+            {
               "name": "DLD",
               "location": "C-310",
               "time": "10:00-11:20"
@@ -786,6 +816,11 @@
               "name": "SDA",
               "location": "C-308",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "03:55-05:15"
             }
           ],
           "Tuesday": [
@@ -820,6 +855,11 @@
               "name": "SDA",
               "location": "C-308",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "03:55-05:15"
             }
           ],
           "Thursday": [
@@ -832,6 +872,11 @@
               "name": "DLD",
               "location": "C-402",
               "time": "11:30-12:50"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "C-MARGALA 1",
+              "time": "02:30-05:15"
             },
             {
               "name": "DLD Lab",
@@ -859,6 +904,11 @@
             }
           ],
           "Tuesday": [
+            {
+              "name": "OOP",
+              "location": "C-307",
+              "time": "03:55-05:15"
+            },
             {
               "name": "Seerah",
               "location": "C-401",
@@ -890,9 +940,19 @@
               "name": "SDA",
               "location": "C-310",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "C-RAWAL 1",
+              "time": "02:30-05:15"
             }
           ],
           "Thursday": [
+            {
+              "name": "OOP",
+              "location": "C-308",
+              "time": "03:55-05:15"
+            },
             {
               "name": "DLD",
               "location": "C-402",
@@ -1186,158 +1246,6 @@
           ]
         }
       },
-      "REPEAT": {
-        "A": {
-          "Monday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "COAL",
-              "location": "C-402",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "MG Elective",
-              "location": "D-404",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "COAL",
-              "location": "C-403",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "MG Elective",
-              "location": "D-404",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "COAL Lab",
-              "location": "C-RAWAL 1",
-              "time": "08:30-11:15"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "03:55-05:15"
-            },
-            {
-              "name": "COAL",
-              "location": "C-402",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "MG Elective",
-              "location": "D-404",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "03:55-05:15"
-            },
-            {
-              "name": "COAL",
-              "location": "C-403",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "MG Elective",
-              "location": "D-404",
-              "time": "03:55-05:15"
-            },
-            {
-              "name": "OOP Lab",
-              "location": "C-MARGALA 1",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "COAL Lab",
-              "location": "C-RAWAL 1",
-              "time": "11:30-02:15"
-            }
-          ]
-        },
-        "C": {
-          "Monday": [
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "OOP",
-              "location": "C-307",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "02:30-03:50"
-            }
-          ]
-        },
-        "D": {
-          "Tuesday": [
-            {
-              "name": "OOP",
-              "location": "C-307",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "OOP",
-              "location": "C-308",
-              "time": "03:55-05:15"
-            }
-          ]
-        }
-      },
       "2024": {
         "A": {
           "Monday": [
@@ -1355,6 +1263,11 @@
               "name": "Comp Net",
               "location": "C-402",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "COAL",
+              "location": "C-402",
+              "time": "02:30-03:50"
             }
           ],
           "Tuesday": [
@@ -1389,6 +1302,11 @@
               "name": "Comp Net",
               "location": "C-403",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "COAL",
+              "location": "C-403",
+              "time": "02:30-03:50"
             }
           ],
           "Thursday": [
@@ -1402,10 +1320,22 @@
               "location": "C-405",
               "time": "10:00-11:20"
             }
+          ],
+          "Friday": [
+            {
+              "name": "COAL Lab",
+              "location": "C-RAWAL 1",
+              "time": "08:30-11:15"
+            }
           ]
         },
         "B": {
           "Monday": [
+            {
+              "name": "COAL",
+              "location": "C-402",
+              "time": "03:55-05:15"
+            },
             {
               "name": "Comp Arch",
               "location": "C-403",
@@ -1439,6 +1369,11 @@
               "name": "App HCI",
               "location": "C-402",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "COAL",
+              "location": "C-403",
+              "time": "03:55-05:15"
             },
             {
               "name": "Comp Arch",
@@ -1465,6 +1400,13 @@
             {
               "name": "Comp Net Lab",
               "location": "C-RAWAL 4",
+              "time": "11:30-02:15"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "COAL Lab",
+              "location": "C-RAWAL 1",
               "time": "11:30-02:15"
             }
           ]
@@ -1857,6 +1799,40 @@
               "name": "PDC",
               "location": "D-411",
               "time": "02:30-03:50"
+            }
+          ]
+        }
+      },
+      "2022": {
+        "A": {
+          "Tuesday": [
+            {
+              "name": "MG Elective",
+              "location": "D-404",
+              "time": "02:30-03:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "MG Elective",
+              "location": "D-404",
+              "time": "02:30-03:50"
+            }
+          ]
+        },
+        "B": {
+          "Tuesday": [
+            {
+              "name": "MG Elective",
+              "location": "D-404",
+              "time": "03:55-05:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "MG Elective",
+              "location": "D-404",
+              "time": "03:55-05:15"
             }
           ]
         }
@@ -2422,6 +2398,11 @@
               "name": "Intro to SE",
               "location": "C-603",
               "time": "11:30-12:50"
+            },
+            {
+              "name": "OOP",
+              "location": "C-603",
+              "time": "03:55-05:15"
             }
           ],
           "Tuesday": [
@@ -2451,6 +2432,11 @@
               "name": "Intro to SE",
               "location": "C-604",
               "time": "11:30-12:50"
+            },
+            {
+              "name": "OOP",
+              "location": "C-604",
+              "time": "03:55-05:15"
             }
           ],
           "Thursday": [
@@ -2468,6 +2454,11 @@
               "name": "COAL Lab",
               "location": "C-MARGALA 4",
               "time": "11:30-02:15"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "C-RAWAL 1",
+              "time": "02:30-05:15"
             }
           ]
         },
@@ -2682,59 +2673,6 @@
           ]
         }
       },
-      "REPEAT": {
-        "A": {
-          "Monday": [
-            {
-              "name": "OOP",
-              "location": "C-603",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Game Design",
-              "location": "C-605",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "OOP",
-              "location": "C-604",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Game Design",
-              "location": "C-605",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
-            }
-          ]
-        },
-        "B": {
-          "Tuesday": [
-            {
-              "name": "Game Design",
-              "location": "C-605",
-              "time": "03:55-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Game Design",
-              "location": "C-605",
-              "time": "03:55-05:15"
-            }
-          ]
-        }
-      },
       "2023": {
         "A": {
           "Monday": [
@@ -2853,6 +2791,40 @@
               "name": "NLP",
               "location": "C-609",
               "time": "01:00-02:20"
+            }
+          ]
+        }
+      },
+      "2022": {
+        "A": {
+          "Tuesday": [
+            {
+              "name": "Game Design",
+              "location": "C-605",
+              "time": "02:30-03:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Game Design",
+              "location": "C-605",
+              "time": "02:30-03:50"
+            }
+          ]
+        },
+        "B": {
+          "Tuesday": [
+            {
+              "name": "Game Design",
+              "location": "C-605",
+              "time": "03:55-05:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Game Design",
+              "location": "C-605",
+              "time": "03:55-05:15"
             }
           ]
         }
@@ -3731,7 +3703,7 @@
           ]
         }
       },
-      "REPEAT": {
+      "2022": {
         "A": {
           "Tuesday": [
             {
@@ -3958,6 +3930,11 @@
               "name": "Data St",
               "location": "D-303",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "D-314",
+              "time": "08:30-09:50"
             }
           ],
           "Tuesday": [
@@ -3997,6 +3974,11 @@
               "name": "Data St",
               "location": "D-304",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "D-315",
+              "time": "08:30-09:50"
             }
           ],
           "Thursday": [
@@ -4013,6 +3995,18 @@
             {
               "name": "Data St Lab",
               "location": "C-MARGALA 4",
+              "time": "08:30-11:15"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "OOP",
+              "location": "C-305",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "OOP Lab",
+              "location": "D-IT LAB 2",
               "time": "08:30-11:15"
             }
           ]
@@ -4100,6 +4094,11 @@
               "time": "08:30-09:50"
             },
             {
+              "name": "OOP",
+              "location": "D-304",
+              "time": "10:00-11:20"
+            },
+            {
               "name": "COAL",
               "location": "D-304",
               "time": "11:30-12:50"
@@ -4147,6 +4146,11 @@
               "name": "Prog for AI",
               "location": "D-305",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "OOP",
+              "location": "D-306",
+              "time": "10:00-11:20"
             }
           ],
           "Thursday": [
@@ -4165,24 +4169,6 @@
               "location": "D-IT LAB 3",
               "time": "02:30-05:15"
             }
-          ]
-        }
-      },
-      "REPEAT": {
-        "B": {
-          "Monday": [
-            {
-              "name": "OOP",
-              "location": "D-304",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "OOP",
-              "location": "D-306",
-              "time": "10:00-11:20"
-            }
           ],
           "Friday": [
             {
@@ -4194,74 +4180,6 @@
               "name": "OOP Lab",
               "location": "D-IT LAB 2",
               "time": "11:30-02:15"
-            }
-          ]
-        },
-        "A": {
-          "Monday": [
-            {
-              "name": "OOP",
-              "location": "D-314",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Edge Comp",
-              "location": "D-402",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "OS",
-              "location": "D-305",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Edge Comp",
-              "location": "C-406",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "OOP",
-              "location": "D-315",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "OS",
-              "location": "D-305",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "OOP",
-              "location": "C-305",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "OOP Lab",
-              "location": "D-IT LAB 2",
-              "time": "08:30-11:15"
-            }
-          ]
-        },
-        "C": {
-          "Tuesday": [
-            {
-              "name": "Business Research",
-              "location": "D-413",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Business Research",
-              "location": "D-403",
-              "time": "11:30-12:50"
             }
           ]
         }
@@ -4286,6 +4204,11 @@
             }
           ],
           "Tuesday": [
+            {
+              "name": "OS",
+              "location": "D-305",
+              "time": "01:00-02:20"
+            },
             {
               "name": "TBW",
               "location": "D-306",
@@ -4320,6 +4243,11 @@
             }
           ],
           "Thursday": [
+            {
+              "name": "OS",
+              "location": "D-305",
+              "time": "01:00-02:20"
+            },
             {
               "name": "TBW",
               "location": "D-311",
@@ -4571,16 +4499,82 @@
             }
           ]
         }
+      },
+      "2022": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Edge Comp",
+              "location": "D-402",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Edge Comp",
+              "location": "C-406",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "C": {
+          "Tuesday": [
+            {
+              "name": "Business Research",
+              "location": "D-413",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Business Research",
+              "location": "D-403",
+              "time": "11:30-12:50"
+            }
+          ]
+        }
       }
     },
     "BS DS": {
-      "REPEAT": {
+      "2025": {
         "B": {
           "Monday": [
             {
               "name": "OOP",
               "location": "D-304",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "LA",
+              "location": "D-312",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "COAL Lab",
+              "location": "D-IT LAB 3",
+              "time": "11:30-02:15"
+            },
+            {
+              "name": "Data St Lab",
+              "location": "C-MARGALA 3",
+              "time": "02:30-05:15"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Intro to DS",
+              "location": "D-313",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "COAL",
+              "location": "D-313",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Data St",
+              "location": "D-314",
+              "time": "08:30-09:50"
             }
           ],
           "Wednesday": [
@@ -4588,6 +4582,38 @@
               "name": "OOP",
               "location": "D-306",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "LA",
+              "location": "D-314",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "UHQ-I&II",
+              "location": "D-314",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Intro to DS Lab",
+              "location": "D-IT LAB 4",
+              "time": "11:30-02:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Intro to DS",
+              "location": "D-314",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Data St",
+              "location": "D-315",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "COAL",
+              "location": "D-315",
+              "time": "01:00-02:20"
             }
           ],
           "Friday": [
@@ -4606,39 +4632,79 @@
         "A": {
           "Monday": [
             {
+              "name": "LA",
+              "location": "D-312",
+              "time": "10:00-11:20"
+            },
+            {
               "name": "OOP",
               "location": "D-314",
               "time": "08:30-09:50"
             },
             {
-              "name": "Edge Comp",
-              "location": "D-316",
-              "time": "11:30-12:50"
+              "name": "UHQ-I&II",
+              "location": "D-314",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Intro to DS Lab",
+              "location": "D-IT LAB 4",
+              "time": "11:30-02:15"
             }
           ],
           "Tuesday": [
             {
-              "name": "OS",
-              "location": "D-305",
+              "name": "COAL",
+              "location": "D-313",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Intro to DS",
+              "location": "D-313",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Data St",
+              "location": "D-314",
               "time": "01:00-02:20"
             }
           ],
           "Wednesday": [
+            {
+              "name": "LA",
+              "location": "D-314",
+              "time": "08:30-09:50"
+            },
             {
               "name": "OOP",
               "location": "D-315",
               "time": "08:30-09:50"
             },
             {
-              "name": "Edge Comp",
-              "location": "D-403",
-              "time": "11:30-12:50"
+              "name": "Data St Lab",
+              "location": "C-MARGALA 1",
+              "time": "02:30-05:15"
+            },
+            {
+              "name": "COAL Lab",
+              "location": "C-MARGALA 3",
+              "time": "11:30-02:15"
             }
           ],
           "Thursday": [
             {
-              "name": "OS",
-              "location": "D-305",
+              "name": "COAL",
+              "location": "D-314",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Intro to DS",
+              "location": "D-314",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Data St",
+              "location": "D-314",
               "time": "01:00-02:20"
             }
           ],
@@ -4851,148 +4917,6 @@
           ]
         }
       },
-      "2025": {
-        "B": {
-          "Monday": [
-            {
-              "name": "LA",
-              "location": "D-312",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "COAL Lab",
-              "location": "D-IT LAB 3",
-              "time": "11:30-02:15"
-            },
-            {
-              "name": "Data St Lab",
-              "location": "C-MARGALA 3",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Intro to DS",
-              "location": "D-313",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "COAL",
-              "location": "D-313",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Data St",
-              "location": "D-314",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "LA",
-              "location": "D-314",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "UHQ-I&II",
-              "location": "D-314",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Intro to DS Lab",
-              "location": "D-IT LAB 4",
-              "time": "11:30-02:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Intro to DS",
-              "location": "D-314",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Data St",
-              "location": "D-315",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "COAL",
-              "location": "D-315",
-              "time": "01:00-02:20"
-            }
-          ]
-        },
-        "A": {
-          "Monday": [
-            {
-              "name": "LA",
-              "location": "D-312",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "UHQ-I&II",
-              "location": "D-314",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Intro to DS Lab",
-              "location": "D-IT LAB 4",
-              "time": "11:30-02:15"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "COAL",
-              "location": "D-313",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Intro to DS",
-              "location": "D-313",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Data St",
-              "location": "D-314",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "LA",
-              "location": "D-314",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Data St Lab",
-              "location": "C-MARGALA 1",
-              "time": "02:30-05:15"
-            },
-            {
-              "name": "COAL Lab",
-              "location": "C-MARGALA 3",
-              "time": "11:30-02:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "COAL",
-              "location": "D-314",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Intro to DS",
-              "location": "D-314",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Data St",
-              "location": "D-314",
-              "time": "01:00-02:20"
-            }
-          ]
-        }
-      },
       "2024": {
         "A": {
           "Monday": [
@@ -5017,6 +4941,11 @@
               "name": "Adv Stats",
               "location": "D-303",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "OS",
+              "location": "D-305",
+              "time": "01:00-02:20"
             },
             {
               "name": "Data Ware & BI",
@@ -5051,6 +4980,11 @@
               "name": "Adv Stats",
               "location": "D-303",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "OS",
+              "location": "D-305",
+              "time": "01:00-02:20"
             },
             {
               "name": "Data Ware & BI",
@@ -5131,6 +5065,24 @@
               "name": "DAV",
               "location": "D-316",
               "time": "02:30-03:50"
+            }
+          ]
+        }
+      },
+      "2022": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Edge Comp",
+              "location": "D-316",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Edge Comp",
+              "location": "D-403",
+              "time": "11:30-12:50"
             }
           ]
         }
@@ -5863,5 +5815,5 @@
     }
   },
   "count": 968,
-  "generatedAt": "2026-08-11T12:48:12.756959+00:00"
+  "generatedAt": "2026-08-11T13:14:51.814021+00:00"
 }
