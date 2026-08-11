@@ -25,6 +25,24 @@
   <script>
     (function () {
       try {
+        var path = location.pathname.replace(/\/+$/, '').replace(/^\/+/, '');
+        var routes = {
+          timetable: 'timetable',
+          freerooms: 'freerooms',
+          showup: 'showup',
+          exams: 'exams',
+          seating: 'seating',
+          faculty: 'faculty'
+        };
+        if (routes[path] && location.hash !== '#' + routes[path]) {
+          location.replace('/#' + routes[path]);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script>
+    (function () {
+      try {
         var stored = localStorage.getItem('theme');
         var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
