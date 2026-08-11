@@ -90,6 +90,11 @@ export default async function handler(req, res) {
     }
     throw lastErr || new Error('Could not save subscription');
   } catch (err) {
-    return res.status(500).json({ ok: false, error: String(err.message || err) });
+    console.error('subscribe API error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Internal error',
+      message: err?.message || String(err),
+    });
   }
 }

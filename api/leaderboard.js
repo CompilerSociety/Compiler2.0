@@ -160,6 +160,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   } catch (err) {
     console.error('leaderboard API error:', err);
-    return res.status(500).json({ error: 'Internal error', message: err?.message || String(err) });
+    return res.status(500).json({
+      error: 'Internal error',
+      message: err?.message || String(err),
+    });
   }
 }
