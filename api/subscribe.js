@@ -12,6 +12,18 @@ const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }
 
+// GitHub rejecting the credential is a server misconfiguration, not a blip —
+// tagged so the handler can say so plainly instead of a bare "HTTP 500" (see
+// api/leaderboard.js, which hit the same failure mode against the same token).
+function authError(status) {
+  const err = new Error(
+    `GitHub rejected GH_TOKEN (${status}). The token is missing, expired, ` +
+    `revoked, or lacks contents:write on the repo.`
+  );
+  err.isAuthFailure = true;
+  return err;
+}
+
 async function ghGet(token) {
   const url = `https://api.github.com/repos/${repo()}/contents/${SUBS_PATH}?ref=${branch()}`;
   const res = await fetch(url, {
@@ -22,6 +34,7 @@ async function ghGet(token) {
     },
   });
   if (res.status === 404) return { subs: [], sha: null };
+  if (res.status === 401 || res.status === 403) throw authError(res.status);
   if (!res.ok) throw new Error(`read subscriptions failed (${res.status})`);
   const data = await res.json();
   let subs = [];
@@ -50,6 +63,7 @@ async function ghPut(token, subs, sha) {
     },
     body: JSON.stringify(body),
   });
+  if (res.status === 401 || res.status === 403) throw authError(res.status);
   if (!res.ok) throw new Error(`write subscriptions failed (${res.status})`);
 }
 
@@ -72,7 +86,16 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: 'nuid and a valid subscription are required' });
     }
     const token = process.env.GH_TOKEN;
-    if (!token) return res.status(500).json({ ok: false, error: 'Server not configured (missing GH_TOKEN)' });
+    if (!token) {
+      // `message` is shown to the user, so it stays plain and blameless.
+      // `detail` carries the operator-facing cause.
+      return res.status(503).json({
+        ok: false,
+        error: 'subscribe_unavailable',
+        message: "Notifications can't be enabled right now — this is on us, not you.",
+        detail: 'GH_TOKEN is not set on the server.',
+      });
+    }
 
     // Retry a couple of times: a concurrent subscribe changes the file sha.
     let lastErr;
@@ -91,6 +114,14 @@ export default async function handler(req, res) {
     throw lastErr || new Error('Could not save subscription');
   } catch (err) {
     console.error('subscribe API error:', err);
+    if (err?.isAuthFailure) {
+      return res.status(503).json({
+        ok: false,
+        error: 'subscribe_unavailable',
+        message: "Notifications can't be enabled right now — this is on us, not you.",
+        detail: err.message,
+      });
+    }
     return res.status(500).json({
       ok: false,
       error: 'Internal error',

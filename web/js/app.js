@@ -621,7 +621,15 @@ async function enableSeatAlerts(){
         subscription:sub
       })
     });
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(!res.ok){
+      // Show the server's actual reason (a 503 from api/subscribe.js means it
+      // knows why — e.g. its GitHub credential is bad) instead of a bare
+      // "HTTP 500" that tells the student nothing and points no one at the cause.
+      let data=null;
+      try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
+      if(data&&data.detail) console.warn('Push subscribe unavailable:',data.detail);
+      throw new Error((data&&data.message)||('HTTP '+res.status));
+    }
     setPushStatus('✓ Notifications are on for '+profile.nuid+'.');
   }catch(err){
     console.warn('enableSeatAlerts failed:',err);
