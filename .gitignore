@@ -20,8 +20,12 @@ dbfolder/*.json
 output.txt
 
 # Node / tooling
+# package-lock.json is intentionally NOT ignored: four GitHub Actions
+# workflows (class-change-notify, exam-schedule-notify, showup-schedule-notify,
+# sync-seating-plan) run `npm ci`, which refuses to run at all without a
+# committed lockfile. Every recorded run of all four failed at that exact step
+# for exactly that reason — see commit fixing this.
 node_modules/
-package-lock.json
 
 # Local editor / agent clutter
 .vscode/
