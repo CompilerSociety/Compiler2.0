@@ -58,6 +58,13 @@ self.addEventListener('push', event => {
     tag: data.tag || 'seating-update',
     renotify: true,
     requireInteraction: false,
+    // Without an icon Chrome falls back to a coloured circle with the first
+    // letter of the domain (a "W" for www.vtable.site) in the corner of
+    // every notification. Default to the site's PWA icon so notifications
+    // look like the site, and let a payload override it if it ever wants a
+    // per-type icon.
+    icon: data.icon || '/icons/icon-192.png',
+    badge: data.badge || '/icons/icon-192.png',
     data: { url: data.url || '/' }
   };
   event.waitUntil(self.registration.showNotification(title, options));

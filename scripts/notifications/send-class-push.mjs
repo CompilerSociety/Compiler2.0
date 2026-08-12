@@ -61,6 +61,36 @@ function cleanCourseName(name) {
   return String(name || '').replace(/\s*(ReSch(eduled)?|Cancelled|Cancel)\b.*$/i, '').trim() || 'your class';
 }
 
+// Format a "HH:MM-HH:MM" slot as "H:MM AM–H:MM PM" for a human-readable
+// notification body. The stored times are 12-hour ambiguous ("01:00-02:20"
+// means 1:00-2:20 PM). Since every scheduled slot lives inside the 8 AM –
+// 8 PM school day:
+//
+//   start hour 8-11  -> AM; anything else (12 or 1-7) -> PM
+//   end hour is PM if start is PM, or if end is exactly 12 (noon), or if end
+//     is numerically less than start (a range that crossed noon, e.g.
+//     "11:30-02:15" -> 11:30 AM – 2:15 PM)
+//
+// An end hour of 8 in a PM-start slot (evening classes end at 8:05 PM) stays
+// PM by the "start is PM" branch.
+function fmt12(hhmm, isPM) {
+  const [h, m] = String(hhmm || '').split(':').map(Number);
+  if (!Number.isFinite(h)) return String(hhmm || '');
+  const period = isPM ? 'PM' : 'AM';
+  let hour12 = h % 12;
+  if (hour12 === 0) hour12 = 12;
+  return `${hour12}:${String(m).padStart(2, '0')} ${period}`;
+}
+function fmtSlot(range) {
+  const [a, b] = String(range || '').split('-').map((s) => s.trim());
+  if (!a || !b) return String(range || '—');
+  const sh = Number(a.split(':')[0]);
+  const eh = Number(b.split(':')[0]);
+  const startPM = !(sh >= 8 && sh <= 11);
+  const endPM = startPM || eh === 12 || eh < sh;
+  return `${fmt12(a, startPM)}–${fmt12(b, endPM)}`;
+}
+
 // Build the current set of class slots across all timetable files.
 const slots = []; // { slotKey, value, status, deptKey, batch, secLetter, section, course, day, time, venue }
 for (const f of TIMETABLE_FILES) {
@@ -142,9 +172,21 @@ let sent = 0, skipped = 0, pruned = 0;
         // cancellation/reschedule (same status, time and venue). A different
         // time/venue is a new composite and will notify.
         if (seen[s.slotKey] === s.value) { continue; }
+        // Include the day and formatted time so the student can tell which
+        // sitting of a class this is about — a course has multiple slots in
+        // the week, and "SDA has been cancelled" alone was ambiguous.
+        //
+        // For a cancellation, s.time is the slot that ISN'T happening — read
+        // as "the sitting at this time is off."
+        //
+        // For a reschedule, the sheet cell holds the CURRENT (post-move)
+        // time/venue, so the message reads as "moved to these coordinates."
+        // The original slot is not stored in the timetable, so we cannot
+        // include "from where."
+        const when = `${s.day} at ${fmtSlot(s.time)}`;
         const body = s.status === 'Cancelled'
-          ? `Dear ${name}, your class ${s.course} (${s.section}) has been cancelled.`
-          : `Dear ${name}, your class ${s.course} (${s.section}) has been rescheduled to ${s.time} at ${s.venue}.`;
+          ? `Dear ${name}, your ${s.course} (${s.section}) class on ${when} has been cancelled.`
+          : `Dear ${name}, your ${s.course} (${s.section}) class has been rescheduled to ${when} in ${s.venue}.`;
         const payload = JSON.stringify({
           title: s.status === 'Cancelled' ? 'Class cancelled' : 'Class rescheduled',
           body, url: '/', tag: `class-${s.deptKey}-${s.batch}-${s.secLetter}-${s.course}-${s.day}`,
