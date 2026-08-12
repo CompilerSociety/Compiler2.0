@@ -62,5 +62,21 @@
       }
     },
     "updated_at": 1786558313180
+  },
+  {
+    "nuid": "25I-0656",
+    "name": "Ali Raza",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dl8_Z7jY-oI:APA91bF6Yq67JZX_kdibdGusYwvJBR96b9y-JGUxvYQ4w4KAwbD3eRX5BeDSNTrb6vIDHydEcIywrRMCwa3356IoxshwOVtl3vOw2NgxFpBwxMfuQuzVpu_ZwiM7s2ISO0XtxTiMcwbx",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BMR9Nc2Wii65GJeKHJCL7PczyWbY-bKm6ItcP6gxL_DOcilzXgxWhAw1VjmmxS1jmWtj4C9hNBY3NCj8A3twBpk",
+        "auth": "XdMh33_lCjyQPskYGOjKtw"
+      }
+    },
+    "updated_at": 1786558375730
   }
 ]
