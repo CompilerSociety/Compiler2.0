@@ -141,9 +141,12 @@ export default async function handler(req, res) {
 
     // Writing a score does need the token: it commits back to the repo.
     if (!token) {
+      // `message` is shown to the player, so it stays plain and blameless.
+      // `detail` carries the operator-facing cause.
       return res.status(503).json({
         error: 'leaderboard_read_only',
-        message: 'Scores cannot be saved: GH_TOKEN is not set on the server.',
+        message: "Scores can't be saved right now — this is on us, not you.",
+        detail: 'GH_TOKEN is not set on the server.',
       });
     }
 
@@ -207,7 +210,7 @@ export default async function handler(req, res) {
       // behind a generic failure.
       return res.status(503).json({
         error: 'leaderboard_read_only',
-        message: 'Scores cannot be saved right now — the server credential was rejected.',
+        message: "Scores can't be saved right now — this is on us, not you.",
         detail: err.message,
       });
     }

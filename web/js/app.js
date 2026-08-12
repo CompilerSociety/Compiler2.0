@@ -716,8 +716,11 @@ async function submitLeaderboardScore(game,profile,score){
     try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
     if(!res.ok){
       // 503 means the server knows it cannot save (bad or missing credential).
-      // Show its reason rather than a generic failure, and still fall back to
-      // reading the board so the player at least sees the standings.
+      // Players see data.message, which is written to be plain and blameless —
+      // a student cannot act on "the credential was rejected" and should not be
+      // left thinking they broke something. The operator-facing cause comes
+      // back as data.detail and goes to the console for diagnosis.
+      if(data&&data.detail) console.warn('Leaderboard save unavailable:',data.detail);
       const msg=(res.status===503&&data&&data.message)?data.message:'Could not submit score.';
       let entries=[];
       try{ entries=await fetchLeaderboard(game); }catch(e){ /* leave empty */ }
