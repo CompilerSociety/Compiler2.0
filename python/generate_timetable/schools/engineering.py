@@ -4,11 +4,15 @@ import re
 from types import SimpleNamespace
 
 from ..config import (
+    COURSES_BATCH_CELL_RE,
+    COURSES_CODE_HEADERS,
+    COURSES_FALLBACK_LAYOUT,
     COURSES_HEADER_BATCH_ONLY_RE,
     COURSES_HEADER_DEPT_BATCH_RE,
-    COURSES_HEADER_MSPHD_RE,
+    COURSES_HEADER_DEPT_ONLY_RE,
+    COURSES_HEADER_MS_RE,
     COURSES_HEADER_SEMESTER_RE,
-    COURSES_SECTION_COLS,
+    COURSES_SECTION_HEADER_RE,
     ENGINEERING_PROGRAMS,
     FSE_SECTION_RE,
     FSE_SUFFIX_RE,
@@ -49,7 +53,7 @@ COMMON = SimpleNamespace(
 def normalize_course_name(name):
     """
     Normalize a course title for cross-referencing between the schedule
-    grid (titles only) and the Courses SP-26 tab (titles + codes + repeat
+    grid (titles only) and the courses tab (titles + codes + repeat
     annotations). Case/punctuation/whitespace differences between the two
     tabs are common, so this intentionally strips all of that.
     """
@@ -58,6 +62,134 @@ def normalize_course_name(name):
     n = re.sub(r'[.,]', '', n)
     n = re.sub(r'\s+', ' ', n)
     return n.strip()
+
+
+# Words that carry no identifying weight and that the two tabs disagree
+# about: the grid writes "A & Digital Comm.", the courses tab writes
+# "Analogue and Digital Communication".
+CONNECTOR_TOKENS = {"and"}
+
+
+def title_tokens(name):
+    """
+    Split a course title into comparison tokens.
+
+    Splitting the RAW title on non-alphanumerics is the point: the sheet's
+    own punctuation is what separates words, so "Computer Org.Architecture"
+    becomes ["computer", "org", "architecture"] instead of gluing
+    "org.architecture" into one unmatchable token.
+    """
+    raw = str(name or "")
+    toks = [t.lower() for t in re.split(r'[^A-Za-z0-9]+', raw) if t]
+    return [t for t in toks if t not in CONNECTOR_TOKENS]
+
+
+def token_key(name):
+    """
+    Lookup key built from title_tokens, used on BOTH sides of the courses-tab
+    lookup so that punctuation differences collide instead of missing:
+    "Applications of ICT - Lab" and "Applications of ICT Lab" produce the
+    same key.
+    """
+    return " ".join(title_tokens(name))
+
+
+def _is_subsequence(short, long):
+    """True if every character of `short` appears in `long`, in order."""
+    it = iter(long)
+    return all(ch in it for ch in short)
+
+
+def tokens_match(grid_tok, course_tok):
+    """
+    Decide whether one grid token refers to the same word as one courses-tab
+    token.
+
+    Prefix match in EITHER direction, because the tabs disagree about
+    plurals and spellings ("Variables"/"Variable", "Analogue"/"Analog") and
+    because the grid abbreviates ("Comm."/"Communication").
+
+    Failing that, for tokens of 3+ characters that share a first letter, an
+    in-order subsequence match — which absorbs dropped vowels and outright
+    typos ("netwks"/"networks", "strucures"/"structures"). The length and
+    first-letter guards keep two-letter stubs like "mp" from matching half
+    the catalogue.
+    """
+    if grid_tok == course_tok:
+        return True
+    if grid_tok.startswith(course_tok) or course_tok.startswith(grid_tok):
+        return True
+    if (len(grid_tok) >= 3 and len(course_tok) >= 3
+            and grid_tok[0] == course_tok[0]):
+        return (_is_subsequence(grid_tok, course_tok)
+                or _is_subsequence(course_tok, grid_tok))
+    return False
+
+
+def title_token_match(grid_toks, course_toks):
+    """
+    True if every grid token is accounted for, in order, by the course
+    title's tokens. The course title may carry EXTRA words the grid dropped
+    ("Obj. Oriented Data Struct." vs "Object Oriented Data Structures and
+    Algorithms"); the grid may not carry words the course title lacks.
+    """
+    if not grid_toks:
+        return False
+    i = 0
+    for ct in course_toks:
+        if i < len(grid_toks) and tokens_match(grid_toks[i], ct):
+            i += 1
+    return i == len(grid_toks)
+
+
+def match_abbreviated_title(grid_title, course_lookup, common):
+    """
+    Find the courses-tab title that a heavily abbreviated grid title refers
+    to. Tried ONLY after an exact-key miss.
+
+    The schedule grid abbreviates hard and the courses tab spells out, so
+    exact-name lookup misses most of the sheet: "A & Digital Comm.",
+    "Elect. Netwk. Analysis", "Obj. Oriented Data Struct.",
+    "Computer Org.Architecture", plus typos like "Discrete Strucures".
+
+    Returns (matched_key, records) or (None, []). Ambiguity is NEVER guessed
+    at — more than one surviving candidate logs a warning and falls back to
+    the keyword heuristic.
+    """
+    grid_toks = title_tokens(grid_title)
+    if not grid_toks:
+        return None, []
+
+    candidates = [
+        key for key in course_lookup
+        if title_token_match(grid_toks, key.split(" "))
+    ]
+    if not candidates:
+        return None, []
+
+    if len(candidates) > 1:
+        # A course and its lab share every other word, so the only thing
+        # separating them is whether the grid title says "lab".
+        wants_lab = "lab" in grid_toks
+        filtered = [k for k in candidates if ("lab" in k.split(" ")) == wants_lab]
+        if filtered:
+            candidates = filtered
+
+    if len(candidates) > 1:
+        # Prefer the title that invents the fewest words of its own.
+        fewest = min(len(k.split(" ")) for k in candidates)
+        candidates = [k for k in candidates if len(k.split(" ")) == fewest]
+
+    if len(candidates) > 1:
+        common.dlog_warn(
+            f"  FSE: '{grid_title}' matches {len(candidates)} courses-tab "
+            f"titles ambiguously ({sorted(candidates)}) — refusing to guess, "
+            f"falling back to keyword heuristic"
+        )
+        return None, []
+
+    key = candidates[0]
+    return key, course_lookup[key]
 
 
 def normalizeDay(raw):
@@ -204,54 +336,66 @@ def infer_fse_batch_fallback(course_name):
     Infer batch year for an FSE engineering course using course-name
     keywords. FALLBACK ONLY (Phase 2) — the structural Courses-tab lookup
     (resolve_fse_entry) is the primary mechanism; this only fires when a
-    course has no matching row in the Courses SP-26 tab.
+    course has no matching row in the courses tab.
 
-    Spring 2026 semester mapping (engineering):
-      Semester 2 (batch 2025): Linear Circuit Analysis, Prog. for Engineers,
+    Fall 2026 semester mapping (engineering). The school has moved on a
+    semester since these tiers were written for Spring-2026, so every tier
+    shifted by one year and a 1st-semester tier was added — without it the
+    function could not return "2026" at all, and the whole freshman batch
+    landed in whichever older bucket its course names happened to hit.
+
+      Semester 1 (batch 2026): Applied Calculus, Applications of ICT,
+                               Physics for Engineers, Pakistan Studies,
+                               English Language Skills, Occupational Health
+                               and Safety, Engineering Drawing,
+                               Prog. Fundamentals
+      Semester 3 (batch 2025): Linear Circuit Analysis, Prog. for Engineers,
                                Differential Equations, Linear Algebra,
-                               Pakistan Studies, Applied Physics, Applied Calculus,
-                               Civics, Understanding of Holy Quran, Applications of ICT,
-                               Prog. Fundamentals (CE 2nd-sem), English Language
-      Semester 4 (batch 2024): Signal & Systems, Digital Logic, Data Structures,
-                               Probability, Communication Skills, Object Oriented,
-                               Electrical Network Anal., Basic Mech. Engg,
-                               Tech. Comm. Skills, Prob. & Random Prs.
-      Semester 6 (batch 2023): Engineering Economics, Analog & Digital, Computer Arch,
-                               Entrepreneurship, Operating Systems, Electro-Mechanical,
-                               Network Programming, Feedback Control, Introduction to IOT,
-                               Engineering Workshop
-      Semester 8 (batch 2022): Power Electronics, Digital Signal Processing, VLSI,
-                               Industrial Processes, Deep Learning, Computational Stat
+                               Applied Physics, Civics, Understanding of Holy
+                               Quran, Digital Logic Design, Object Oriented
+      Semester 5 (batch 2024): Signal & Systems, Data Structures, Probability,
+                               Communication Skills, Electrical Network Anal.,
+                               Basic Mech. Engg, Tech. Comm. Skills,
+                               Analog & Digital Comm., Computer Architecture,
+                               Microprocessor Interfacing, Database Systems
+      Semester 7 (batch 2023): Engineering Economics, Entrepreneurship,
+                               Operating Systems, Electro-Mechanical, Network
+                               Programming, Feedback Control, IOT, Engineering
+                               Workshop, Power Electronics, DSP, VLSI,
+                               Industrial Processes, Deep Learning
     """
     name = (course_name or "").upper()
 
     if re.search(
+        r'\b(APPLIED\s+CALCULUS|APPLICATIONS\s+OF\s+ICT|'
+        r'PHYSICS\s+FOR\s+ENGR|PHYSICS\s+FOR\s+ENGINEER|'
+        r'PAKISTAN\s+STUD|ENGLISH\s+LANGUAGE|'
+        r'OCCUPATIONAL\s+HEALTH|ENGINEERING\s+DRAWING|'
+        r'PROG\.?\s+FUNDAMENTALS|PROGRAMMING\s+FUNDAMENTALS)', name):
+        return "2026"
+
+    if re.search(
         r'\b(LINEAR\s+CIRCUIT\s+ANALYSIS|PROG\.?\s+FOR\s+ENGINEERS|'
-        r'DIFFERENTIAL\s+EQU|LINEAR\s+ALGEBRA|PAKISTAN\s+STUD|'
-        r'APPLIED\s+PHYSICS|APPLIED\s+CALCULUS|'
-        r'CIVICS|COMMUNITY\s+ENGAGEMENT|UNDERSTANDING\s+OF\s+HOLY|'
-        r'APPLICATIONS\s+OF\s+ICT|PROG\.?\s+FUNDAMENTALS|'
-        r'ENGLISH\s+LANGUAGE)', name):
+        r'DIFFERENTIAL\s+EQU|LINEAR\s+ALGEBRA|'
+        r'APPLIED\s+PHYSICS|CIVICS|COMMUNITY\s+ENGAGEMENT|'
+        r'UNDERSTANDING\s+OF\s+HOLY|DIGITAL\s+LOGIC|OBJECT\s+ORIENTED)', name):
         return "2025"
 
     if re.search(
-        r'\b(SIGNAL\s+.?\s*SYSTEMS?|DIGITAL\s+LOGIC|DATA\s+STRUCT|'
+        r'\b(SIGNAL\s+.?\s*SYSTEMS?|DATA\s+STRUCT|'
         r'PROBABILITY|PROB\.?\s+.?\s*RANDOM|COMMUNICATION\s+SKILLS?|'
-        r'OBJECT\s+ORIENTED|ELECTRICAL\s+NETWORK|'
-        r'BASIC\s+MECH|TECH\.?\s+COMM)', name):
+        r'ELECTRICAL\s+NETWORK|ELECT\.?\s+NETWK|'
+        r'BASIC\s+MECH|TECH\.?\s+COMM|ANALOG|COMPUTER\s+ARCH|'
+        r'COMPUTER\s+ORG|DATABASE|MICROPROCESSOR)', name):
         return "2024"
 
     if re.search(
-        r'\b(ENGINEERING\s+ECONOMICS|ANALOG|COMPUTER\s+ARCH|'
-        r'ENTREPRENEURSHIP|OPERATING\s+SYSTEMS?|ELECTRO.?MECHANICAL|'
+        r'\b(ENGINEERING\s+ECONOMICS|ENTREPRENEURSHIP|'
+        r'OPERATING\s+SYSTEMS?|ELECTRO.?MECHANICAL|'
         r'NETWORK\s+PROGRAM|FEEDBACK\s+CONTROL|INTRODUCTION\s+TO\s+IOT|'
-        r'ENGINEERING\s+WORKSHOP)', name):
+        r'ENGINEERING\s+WORKSHOP|POWER\s+ELECTRONICS?|DIGITAL\s+SIGNAL|'
+        r'VLSI|INDUSTRIAL\s+PROC|DEEP\s+LEARN|COMPUTATIONAL\s+STAT)', name):
         return "2023"
-
-    if re.search(
-        r'\b(POWER\s+ELECTRONICS?|DIGITAL\s+SIGNAL|VLSI|'
-        r'INDUSTRIAL\s+PROC|DEEP\s+LEARN|COMPUTATIONAL\s+STAT)', name):
-        return "2022"
 
     return "2024"  # safe middle-ground default
 
@@ -260,9 +404,139 @@ def infer_fse_batch_fallback(course_name):
 # Phase 2 — Courses SP-26 tab parsing (structural source of truth)
 # ---------------------------------------------------------------------------
 
+def detect_courses_layout(text_grid, common):
+    """
+    Work out where the courses tab keeps its Code / Course / Section columns.
+
+    The tab has been re-laid-out between semesters and hardcoded indices
+    silently stopped matching — only 8 of ~81 rows parsed, which pushed
+    nearly every class onto keyword guessing. So find the header row by
+    what it says rather than where it sits:
+
+        Courses SP-26      row 1: [_, Code, Course/Lab, ...,  Section-A..D at 6-9]
+        Course Allocation  row 2: [_, _, Code, Course/Lab, ..., Section-A..E at 7-11]
+        FA26
+
+    Returns a layout dict {header_row, code_col, title_col, section_cols}.
+    Falls back to COURSES_FALLBACK_LAYOUT (the SP-26 positions) when no
+    header row is recognisable, so an unexpected tab still parses something.
+    """
+    one_line = common.one_line
+
+    for r, row in enumerate(text_grid[:12]):
+        if not row:
+            continue
+        cells = [one_line(c).strip() for c in row]
+
+        code_col = next(
+            (c for c, cell in enumerate(cells)
+             if cell.lower() in COURSES_CODE_HEADERS), None)
+        if code_col is None:
+            continue
+
+        title_col = next(
+            (c for c, cell in enumerate(cells)
+             if c != code_col and cell.lower().startswith("course")), None)
+        if title_col is None:
+            continue
+
+        section_cols = []
+        for c, cell in enumerate(cells):
+            m = COURSES_SECTION_HEADER_RE.match(cell)
+            if m:
+                section_cols.append((c, m.group(1).upper()))
+
+        if not section_cols:
+            section_cols = COURSES_FALLBACK_LAYOUT["section_cols"]
+
+        return {
+            "header_row": r,
+            "code_col": code_col,
+            "title_col": title_col,
+            "section_cols": section_cols,
+        }
+
+    common.dlog_warn(
+        "  FSE: no Code/Course header row found on the courses tab — "
+        f"falling back to the old fixed layout {COURSES_FALLBACK_LAYOUT}"
+    )
+    return dict(COURSES_FALLBACK_LAYOUT)
+
+
+def interpret_block_header(text):
+    """
+    Read one block-header cell into whatever it declares.
+
+    Returns a dict with any of: dept, batch, is_repeat, semester — plus
+    "matched" telling the caller whether anything was recognised at all.
+    A dept WITHOUT a batch ("BS CE 1st Semester Courses/Labs") opens a
+    block: the caller sets the dept and clears the batch, and the batch
+    fills in when its own cell turns up a row later.
+
+    A dept value of None means "shared block, applies to EE and CE alike".
+    """
+    out = {"matched": False}
+    if not text:
+        return out
+    norm = re.sub(r'\s+', ' ', text).strip()
+
+    sem_m = COURSES_HEADER_SEMESTER_RE.search(norm)
+    if sem_m:
+        out["semester"] = sem_m.group(1)
+        out["matched"] = True
+
+    # "Batch BS(CE) 2026" — dept and batch in one cell.
+    m = COURSES_HEADER_DEPT_BATCH_RE.search(norm)
+    if m:
+        code = m.group(1).upper()
+        out["dept"] = code if code in ENGINEERING_PROGRAMS else None
+        out["batch"] = m.group(2)
+        out["is_repeat"] = bool(re.search(r'repeat', norm, re.IGNORECASE))
+        out["matched"] = True
+        return out
+
+    # "MS/PhD (EE) Courses" / "MS EE" / "MS(EE) - IC Design" / "MS Electives".
+    m = COURSES_HEADER_MS_RE.search(norm)
+    if m:
+        code = m.group(1).upper()
+        # Only trust the captured token when it actually names a programme —
+        # otherwise "MS Electives" would register a department called "Ele".
+        out["dept"] = code if code in ENGINEERING_PROGRAMS else None
+        out["batch"] = "MS"
+        out["matched"] = True
+        return out
+
+    # "6th Semester  Batch 2023" — shared across EE and CE.
+    m = COURSES_HEADER_BATCH_ONLY_RE.search(norm)
+    if m:
+        out["dept"] = None
+        out["batch"] = m.group(1)
+        out["is_repeat"] = bool(re.search(r'repeat', norm, re.IGNORECASE))
+        out["matched"] = True
+        return out
+
+    # A bare batch cell, possibly flagged: "2026", "2025 (Repeat)".
+    m = COURSES_BATCH_CELL_RE.match(norm)
+    if m:
+        out["batch"] = m.group(1)
+        out["is_repeat"] = bool(m.group(2) and re.search(r'repeat', m.group(2), re.IGNORECASE))
+        out["matched"] = True
+        return out
+
+    # Dept-only header that opens a block ahead of its batch cell.
+    m = COURSES_HEADER_DEPT_ONLY_RE.search(norm)
+    if m:
+        code = m.group(1).upper()
+        if code in ENGINEERING_PROGRAMS:
+            out["dept"] = code
+            out["opens_block"] = True
+            out["matched"] = True
+    return out
+
+
 def parse_courses_tab(text_grid, common):
     """
-    Parse the "Courses SP-26" tab into a lookup:
+    Parse the courses tab into a lookup:
         normalized_course_name -> [record, ...]
     where each record is:
         {dept, batch, semester, is_repeat, code, raw_title, sections}
@@ -270,47 +544,66 @@ def parse_courses_tab(text_grid, common):
     dept is "EE" / "CE" / None (None = shared block, applies to both —
     used by the later, non-dept-split semesters e.g. "6th Semester Batch 2023").
 
+    Block headers are read from EVERY cell left of the Code column, because
+    the FA26 tab splits them: the dept sits in column 0 on the row that opens
+    the block, and the batch in column 1 on the block's FIRST COURSE ROW.
+
     Also returns the flat list of all records, for cross-validation.
     """
     dlog = common.dlog
+    dlog_warn = common.dlog_warn
     one_line = common.one_line
+
+    layout = detect_courses_layout(text_grid, common)
+    code_col = layout["code_col"]
+    title_col = layout["title_col"]
+    section_cols = layout["section_cols"]
+    dlog(f"  FSE: courses-tab layout {layout}")
 
     lookup = {}
     all_entries = []
     current_dept = None
     current_batch = None
     current_semester = None
+    current_block_repeat = False
+    skipped_no_batch = 0
 
-    for row in text_grid:
+    for r, row in enumerate(text_grid):
         if not row:
             continue
+        if r <= layout["header_row"]:
+            continue
 
-        header_raw = one_line(row[0] if len(row) > 0 else "")
-        if header_raw:
-            header_norm = re.sub(r'\s+', ' ', header_raw).strip()
-            m = COURSES_HEADER_DEPT_BATCH_RE.search(header_norm)
-            if m:
-                current_dept = m.group(1).upper()
-                current_batch = m.group(2)
-            else:
-                m2 = COURSES_HEADER_MSPHD_RE.search(header_norm)
-                if m2:
-                    current_dept = m2.group(1).upper()
-                    current_batch = "MS"
-                else:
-                    m3 = COURSES_HEADER_BATCH_ONLY_RE.search(header_norm)
-                    if m3:
-                        current_dept = None  # shared across EE & CE
-                        current_batch = m3.group(1)
-            sem_m = COURSES_HEADER_SEMESTER_RE.match(header_norm)
-            if sem_m:
-                current_semester = sem_m.group(1)
+        # Every cell left of the Code column can carry block-header text.
+        for c in range(0, min(code_col, len(row))):
+            info = interpret_block_header(one_line(row[c]))
+            if not info["matched"]:
+                continue
+            if "semester" in info:
+                current_semester = info["semester"]
+            if "batch" in info:
+                current_batch = info["batch"]
+                current_block_repeat = info.get("is_repeat", False)
+                if "dept" in info:
+                    current_dept = info["dept"]
+            elif info.get("opens_block"):
+                # Dept named but no batch yet — open the block and wait for
+                # the batch cell rather than inheriting the previous block's.
+                current_dept = info.get("dept")
+                current_batch = None
+                current_block_repeat = False
 
-        code = one_line(row[1] if len(row) > 1 else "")
-        title_raw = one_line(row[2] if len(row) > 2 else "")
+        code = one_line(row[code_col] if len(row) > code_col else "")
+        title_raw = one_line(row[title_col] if len(row) > title_col else "")
         if not title_raw or not code:
             continue
         if title_raw.lower() in ("course/lab", "course", "lab"):
+            continue
+
+        if not current_batch:
+            # No batch in scope — filing this under a null batch would put it
+            # in a bucket nothing can ever select. Skip and count instead.
+            skipped_no_batch += 1
             continue
 
         is_repeat_annotated, other_depts, clean_title = parse_repeat_annotation(title_raw)
@@ -326,15 +619,19 @@ def parse_courses_tab(text_grid, common):
         #     repeat for the home dept itself.
         # This distinction is exactly what fixes the Applied-Calculus bug:
         # EE gets it as a normal 2025 course, CE gets it as a REPEAT entry.
-        home_is_repeat = is_repeat_annotated and not other_depts
+        # A block-level "(Repeat)" on the batch cell applies to every row in
+        # the block, on top of the per-title annotation handled above.
+        home_is_repeat = (is_repeat_annotated and not other_depts) or current_block_repeat
 
         sections = []
-        for idx, letter in COURSES_SECTION_COLS:
+        for idx, letter in section_cols:
             val = one_line(row[idx] if len(row) > idx else "")
             if val:
                 sections.append(letter)
 
-        norm_name = normalize_course_name(clean_title)
+        # Keyed on tokens, not raw text, so that punctuation differences
+        # between the two tabs collide instead of missing — see token_key.
+        norm_name = token_key(clean_title)
         if not norm_name:
             continue
 
@@ -369,6 +666,11 @@ def parse_courses_tab(text_grid, common):
             all_entries.append(extra)
 
     dlog(f"  FSE: Courses tab parsed — {len(all_entries)} rows, {len(lookup)} unique course names")
+    if skipped_no_batch:
+        dlog_warn(
+            f"  FSE: {skipped_no_batch} courses-tab row(s) skipped — a course "
+            f"row appeared with no batch in scope (block header not recognised?)"
+        )
     return lookup, all_entries
 
 
@@ -409,19 +711,29 @@ def build_course_lookup(service, school_info, common):
 # Phase 2/3 — structural resolution of dept + batch + repeat status
 # ---------------------------------------------------------------------------
 
-def resolve_fse_entry(parsed, course_lookup, common):
+def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
     """
     Resolve department(s) + batch + repeat-status for a parsed FSE schedule
-    cell, using the Courses SP-26 tab as the structural source of truth
-    (Phase 2) instead of keyword-based inference (infer_fse_batch_fallback).
+    cell, using the courses tab as the structural source of truth (Phase 2)
+    instead of keyword-based inference (infer_fse_batch_fallback).
 
     Returns a list of (dept_key, batch, is_repeat) tuples, e.g.:
       [("BS EE", "2025", False)]
       [("BS EE", "2025", False), ("BS CE", "2025", True)]   # repeat for CE
+
+    `aliases` collects grid-title-key -> courses-tab-key for titles resolved
+    by abbreviation matching, so cross_validate() can still tell that the
+    courses-tab entry reached the schedule under its abbreviated name.
     """
     dlog_warn = common.dlog_warn
-    norm_name = normalize_course_name(parsed["course"])
+    norm_name = token_key(parsed["course"])
     candidates = course_lookup.get(norm_name, [])
+
+    if not candidates:
+        matched_key, candidates = match_abbreviated_title(
+            parsed["course"], course_lookup, common)
+        if matched_key and aliases is not None:
+            aliases[norm_name] = matched_key
 
     results = []
     programs = parsed.get("programs", [])
@@ -515,6 +827,10 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
 
     added = 0
     matched_records = set()
+    # Grid title key -> courses-tab title key, for titles the grid abbreviates.
+    aliases = {}
+    structural_hits = 0
+    structural_misses = 0
     total_rows = len(text_grid)
     if total_rows < 5:
         return 0, matched_records
@@ -614,7 +930,12 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                 if not parsed:
                     continue
 
-                resolved = resolve_fse_entry(parsed, course_lookup, common)
+                resolved = resolve_fse_entry(parsed, course_lookup, common, aliases)
+                grid_key = token_key(parsed["course"])
+                if grid_key in course_lookup or grid_key in aliases:
+                    structural_hits += 1
+                else:
+                    structural_misses += 1
 
                 is_ms = False
                 if instr_row and course_col is not None:
@@ -628,7 +949,9 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                 if not day:
                     continue
 
-                norm_name = normalize_course_name(parsed["course"])
+                # Credit the courses-tab spelling, not the grid's abbreviation,
+                # so cross_validate() sees the entry as scheduled.
+                norm_name = aliases.get(grid_key, grid_key)
                 for dept, batch, is_repeat in resolved:
                     store_batch = REPEAT_BATCH_KEY if is_repeat else batch
                     bare_dept = dept.split(" ")[-1]
@@ -638,6 +961,11 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                         added += 1
 
             r += 2  # skip to next course row (past instructor row)
+
+    resolved_total = structural_hits + structural_misses
+    dlog(f"  FSE: structural resolution {structural_hits}/{resolved_total} "
+         f"schedule entries ({len(aliases)} via abbreviation matching); "
+         f"{structural_misses} on the keyword fallback")
 
     return added, matched_records
 

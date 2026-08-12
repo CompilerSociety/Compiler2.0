@@ -1,9 +1,73 @@
 """Generic helpers shared by timetable generators."""
 
 import re
+import sys
 from datetime import datetime
 
 from .config import DEBUG_LOG_FILE
+
+# ---------------------------------------------------------------------------
+# Console encoding
+#
+# The logs below are full of arrows and em-dashes. A Windows console defaults
+# to cp1252, which cannot encode them, and a single such character raised
+# UnicodeEncodeError mid-run and killed the whole generation. Switch the
+# streams to UTF-8 here — at import, before anything has printed — and fall
+# back to lossy printing where the interpreter won't allow the switch.
+# A bad character in a log line must never abort a generation.
+# ---------------------------------------------------------------------------
+
+class _LossyWriter:
+    """Last-resort stream proxy that never raises on an unencodable character.
+
+    Wraps the original stream and, if a write blows up on encoding, retries
+    with the offending characters replaced. Everything else is delegated, so
+    the object still behaves like the stream it replaced.
+    """
+
+    def __init__(self, stream):
+        self._stream = stream
+        self._encoding = getattr(stream, "encoding", None) or "ascii"
+
+    def write(self, text):
+        try:
+            return self._stream.write(text)
+        except UnicodeEncodeError:
+            scrubbed = text.encode(self._encoding, errors="replace") \
+                           .decode(self._encoding, errors="replace")
+            try:
+                return self._stream.write(scrubbed)
+            except Exception:
+                return 0  # a log line is never worth aborting a generation for
+
+    def __getattr__(self, name):
+        return getattr(self._stream, name)
+
+
+def _make_stream_safe(stream):
+    """Return a stream that can print arrows and em-dashes without raising.
+
+    Prefers switching the real stream to UTF-8 (so the characters survive
+    intact). Where the interpreter won't allow that, falls back to a proxy
+    that prints them lossily rather than letting them kill the run.
+    """
+    if stream is None:
+        return None  # nothing to write to; nothing can fail
+    encoding = (getattr(stream, "encoding", None) or "").lower().replace("-", "")
+    if encoding.startswith("utf"):
+        return stream
+    reconfigure = getattr(stream, "reconfigure", None)
+    if reconfigure is not None:
+        try:
+            reconfigure(encoding="utf-8", errors="replace")
+            return stream
+        except (ValueError, OSError, AttributeError):
+            pass
+    return _LossyWriter(stream)
+
+
+sys.stdout = _make_stream_safe(sys.stdout)
+sys.stderr = _make_stream_safe(sys.stderr)
 
 # ---------------------------------------------------------------------------
 # Debug logger

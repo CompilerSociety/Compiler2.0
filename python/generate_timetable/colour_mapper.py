@@ -2,7 +2,7 @@
 
 import re
 
-from .config import COLOUR_BATCH_MAP, SCHOOLS
+from .config import COLOUR_BATCH_MAP, COMPUTING_PROGRAM_CODES, SCHOOLS
 from .helpers import one_line
 
 def rgb_key(bg):
@@ -53,44 +53,127 @@ def is_yellow(colour):
 # a header legend swatch when they don't round to the exact same tuple.
 COLOUR_MATCH_TOLERANCE = 0.03
 
-def colour_to_batch(colour):
-    """
-    Look up a colour tuple against COLOUR_BATCH_MAP.
-    Tries an exact match first, then falls back to the nearest legend
-    swatch within COLOUR_MATCH_TOLERANCE per channel — this is what lets
-    a slightly-drifted body cell (e.g. CS-2023's pale-skin fill) resolve
-    to its real legend batch instead of falling through to name-guessing.
-    Returns a year string like "2025"/"2023", "MS", or None if no swatch
-    is close enough / colour is white.
-    """
-    if colour is None or is_white(colour):
-        return None
+# A legend header names the programme it belongs to inside parentheses or
+# right after the degree word: 'BS CS (2023)' -> CS, 'MS (AI)' -> AI,
+# 'MS Electives (All Prgrms)' -> None (names no single programme).
+LEGEND_DEPT_RE = re.compile(
+    r'\b(?:BS|MS)\s*\(?\s*([A-Za-z]{2,4})\s*\)?', re.IGNORECASE
+)
 
+def legend_dept_code(text):
+    """
+    Extract the programme code a legend header refers to, or None.
+
+      'BS CS (2023)'              -> 'CS'
+      'MS (AI)'                   -> 'AI'
+      'BS AI (2025)'              -> 'AI'
+      'MS Electives (All Prgrms)' -> None   (no programme named)
+      'MS'                        -> None
+
+    Only codes that are actual programmes count. Anything else — 'Electives',
+    a year, a stray word — yields None, which means "this legend does not
+    discriminate by department" and matches any cell.
+    """
+    if not text:
+        return None
+    for m in LEGEND_DEPT_RE.finditer(text):
+        code = m.group(1).upper()
+        if code in COMPUTING_PROGRAM_CODES:
+            return code
+    return None
+
+def add_colour_entry(colour, dept_code, batch):
+    """
+    Record one legend under its fill colour.
+
+    Entries ACCUMULATE rather than first-write-wins: the computing sheet
+    paints 'MS (AI)' and 'BS CS (2023)' with the very same fill, and the
+    old first-write-wins behaviour silently redirected an entire BS CS
+    cohort into MS. Both legends are kept, and colour_to_batch() picks
+    between them using the department code in the cell's own text.
+    """
+    entries = COLOUR_BATCH_MAP.setdefault(colour, [])
+    if (dept_code, batch) not in entries:
+        entries.append((dept_code, batch))
+
+def _entries_for_colour(colour):
+    """Exact colour hit, else the nearest legend swatch within tolerance."""
     exact = COLOUR_BATCH_MAP.get(colour)
     if exact:
         return exact
 
-    best_batch, best_dist = None, None
-    for swatch, batch in COLOUR_BATCH_MAP.items():
+    best_entries, best_dist = None, None
+    for swatch, entries in COLOUR_BATCH_MAP.items():
         dr = abs(colour[0] - swatch[0])
         dg = abs(colour[1] - swatch[1])
         db = abs(colour[2] - swatch[2])
         if dr <= COLOUR_MATCH_TOLERANCE and dg <= COLOUR_MATCH_TOLERANCE and db <= COLOUR_MATCH_TOLERANCE:
             dist = dr + dg + db
             if best_dist is None or dist < best_dist:
-                best_batch, best_dist = batch, dist
-    return best_batch
+                best_entries, best_dist = entries, dist
+    return best_entries
+
+def colour_to_batch(colour, dept_codes=None):
+    """
+    Look up a colour tuple against COLOUR_BATCH_MAP.
+
+    Tries an exact match first, then falls back to the nearest legend
+    swatch within COLOUR_MATCH_TOLERANCE per channel — this is what lets
+    a slightly-drifted body cell (e.g. CS-2023's pale-skin fill) resolve
+    to its real legend batch instead of falling through to name-guessing.
+
+    When a colour carries MORE THAN ONE legend (the sheet reuses a fill for
+    two different cohorts), dept_codes — the department codes parsed out of
+    the cell's own text, e.g. ["CS"] from "Cloud Comp (CS-A)" — decides
+    which legend applies. A colour with a single legend ignores dept_codes
+    entirely and resolves exactly as it always did.
+
+    Returns a year string like "2025"/"2023", "MS", or None if no swatch
+    is close enough / colour is white.
+    """
+    if colour is None or is_white(colour):
+        return None
+
+    entries = _entries_for_colour(colour)
+    if not entries:
+        return None
+
+    if len(entries) == 1:
+        return entries[0][1]
+
+    # Shared fill — disambiguate on the cell's own department code.
+    if dept_codes:
+        wanted = {str(d).upper() for d in dept_codes}
+        for dept_code, batch in entries:
+            if dept_code and dept_code in wanted:
+                return batch
+
+    # No usable department signal: prefer a legend that names no programme
+    # (it applies to everything), otherwise keep the first-seen legend so
+    # behaviour matches the pre-fix code rather than changing arbitrarily.
+    for dept_code, batch in entries:
+        if dept_code is None:
+            return batch
+    return entries[0][1]
 
 def build_colour_map(service):
     """
     Scan all sheets and auto-populate COLOUR_BATCH_MAP by parsing year from
     header cells like 'BS CS (2025)', 'BS AI (2022)', 'MS (CS)', etc.
     Only needs to scan the first few rows where headers live.
+
+    Each legend is stored with the programme code it names, so a fill used
+    by two cohorts keeps both and can be resolved per-cell later.
     """
     from .google_sheets import fetch_sheet_with_colours
 
     year_re = re.compile(r'\b(20\d{2})\b')
     ms_re   = re.compile(r'\bMS\b', re.IGNORECASE)
+    # A cohort legend always names a degree. Without this guard the business
+    # tab's course titles — 'MG 2011 Environmental Science', 'SS 2006
+    # Macroeconomics' — parse their course codes as batch years and claim
+    # whatever fill they happen to carry.
+    cohort_re = re.compile(r'\b(?:BS|MS)\b', re.IGNORECASE)
 
     for school_name, school_info in SCHOOLS.items():
         for tab in school_info["tabs"]:
@@ -105,17 +188,23 @@ def build_colour_map(service):
                 for text, colour in zip(t_row, c_row):
                     if colour is None or is_white(colour):
                         continue
-                    if colour in COLOUR_BATCH_MAP:
-                        continue  # already mapped
+                    if not cohort_re.search(text or ""):
+                        continue  # not a cohort legend — see cohort_re above
+
+                    dept_code = legend_dept_code(text)
 
                     m = year_re.search(text)
                     if m:
-                        COLOUR_BATCH_MAP[colour] = m.group(1)
+                        add_colour_entry(colour, dept_code, m.group(1))
                         continue
 
                     # MS header with no year e.g. 'MS (CS)', 'MS (DS)'
                     if ms_re.search(text) and 'BS' not in text.upper():
-                        COLOUR_BATCH_MAP[colour] = "MS"
+                        add_colour_entry(colour, dept_code, "MS")
 
-    print(f"  Auto-mapped {len(COLOUR_BATCH_MAP)} colours: "
-          + ", ".join(sorted(set(COLOUR_BATCH_MAP.values()))))
+    all_batches = sorted({b for entries in COLOUR_BATCH_MAP.values() for _, b in entries})
+    shared = [c for c, entries in COLOUR_BATCH_MAP.items() if len(entries) > 1]
+    print(f"  Auto-mapped {len(COLOUR_BATCH_MAP)} colours: " + ", ".join(all_batches))
+    for colour in shared:
+        print(f"    shared fill {colour} -> {COLOUR_BATCH_MAP[colour]} "
+              f"(resolved per-cell by department code)")

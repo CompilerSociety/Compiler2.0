@@ -68,12 +68,18 @@ def discover_colours(service):
         print(f"  ({r:.2f}, {g:.2f}, {b:.2f})  [{count:4d} cells]  e.g. {ex_str}")
 
     print("\n" + "=" * 60)
-    print("Copy the entries below into COLOUR_BATCH_MAP at the top of this script,")
-    print("replacing 'YEAR' with the correct batch year (2022 / 2023 / 2024 / 2025):\n")
+    print("Copy the entries below into COLOUR_BATCH_MAP in config.py, replacing")
+    print("'YEAR' with the correct batch year (2022 / 2023 / 2024 / 2025 / MS)")
+    print("and 'DEPT' with the programme the legend names (CS / AI / DS / SE /")
+    print("CY), or None when it names none.")
+    print()
+    print("Each colour maps to a LIST: the sheet paints some fills with two")
+    print("different legends, and both have to be kept — the department code in")
+    print("a cell's own text is what picks between them (see colour_to_batch).\n")
     print("COLOUR_BATCH_MAP = {")
     for colour, occurrences in sorted(all_colours.items(), key=sort_key):
         r, g, b = colour
         ex = occurrences[0]
-        print(f"    ({r:.2f}, {g:.2f}, {b:.2f}): \"YEAR\",  # e.g. '{ex[4][:50]}'")
+        print(f"    ({r:.2f}, {g:.2f}, {b:.2f}): [(\"DEPT\", \"YEAR\")],  # e.g. '{ex[4][:50]}'")
     print("}")
     print()

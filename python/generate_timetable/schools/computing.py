@@ -150,7 +150,7 @@ def infer_batch_from_course(course_name):
         return "2025"
     return None
 
-def resolve_batch(cell_colour, cell_text, course_name):
+def resolve_batch(cell_colour, cell_text, course_name, dept_codes=None):
     """
     Three-tier batch resolution for a single data cell:
 
@@ -164,6 +164,11 @@ def resolve_batch(cell_colour, cell_text, course_name):
     3. Course-name inference (last resort)
        Fragile — only works for courses with distinctive names.
        Falls back to "2023" if nothing matches.
+
+    dept_codes are the department codes parsed from the cell text (e.g.
+    ["CS"] from "Cloud Comp (CS-A)"). They only matter for tier 2, and only
+    for the handful of fills the sheet reuses across two cohorts — see
+    colour_to_batch().
     """
     # Tier 1 — explicit suffix
     m = re.search(r",\s*(\d{2})\s*\)", cell_text)
@@ -172,7 +177,7 @@ def resolve_batch(cell_colour, cell_text, course_name):
         return BATCH_MAP.get(short, "20" + short)
 
     # Tier 2 — colour lookup
-    batch = colour_to_batch(cell_colour)
+    batch = colour_to_batch(cell_colour, dept_codes)
     if batch:
         return batch
 
@@ -308,7 +313,17 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
         if not row:
             continue
         room = normalise_room(one_line(row[block["room_col"]] if len(row) > block["room_col"] else ""))
-        if (not room or len(room) < 2 or
+        if not room:
+            # A blank room column normally means the row isn't a class row.
+            # The evening block is the exception — see "blank_room_fallback"
+            # in config.CLASSROOM_RIGHT. Any class cells on this row are
+            # emitted with an unknown room rather than dropped; rows with no
+            # parseable cells still add nothing.
+            fallback = block.get("blank_room_fallback")
+            if not fallback:
+                continue
+            room = fallback
+        elif (len(room) < 2 or
                 re.search(r"reserved|tutorial|fsm|fsa|fcss|fyp|travel|admin|room",
                           room, re.IGNORECASE)):
             continue
@@ -332,7 +347,8 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 if r < len(colour_grid) and col < len(colour_grid[r]):
                     cell_colour = colour_grid[r][col]
 
-                batch = resolve_batch(cell_colour, cell_text, parsed["course"])
+                batch = resolve_batch(cell_colour, cell_text, parsed["course"],
+                                      parsed["depts"])
                 if not batch:
                     continue
 

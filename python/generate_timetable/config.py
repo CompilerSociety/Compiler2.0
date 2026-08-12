@@ -32,6 +32,15 @@ DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 # Auto-populated at runtime by build_colour_map().
 # No manual editing needed — the script reads header cells like
 # 'BS CS (2025)' or 'MS (CS)' to infer which colour = which batch.
+#
+# Shape: (R, G, B) -> [(dept_code, batch), ...]
+#
+# It is a LIST because the computing sheet paints more than one legend with
+# the same fill — 'MS (AI)' and 'BS CS (2023)' share (1.0, 0.9, 0.6). Keeping
+# only the first legend filed that entire CS cohort under MS. Each entry
+# records the programme the legend named (None if it named none), and
+# colour_to_batch() picks between them using the department code in the
+# cell's own text. See colour_mapper.add_colour_entry / colour_to_batch.
 # ---------------------------------------------------------------------------
 
 COLOUR_BATCH_MAP = {}  # filled automatically at runtime
@@ -84,7 +93,17 @@ CLASSROOM_LEFT = {
 CLASSROOM_RIGHT = {
     "room_col": 30, "end_col": None,
     "slot_cols": [31, 36],
-    "slot_map": {31: "05:20-06:40", 36: "06:45-08:05"}
+    "slot_map": {31: "05:20-06:40", 36: "06:45-08:05"},
+    # The evening block has its own Room column (30), separate from the
+    # daytime block's column 0 — and the rooms genuinely differ (Wednesday
+    # row 9 is C-305 in col 0 but D-305 in col 30), so col 0 must never be
+    # substituted here. The sheet only fills column 30 on Wednesday, which
+    # made parse_matrix_block drop every Mon/Tue/Thu evening class: ~39
+    # entries, essentially the whole MS evening programme. Emit them with
+    # an unknown room instead of losing them. Scoped to THIS block only —
+    # a blank room in the daytime or lab blocks still skips the row.
+    # The real fix is upstream: fill column 30 on the other day tabs.
+    "blank_room_fallback": "TBA",
 }
 LAB_BLOCK = {
     "room_col": 0, "end_col": None,
@@ -142,25 +161,58 @@ FSE_SUFFIX_RE = re.compile(
 # Known section letters for validation
 FSE_VALID_SECTIONS = set("ABCD")
 
-# Regex used to pull dept + batch out of a "Courses SP-26" semester-header
-# cell (e.g. "2nd Semester    Batch BS(EE) 2025"). Whitespace is normalized
+# --- Courses-tab block headers ---------------------------------------------
+# The FSE courses tab changed shape between semesters, so these are matched
+# against every cell to the LEFT of the Code column rather than against a
+# fixed cell. See engineering.detect_courses_layout / parse_courses_tab.
+#
+#   Courses SP-26        one combined cell: "2nd Semester  Batch BS(EE) 2025"
+#   Course Allocation    split over two cells and two rows:
+#   FA26                   col 0  "BS CE 1st Semester Courses/Labs"
+#                          col 1  "Batch BS(CE) 2026"   (on the first course row)
+#
+# Dept + batch together, e.g. "Batch BS(EE) 2025". Whitespace is normalized
 # to single spaces before matching.
 COURSES_HEADER_DEPT_BATCH_RE = re.compile(
-    r'Batch\s+BS\s*\(\s*([A-Za-z]+)\s*\)\s+(\d{4})', re.IGNORECASE
+    r'Batch\s+BS\s*\(\s*([A-Za-z]+)\s*\)\s*(\d{4})', re.IGNORECASE
 )
 # Shared/general block, no dept split, e.g. "6th Semester   Batch 2023"
 COURSES_HEADER_BATCH_ONLY_RE = re.compile(r'Batch\s+(\d{4})', re.IGNORECASE)
-# MS/PhD block, e.g. "MS/PhD EE"
-COURSES_HEADER_MSPHD_RE = re.compile(r'MS\s*/\s*PhD\s+([A-Za-z]+)', re.IGNORECASE)
+# MS/PhD block in any of the forms the sheet uses:
+#   "MS/PhD (EE) Courses"   "MS/PhD EE"   "MS EE"   "MS(EE) - IC Design"
+#   "MS Electives"  -> captures "Electives", which is NOT a programme, so the
+#                      caller drops it rather than inventing a dept "Ele".
+COURSES_HEADER_MS_RE = re.compile(
+    r'\bMS\b(?:\s*/\s*PhD)?\s*\(?\s*([A-Za-z]{2,9})', re.IGNORECASE
+)
+# Dept-only header that OPENS a block before its batch cell shows up, e.g.
+# "BS CE 1st Semester Courses/Labs".
+COURSES_HEADER_DEPT_ONLY_RE = re.compile(
+    r'\bBS\s*\(?\s*([A-Za-z]{2,3})\s*\)?', re.IGNORECASE
+)
+# A bare batch cell, optionally carrying a block-level annotation:
+#   "2026"            -> batch 2026
+#   "2025 (Repeat)"   -> batch 2025, whole block is a repeat offering
+COURSES_BATCH_CELL_RE = re.compile(r'^(\d{4})\s*(?:\(\s*([^)]*?)\s*\))?$')
 COURSES_HEADER_SEMESTER_RE = re.compile(r'(\d+)\w{2}\s+Semester', re.IGNORECASE)
+
+# Courses-tab column layout. Detected per-tab by detect_courses_layout();
+# these are the "Courses SP-26" positions, kept only as a fallback for when
+# detection finds no recognisable header row.
+COURSES_FALLBACK_LAYOUT = {
+    "header_row": 1,
+    "code_col": 1,
+    "title_col": 2,
+    # Section-letter columns (Section-A/B/C/D), 0-indexed.
+    "section_cols": list(zip(range(6, 10), "ABCD")),
+}
+COURSES_CODE_HEADERS = ("code", "course code")
+COURSES_SECTION_HEADER_RE = re.compile(r'^section\s*[-\s]?\s*([A-Z])$', re.IGNORECASE)
 
 # Parenthetical annotation on a Courses-tab title that marks a repeat /
 # retake offering, e.g. "Applied Calculus (EE & CE Repeat)", "OOP (Repeat)".
 REPEAT_ANNOTATION_RE = re.compile(r'\(([^)]*repeat[^)]*)\)', re.IGNORECASE)
 REPEAT_ANNOTATION_STOPWORDS = {"REPEAT", "AND", "FOR", "OF", "THE"}
-
-# Section-letter columns (Section-A/B/C/D) on the Courses SP-26 tab, 0-indexed.
-COURSES_SECTION_COLS = list(zip(range(6, 10), "ABCD"))
 
 # --- Phase 6: regression guard --------------------------------------------
 # Course names that are known EE-repeat offerings (per the bug that
