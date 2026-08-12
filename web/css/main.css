@@ -911,3 +911,91 @@ html[data-theme="dark"] .fv-empty{color:var(--muted)}
   /* One filter per row — two 16px selects side by side clip their labels. */
   .exam-filters{grid-template-columns:1fr}
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COMING SOON / HOLDING PAGE
+   Rendered by main.js when js/status.js has the site gated. Built on the same
+   design tokens as the app, so it follows the light/dark theme automatically.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cs-screen{position:relative;min-height:100vh;min-height:100dvh;display:grid;place-items:center;overflow:hidden;
+  padding:32px max(20px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));
+  background:var(--surface);color:var(--text)}
+.cs-inner{position:relative;z-index:1;width:100%;max-width:860px;text-align:center}
+
+/* Scattered pixel squares, echoing the app's retro-terminal styling. */
+.cs-pixels{position:absolute;inset:0;z-index:0;pointer-events:none}
+.cs-px{position:absolute;display:block;background:var(--accent);opacity:.16;border-radius:2px}
+.cs-px1{width:14px;height:14px;top:8%;left:6%}
+.cs-px2{width:9px;height:9px;top:15%;left:14%;opacity:.10}
+.cs-px3{width:20px;height:20px;top:26%;left:3%;opacity:.08}
+.cs-px4{width:12px;height:12px;top:10%;right:9%}
+.cs-px5{width:22px;height:22px;top:20%;right:4%;opacity:.09}
+.cs-px6{width:8px;height:8px;top:32%;right:14%;opacity:.13}
+.cs-px7{width:16px;height:16px;bottom:12%;left:8%;opacity:.10}
+.cs-px8{width:10px;height:10px;bottom:22%;right:7%;opacity:.14}
+.cs-px9{width:18px;height:18px;bottom:7%;right:16%;opacity:.07}
+
+.cs-brand{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.cs-logo{height:auto;max-height:64px;width:auto}
+.cs-x{font-family:var(--font-display);font-size:26px;color:var(--muted-light)}
+.cs-wordmark{font-family:var(--font-display);font-size:56px;line-height:1;letter-spacing:4px;color:var(--accent)}
+
+.cs-campus{font-family:var(--font-mono);font-size:15px;letter-spacing:3px;color:var(--text);
+  font-weight:400;margin:14px 0 0;text-transform:none}
+
+.cs-soon-box{display:inline-block;margin:26px auto 0;padding:14px 34px;border:3px solid var(--accent);border-radius:6px;
+  box-shadow:0 0 0 1px var(--surface-strong) inset}
+.cs-soon{font-family:var(--font-display);font-size:52px;line-height:1;letter-spacing:6px;color:var(--accent-strong);
+  display:block;white-space:nowrap}
+
+.cs-tagline{font-family:var(--font-mono);font-size:14px;letter-spacing:1.5px;color:var(--muted);margin:18px 0 0}
+
+.cs-countdown{display:flex;align-items:flex-start;justify-content:center;gap:6px;margin:30px 0 0}
+.cs-unit{min-width:74px;padding:12px 8px;border:2px solid var(--border);border-radius:8px;background:var(--surface-strong)}
+.cs-num{display:block;font-family:var(--font-display);font-size:40px;line-height:1;color:var(--accent);
+  font-variant-numeric:tabular-nums}
+.cs-label{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:6px}
+.cs-sep{font-family:var(--font-display);font-size:34px;line-height:1;color:var(--muted-light);padding-top:14px}
+.cs-launch-note{font-family:var(--font-mono);font-size:12px;letter-spacing:1.5px;color:var(--muted);margin:14px 0 0}
+
+.cs-features{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cs-feature{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;
+  border-left:1px solid var(--border);color:var(--text)}
+.cs-feature:first-child{border-left:none}
+.cs-feature svg{width:26px;height:26px;color:var(--accent)}
+.cs-feature span{font-family:var(--font-mono);font-size:11px;line-height:1.35;letter-spacing:.5px;color:var(--muted)}
+
+@media(max-width:700px){
+  .cs-screen{padding-top:24px}
+  .cs-logo{max-height:48px}
+  .cs-wordmark{font-size:40px;letter-spacing:2px}
+  .cs-x{font-size:20px}
+  .cs-campus{font-size:12px;letter-spacing:2px}
+  .cs-soon-box{margin-top:20px;padding:11px 20px;border-width:2px}
+  .cs-soon{font-size:34px;letter-spacing:3px}
+  .cs-tagline{font-size:12px;letter-spacing:.5px}
+  .cs-countdown{gap:4px;margin-top:24px}
+  .cs-unit{min-width:0;flex:1;padding:10px 4px}
+  .cs-num{font-size:28px}
+  .cs-label{font-size:9px;letter-spacing:1px}
+  .cs-sep{font-size:24px;padding-top:12px}
+  /* 3x2 keeps the labels readable instead of squeezing six into one row. */
+  .cs-features{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:26px}
+  .cs-feature{padding:12px 4px;border-left:none}
+  .cs-feature svg{width:22px;height:22px}
+  .cs-feature span{font-size:10px}
+}
+
+@media(max-width:380px){
+  .cs-soon{font-size:28px;letter-spacing:2px}
+  .cs-num{font-size:24px}
+  .cs-sep{display:none}
+  /* Tightened so the whole page still clears a 568px-tall screen (iPhone SE)
+     without scrolling. */
+  .cs-screen{padding-top:18px}
+  .cs-countdown{margin-top:20px}
+  .cs-features{margin-top:18px}
+  .cs-feature{padding:10px 4px}
+}

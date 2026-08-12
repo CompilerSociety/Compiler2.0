@@ -158,7 +158,82 @@ function initializeSeating() {}
 function initializeFaculty() {}
 function initializeCompilerRun() { return loadCompatibilityRuntime(); }
 
+/* ── Launch gate ──────────────────────────────────────────────────────────
+   js/status.js decides whether the real site boots. When it is gated we
+   render the holding page and return, so loadComponents() never runs and
+   js/app.js is never fetched — nothing of the app exists to interact with. */
+
+function isSiteLive() {
+  const status = window.SITE_STATUS;
+  // No status file (or a broken one) fails safe onto the holding page.
+  if (!status || typeof status.isLive !== 'function') return false;
+  return status.isLive();
+}
+
+function startLaunchCountdown() {
+  const target = new Date(window.SITE_STATUS?.launchAt || '').getTime();
+  const note = document.getElementById('cs-launch-note');
+  const fields = {
+    days: document.getElementById('cs-days'),
+    hours: document.getElementById('cs-hours'),
+    mins: document.getElementById('cs-mins'),
+    secs: document.getElementById('cs-secs')
+  };
+  if (!fields.days) return;
+
+  if (!Number.isFinite(target)) {
+    // Unparseable launchAt: drop the countdown rather than show "NaN".
+    const box = document.getElementById('cs-countdown');
+    if (box) box.remove();
+    if (note) note.textContent = 'Launching soon.';
+    return;
+  }
+
+  const pad = n => String(Math.max(0, n)).padStart(2, '0');
+
+  function tick() {
+    const left = target - Date.now();
+    if (left <= 0) {
+      Object.values(fields).forEach(el => { el.textContent = '00'; });
+      if (note) note.textContent = 'Launching now — refreshing.';
+      clearInterval(timer);
+      // The flags in status.js are the real switch, so a visitor sitting on
+      // this page needs a reload to pick up the deploy that flips them. Once
+      // only: if the deploy has not landed yet, they keep the holding page
+      // instead of being caught in a reload loop.
+      try {
+        if (!sessionStorage.getItem('vtable-launch-reloaded')) {
+          sessionStorage.setItem('vtable-launch-reloaded', '1');
+          setTimeout(() => location.reload(), 2000);
+        } else if (note) {
+          note.textContent = 'Launching now — refresh in a moment.';
+        }
+      } catch (e) { /* private mode: skip the reload, keep the page */ }
+      return;
+    }
+    const secs = Math.floor(left / 1000);
+    fields.days.textContent = pad(Math.floor(secs / 86400));
+    fields.hours.textContent = pad(Math.floor(secs / 3600) % 24);
+    fields.mins.textContent = pad(Math.floor(secs / 60) % 60);
+    fields.secs.textContent = pad(secs % 60);
+  }
+
+  tick();
+  const timer = setInterval(tick, 1000);
+}
+
+async function showComingSoon() {
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.innerHTML = await fetchComponent('/components/coming-soon.html');
+  startLaunchCountdown();
+}
+
 async function startApplication() {
+  if (!isSiteLive()) {
+    await showComingSoon();
+    return;
+  }
   await loadComponents();
   verifyRequiredElements();
   initializeRouting();
