@@ -651,6 +651,11 @@
               "name": "OOP",
               "location": "C-308",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "Discrete",
+              "location": "C-309",
+              "time": "03:55-05:15"
             }
           ],
           "Tuesday": [
@@ -695,6 +700,11 @@
               "name": "OOP",
               "location": "C-308",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "Discrete",
+              "location": "C-309",
+              "time": "03:55-05:15"
             }
           ],
           "Thursday": [
@@ -825,6 +835,11 @@
           ],
           "Tuesday": [
             {
+              "name": "Discrete",
+              "location": "C-308",
+              "time": "03:55-05:15"
+            },
+            {
               "name": "Seerah",
               "location": "C-311",
               "time": "10:30-11:25"
@@ -863,6 +878,11 @@
             }
           ],
           "Thursday": [
+            {
+              "name": "Discrete",
+              "location": "C-309",
+              "time": "03:55-05:15"
+            },
             {
               "name": "UHQ-I&II",
               "location": "C-310",
@@ -1135,14 +1155,14 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "SDA Cancelled",
+              "name": "SDA",
               "location": "C-308",
               "time": "01:00-02:20"
             }
           ],
           "Wednesday": [
             {
-              "name": "LA Cancelled",
+              "name": "LA",
               "location": "C-311",
               "time": "01:00-02:20"
             },
@@ -2208,25 +2228,11 @@
               "time": "11:30-12:50"
             }
           ],
-          "Tuesday": [
-            {
-              "name": "Algo",
-              "location": "C-402",
-              "time": "02:30-03:50"
-            }
-          ],
           "Wednesday": [
             {
               "name": "SMD",
               "location": "D-405",
               "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Algo",
-              "location": "C-311",
-              "time": "02:30-03:50"
             }
           ]
         }
@@ -3365,6 +3371,31 @@
               "name": "Found of AI",
               "location": "TBA",
               "time": "06:45-08:05"
+            }
+          ]
+        },
+        "SE": {
+          "Wednesday": [
+            {
+              "name": "UHQ-I & II",
+              "location": "TBA",
+              "time": "05:20-07:10"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "UHQ-I & II",
+              "location": "TBA",
+              "time": "05:20-07:10"
+            }
+          ]
+        },
+        "CY": {
+          "Friday": [
+            {
+              "name": "UHQ-I & II",
+              "location": "C-304",
+              "time": "05:20-07:10"
             }
           ]
         }
@@ -6676,6 +6707,6 @@
       }
     }
   },
-  "count": 1112,
-  "generatedAt": "2026-08-12T11:37:26.100338+00:00"
+  "count": 1117,
+  "generatedAt": "2026-08-12T18:59:43.050000+00:00"
 }
