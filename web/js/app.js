@@ -1,17 +1,24 @@
+const ISLAMABAD_TIMEZONE='Asia/Karachi';
+const dateFormatter=new Intl.DateTimeFormat('en-GB',{timeZone:ISLAMABAD_TIMEZONE,weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const timeFormatter=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
 (function headerLiveClock(){
   const dayEl=document.getElementById('liveDay');
   const dateEl=document.getElementById('liveDate');
   const timeEl=document.getElementById('liveTime');
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  function pad(n){return n<10?'0'+n:n}
   function tick(){
     const now=new Date();
-    if(dayEl) dayEl.textContent=now.toLocaleDateString('en-US',{weekday:'long'});
-    if(dateEl) dateEl.textContent=`${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    const parts=dateFormatter.formatToParts(now);
+    const weekday=parts.find(part=>part.type==='weekday')?.value||'';
+    const day=parts.find(part=>part.type==='day')?.value||'';
+    const month=parts.find(part=>part.type==='month')?.value||'';
+    const year=parts.find(part=>part.type==='year')?.value||'';
+    if(dayEl) dayEl.textContent=weekday;
+    if(dateEl) dateEl.textContent=`${day} ${month} ${year}`;
     if(timeEl){
-      let h=now.getHours();const m=pad(now.getMinutes());const s=pad(now.getSeconds());
-      const ampm=h>=12?'PM':'AM';h=h%12;if(h===0)h=12;
-      timeEl.textContent=`${pad(h)}:${m}:${s} ${ampm}`;
+      const currentTime=timeFormatter.format(now);
+      timeEl.textContent=currentTime;
+      timeEl.title='Current time in Islamabad';
+      timeEl.setAttribute('aria-label',`Current time in Islamabad: ${currentTime}`);
     }
   }
   tick();
@@ -43,6 +50,8 @@ let PROFILE_SYNC_IN_PROGRESS=false;
 const PROFILE_STORAGE_KEY='vtable_profile_nuid';
 const PROFILE_COOKIE_KEY='vtable_profile';
 let PROFILE_SUCCESS_TIMEOUT=null;
+let PROFILE_MODAL_RETURN_FOCUS=null;
+let PROFILE_MODAL_KEYDOWN_HANDLER=null;
 
 function getProfileCookie(){
   // Prefer localStorage (works on file:// where cookies are blocked), fall back to cookie.
@@ -89,6 +98,54 @@ function setProfileSyncVisible(visible){
   if(row) row.hidden=!visible;
   if(help) help.hidden=!visible;
   if(status) status.hidden=!visible;
+}
+function setTimetableSelectorState(selectEl,placeholder,disabled){
+  if(!selectEl) return;
+  selectEl.innerHTML=`<option value="">${placeholder}</option>`;
+  selectEl.disabled=Boolean(disabled);
+}
+function setTimetableDependencyHelp(id,message,visible){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.textContent=message;
+  el.hidden=!visible;
+}
+function setTimetableLiveBadge(text,state){
+  const el=document.getElementById('tt-live-badge');
+  if(!el) return;
+  el.textContent=text;
+  el.dataset.state=state||'';
+  el.classList.toggle('is-syncing',state==='syncing');
+  el.classList.toggle('is-live',state==='live');
+  el.classList.toggle('is-cached',state==='cached');
+  el.classList.toggle('is-error',state==='error');
+  if(state==='error'){
+    el.tabIndex=0;
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label','Sync failed. Activate to retry syncing the timetable.');
+    el.onclick=()=>refreshTimetableFromGoogleSheet();
+    el.onkeydown=e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        refreshTimetableFromGoogleSheet();
+      }
+    };
+  }else{
+    el.removeAttribute('tabindex');
+    el.removeAttribute('role');
+    el.removeAttribute('aria-label');
+    el.onclick=null;
+    el.onkeydown=null;
+  }
+}
+function relativeTimeAgo(ms){
+  if(!ms) return 'just now';
+  const secs=Math.max(0,Math.round((Date.now()-ms)/1000));
+  if(secs<60) return 'just now';
+  const mins=Math.round(secs/60);
+  if(mins<60) return `${mins} min${mins===1?'':'s'} ago`;
+  const hrs=Math.round(mins/60);
+  return `${hrs} hr${hrs===1?'':'s'} ago`;
 }
 function showProfileActions(saveVisible, deleteVisible){
   const actions=document.getElementById('profile-actions');
@@ -266,12 +323,13 @@ function openProfileModal(){
   const status=document.getElementById('profile-status');
   const registration=document.getElementById('profile-registration');
   const card=document.getElementById('profile-card');
+  const modal=document.querySelector('.profile-modal');
+  PROFILE_MODAL_RETURN_FOCUS=document.activeElement instanceof HTMLElement ? document.activeElement : null;
   if(backdrop){ backdrop.hidden=false; }
   const savedProfile=getProfileCookie();
   const savedNuid=localStorage.getItem(PROFILE_STORAGE_KEY)||'';
   if(input){
     input.value=savedProfile?.nuid || savedNuid || '';
-    input.focus();
   }
   if(savedProfile){
     setProfileSyncVisible(false);
@@ -279,17 +337,55 @@ function openProfileModal(){
     showProfileActions(false,true);
     if(card) card.hidden=false;
     if(registration) registration.hidden=true;
-    return;
+  }else{
+    setProfileSyncVisible(true);
+    if(card) card.hidden=true;
+    if(registration) registration.hidden=true;
+    showProfileActions(false,false);
+    if(status) status.textContent='Type your NU ID and press sync.';
   }
-  setProfileSyncVisible(true);
-  if(card) card.hidden=true;
-  if(registration) registration.hidden=true;
-  showProfileActions(false,false);
-  if(status) status.textContent='Type your NU ID and press sync.';
+  const focusTarget=(savedProfile && card && !card.hidden)
+    ? (document.getElementById('profile-save-btn') || document.getElementById('profile-delete-btn') || modal)
+    : input || modal;
+  window.requestAnimationFrame(()=>{ focusTarget?.focus?.(); });
+  if(backdrop){
+    backdrop.onclick=e=>{
+      if(e.target===backdrop) closeProfileModal();
+    };
+  }
+  if(!PROFILE_MODAL_KEYDOWN_HANDLER){
+    PROFILE_MODAL_KEYDOWN_HANDLER=event=>{
+      const activeBackdrop=document.getElementById('profile-modal-backdrop');
+      if(!activeBackdrop || activeBackdrop.hidden) return;
+      if(event.key==='Escape'){
+        event.preventDefault();
+        closeProfileModal();
+        return;
+      }
+      if(event.key!=='Tab') return;
+      const focusables=[...activeBackdrop.querySelectorAll('button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled && el.offsetParent!==null);
+      if(!focusables.length) return;
+      const first=focusables[0];
+      const last=focusables[focusables.length-1];
+      if(event.shiftKey && document.activeElement===first){
+        event.preventDefault();
+        last.focus();
+      }else if(!event.shiftKey && document.activeElement===last){
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown',PROFILE_MODAL_KEYDOWN_HANDLER,true);
+  }
+  document.body.style.overflow='hidden';
 }
 function closeProfileModal(){
   const backdrop=document.getElementById('profile-modal-backdrop');
   if(backdrop){ backdrop.hidden=true; }
+  document.body.style.overflow='';
+  if(PROFILE_MODAL_RETURN_FOCUS instanceof HTMLElement){
+    PROFILE_MODAL_RETURN_FOCUS.focus({preventScroll:true});
+  }
 }
 function deptCodeToLabel(code){
   const normalized=(code||'').toUpperCase();
@@ -829,6 +925,7 @@ let _sheetTimer=null;
 let _cdSheetTimer=null;
 let _roomTTTimer=null;
 let _sheetHadSuccessfulLoad=false;
+let _timetableLastSyncMs=0;
 let CD_ROOM_OCCUPANCY={};
 let _cdSheetLastSync=null;
 
@@ -989,10 +1086,13 @@ function applyTimetablePayload(payload,sourceLabel){
   refreshTTFilters();
   refreshRoomSelectorsAfterDataUpdate();
   _sheetHadSuccessfulLoad=true;
+  _timetableLastSyncMs=Date.now();
 
   const stamp=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   const count=typeof payload.count==='number' ? payload.count : countTTEntries(TT);
   setSheetStatus(`${sourceLabel} · ${count} CLASSES · ${stamp}`);
+  const isLive=String(sourceLabel).startsWith('SHEET');
+  setTimetableLiveBadge(`${isLive?'Live':'Cached'} · Updated ${relativeTimeAgo(_timetableLastSyncMs)}`,isLive?'live':'cached');
   updateFooterSyncTime();
 
   const p0=document.getElementById('p0');
@@ -1431,19 +1531,28 @@ function refreshTTFilters(){
   if(prefs.dept===REPEAT_DEPT) deptSel.value=REPEAT_DEPT;
   else if(prefs.dept&&depts.includes(prefs.dept)) deptSel.value=prefs.dept;
   const dep=deptSel.value;
+  setTimetableDependencyHelp('tt-dept-help',dep?'':'Pick a department first to unlock batch options.',!dep);
   if(dep===REPEAT_DEPT){
     applyRepeatModeUI();
     if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
     else setDefaultDay();
+    setTimetableSelectorState(batchSel,'Repeat courses only',true);
+    setTimetableSelectorState(secSel,'Repeat courses only',true);
+    setTimetableDependencyHelp('tt-batch-help','Repeat courses do not use batch selection.',true);
+    setTimetableDependencyHelp('tt-section-help','Repeat courses do not use section selection.',true);
     return;
   }
   applyRepeatModeUI();
   const batches=Object.keys(TT[dep]||{}).filter(b=>!REPEAT_BATCH_KEYS.includes(b)).sort((a,b)=>Number(b)-Number(a));
-  fillSelectOptions(batchSel,batches,null,'-- Batch --');
+  fillSelectOptions(batchSel,batches,null,dep ? '-- Batch --' : 'Select department first');
+  batchSel.disabled=!dep;
+  setTimetableDependencyHelp('tt-batch-help',dep ? (batches.length ? 'Select a batch to load section options.' : 'No batches available for this department.') : 'Select a department first to load available batches.',true);
   if(prefs.batch&&batches.includes(prefs.batch)) batchSel.value=prefs.batch;
   const bat=batchSel.value;
   const secs=Object.keys(((TT[dep]||{})[bat])||{}).filter(s=>s!==ALL_SECTIONS).sort();
-  fillSelectOptions(secSel,secs,null,'-- Section --');
+  fillSelectOptions(secSel,secs,null,bat ? '-- Section --' : 'Select batch first');
+  secSel.disabled=!bat || !dep;
+  setTimetableDependencyHelp('tt-section-help',bat ? (secs.length ? 'Select a section to view the timetable.' : 'No sections available for this batch.') : 'Select a batch first to load sections.',true);
   if(prefs.sec&&secs.includes(prefs.sec)) secSel.value=prefs.sec;
   else if(secs.length===1) secSel.value=secs[0];
   if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
@@ -1454,9 +1563,12 @@ function onSchoolChange(){
   const schoolSel=document.getElementById('school');
   if(!schoolSel) return;
   const school=schoolSel.value;
-  document.getElementById('dept').innerHTML='<option value="">-- Department --</option>';
-  document.getElementById('batch').innerHTML='<option value="">-- Batch --</option>';
-  document.getElementById('sec').innerHTML='<option value="">-- Section --</option>';
+  setTimetableSelectorState(document.getElementById('dept'),'Loading departments...',true);
+  setTimetableSelectorState(document.getElementById('batch'),'Select department first',true);
+  setTimetableSelectorState(document.getElementById('sec'),'Select batch first',true);
+  setTimetableDependencyHelp('tt-dept-help','Loading departments…',true);
+  setTimetableDependencyHelp('tt-batch-help','Loading batches…',true);
+  setTimetableDependencyHelp('tt-section-help','Loading sections…',true);
   const ttOut=document.getElementById('tt-out');
   if(ttOut){
     ttOut.innerHTML=renderUiState({
@@ -1474,10 +1586,11 @@ function setupTTFilterListeners(){
     schoolSel.dataset.liveBound='1';
     schoolSel.addEventListener('change',()=>{onSchoolChange();});
   }
- if(deptSel&&!deptSel.dataset.liveBound){
+  if(deptSel&&!deptSel.dataset.liveBound){
     deptSel.dataset.liveBound='1';
     deptSel.addEventListener('change',()=>{
       const dep=deptSel.value;
+      setTimetableDependencyHelp('tt-dept-help',dep?'':'Pick a department first to unlock batch options.',!dep);
       if(dep===REPEAT_DEPT){
         applyRepeatModeUI();
         saveTTPrefs();loadTT();
@@ -1485,14 +1598,18 @@ function setupTTFilterListeners(){
       }
       applyRepeatModeUI();
       const batches=Object.keys(TT[dep]||{}).filter(b=>!REPEAT_BATCH_KEYS.includes(b)).sort((a,b)=>Number(b)-Number(a));
-      fillSelectOptions(batchSel,batches,null,'-- Batch --');
+      fillSelectOptions(batchSel,batches,null,batches.length ? '-- Batch --' : 'No batches available');
+      batchSel.disabled=!dep;
       // Refill sections for whatever batch survived the dept switch — fillSelectOptions
       // keeps the previous value when the new dept also offers that batch, and changing
       // dept fires no 'change' on the batch select, so blanking the section list here
       // left it empty until the next page load.
       const secs=Object.keys(((TT[dep]||{})[batchSel.value])||{}).filter(s=>s!==ALL_SECTIONS).sort();
-      fillSelectOptions(secSel,secs,null,'-- Section --');
+      fillSelectOptions(secSel,secs,null,secs.length ? '-- Section --' : 'Select batch first');
+      secSel.disabled=!secs.length;
       if(secs.length===1) secSel.value=secs[0];
+      setTimetableDependencyHelp('tt-batch-help',batches.length ? 'Select a batch to load section options.' : 'No batches available for this department.',true);
+      setTimetableDependencyHelp('tt-section-help',secs.length ? 'Select a section to view the timetable.' : 'Select a batch first to load sections.',true);
       saveTTPrefs();loadTT();
     });
   }
@@ -1506,7 +1623,9 @@ function setupTTFilterListeners(){
     batchSel.addEventListener('change',()=>{
       const dep=deptSel.value,bat=batchSel.value;
       const secs=Object.keys(((TT[dep]||{})[bat])||{}).filter(s=>s!==ALL_SECTIONS).sort();
-      fillSelectOptions(secSel,secs,null,'-- Section --');
+      fillSelectOptions(secSel,secs,null,secs.length ? '-- Section --' : 'No sections available');
+      secSel.disabled=!bat;
+      setTimetableDependencyHelp('tt-section-help',secs.length ? 'Select a section to view the timetable.' : 'No sections available for this batch.',true);
       if(secs.length===1) secSel.value=secs[0];
       saveTTPrefs();loadTT();
     });
@@ -1670,7 +1789,8 @@ const LAB_BLOCK={
 /* ── Timetable sync: API only ── */
 
 async function refreshTimetableFromGoogleSheet(){
-  setSheetStatus('SHEET: SYNCING...');
+  setSheetStatus('SHEET: SYNCING...',true);
+  setTimetableLiveBadge('Syncing…','syncing');
   try{
     const apiRes=await fetch(timetableApiUrl(),{cache:'no-store'});
     if(!apiRes.ok) throw new Error(`Timetable API HTTP ${apiRes.status}`);
@@ -1711,6 +1831,10 @@ async function refreshTimetableFromGoogleSheet(){
       console.warn('Fallback timetable source also failed:',fbErr);
       const message=(apiErr&&apiErr.message)?apiErr.message:String(apiErr);
       setSheetStatus((_sheetHadSuccessfulLoad?'SHEET: LAST LIVE DATA · ':'SHEET ERROR · ')+message,false);
+      setTimetableLiveBadge(_sheetHadSuccessfulLoad
+        ? `Cached · Updated ${relativeTimeAgo(_timetableLastSyncMs)}`
+        : 'Sync failed · Retry',
+        _sheetHadSuccessfulLoad?'cached':'error');
       if(!_sheetHadSuccessfulLoad&&Object.keys(TT).length>0){
         refreshTTFilters();
         rebuildBlockFloorsFromTT();
@@ -1770,6 +1894,7 @@ async function refreshRoomTimetables(){
 
 function initLiveSheetSync(){
   setupTTFilterListeners();
+  setTimetableLiveBadge('Syncing…','syncing');
   refreshTimetableFromGoogleSheet();
   refreshCDRoomScheduleFromSheet();
   refreshRoomTimetables();
@@ -1824,7 +1949,15 @@ function fmtSlot(slot){
 }
 
 function nowMinutes(){
-  const n=new Date();return n.getHours()*60+n.getMinutes();
+  const parts=timeFormatter.formatToParts(new Date());
+  const hourStr=parts.find(p=>p.type==='hour')?.value||'';
+  const minuteStr=parts.find(p=>p.type==='minute')?.value||'';
+  let hour=parseInt(hourStr,10)||0;
+  const minute=parseInt(minuteStr,10)||0;
+  const period=parts.find(p=>p.type==='dayPeriod')?.value||'';
+  if(period==='PM'&&hour<12) hour+=12;
+  if(period==='AM'&&hour===12) hour=0;
+  return hour*60+minute;
 }
 
 function getCurrentSlot(){
@@ -2259,7 +2392,14 @@ function loadTT(){
   const out=document.getElementById('tt-out');
   if(out){
     if(!dep||!bat||!sec||!day){
-      out.innerHTML='<div class="tt-empty-card"><svg class="tt-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="tt-empty-title">Select your timetable</div><div class="tt-empty-copy">Choose the school, department, batch, day, and section to view your classes.</div></div>';
+      const missing=[];
+      if(!dep) missing.push('department');
+      if(!bat) missing.push('batch');
+      if(!sec) missing.push('section');
+      if(!day) missing.push('day');
+      const title=!dep ? 'Select a department' : !bat ? 'Select a batch' : !sec ? 'Select a section' : 'Select a day';
+      const copy=!dep ? 'Choose a department first to load available batches.' : !bat ? 'Choose a batch to load the section list.' : !sec ? 'Choose a section to continue.' : 'Choose a day to view your timetable.';
+      out.innerHTML=`<div class="tt-empty-card"><svg class="tt-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="tt-empty-title">${title}</div><div class="tt-empty-copy">${copy}</div><div class="tt-empty-copy">Missing: ${missing.join(', ')}</div></div>`;
       return;
     }
     saveTTPrefs();
@@ -2276,7 +2416,7 @@ function loadTT(){
     const sortedValidEntries=validEntries.sort((a,b)=>timeToNumber(a.time||a.t||'')-timeToNumber(b.time||b.t||''));
     const finalEntries=[...sortedValidEntries,...invalidEntries];
     if(!finalEntries.length){
-      out.innerHTML='<div class="tt-empty-card"><div class="tt-empty-icon" aria-hidden="true">◌</div><div class="tt-empty-title">No classes today</div><div class="tt-empty-copy">This section does not have a class scheduled for the selected day.</div></div>';
+      out.innerHTML='<div class="tt-empty-card"><div class="tt-empty-icon" aria-hidden="true">◌</div><div class="tt-empty-title">No classes found</div><div class="tt-empty-copy">This department, batch, section, and day combination has no published classes.</div><div class="tt-empty-copy">Try another day or switch sections.</div></div>';
       return;
     }
     const currentSlot=getCurrentSlot();
@@ -2298,11 +2438,23 @@ function loadTT(){
 
 /* ── Live clock + auto-refresh rooms when slot changes ── */
 let _lastSlot=null;
+function islamabadTimeParts(){
+  const now=new Date();
+  const timeParts=timeFormatter.formatToParts(now);
+  const hour=timeParts.find(p=>p.type==='hour')?.value||'';
+  const minute=timeParts.find(p=>p.type==='minute')?.value||'';
+  const dateParts=dateFormatter.formatToParts(now);
+  const weekday=dateParts.find(p=>p.type==='weekday')?.value||DAYNAMES[now.getDay()];
+  const day=dateParts.find(p=>p.type==='day')?.value||'';
+  const month=dateParts.find(p=>p.type==='month')?.value||'';
+  const year=dateParts.find(p=>p.type==='year')?.value||'';
+  return { hour,minute,weekday,day,month:month.slice(0,3),year };
+}
 function tickBanner(){
-  const n=new Date();
-  const t=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  const d=DAYNAMES[n.getDay()];
-  const dateStr=n.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const p=islamabadTimeParts();
+  const t=`${p.hour}:${p.minute}`;
+  const d=p.weekday;
+  const dateStr=`${p.day} ${p.month} ${p.year}`;
   const slot=getCurrentSlot();
 
   const hc=document.getElementById('clk');if(hc)hc.textContent=t;
