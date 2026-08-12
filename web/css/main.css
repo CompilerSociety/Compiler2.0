@@ -807,3 +807,107 @@ html[data-theme="dark"] .fv-empty{color:var(--muted)}
 /* keep coloured badge/type surfaces (event types, exam pills, room-status cards)
    as-is — they already carry sufficient contrast (white text on saturated bg)
    in both themes. */
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE REFINEMENTS
+   Appended last so these win over the earlier max-width:700px / 420px blocks
+   at equal specificity. Sizing/geometry only — no colour changes, so both
+   the light and html[data-theme="dark"] palettes are unaffected.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* index.html ships viewport-fit=cover, but nothing consumed the insets, so on
+   notched devices the fixed corner buttons sat under the status bar and the
+   page bottom under the home indicator.
+
+   These two are safe at every width because env() resolves to 0 where there is
+   no inset, leaving the desktop values untouched. */
+@supports (padding: max(0px)) {
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  .pwa-install-bar{padding-bottom:max(10px,env(safe-area-inset-bottom))}
+}
+
+/* The fixed corner buttons and header need a per-breakpoint base to max()
+   against, so they are scoped: 12px is the mobile base (set at max-width:560px),
+   and desktop keeps its own 16px. The max-height arm covers landscape phones,
+   which are wider than 700px but still have side insets. */
+@supports (padding: max(0px)) {
+  @media(max-width:700px),(max-height:500px){
+    .hdr{padding-top:max(8px,env(safe-area-inset-top))}
+    .theme-toggle{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right))}
+    .profile-launcher{top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left))}
+  }
+}
+
+@media(max-width:700px){
+
+  /* Removes the grey flash on tap and the 300ms double-tap-zoom delay. */
+  a,button,select,input,textarea,.nav-card,[role="button"]{-webkit-tap-highlight-color:transparent}
+  button,a,.nav-card,[role="button"]{touch-action:manipulation}
+
+  /* ── Primary nav ──────────────────────────────────────────────────────
+     Was a 918px-wide horizontal scroller inside a 363px viewport: four of
+     the six destinations were reachable only by swiping, with no affordance
+     showing they existed. Now a 3x2 grid — all six visible at once. The
+     badge doubles as the tab label, so the redundant title ("TIMETABLE" /
+     "Class timetable") and the descriptions come out. */
+  .nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 10px 0;padding-bottom:0;overflow-x:visible;scroll-snap-type:none}
+  .nav-card{flex:none;min-height:0;padding:12px 6px 10px;text-align:center;scroll-snap-align:none}
+  .nav-icon{width:24px;height:24px;margin:0 auto 6px;display:block}
+  .nav-badge{font-size:10px;letter-spacing:.04em;padding:0;margin:0;border:none;background:none;display:block;line-height:1.25}
+  .nav-title,.nav-desc{display:none}
+  .nav-indicator{height:3px}
+
+  /* ── Form controls ────────────────────────────────────────────────────
+     Every select was 32px tall at 11px. Two problems: under the 44px touch
+     minimum, and any control under 16px makes iOS Safari zoom the page on
+     focus (and it does not zoom back out). 16px is the fix, not a taste
+     call. */
+  .rsel,.fv-search-input,.sp-search-input,.profile-input{font-size:16px;min-height:44px;padding:11px 12px;border-radius:8px}
+  .rsel{background-position:right 12px center;padding-right:32px}
+  .fv-search-input,.sp-search-input{padding:11px 14px}
+
+  /* ── Legibility floors ────────────────────────────────────────────────
+     The earlier mobile blocks shrank secondary type to 7-9px, below what is
+     readable on a phone. Nothing drops under 11px now. */
+  .flabel{font-size:11px;letter-spacing:.08em;margin-bottom:6px}
+  .fv-contact-label{font-size:11px;letter-spacing:.06em}
+  .sp-hint,.sp-status{font-size:11px;letter-spacing:.06em}
+  .tt-kicker,.tt-hint,.tt-empty-copy{font-size:11px}
+  .fv-results-label,.fv-results-count{font-size:11px}
+  h2.fv-top-label{font-size:11px}
+  .time-day-txt,.time-slot{font-size:11px}
+  .header-campus{font-size:12px!important;letter-spacing:.5px}
+
+  /* Result tables — these carry the answer the user came for, so they get
+     the most headroom: 10-11px headers up to 11px, 11-12px cells to 13px. */
+  .tt-result-table thead th,.tbl th{font-size:11px}
+  .exam-tbl th{font-size:10px;letter-spacing:1px}
+  .tt-result-table td,.tbl td{font-size:13px}
+  .exam-tbl td{font-size:12px}
+
+  /* ── Tap targets ──────────────────────────────────────────────────────
+     The faculty copy button was 24x24 — roughly a quarter of the 44px
+     minimum. The two fixed corner buttons were 42px. */
+  .fv-copy-btn{width:44px;height:44px;border-radius:8px}
+  .fv-copy-btn svg{width:16px;height:16px}
+  .theme-toggle,.profile-launcher{width:44px;height:44px}
+  .go{min-height:44px}
+
+  /* Unbroken room codes ("C-MARGALA 1") are wider than the narrow location
+     column and spilled past the cell edge. */
+  .tt-room,.tt-out td{overflow-wrap:anywhere}
+
+  /* Momentum scrolling without rubber-banding the whole page. */
+  .content{overscroll-behavior-y:contain}
+}
+
+@media(max-width:420px){
+  /* Keep the 3-up nav from crowding at the narrow end. */
+  .nav{gap:6px;margin:8px 6px 0}
+  .nav-card{padding:10px 4px 9px}
+  .nav-badge{font-size:10px;letter-spacing:.02em}
+
+  /* One filter per row — two 16px selects side by side clip their labels. */
+  .exam-filters{grid-template-columns:1fr}
+}
