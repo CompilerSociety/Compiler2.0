@@ -6,585 +6,176 @@
         "A": {
           "Monday": [
             {
-              "name": "Linear Circuit Analysis",
+              "name": "Applied Calculus",
               "location": "B-027",
               "time": "8:30-09:50"
             },
             {
-              "name": "Prog. For Engineers",
+              "name": "Prog Fundamentals & Eng.",
               "location": "B-027",
-              "time": "12:45-02:05"
+              "time": "02:20-03:40"
             },
             {
-              "name": "Applied Calculus",
-              "location": "B-119",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Applications of ICT",
-              "location": "B-229",
-              "time": "08:30-10:20"
-            },
-            {
-              "name": "English Language",
-              "location": "B-229",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-229",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "02:10-03:30"
+              "name": "Applications of ICT Lab",
+              "location": "COMP-I",
+              "time": "12:50-02:10"
             }
           ],
           "Tuesday": [
             {
-              "name": "Civics and Community Engagement",
+              "name": "Applications of ICT",
               "location": "B-027",
               "time": "08:30-10:20"
             },
             {
-              "name": "Differential Equations",
+              "name": "English Language Skills",
               "location": "B-027",
-              "time": "11:20-12:40"
+              "time": "10:55-12:15"
             },
             {
-              "name": "Applied Calculus",
-              "location": "B-229",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Applied Physics",
-              "location": "B-229",
-              "time": "09:55-11:50"
-            },
-            {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "12:45-02:05"
+              "name": "Linear Circuit Analysis",
+              "location": "B-119",
+              "time": "11:25-12:45"
             }
           ],
           "Wednesday": [
             {
-              "name": "Prog. For Engineers",
+              "name": "English Language Skills",
               "location": "B-027",
-              "time": "8:30-09:50"
+              "time": "11:25-12:45"
             },
             {
-              "name": "Linear Circuit Analysis",
-              "location": "B-027",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Applied Calculus",
-              "location": "B-027",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "English Language",
-              "location": "B-229",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-229",
-              "time": "02:10-03:30"
-            },
-            {
-              "name": "Applications of ICT Lab",
-              "location": "COMP-III",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Prog. For Engineers Lab",
-              "location": "COMP-I",
-              "time": "12:45-02:05"
+              "name": "Linear Algebra",
+              "location": "B-028",
+              "time": "11:25-12:45"
             }
           ],
           "Thursday": [
             {
-              "name": "Linear Algebra",
+              "name": "Applied Calculus",
               "location": "B-027",
               "time": "8:30-09:50"
             },
             {
               "name": "Pakistan Studies",
               "location": "B-027",
-              "time": "09:55-11:50"
+              "time": "09:55-11:45"
             },
             {
-              "name": "Applications of ICT",
+              "name": "Linear Algebra",
               "location": "B-027",
-              "time": "12:15-02:05"
+              "time": "03:45-05:05"
             },
             {
-              "name": "Applied Calculus",
-              "location": "B-229",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "02:10-03:30"
+              "name": "Linear Circuit Analysis",
+              "location": "B-129",
+              "time": "12:50-02:10"
             }
           ],
           "Friday": [
             {
-              "name": "Linear Algebra",
-              "location": "B-027",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Differential Equations",
-              "location": "B-027",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Applied Physics",
-              "location": "B-027",
-              "time": "11:20-01:10"
-            },
-            {
-              "name": "Linear Algebra & Diff. Equ.",
-              "location": "B-030",
-              "time": "11:20-01:10"
-            },
-            {
-              "name": "Applications of ICT Lab",
-              "location": "COMP-I",
-              "time": "14:00-15:20"
+              "name": "Linear Circuit Analysis Lab",
+              "location": "CKT",
+              "time": "02:00-03:20"
             }
           ]
         },
         "B": {
           "Monday": [
             {
-              "name": "Prog. For Engineers",
+              "name": "English Language Skills",
               "location": "B-028",
               "time": "8:30-09:50"
             },
             {
-              "name": "Linear Circuit Analysis",
+              "name": "Applied Calculus",
               "location": "B-028",
               "time": "09:55-11:15"
             },
             {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "02:10-03:30"
+              "name": "Applications of ICT Lab",
+              "location": "COMP-II",
+              "time": "12:50-02:10"
             }
           ],
           "Tuesday": [
             {
-              "name": "Differential Equations",
+              "name": "English Language Skills",
               "location": "B-028",
               "time": "8:30-09:50"
             },
             {
-              "name": "Linear Algebra",
+              "name": "Pakistan Studies",
               "location": "B-028",
               "time": "09:55-11:15"
             }
           ],
           "Wednesday": [
             {
-              "name": "Linear Circuit Analysis",
-              "location": "B-028",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Prog. For Engineers",
+              "name": "Applied Calculus",
               "location": "B-028",
               "time": "09:55-11:15"
             }
           ],
           "Thursday": [
             {
-              "name": "Differential Equations",
-              "location": "B-028",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Linear Algebra",
-              "location": "B-028",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "02:10-03:30"
-            },
-            {
-              "name": "Prog. For Engineers Lab",
-              "location": "COMP-I",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Pakistan Studies",
+              "name": "Applications of ICT",
               "location": "B-028",
               "time": "08:30-10:20"
-            },
-            {
-              "name": "Civics and Community Engagement",
-              "location": "B-028",
-              "time": "10:30-12:20"
             }
           ]
         },
         "C": {
           "Monday": [
             {
-              "name": "Prog. For Engineers",
+              "name": "English Language Skills",
               "location": "B-030",
               "time": "09:55-11:15"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-030",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Prog. For Engineers Lab",
-              "location": "COMP-I",
-              "time": "02:10-03:30"
             }
           ],
           "Tuesday": [
-            {
-              "name": "Linear Algebra",
-              "location": "B-030",
-              "time": "8:30-09:50"
-            },
             {
               "name": "Pakistan Studies",
               "location": "B-030",
-              "time": "09:55-11:50"
-            },
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Differential Equations",
-              "location": "B-030",
               "time": "8:30-09:50"
             },
             {
-              "name": "Linear Circuit Analysis",
+              "name": "Applications of ICT",
               "location": "B-030",
               "time": "09:55-11:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Civics and Community Engagement",
-              "location": "B-030",
-              "time": "08:30-10:20"
             },
             {
-              "name": "Differential Equations",
-              "location": "B-030",
-              "time": "10:30-11:50"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Prog. For Engineers",
-              "location": "B-030",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Linear Algebra",
-              "location": "B-030",
-              "time": "09:55-11:15"
-            }
-          ]
-        },
-        "D": {
-          "Tuesday": [
-            {
-              "name": "Prog. For Engineers Lab",
-              "location": "PTH",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "12:45-02:05"
-            }
-          ]
-        }
-      },
-      "2023": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Analog & Digital Comm.",
-              "location": "B-119",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Engineering Economics",
-              "location": "B-127",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Introduction to IOT",
-              "location": "B-130",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Entrepreneurship",
-              "location": "B-130",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Engineering Workshop Lab",
-              "location": "WSHOP",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Electro-Mechanical Sys.",
-              "location": "B-127",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Operating Systems",
-              "location": "B-127",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Feedback Control Syst.",
-              "location": "B-127",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Analog & Digital Comm.",
-              "location": "B-019",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Computer Architecture",
-              "location": "B-127",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Entrepreneurship",
-              "location": "B-130",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Network Programming",
-              "location": "B-130",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Computer Architecture Lab",
-              "location": "KOH",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Network Programming",
-              "location": "B-119",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Electro-Mechanical Sys.",
-              "location": "B-127",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Engineering Economics",
-              "location": "B-127",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Feedback Control Syst.",
-              "location": "B-127",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Introduction to IOT",
-              "location": "B-130",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Operating Systems Lab",
-              "location": "COMP-III",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Introduction to IOT Lab",
-              "location": "COMP-III",
-              "time": "02:10-03:30"
-            },
-            {
-              "name": "Electro-Mechanical Systems Lab",
-              "location": "COMP-II",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Computer Architecture",
-              "location": "B-127",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Operating Systems",
-              "location": "B-127",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Analog & Digital Comm. Lab",
-              "location": "POTH",
-              "time": "14:00-15:20"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Engineering Economics",
-              "location": "B-129",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Entrepreneurship",
-              "location": "B-130",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Electro-Mechanical Systems Lab",
-              "location": "COMP-II",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Introduction to IOT Lab",
-              "location": "COMP-III",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Computer Architecture",
-              "location": "B-020",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Operating Systems",
-              "location": "B-020",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Electro-Mechanical Sys.",
-              "location": "B-129",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Engineering Economics",
-              "location": "B-129",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Engineering Workshop Lab",
-              "location": "WSHOP",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Operating Systems Lab",
-              "location": "COMP-III",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Feedback Control Syst.",
-              "location": "B-129",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Entrepreneurship",
-              "location": "B-130",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Computer Architecture Lab",
-              "location": "KOH",
-              "time": "8:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Electro-Mechanical Sys.",
-              "location": "B-129",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Feedback Control Syst.",
-              "location": "B-129",
-              "time": "11:20-12:40"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Computer Architecture",
-              "location": "B-127",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Operating Systems",
-              "location": "B-129",
-              "time": "8:30-09:50"
-            }
-          ]
-        },
-        "C": {
-          "Tuesday": [
-            {
-              "name": "Electro-Mechanical Systems Lab",
+              "name": "Applications of ICT Lab",
               "location": "COMP-I",
-              "time": "12:45-02:05"
+              "time": "02:20-03:40"
             }
           ],
           "Wednesday": [
             {
-              "name": "Engineering Workshop Lab",
-              "location": "WSHOP",
-              "time": "12:45-02:05"
+              "name": "Applied Calculus",
+              "location": "B-030",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "English Language Skills",
+              "location": "B-030",
+              "time": "09:55-11:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Applied Calculus",
+              "location": "B-030",
+              "time": "09:55-11:15"
             }
           ]
         },
         "D": {
-          "Thursday": [
+          "Wednesday": [
             {
-              "name": "Engineering Workshop Lab",
-              "location": "WSHOP",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Electro-Mechanical Systems Lab",
+              "name": "Applications of ICT Lab",
               "location": "COMP-II",
-              "time": "14:00-15:20"
+              "time": "02:20-03:40"
             }
           ]
         }
@@ -593,291 +184,601 @@
         "A": {
           "Monday": [
             {
-              "name": "Signal & Systems",
-              "location": "B-127",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Digital Logic Design",
-              "location": "B-127",
+              "name": "Physics for Engr.",
+              "location": "B-027",
               "time": "09:55-11:15"
             },
             {
-              "name": "Communication Skills",
-              "location": "B-127",
+              "name": "Engineering Management",
+              "location": "B-028",
+              "time": "11:20-12:40"
+            },
+            {
+              "name": "Tech. & Business Writing",
+              "location": "B-028",
               "time": "12:45-02:05"
             },
             {
-              "name": "Feedback & Control Systems Lab",
-              "location": "PTH",
-              "time": "02:10-03:30"
+              "name": "A & Digital Comm.",
+              "location": "B-019",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Basic Mechanical Engg.",
+              "location": "B-019",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Digital Logic Design",
+              "location": "B-019",
+              "time": "11:20-12:40"
+            },
+            {
+              "name": "Comp. Variables & Trans.",
+              "location": "B-019",
+              "time": "12:45-02:05"
+            },
+            {
+              "name": "Advanced Artificial Intel. -",
+              "location": "B-019",
+              "time": "05:15-08:00"
+            },
+            {
+              "name": "Applied Machine Learning Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Instrumentation and Measurements - Lab",
+              "location": "PWR",
+              "time": "02:20-03:40"
             }
           ],
           "Tuesday": [
             {
-              "name": "Object Oriented Data Str.",
+              "name": "Applied Machine Learning",
               "location": "B-028",
-              "time": "11:20-12:40"
+              "time": "12:50-02:10"
             },
             {
-              "name": "Electrical Network Anal.",
+              "name": "Embedded Systems -",
               "location": "B-028",
-              "time": "12:45-02:05"
+              "time": "02:20-03:40"
             },
             {
-              "name": "Basic Mech. Engg",
-              "location": "B-020",
-              "time": "03:35-04:55"
+              "name": "Instru. & Measurements",
+              "location": "B-028",
+              "time": "03:45-05:05"
             },
             {
-              "name": "Probability & Random Prs.",
-              "location": "B-127",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Object Oriented Data Structures -Lab",
-              "location": "KOH",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Object Oriented Data Str.",
+              "name": "Fund. Database Systems",
               "location": "B-030",
-              "time": "11:20-12:40"
+              "time": "03:45-05:05"
             },
             {
-              "name": "Probability & Random Prs.",
-              "location": "B-127",
+              "name": "Electromagnetic Theory",
+              "location": "B-019",
               "time": "8:30-09:50"
             },
             {
-              "name": "Signal & Systems",
-              "location": "B-127",
+              "name": "MP Inter. & Prog",
+              "location": "B-019",
               "time": "09:55-11:15"
             },
             {
-              "name": "Communication Skills",
-              "location": "B-127",
-              "time": "12:45-02:05"
+              "name": "Elect. Netwk. Analysis",
+              "location": "B-019",
+              "time": "11:25-12:45"
             },
             {
-              "name": "Electrical Network Anal. Lab",
+              "name": "Obj. Oriented Data Struct.",
+              "location": "B-019",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Adv. Network Security -",
+              "location": "B-019",
+              "time": "05:15-08:00"
+            },
+            {
+              "name": "Holy Quran I/Ethics I & II",
+              "location": "B-020",
+              "time": "05:15-07:00"
+            },
+            {
+              "name": "Engineering Drawing",
+              "location": "POTH",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Microprocessor Interfacing & Prog. Lab",
+              "location": "MDEL",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Elect. Netwk. Analysis Lab",
               "location": "ELECT",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Signal & Systems Lab",
-              "location": "PTH",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Electrical Network Anal.",
-              "location": "B-028",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Digital Logic Design",
-              "location": "B-127",
               "time": "8:30-09:50"
             },
             {
-              "name": "Linear Circuit Anlysis Lab",
-              "location": "CKT",
-              "time": "11:20-12:40"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Tech. Comm. Skills.",
-              "location": "B-019",
-              "time": "08:30-10:20"
-            },
-            {
-              "name": "Basic Mech. Engg",
-              "location": "B-020",
-              "time": "11:20-12:40"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Digital Logic Design",
-              "location": "B-129",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Signal & Systems",
-              "location": "B-129",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Communication Skills",
-              "location": "B-129",
-              "time": "11:20-12:40"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Electrical Network Anal.",
-              "location": "B-030",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Probability & Random Prs.",
-              "location": "B-129",
-              "time": "8:30-09:50"
+              "name": "Electronic Devices & Circuits Lab",
+              "location": "ELECT",
+              "time": "12:50-02:10"
             }
           ],
           "Wednesday": [
             {
-              "name": "Signal & Systems",
-              "location": "B-129",
+              "name": "Physics for Engr.",
+              "location": "B-027",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Applied Thermodynamics",
+              "location": "B-027",
+              "time": "03:45-05:05"
+            },
+            {
+              "name": "Engineering Management",
+              "location": "B-028",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Tech. & Business Writing",
+              "location": "B-028",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Data Com. & Netwks.",
+              "location": "B-019",
               "time": "8:30-09:50"
             },
             {
-              "name": "Probability & Random Prs.",
-              "location": "B-129",
+              "name": "A & Digital Comm.",
+              "location": "B-019",
               "time": "09:55-11:15"
+            },
+            {
+              "name": "Comp. Variables & Trans.",
+              "location": "B-019",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Digital Logic Design",
+              "location": "B-019",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Adv. Embedded Sys & Net.",
+              "location": "B-019",
+              "time": "05:15-08:00"
+            },
+            {
+              "name": "Electronic Circuit Design",
+              "location": "B-020",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Obj. Oriented Data Struct. Lab",
+              "location": "KOH",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Embedded Systems Lab",
+              "location": "COMP-I",
+              "time": "8:30-09:50"
             }
           ],
           "Thursday": [
             {
-              "name": "Electrical Network Anal.",
-              "location": "B-030",
-              "time": "12:45-02:05"
+              "name": "Basic Mechanical Engg.",
+              "location": "B-019",
+              "time": "8:30-09:50"
             },
             {
-              "name": "Digital Logic Design",
-              "location": "B-129",
+              "name": "Electromagnetic Theory",
+              "location": "B-019",
               "time": "09:55-11:15"
             },
             {
-              "name": "Communication Skills",
+              "name": "Obj. Oriented Data Struct.",
+              "location": "B-019",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Elect. Netwk. Analysis",
+              "location": "B-019",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Internet of Things -",
+              "location": "B-019",
+              "time": "05:15-08:00"
+            },
+            {
+              "name": "Embedded Systems -",
+              "location": "B-119",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Programming Fundamentals",
               "location": "B-129",
-              "time": "12:45-02:05"
+              "time": "11:25-12:45"
             },
             {
-              "name": "Signal & Systems Lab",
-              "location": "KOH",
-              "time": "02:10-03:30"
+              "name": "Fund. Database Systems",
+              "location": "B-130",
+              "time": "12:50-02:10"
             },
             {
-              "name": "Feedback & Control Systems Lab",
-              "location": "PTH",
-              "time": "02:10-03:30"
+              "name": "Instru. & Measurements",
+              "location": "B-230",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Applied Machine Learning",
+              "location": "B-230",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Fund. Database Systems Lab",
+              "location": "POTH",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Digital Logic Design Lab",
+              "location": "DLD",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Electronic Circuit Design Lab",
+              "location": "CKT",
+              "time": "12:50-02:10"
             }
           ],
           "Friday": [
             {
-              "name": "Tech. Comm. Skills.",
+              "name": "Applied Thermodynamics",
               "location": "B-019",
-              "time": "10:30-12:20"
+              "time": "02:00-03:20"
             },
             {
-              "name": "Electrical Network Anal. Lab",
-              "location": "CKT",
-              "time": "14:00-15:20"
+              "name": "MP Inter. & Prog",
+              "location": "B-027",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Data Com. & Netwks.",
+              "location": "B-027",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Electronic Circuit Design",
+              "location": "B-028",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Data Communication and Networks - Lab",
+              "location": "COMP-III",
+              "time": "02:00-03:20"
+            },
+            {
+              "name": "Programming Fundamentals Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
             }
           ]
         },
         "C": {
           "Monday": [
             {
-              "name": "Signal & Systems Lab",
-              "location": "KOH",
-              "time": "02:10-03:30"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Probability & Random Prs.",
-              "location": "B-019",
-              "time": "09:55-11:15"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Probability & Random Prs.",
-              "location": "B-020",
+              "name": "Physics for Engr.",
+              "location": "B-030",
               "time": "8:30-09:50"
-            }
-          ]
-        }
-      },
-      "2022": {
-        "A": {
-          "Monday": [
+            },
             {
-              "name": "Industrial Processes Cont. Lab",
-              "location": "IPC",
-              "time": "02:10-03:30"
+              "name": "Engineering Drawing",
+              "location": "POTH",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Microprocessor Interfacing & Prog. Lab",
+              "location": "MDEL",
+              "time": "12:50-02:10"
             }
           ],
           "Tuesday": [
             {
-              "name": "Digital Signal Processing",
-              "location": "B-129",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Power Electronics",
-              "location": "B-130",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Power Electronics Lab",
-              "location": "COMP-II",
-              "time": "02:10-03:30"
+              "name": "Obj. Oriented Data Struct. Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
             }
           ],
           "Wednesday": [
             {
-              "name": "VLSI",
-              "location": "B-130",
-              "time": "12:45-02:05"
+              "name": "Comp. Variables & Trans.",
+              "location": "B-030",
+              "time": "11:25-12:45"
             },
             {
-              "name": "Digital Signal Processing Lab",
-              "location": "COMP-II",
-              "time": "09:55-11:15"
+              "name": "Digital Logic Design",
+              "location": "B-020",
+              "time": "03:45-05:05"
             },
             {
-              "name": "VLSI Lab",
-              "location": "COMP-II",
-              "time": "02:10-03:30"
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Digital Logic Design Lab",
+              "location": "DLD",
+              "time": "8:30-09:50"
             }
           ],
           "Thursday": [
             {
-              "name": "VLSI",
-              "location": "B-130",
+              "name": "Comp. Variables & Trans.",
+              "location": "B-028",
+              "time": "03:45-05:05"
+            },
+            {
+              "name": "Physics for Engr.",
+              "location": "B-030",
               "time": "8:30-09:50"
             },
             {
-              "name": "Industrial Procsses Cont.",
-              "location": "B-130",
+              "name": "Digital Logic Design",
+              "location": "B-020",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Elect. Netwk. Analysis Lab",
+              "location": "ELECT",
+              "time": "8:30-09:50"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "Tech. & Business Writing",
+              "location": "B-030",
               "time": "11:20-12:40"
             },
             {
-              "name": "Industrial Procsses Cont.",
-              "location": "B-130",
+              "name": "Engineering Management",
+              "location": "B-030",
               "time": "12:45-02:05"
+            },
+            {
+              "name": "Basic Mechanical Engg.",
+              "location": "B-020",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "A & Digital Comm.",
+              "location": "B-020",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Comp. Variables & Trans.",
+              "location": "B-020",
+              "time": "11:20-12:40"
+            },
+            {
+              "name": "Digital Logic Design",
+              "location": "B-020",
+              "time": "12:45-02:05"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Applied Machine Learning",
+              "location": "B-030",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Data Com. & Netwks.",
+              "location": "B-019",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "MP Inter. & Prog",
+              "location": "B-020",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Electromagnetic Theory",
+              "location": "B-020",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Obj. Oriented Data Struct.",
+              "location": "B-020",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Elect. Netwk. Analysis",
+              "location": "B-020",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Engineering Drawing",
+              "location": "KOH",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Applied Machine Learning Lab",
+              "location": "COMP-I",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Digital Logic Design Lab",
+              "location": "DLD",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Physics for Engr.",
+              "location": "B-028",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Tech. & Business Writing",
+              "location": "B-030",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Engineering Management",
+              "location": "B-030",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "MP Inter. & Prog",
+              "location": "B-020",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Digital Logic Design",
+              "location": "B-020",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Comp. Variables & Trans.",
+              "location": "B-020",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Microprocessor Interfacing & Prog. Lab",
+              "location": "MDEL",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Elect. Netwk. Analysis Lab",
+              "location": "CKT",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Physics for Engr.",
+              "location": "B-028",
+              "time": "10:25-11:45"
+            },
+            {
+              "name": "Electromagnetic Theory",
+              "location": "B-020",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Basic Mechanical Engg.",
+              "location": "B-020",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Elect. Netwk. Analysis",
+              "location": "B-020",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Obj. Oriented Data Struct.",
+              "location": "B-020",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Applied Machine Learning",
+              "location": "B-230",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Obj. Oriented Data Struct. Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Data Communication and Networks - Lab",
+              "location": "COMP-III",
+              "time": "12:50-02:10"
             }
           ],
           "Friday": [
             {
-              "name": "Digital Signal Processing",
-              "location": "B-129",
-              "time": "09:55-11:15"
+              "name": "A & Digital Comm.",
+              "location": "B-028",
+              "time": "8:30-09:50"
             },
             {
-              "name": "Power Electronics",
-              "location": "B-129",
-              "time": "11:20-12:40"
+              "name": "Data Com. & Netwks.",
+              "location": "B-028",
+              "time": "11:25-12:45"
+            }
+          ]
+        },
+        "D": {
+          "Monday": [
+            {
+              "name": "Engineering Drawing",
+              "location": "KOH",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Elect. Netwk. Analysis Lab",
+              "location": "CKT",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "02:20-03:40"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Digital Logic Design Lab",
+              "location": "DLD",
+              "time": "02:00-03:20"
+            }
+          ]
+        }
+      },
+      "2023": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Analogue and Digital Communication - Lab",
+              "location": "COMP-III",
+              "time": "12:50-02:10"
+            }
+          ]
+        },
+        "B": {
+          "Tuesday": [
+            {
+              "name": "Analogue and Digital Communication - Lab",
+              "location": "KOH",
+              "time": "11:25-12:45"
+            }
+          ]
+        },
+        "C": {
+          "Wednesday": [
+            {
+              "name": "Analogue and Digital Communication - Lab",
+              "location": "COMP-I",
+              "time": "12:50-02:10"
             }
           ]
         }
@@ -888,182 +789,78 @@
         "A": {
           "Monday": [
             {
-              "name": "Linear Circuit Analysis",
-              "location": "B-019",
+              "name": "Applications of ICT",
+              "location": "B-119",
               "time": "8:30-09:50"
             },
-            {
-              "name": "Differential Equations",
-              "location": "B-019",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Prog. Fundamentals",
-              "location": "B-019",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Understanding of Holy Quran I & II",
-              "location": "B-019",
-              "time": "12:15-02:10"
-            },
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "8:30-09:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-019",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Differential Equations",
-              "location": "B-019",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Prog. Fundamentals Lab",
-              "location": "COMP-I",
-              "time": "8:30-09:50"
-            }
-          ],
-          "Thursday": [
             {
               "name": "Pakistan Studies",
-              "location": "B-019",
-              "time": "12:15-02:05"
-            },
-            {
-              "name": "Prog. Fundamentals",
-              "location": "B-019",
-              "time": "02:10-03:30"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Prog. Fundamentals",
-              "location": "B-020",
-              "time": "8:30-09:50"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-020",
-              "time": "09:55-11:15"
-            },
-            {
-              "name": "Differential Equations",
-              "location": "B-020",
-              "time": "12:45-02:05"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Pakistan Studies",
-              "location": "B-020",
-              "time": "11:20-12:40"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Differential Equations",
-              "location": "B-020",
-              "time": "11:20-12:40"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-020",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "8:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Understanding of Holy Quran I & II",
-              "location": "B-020",
-              "time": "02:10-03:30"
-            },
-            {
-              "name": "Prog. Fundamentals Lab",
-              "location": "PTH",
-              "time": "8:30-09:50"
-            }
-          ]
-        },
-        "C": {
-          "Tuesday": [
-            {
-              "name": "Prog. Fundamentals Lab",
-              "location": "KOH",
-              "time": "8:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "8:30-09:50"
-            }
-          ]
-        }
-      },
-      "REPEAT": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Applied Calculus",
               "location": "B-119",
               "time": "11:20-12:40"
             },
             {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "02:10-03:30"
+              "name": "Applied Calculus",
+              "location": "B-119",
+              "time": "02:20-03:40"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "English Language Skills",
+              "location": "B-119",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Linear Algebra",
+              "location": "B-129",
+              "time": "8:30-09:50"
             }
           ],
           "Wednesday": [
             {
+              "name": "English Language Skills",
+              "location": "B-119",
+              "time": "09:55-11:15"
+            },
+            {
               "name": "Applied Calculus",
-              "location": "B-027",
-              "time": "11:20-12:40"
+              "location": "B-119",
+              "time": "12:50-02:10"
             }
           ],
           "Thursday": [
             {
-              "name": "Applications of ICT",
-              "location": "B-027",
-              "time": "12:15-02:05"
+              "name": "Applications of ICT Lab",
+              "location": "COMP-I",
+              "time": "09:55-11:15"
             }
           ],
           "Friday": [
             {
-              "name": "Applied Physics",
-              "location": "B-027",
-              "time": "11:20-01:10"
-            },
-            {
-              "name": "Applications of ICT Lab",
-              "location": "COMP-I",
-              "time": "14:00-15:20"
+              "name": "Linear Algebra",
+              "location": "B-129",
+              "time": "11:25-12:45"
             }
           ]
         },
         "B": {
-          "Thursday": [
+          "Tuesday": [
             {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "02:10-03:30"
+              "name": "Linear Algebra",
+              "location": "B-130",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Applications of ICT Lab",
+              "location": "KOH",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Linear Algebra",
+              "location": "B-130",
+              "time": "09:55-11:15"
             }
           ]
         }
@@ -1072,175 +869,263 @@
         "A": {
           "Monday": [
             {
-              "name": "Probability and Statistics",
-              "location": "B-119",
-              "time": "12:45-02:05"
-            },
-            {
-              "name": "Signal & Systems",
-              "location": "B-119",
-              "time": "02:10-03:30"
-            },
-            {
-              "name": "Data Structures and Algo Lab",
-              "location": "PTH",
+              "name": "Elect Devices & Circuits",
+              "location": "B-129",
               "time": "8:30-09:50"
             },
             {
-              "name": "Digital Logic Design Lab",
-              "location": "DLD",
-              "time": "12:45-02:05"
+              "name": "Discrete Strucures",
+              "location": "B-129",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Blockchain Technologies",
+              "location": "B-230",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Numerical Computing.",
+              "location": "B-230",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Data Com. & Netwks.",
+              "location": "B-230",
+              "time": "02:20-03:40"
             }
           ],
           "Tuesday": [
             {
-              "name": "Digital Logic Design",
+              "name": "Physics for Engr.",
               "location": "B-119",
-              "time": "8:30-09:50"
+              "time": "12:50-02:10"
             },
             {
-              "name": "Tech. Communcation Skills.",
-              "location": "B-119",
+              "name": "Comp.Var. & Transforms",
+              "location": "B-129",
               "time": "09:55-11:15"
             },
             {
-              "name": "Data Structures Algo.",
-              "location": "B-119",
-              "time": "12:45-02:05"
+              "name": "Numerical Computing.",
+              "location": "B-230",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Computer Org.Architecture",
+              "location": "B-230",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Computer Organization and Architecture Lab",
+              "location": "POTH",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "8:30-09:50"
             }
           ],
           "Wednesday": [
             {
-              "name": "Probability and Statistics",
+              "name": "Physics for Engr.",
               "location": "B-119",
               "time": "8:30-09:50"
             },
             {
-              "name": "Digital Logic Design",
-              "location": "B-119",
+              "name": "Discrete Strucures",
+              "location": "B-129",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Object Oriented Prog.",
+              "location": "B-129",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Blockchain Technologies",
+              "location": "B-230",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Data Com. & Netwks.",
+              "location": "B-230",
               "time": "09:55-11:15"
             },
             {
-              "name": "Digital Logic Design Lab",
-              "location": "DLD",
-              "time": "11:20-12:40"
+              "name": "Object Oriented Programming Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Data Communication and Networks - Lab",
+              "location": "COMP-III",
+              "time": "12:50-02:10"
             }
           ],
           "Thursday": [
             {
-              "name": "Signal & Systems",
+              "name": "Health & Safety",
               "location": "B-119",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Elect Devices & Circuits",
+              "location": "B-129",
               "time": "8:30-09:50"
             },
             {
-              "name": "Data Structures Algo.",
-              "location": "B-119",
+              "name": "Comp.Var. & Transforms",
+              "location": "B-129",
               "time": "09:55-11:15"
             },
             {
-              "name": "Signal & Systems Lab",
-              "location": "KOH",
-              "time": "11:20-12:40"
+              "name": "Computer Org.Architecture",
+              "location": "B-230",
+              "time": "12:50-02:10"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Object Oriented Prog.",
+              "location": "B-129",
+              "time": "09:55-11:15"
             }
           ]
         },
         "B": {
           "Monday": [
             {
-              "name": "Signal & Systems Lab",
-              "location": "KOH",
+              "name": "Discrete Strucures",
+              "location": "B-130",
               "time": "8:30-09:50"
+            },
+            {
+              "name": "Elect Devices & Circuits",
+              "location": "B-130",
+              "time": "09:55-11:15"
             }
           ],
           "Tuesday": [
             {
-              "name": "Digital Logic Design Lab",
-              "location": "DLD",
-              "time": "12:45-02:05"
+              "name": "Comp.Var. & Transforms",
+              "location": "B-130",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Object Oriented Programming Lab",
+              "location": "COMP-III",
+              "time": "12:50-02:10"
             }
           ],
           "Wednesday": [
             {
-              "name": "Data Structures and Algo Lab",
-              "location": "PTH",
-              "time": "11:20-12:40"
+              "name": "Object Oriented Prog.",
+              "location": "B-130",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Discrete Strucures",
+              "location": "B-130",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Computer Organization and Architecture Lab",
+              "location": "POTH",
+              "time": "12:50-02:10"
             }
           ],
           "Thursday": [
             {
-              "name": "Digital Logic Design Lab",
-              "location": "DLD",
-              "time": "11:20-12:40"
+              "name": "Comp.Var. & Transforms",
+              "location": "B-130",
+              "time": "8:30-09:50"
+            },
+            {
+              "name": "Elect Devices & Circuits",
+              "location": "B-130",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Physics for Engineers Lab",
+              "location": "PHY",
+              "time": "09:55-11:15"
+            },
+            {
+              "name": "Electronic Devices and Circuits - Lab",
+              "location": "ELECT",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Data Communication and Networks - Lab",
+              "location": "COMP-III",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Object Oriented Prog.",
+              "location": "B-130",
+              "time": "11:25-12:45"
             }
           ]
         },
         "C": {
           "Wednesday": [
             {
-              "name": "Digital Logic Design Lab",
-              "location": "DLD",
-              "time": "02:10-03:30"
+              "name": "Electronic Devices and Circuits - Lab",
+              "location": "ELECT",
+              "time": "8:30-09:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Object Oriented Programming Lab",
+              "location": "KOH",
+              "time": "12:50-02:10"
             }
           ]
         }
       },
-      "2023": {
+      "2022": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Digital Signal Processing",
+              "location": "B-230",
+              "time": "12:45-02:05"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Digital Signal Processing",
+              "location": "B-230",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Digital Signal Processing Lab",
+              "location": "KOH",
+              "time": "8:30-09:50"
+            }
+          ]
+        },
         "B": {
           "Tuesday": [
             {
-              "name": "Engineering Workshop Lab",
-              "location": "PTH",
-              "time": "8:30-09:50"
-            }
-          ]
-        },
-        "C": {
-          "Wednesday": [
-            {
-              "name": "Engineering Workshop Lab",
-              "location": "PTH",
-              "time": "8:30-09:50"
-            }
-          ]
-        },
-        "A": {
-          "Thursday": [
-            {
-              "name": "Engineering Workshop Lab",
-              "location": "KOH",
-              "time": "8:30-09:50"
+              "name": "Digital Signal Processing Lab",
+              "location": "COMP-I",
+              "time": "11:25-12:45"
             }
           ]
         }
       }
     },
-    "MS EE": {
-      "MS": {
+    "BS MS": {
+      "2024": {
         "A": {
-          "Monday": [
-            {
-              "name": "Under. of Holy Quran I & II",
-              "location": "B-019",
-              "time": "05:20-07:05"
-            }
-          ],
-          "Tuesday": [
+          "Friday": [
             {
               "name": "Research Methodology",
-              "location": "B-019",
-              "time": "05:15-08:00"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Deep Learning",
-              "location": "B-019",
-              "time": "05:15-08:00"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Computational Statistics",
               "location": "B-019",
               "time": "05:15-08:00"
             }
@@ -1249,6 +1134,6 @@
       }
     }
   },
-  "count": 203,
-  "generatedAt": "2026-08-11T13:19:22.931426+00:00"
+  "count": 192,
+  "generatedAt": "2026-08-12T09:37:12.485389+00:00"
 }

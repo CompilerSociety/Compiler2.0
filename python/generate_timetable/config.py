@@ -17,10 +17,10 @@ SCHOOLS = OrderedDict([
         ("tabs", ["Timetable"]),
     ])),
     ("engineering", OrderedDict([
-        ("id", "1S3mWYvoM7HbIeiqAbt65FngdmYDUA8MWOQSjcUYsFXU"),
-        ("tabs", ["Classes Schedule FSE SP-26"]),
+        ("id", "1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw"),
+        ("tabs", ["Classes Schedule FA26 (In Progress)"]),
         # Structural source of truth for dept/batch/repeat status — see schools/engineering.py
-        ("courses_tab", "Courses SP-26"),
+        ("courses_tab", "Course Allocation FA26"),
     ])),
 ])
 

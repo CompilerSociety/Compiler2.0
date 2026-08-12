@@ -748,7 +748,7 @@ function isLabFloor(floorName){
 ══════════════════════════════════════════ */
 const SCHOOLS={
   computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],label:"Computing (FSC)"},
-  engineering:{id:"1S3mWYvoM7HbIeiqAbt65FngdmYDUA8MWOQSjcUYsFXU",tabs:["Monday"],label:"Engineering (FSE)"},
+  engineering:{id:"1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",tabs:["Monday"],label:"Engineering (FSE)"},
   business:{id:"1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw",tabs:["Monday"],label:"Business (FSM)"},
 };
 const GOOGLE_SHEET_ID=SCHOOLS.computing.id;
@@ -1416,7 +1416,13 @@ function setupTTFilterListeners(){
       applyRepeatModeUI();
       const batches=Object.keys(TT[dep]||{}).filter(b=>!REPEAT_BATCH_KEYS.includes(b)).sort((a,b)=>Number(b)-Number(a));
       fillSelectOptions(batchSel,batches,null,'-- Batch --');
-      fillSelectOptions(secSel,[],null,'-- Section --');
+      // Refill sections for whatever batch survived the dept switch — fillSelectOptions
+      // keeps the previous value when the new dept also offers that batch, and changing
+      // dept fires no 'change' on the batch select, so blanking the section list here
+      // left it empty until the next page load.
+      const secs=Object.keys(((TT[dep]||{})[batchSel.value])||{}).sort();
+      fillSelectOptions(secSel,secs,null,'-- Section --');
+      if(secs.length===1) secSel.value=secs[0];
       saveTTPrefs();loadTT();
     });
   }

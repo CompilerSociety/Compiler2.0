@@ -9,8 +9,8 @@ const SCHOOLS = {
     format: "matrix"
   },
   engineering: {
-    id: "1S3mWYvoM7HbIeiqAbt65FngdmYDUA8MWOQSjcUYsFXU",
-    tabs: ["Classes Schedule FSE SP-26"],
+    id: "1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",
+    tabs: ["Classes Schedule FA26 (In Progress)"],
     format: "flat"
   },
   business: {

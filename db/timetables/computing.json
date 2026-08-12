@@ -2383,6 +2383,28 @@
               "location": "C-RAWAL 4",
               "time": "08:30-11:15"
             }
+          ],
+          "Saturday": [
+            {
+              "name": "PF",
+              "location": "C-301",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PF Lab",
+              "location": "D-IT LAB 2",
+              "time": "02:30-05:15"
+            },
+            {
+              "name": "Func Eng Lab (E1)",
+              "location": "C-CALL-1",
+              "time": "11:30-02:15"
+            },
+            {
+              "name": "Func Eng Lab (E2)",
+              "location": "C-CALL-2",
+              "time": "11:30-02:15"
+            }
           ]
         }
       },
@@ -3700,6 +3722,28 @@
               "location": "D-IT LAB 3",
               "time": "11:30-02:15"
             }
+          ],
+          "Saturday": [
+            {
+              "name": "PF",
+              "location": "C-301",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "IICT Lab",
+              "location": "D-IT LAB 1",
+              "time": "02:30-05:15"
+            },
+            {
+              "name": "Func Eng Lab (D1)",
+              "location": "C-CALL-1",
+              "time": "08:30-11:15"
+            },
+            {
+              "name": "Func Eng Lab (D2)",
+              "location": "C-CALL-2",
+              "time": "08:30-11:15"
+            }
           ]
         }
       },
@@ -3910,6 +3954,23 @@
               "location": "C-309",
               "time": "01:00-02:20"
             }
+          ],
+          "Saturday": [
+            {
+              "name": "PF Lab",
+              "location": "D-IT LAB 2",
+              "time": "08:30-11:15"
+            },
+            {
+              "name": "Func Eng Lab (B2)",
+              "location": "C-RAWAL 4",
+              "time": "11:30-02:15"
+            },
+            {
+              "name": "Func Eng Lab (B1)",
+              "location": "A-CALL-3",
+              "time": "11:30-02:15"
+            }
           ]
         }
       },
@@ -3922,12 +3983,12 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "Prog for AI",
+              "name": "Data St",
               "location": "D-303",
               "time": "10:00-11:20"
             },
             {
-              "name": "Data St",
+              "name": "Prog for AI",
               "location": "D-303",
               "time": "01:00-02:20"
             },
@@ -3961,7 +4022,7 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "Prog for AI",
+              "name": "Data St",
               "location": "D-304",
               "time": "10:00-11:20"
             },
@@ -3971,14 +4032,9 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Data St",
+              "name": "Prog for AI",
               "location": "D-304",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "OOP",
-              "location": "D-315",
-              "time": "08:30-09:50"
             }
           ],
           "Thursday": [
@@ -4146,11 +4202,6 @@
               "name": "Prog for AI",
               "location": "D-305",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "OOP",
-              "location": "D-306",
-              "time": "10:00-11:20"
             }
           ],
           "Thursday": [
@@ -4410,16 +4461,6 @@
         "A": {
           "Monday": [
             {
-              "name": "Blockchain",
-              "location": "D-315",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "AI Prod Dev",
-              "location": "D-315",
-              "time": "02:30-03:50"
-            },
-            {
               "name": "Business Research",
               "location": "D-316",
               "time": "08:30-09:50"
@@ -4435,21 +4476,31 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Multiagent Sys",
+              "name": "AI Prod Dev",
               "location": "D-316",
+              "time": "03:55-05:15"
+            },
+            {
+              "name": "Blockchain",
+              "location": "D-401",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Multiagent Sys",
+              "location": "D-401",
               "time": "02:30-03:50"
             }
           ],
           "Wednesday": [
             {
-              "name": "Blockchain",
+              "name": "Edge Comp",
               "location": "D-402",
               "time": "01:00-02:20"
             },
             {
               "name": "AI Prod Dev",
               "location": "D-402",
-              "time": "02:30-03:50"
+              "time": "03:55-05:15"
             },
             {
               "name": "Business Research",
@@ -4462,9 +4513,9 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Edge Comp",
+              "name": "Blockchain",
               "location": "D-403",
-              "time": "01:00-02:20"
+              "time": "11:30-12:50"
             },
             {
               "name": "Multiagent Sys",
@@ -4562,6 +4613,11 @@
           ],
           "Tuesday": [
             {
+              "name": "Data St",
+              "location": "D-312",
+              "time": "08:30-09:50"
+            },
+            {
               "name": "Intro to DS",
               "location": "D-313",
               "time": "11:30-12:50"
@@ -4570,19 +4626,9 @@
               "name": "COAL",
               "location": "D-313",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "Data St",
-              "location": "D-314",
-              "time": "08:30-09:50"
             }
           ],
           "Wednesday": [
-            {
-              "name": "OOP",
-              "location": "D-306",
-              "time": "10:00-11:20"
-            },
             {
               "name": "LA",
               "location": "D-314",
@@ -4601,14 +4647,14 @@
           ],
           "Thursday": [
             {
+              "name": "Data St",
+              "location": "D-313",
+              "time": "08:30-09:50"
+            },
+            {
               "name": "Intro to DS",
               "location": "D-314",
               "time": "11:30-12:50"
-            },
-            {
-              "name": "Data St",
-              "location": "D-315",
-              "time": "08:30-09:50"
             },
             {
               "name": "COAL",
@@ -4673,11 +4719,6 @@
             {
               "name": "LA",
               "location": "D-314",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "OOP",
-              "location": "D-315",
               "time": "08:30-09:50"
             },
             {
@@ -4914,6 +4955,23 @@
               "location": "D-IT LAB 1",
               "time": "11:30-02:15"
             }
+          ],
+          "Saturday": [
+            {
+              "name": "IICT Lab",
+              "location": "D-IT LAB 1",
+              "time": "08:30-11:15"
+            },
+            {
+              "name": "Func Eng Lab (C1)",
+              "location": "C-CALL-1",
+              "time": "02:30-05:15"
+            },
+            {
+              "name": "Func Eng Lab (C2)",
+              "location": "C-CALL-2",
+              "time": "02:30-05:15"
+            }
           ]
         }
       },
@@ -4949,7 +5007,7 @@
             },
             {
               "name": "Data Ware & BI",
-              "location": "D-315",
+              "location": "D-314",
               "time": "08:30-09:50"
             },
             {
@@ -4988,7 +5046,7 @@
             },
             {
               "name": "Data Ware & BI",
-              "location": "D-316",
+              "location": "D-315",
               "time": "08:30-09:50"
             },
             {
@@ -5081,7 +5139,7 @@
           "Wednesday": [
             {
               "name": "Edge Comp",
-              "location": "D-403",
+              "location": "D-402",
               "time": "11:30-12:50"
             }
           ]
@@ -5208,14 +5266,14 @@
           ],
           "Tuesday": [
             {
-              "name": "Comp Net",
-              "location": "D-316",
-              "time": "08:30-09:50"
-            },
-            {
               "name": "Multiagent Sys",
               "location": "D-316",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "Comp Net",
+              "location": "D-316",
+              "time": "01:00-02:20"
             },
             {
               "name": "Agentic AI",
@@ -5243,8 +5301,8 @@
             },
             {
               "name": "Comp Net",
-              "location": "D-401",
-              "time": "08:30-09:50"
+              "location": "D-316",
+              "time": "01:00-02:20"
             },
             {
               "name": "Agentic AI",
@@ -5334,12 +5392,12 @@
               "time": "05:20-06:40"
             },
             {
-              "name": "Adv OS",
+              "name": "Adv Algo",
               "location": "D-302",
               "time": "05:20-06:40"
             },
             {
-              "name": "Adv Algo",
+              "name": "Adv OS",
               "location": "D-302",
               "time": "06:45-08:05"
             }
@@ -5766,6 +5824,11 @@
               "name": "App Comp Vision",
               "location": "D-305",
               "time": "05:20-06:40"
+            },
+            {
+              "name": "Math Foundations of AI",
+              "location": "D-316",
+              "time": "05:20-06:40"
             }
           ]
         },
@@ -5780,6 +5843,11 @@
               "name": "Research Methodology",
               "location": "D-315",
               "time": "05:20-06:40"
+            },
+            {
+              "name": "Math Foundations of AI",
+              "location": "D-316",
+              "time": "06:45-08:05"
             }
           ]
         }
@@ -5814,6 +5882,6 @@
       }
     }
   },
-  "count": 968,
-  "generatedAt": "2026-08-11T13:19:17.474043+00:00"
+  "count": 980,
+  "generatedAt": "2026-08-12T09:37:06.828647+00:00"
 }
