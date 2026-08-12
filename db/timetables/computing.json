@@ -1058,7 +1058,7 @@
         "G": {
           "Monday": [
             {
-              "name": "LA Cancelled",
+              "name": "LA",
               "location": "C-311",
               "time": "01:00-02:20"
             },
@@ -1068,7 +1068,7 @@
               "time": "02:30-04:20"
             },
             {
-              "name": "DLD Lab ",
+              "name": "DLD Lab",
               "location": "B-DIGITAL",
               "time": "08:30-11:15"
             }
@@ -6869,5 +6869,5 @@
     }
   },
   "count": 1136,
-  "generatedAt": "2026-08-12T20:37:39.270813+00:00"
+  "generatedAt": "2026-08-12T21:00:24.196203+00:00"
 }
