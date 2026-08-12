@@ -14,12 +14,17 @@
 // Writes: db/metadata/notifications/class-notify-state.json
 
 import fs from 'node:fs';
-import path from 'node:path';
 import webpush from 'web-push';
 
-const DB = 'db';
-const SUBS = path.join(DB, 'push-subscriptions.json');
-const STATE = path.join(DB, 'class-notify-state.json');
+// These three paths and the file list below must track the actual db/ layout.
+// They previously pointed at a flat db/push-subscriptions.json and a
+// db/timetable-*.json glob that stopped existing once the repo moved to
+// nested db/timetables/, db/exams/, db/showup/, db/metadata/notifications/
+// directories — so this script silently found zero files, exited via the
+// "No timetable data" branch, and never sent a single notification.
+const TIMETABLE_FILES = ['db/timetables/computing.json', 'db/timetables/business.json', 'db/timetables/engineering.json'];
+const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const STATE = 'db/metadata/notifications/class-notify-state.json';
 
 function readJson(p, fallback) {
   try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
@@ -47,10 +52,9 @@ function cleanCourseName(name) {
 }
 
 // Build the current set of class slots across all timetable files.
-const files = fs.existsSync(DB) ? fs.readdirSync(DB).filter((f) => /^timetable-.*\.json$/.test(f)) : [];
 const slots = []; // { slotKey, value, status, deptKey, batch, secLetter, section, course, day, time, venue }
-for (const f of files) {
-  const doc = readJson(path.join(DB, f), null);
+for (const f of TIMETABLE_FILES) {
+  const doc = readJson(f, null);
   const tt = doc && doc.tt ? doc.tt : null;
   if (!tt) continue;
   for (const dep of Object.keys(tt)) {

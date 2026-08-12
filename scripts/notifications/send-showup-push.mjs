@@ -12,12 +12,17 @@
 // from the stored value fire a notification.
 
 import fs from 'node:fs';
-import path from 'node:path';
 import webpush from 'web-push';
 
-const DB = 'db';
-const SUBS = path.join(DB, 'push-subscriptions.json');
-const STATE = path.join(DB, 'showup-notify-state.json');
+// See send-class-push.mjs for why these must be the nested paths, not a flat
+// db/ layout that no longer exists. Only computing has a show-up sheet today,
+// but this lists every school so a new one starts working without a code
+// change here — same shape send-exam-push.mjs uses for its three schools.
+const SHOWUP_FILES = fs.existsSync('db/showup')
+  ? fs.readdirSync('db/showup').filter((f) => f.endsWith('.json')).map((f) => `db/showup/${f}`)
+  : [];
+const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const STATE = 'db/metadata/notifications/showup-notify-state.json';
 
 function readJson(p, fallback) {
   try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
@@ -36,12 +41,9 @@ const sectionLetter = (s) => String(s || '').replace(/[^A-Za-z]/g, '').toUpperCa
 const slotKey = (dep, sec, batch, code, date) => [dep, sec, batch, code, date].join('|');
 
 // Build the current snapshot of every section slot across all show-up files.
-const files = fs.existsSync(DB)
-  ? fs.readdirSync(DB).filter((f) => /^showup-schedule-.*\.json$/.test(f))
-  : [];
 const current = new Map(); // slotKey -> { value, info }
-for (const f of files) {
-  const doc = readJson(path.join(DB, f), null);
+for (const f of SHOWUP_FILES) {
+  const doc = readJson(f, null);
   const exams = doc && Array.isArray(doc.exams) ? doc.exams : [];
   for (const e of exams) {
     const secs = e.sections || {};

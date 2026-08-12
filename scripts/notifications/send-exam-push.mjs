@@ -9,12 +9,13 @@
 // Writes: db/metadata/notifications/push-exam-state.json  (endpoint -> exam-doc id already notified)
 
 import fs from 'node:fs';
-import path from 'node:path';
 import webpush from 'web-push';
 
-const DB = 'db';
-const SUBS = path.join(DB, 'push-subscriptions.json');
-const STATE = path.join(DB, 'push-exam-state.json');
+// See send-class-push.mjs for why these must be the nested paths, not a flat
+// db/ layout that no longer exists.
+const EXAM_FILES = ['db/exams/computing.json', 'db/exams/business.json', 'db/exams/engineering.json'];
+const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const STATE = 'db/metadata/notifications/push-exam-state.json';
 
 function readJson(p, fallback) {
   try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
@@ -28,11 +29,8 @@ if (!priv || !pub) { console.log('VAPID keys not set — skipping exam push.'); 
 webpush.setVapidDetails(subject, pub, priv);
 
 // Load every exam schedule file (computing / business / engineering).
-const examFiles = fs.existsSync(DB)
-  ? fs.readdirSync(DB).filter((f) => /^exam-schedule-.*\.json$/.test(f))
-  : [];
-const examDocs = examFiles
-  .map((f) => readJson(path.join(DB, f), null))
+const examDocs = EXAM_FILES
+  .map((f) => readJson(f, null))
   .filter((d) => d && Array.isArray(d.exams));
 
 if (examDocs.length === 0) { console.log('No exam schedules present — nothing to send.'); process.exit(0); }
