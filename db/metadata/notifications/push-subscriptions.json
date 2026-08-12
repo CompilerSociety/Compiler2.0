@@ -46,5 +46,21 @@
       }
     },
     "updated_at": 1786558081517
+  },
+  {
+    "nuid": "25I-0816",
+    "name": "Hammad Rehan",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dO0PmWGyc-M:APA91bGcDkP8s51eX3-N0Uu9wamXETxv8ZfVB3yxbHdMJMLJxZm3qTRmhOhj3JBG88PFH0eOqVyGgs7axkHWW5o1scep2hbRwK076wofmGGawkUNklqPtzoemShHWdZzkvuMv1ErYeUG",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BCv2rzbT-BNYpXFzFbJK5lRrEtIQ8bIWu7O9MUDqUpby1XX6hvwmFVAzkz01WMBsMTwAdxKzpqGoCbFvN0HNMRo",
+        "auth": "JBW5wN5Ph4jzLzs6ozWEsg"
+      }
+    },
+    "updated_at": 1786558313180
   }
 ]
