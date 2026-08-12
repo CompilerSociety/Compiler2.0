@@ -1068,7 +1068,7 @@
               "time": "02:30-04:20"
             },
             {
-              "name": "DLD Lab Cancelled",
+              "name": "DLD Lab",
               "location": "B-DIGITAL",
               "time": "08:30-11:15"
             }
@@ -1122,13 +1122,6 @@
               "name": "SDA",
               "location": "C-309",
               "time": "01:00-02:20"
-            }
-          ],
-          "Saturday": [
-            {
-              "name": "SDA ReSch",
-              "location": "D-501",
-              "time": "05:20-06:40"
             }
           ]
         },
@@ -6876,5 +6869,5 @@
     }
   },
   "count": 1136,
-  "generatedAt": "2026-08-12T21:00:24.196203+00:00"
+  "generatedAt": "2026-08-12T22:00:16.519740+00:00"
 }
