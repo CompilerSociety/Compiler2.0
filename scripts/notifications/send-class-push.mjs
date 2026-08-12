@@ -87,47 +87,51 @@ const state = readJson(STATE, {}); // { endpoint: { slotKey: value } }
 const liveEndpoints = new Set();
 
 let sent = 0, skipped = 0;
-if (Array.isArray(subs)) {
-  for (const entry of subs) {
-    const subscription = entry?.subscription;
-    if (!subscription?.endpoint) continue;
-    const endpoint = subscription.endpoint;
-    liveEndpoints.add(endpoint);
-    const dep = deptKeyOf(entry.department);
-    const batch = fullBatch(entry.batch);
-    const secLetter = sectionLetter(entry.section);
-    if (!dep || !batch || !secLetter) { skipped++; continue; }
 
-    const seen = state[endpoint] || (state[endpoint] = {});
-    const name = String(entry.name || '').trim() || 'Student';
+// Wrap in async IIFE to support await
+(async () => {
+  if (Array.isArray(subs)) {
+    for (const entry of subs) {
+      const subscription = entry?.subscription;
+      if (!subscription?.endpoint) continue;
+      const endpoint = subscription.endpoint;
+      liveEndpoints.add(endpoint);
+      const dep = deptKeyOf(entry.department);
+      const batch = fullBatch(entry.batch);
+      const secLetter = sectionLetter(entry.section);
+      if (!dep || !batch || !secLetter) { skipped++; continue; }
 
-    // Only this device's matching, currently cancelled/rescheduled classes.
-    const mine = slots.filter((s) => s.status !== 'Normal' && s.deptKey === dep && s.batch === batch && s.secLetter === secLetter);
+      const seen = state[endpoint] || (state[endpoint] = {});
+      const name = String(entry.name || '').trim() || 'Student';
 
-    for (const s of mine) {
-      const composite = `${s.slotKey}||${s.value}`;
-      if (seen[composite]) { continue; } // this device already received this exact cancel/reschedule
-      const body = s.status === 'Cancelled'
-        ? `Dear ${name}, your class ${s.course} (${s.section}) has been cancelled.`
-        : `Dear ${name}, your class ${s.course} (${s.section}) has been rescheduled to ${s.time} at ${s.venue}.`;
-      const payload = JSON.stringify({
-        title: s.status === 'Cancelled' ? 'Class cancelled' : 'Class rescheduled',
-        body, url: '/', tag: `class-${s.deptKey}-${s.batch}-${s.secLetter}-${s.course}-${s.day}`,
-      });
-      try {
-        await webpush.sendNotification(subscription, payload);
-        seen[composite] = true; // remember permanently — never send this one to this device again
-        sent++;
-      } catch (err) {
-        const code = err?.statusCode;
-        if (code !== 404 && code !== 410) console.warn(`class push failed (${code || 'err'}): ${err?.message || err}`);
+      // Only this device's matching, currently cancelled/rescheduled classes.
+      const mine = slots.filter((s) => s.status !== 'Normal' && s.deptKey === dep && s.batch === batch && s.secLetter === secLetter);
+
+      for (const s of mine) {
+        const composite = `${s.slotKey}||${s.value}`;
+        if (seen[composite]) { continue; } // this device already received this exact cancel/reschedule
+        const body = s.status === 'Cancelled'
+          ? `Dear ${name}, your class ${s.course} (${s.section}) has been cancelled.`
+          : `Dear ${name}, your class ${s.course} (${s.section}) has been rescheduled to ${s.time} at ${s.venue}.`;
+        const payload = JSON.stringify({
+          title: s.status === 'Cancelled' ? 'Class cancelled' : 'Class rescheduled',
+          body, url: '/', tag: `class-${s.deptKey}-${s.batch}-${s.secLetter}-${s.course}-${s.day}`,
+        });
+        try {
+          await webpush.sendNotification(subscription, payload);
+          seen[composite] = true; // remember permanently — never send this one to this device again
+          sent++;
+        } catch (err) {
+          const code = err?.statusCode;
+          if (code !== 404 && code !== 410) console.warn(`class push failed (${code || 'err'}): ${err?.message || err}`);
+        }
       }
     }
   }
-}
 
-// Drop devices that are no longer subscribed.
-for (const ep of Object.keys(state)) { if (!liveEndpoints.has(ep)) delete state[ep]; }
+  // Drop devices that are no longer subscribed.
+  for (const ep of Object.keys(state)) { if (!liveEndpoints.has(ep)) delete state[ep]; }
 
-writeJson(STATE, state);
-console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}`);
+  writeJson(STATE, state);
+  console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}`);
+})();
