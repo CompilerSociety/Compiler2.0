@@ -2,16 +2,15 @@
   "https://fcm.googleapis.com/fcm/send/cPqyfeJCDog:APA91bEv03lbKA6xRdfB7YDM06xOcGuMF1vAzj98HlgZBYnoMPAkzTalFVxr4sDSvf8Bd6D47Dc_-4c9k2F9G4RfFQc7tK9IWriYfvPccGK_3ELsjMEx7dDO33oCd-6ApuAJl4T48bZF": {},
   "https://fcm.googleapis.com/fcm/send/e_IqK8ryhws:APA91bECP0dt7NRUglHwhGYNazS3TJza_4cAQa5p5YQVjyB-ecultACmobOMgZKEim6bGPZVSwco4fMmnPtvwYLt_XfyW5laNUkv8E07xeXvB7KjGZ0-k8Dxm9rCIR_qnNLJTTFuev5o": {},
   "https://fcm.googleapis.com/fcm/send/cHmJeLFeYug:APA91bHYm8p6FeU7hstbPQa9g8LFs5qTUUafWD8GxxysXlCNm70GQYJNpf1Xbeu4aN8G0CLVOAsTh2mRwWPzWoyhQolSJB4UfnsohZsrQPD9a6axTYNgSIrO7OyJO-8zNH-M6YP7jzCb": {
-    "BS CS|2025|G|Tuesday|SDA||Cancelled|01:00-02:20|C-308": true,
-    "BS CS|2025|G|Wednesday|LA||Cancelled|01:00-02:20|C-311": true
+    "BS CS|2025|G|Monday|DLD Lab": "Cancelled|08:30-11:15|B-DIGITAL"
   },
   "https://fcm.googleapis.com/fcm/send/dO0PmWGyc-M:APA91bGcDkP8s51eX3-N0Uu9wamXETxv8ZfVB3yxbHdMJMLJxZm3qTRmhOhj3JBG88PFH0eOqVyGgs7axkHWW5o1scep2hbRwK076wofmGGawkUNklqPtzoemShHWdZzkvuMv1ErYeUG": {
-    "BS CS|2025|G|Tuesday|SDA||Cancelled|01:00-02:20|C-308": true,
-    "BS CS|2025|G|Wednesday|LA||Cancelled|01:00-02:20|C-311": true
+    "BS CS|2025|G|Monday|DLD Lab": "Cancelled|08:30-11:15|B-DIGITAL"
   },
   "https://fcm.googleapis.com/fcm/send/dl8_Z7jY-oI:APA91bF6Yq67JZX_kdibdGusYwvJBR96b9y-JGUxvYQ4w4KAwbD3eRX5BeDSNTrb6vIDHydEcIywrRMCwa3356IoxshwOVtl3vOw2NgxFpBwxMfuQuzVpu_ZwiM7s2ISO0XtxTiMcwbx": {
-    "BS CS|2025|G|Tuesday|SDA||Cancelled|01:00-02:20|C-308": true,
-    "BS CS|2025|G|Wednesday|LA||Cancelled|01:00-02:20|C-311": true
+    "BS CS|2025|G|Monday|DLD Lab": "Cancelled|08:30-11:15|B-DIGITAL"
   },
-  "https://web.push.apple.com/QP7-FoD3KvWJV4X287QACy0XS0_OEHKeTr7Hcq4IXR0sfVa4uu3kbhaoRI7QXXWl3l25NSNvlsQXGywEwxCYfJkRqytxabkVMY5ALTd0RErfeNQWcU0eTgolrPfNl5T790crcoJHozgQOci4M-5W3skXdJwZNDrHQ7bFKiWwg1A": {}
+  "https://web.push.apple.com/QP7-FoD3KvWJV4X287QACy0XS0_OEHKeTr7Hcq4IXR0sfVa4uu3kbhaoRI7QXXWl3l25NSNvlsQXGywEwxCYfJkRqytxabkVMY5ALTd0RErfeNQWcU0eTgolrPfNl5T790crcoJHozgQOci4M-5W3skXdJwZNDrHQ7bFKiWwg1A": {
+    "BS CS|2025|G|Monday|DLD Lab": "Cancelled|08:30-11:15|B-DIGITAL"
+  }
 }
