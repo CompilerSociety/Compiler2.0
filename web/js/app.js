@@ -689,6 +689,33 @@ const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 // without a section letter. Never shown as a pickable section — it is merged
 // into whatever section the student selects.
 const ALL_SECTIONS="ALL";
+/* ── Game leaderboards ──────────────────────────────────────────────────
+   The scores live in committed JSON that Vercel also serves as a static
+   file, so when /api/leaderboard is unavailable — a revoked GH_TOKEN once
+   took it down with a 500 — the board is still readable. Read the API
+   first (it is the freshest), then fall back to the static copy rather
+   than showing an empty "could not load" board. */
+const LB_STATIC_PATHS={
+  compiler_run:'/db/leaderboard.json',
+  duck_hunter:'/db/leaderboard-duck-hunter.json',
+  flappy_bird:'/db/leaderboard-flappy-bird.json',
+};
+async function fetchLeaderboard(game){
+  const q=game&&game!=='compiler_run'?`?game=${encodeURIComponent(game)}`:'';
+  try{
+    const res=await fetch(`/api/leaderboard${q}`,{cache:'no-store'});
+    if(!res.ok) throw new Error(`API ${res.status}`);
+    const data=await res.json();
+    return data.leaderboard||[];
+  }catch(apiErr){
+    const path=LB_STATIC_PATHS[game]||LB_STATIC_PATHS.compiler_run;
+    console.warn(`Leaderboard API unavailable (${apiErr.message}); using ${path}`);
+    const res=await fetch(`${path}?cachebust=${Date.now()}`,{cache:'no-store'});
+    if(!res.ok) throw new Error(`static leaderboard HTTP ${res.status}`);
+    const data=await res.json();
+    return data.leaderboard||[];
+  }
+}
 // Merge batch-wide entries into a section's own list, skipping any the section
 // already lists (same course, room and time) so nothing appears twice.
 function mergeSectionEntries(secData,allData){
@@ -3782,12 +3809,10 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   async function loadLeaderboard(){
     if(!LB_LOADED_ONCE){ LB_STATUS='Loading...'; renderLeaderboard(null); }
     try{
-      const res=await fetch('/api/leaderboard');
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json();
+      const entries=await fetchLeaderboard('compiler_run');
       LB_STATUS='';
       LB_LOADED_ONCE=true;
-      renderLeaderboard(data.leaderboard||[]);
+      renderLeaderboard(entries);
     }catch(err){
       LB_STATUS='Could not load leaderboard.';
       renderLeaderboard([]);
@@ -4025,9 +4050,8 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   async function loadLB(){
     if(!LB_LOADED_ONCE){ LB_STATUS='Loading...'; renderLB(null); }
     try{
-      const res=await fetch('/api/leaderboard?game=duck_hunter');
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json(); LB_STATUS=''; LB_LOADED_ONCE=true; renderLB(data.leaderboard||[]);
+      const entries=await fetchLeaderboard('duck_hunter');
+      LB_STATUS=''; LB_LOADED_ONCE=true; renderLB(entries);
     }catch(err){ LB_STATUS='Could not load leaderboard.'; renderLB([]); }
   }
   async function submitScore(finalScore){
@@ -4178,9 +4202,8 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   async function loadLB(){
     if(!LB_LOADED_ONCE){ LB_STATUS='Loading...'; renderLB(null); }
     try{
-      const res=await fetch('/api/leaderboard?game=flappy_bird');
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json(); LB_STATUS=''; LB_LOADED_ONCE=true; renderLB(data.leaderboard||[]);
+      const entries=await fetchLeaderboard('flappy_bird');
+      LB_STATUS=''; LB_LOADED_ONCE=true; renderLB(entries);
     }catch(err){ LB_STATUS='Could not load leaderboard.'; renderLB([]); }
   }
   async function submitScore(finalScore){
