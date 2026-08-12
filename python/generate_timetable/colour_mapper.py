@@ -29,25 +29,51 @@ def is_white(colour):
 # Batch key used for yellow-highlighted "repeat" classes. Yellow is the
 # authoritative repeat signal (per the source sheet's convention), so it
 # overrides year-suffix / colour-map batch resolution — see resolve_batch.
-# Exact fill colour Sheets uses to flag a repeat-course cell (#FCFE58).
-# Tolerance is generous enough to absorb Sheets/rendering float drift but
-# tight enough that pale-skin cohort swatches (e.g. CS-2023's mustard/gold
-# legend colour) never match it.
-REPEAT_YELLOW_RGB = (252, 254, 88)
+#
+# The repeat fill is READ FROM THE LEGEND (the swatch labelled e.g. "BS Repeat
+# Courses" at the top of each day tab) rather than hardcoded, because it has
+# already changed once without notice: this was pinned to #FCFE58 while the
+# sheet painted #FFFF00, so is_yellow() never fired and 78 repeat cells sat in
+# normal batch schedules. A legend the sheet itself maintains cannot drift out
+# of sync with the cells it labels.
+REPEAT_YELLOW_RGB = (252, 254, 88)   # fallback only, for a tab with no legend
 REPEAT_YELLOW_TOLERANCE = 5  # +/- per channel, on a 0-255 scale
 
-def is_yellow(colour):
-    """True only for the sheet's repeat-course yellow (#FCFE58), within a
-    small tolerance for rendering variation. This is intentionally NOT a
-    broad 'looks yellowish' check — pale cohort legend colours (including
-    CS-2023's) must never match here; they're resolved via colour_to_batch."""
-    if colour is None:
-        return False
+# Legend headers that mark the repeat/retake swatch, e.g. "BS Repeat Courses".
+REPEAT_LEGEND_RE = re.compile(r'\brepeat\b', re.IGNORECASE)
+
+# Fills registered as the repeat swatch by build_colour_map(). A set, because
+# nothing stops the tabs from painting the legend in two near-identical yellows.
+REPEAT_SWATCHES = set()
+
+def register_repeat_swatch(colour):
+    """Record a fill the legend labels as the repeat/retake colour."""
+    if colour is not None and not is_white(colour):
+        REPEAT_SWATCHES.add(colour)
+
+def _near(colour, target_255):
+    tr, tg, tb = target_255
     r, g, b = colour
-    tr, tg, tb = REPEAT_YELLOW_RGB
     return (abs(r * 255 - tr) <= REPEAT_YELLOW_TOLERANCE and
             abs(g * 255 - tg) <= REPEAT_YELLOW_TOLERANCE and
             abs(b * 255 - tb) <= REPEAT_YELLOW_TOLERANCE)
+
+def is_yellow(colour):
+    """True only for the fill the sheet's own legend marks as repeat courses.
+
+    This is intentionally NOT a broad 'looks yellowish' check — pale cohort
+    legend colours (including CS-2023's) must never match here; they're
+    resolved via colour_to_batch. Falls back to the historical #FCFE58 when
+    no tab declared a repeat legend, so a legend-less sheet still works.
+    """
+    if colour is None:
+        return False
+    for swatch in REPEAT_SWATCHES:
+        if _near(colour, tuple(v * 255 for v in swatch)):
+            return True
+    if REPEAT_SWATCHES:
+        return False
+    return _near(colour, REPEAT_YELLOW_RGB)
 
 # Conservative per-channel tolerance for matching a body cell's colour to
 # a header legend swatch when they don't round to the exact same tuple.
@@ -95,6 +121,54 @@ def add_colour_entry(colour, dept_code, batch):
     entries = COLOUR_BATCH_MAP.setdefault(colour, [])
     if (dept_code, batch) not in entries:
         entries.append((dept_code, batch))
+
+# Legend header text kept per fill, so a cell that names no department of its
+# own can still be attributed to the cohort its colour belongs to.
+COLOUR_LEGEND_TEXT = {}
+
+def remember_legend_text(colour, text):
+    texts = COLOUR_LEGEND_TEXT.setdefault(colour, [])
+    text = one_line(text)
+    if text and text not in texts:
+        texts.append(text)
+
+def _legend_texts_for(colour):
+    exact = COLOUR_LEGEND_TEXT.get(colour)
+    if exact:
+        return exact
+    best, best_dist = [], None
+    for swatch, texts in COLOUR_LEGEND_TEXT.items():
+        deltas = [abs(a - b) for a, b in zip(colour, swatch)]
+        if max(deltas) <= COLOUR_MATCH_TOLERANCE:
+            dist = sum(deltas)
+            if best_dist is None or dist < best_dist:
+                best, best_dist = texts, dist
+    return best
+
+def colour_dept_label(colour):
+    """
+    Department label for a cell that names no department of its own, taken
+    from the legend that owns the cell's fill.
+
+      'BS CS (2023)'              -> 'BS CS'
+      'MS (DS)'                   -> 'MS (DS)'
+      'MS Electives (All Prgrms)' -> 'MS (Electives)'
+
+    Last resort only — a department written in the cell text, or carried by
+    the cell's row, is always better evidence than the fill. Returns None
+    when the legend names no usable programme.
+    """
+    if colour is None or is_white(colour):
+        return None
+    for text in _legend_texts_for(colour):
+        m = re.match(r'^\s*BS\s*\(?\s*([A-Za-z]{2,4})\b', text, re.IGNORECASE)
+        if m:
+            return f"BS {m.group(1).upper()}"
+        m = re.match(r'^\s*MS\s*\(?\s*([A-Za-z]{2,9})\b', text, re.IGNORECASE)
+        if m:
+            code = m.group(1)
+            return f"MS ({code.upper() if len(code) <= 4 else code.capitalize()})"
+    return None
 
 def _entries_for_colour(colour):
     """Exact colour hit, else the nearest legend swatch within tolerance."""
@@ -191,6 +265,13 @@ def build_colour_map(service):
                     if not cohort_re.search(text or ""):
                         continue  # not a cohort legend — see cohort_re above
 
+                    # "BS Repeat Courses" names a fill, not a cohort: register
+                    # it as the repeat swatch and never as a batch.
+                    if REPEAT_LEGEND_RE.search(text or ""):
+                        register_repeat_swatch(colour)
+                        continue
+
+                    remember_legend_text(colour, text)
                     dept_code = legend_dept_code(text)
 
                     m = year_re.search(text)

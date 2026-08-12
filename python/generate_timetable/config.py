@@ -55,6 +55,14 @@ REPEAT_BATCH_KEY = "REPEAT"
 # frontend merges it into whichever section the student selects.
 ALL_SECTIONS = "ALL"
 
+# A doctoral cohort has no entry year, so "UHQ-I & II (PHD-A)" has no batch to
+# resolve. Left to the normal path it became department "BS PHD" at batch
+# "2023" — a BS cohort that does not exist. Give PhD its own department and
+# batch key, the way the MS programmes have theirs.
+PHD_DEPT_KEY = "PhD"
+PHD_BATCH_KEY = "PhD"
+PHD_CODES = {"PHD", "PHDCS", "PHDSE"}
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -158,8 +166,46 @@ FSE_SUFFIX_RE = re.compile(
     r'^((?:[A-Z][A-Za-z]*[-/])*)\s*([A-Z])$'
 )
 
-# Known section letters for validation
-FSE_VALID_SECTIONS = set("ABCD")
+# Known section letters for validation. E is real: the Course Allocation tab
+# lists sections A–E for the EE 2026 labs, and pinning this to "ABCD" dropped
+# every "EE-E" cell in the schedule.
+FSE_VALID_SECTIONS = set("ABCDE")
+
+# One cell covering several sections at once:
+#   "Civics and Community Engagement CE-A, CE-B"
+#   "Understanding of Holy Quran I/Ethics I & II A,B"
+#   "Ocp. Health & Safety EE-A,B,C"
+# Requires at least one comma, so single-section titles still take the
+# FSE_SECTION_RE path.
+FSE_MULTI_SECTION_RE = re.compile(
+    r'^(?P<course>.+?)\s+(?P<suffix>'
+    r'(?:[A-Za-z]+\s*[-/]\s*)?[A-Z]'
+    r'(?:\s*,\s*(?:[A-Za-z]+\s*[-/]\s*)?[A-Z])+'
+    r')\s*$'
+)
+
+# A batch the cell states outright, e.g. "Applied Physics A (Batch 2025)".
+# Left in place it defeated the section suffix and the cell was dropped.
+FSE_BATCH_ANNOTATION_RE = re.compile(r'\(\s*Batch\s*(\d{4})\s*\)\s*$', re.IGNORECASE)
+
+# The grid appends the instructor, the time and sometimes the venue to a cell
+# ("... CE-A, CE-B Ms. Maria Mazhar 12:45 - 02:40 (Main Auditoriam"). None of
+# it is part of the title, and all of it hid the section suffix.
+#
+# Applied ONLY to cells that don't parse as they stand — see
+# parse_fse_course_title. Course titles abbreviate too, and "Physics for
+# Engr. EE-A" loses its own name to an honorific rule that fires too eagerly.
+# Hence "Engr" is absent below, and the honorific must be followed by a
+# capitalised name.
+FSE_TRAILING_NOISE_RES = [
+    re.compile(r'\s*\(\s*(?:main|d\s*block)[^)]*\)?\s*$', re.IGNORECASE),
+    re.compile(r'\s*\b(?:teacher|instructor)\s*:.*$', re.IGNORECASE),
+    re.compile(r'\s*\b(?:Mr|Ms|Mrs|Dr|Prof)\b\.?\s+[A-Z].*$'),
+    re.compile(r'\s*\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}.*$'),
+]
+
+# A time the cell states for itself, which beats the column's slot.
+FSE_CELL_TIME_RE = re.compile(r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})')
 
 # --- Courses-tab block headers ---------------------------------------------
 # The FSE courses tab changed shape between semesters, so these are matched

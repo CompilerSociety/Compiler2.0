@@ -14,8 +14,12 @@ from ..config import (
     COURSES_HEADER_SEMESTER_RE,
     COURSES_SECTION_HEADER_RE,
     ENGINEERING_PROGRAMS,
+    FSE_BATCH_ANNOTATION_RE,
+    FSE_CELL_TIME_RE,
+    FSE_MULTI_SECTION_RE,
     FSE_SECTION_RE,
     FSE_SUFFIX_RE,
+    FSE_TRAILING_NOISE_RES,
     FSE_VALID_SECTIONS,
     REGRESSION_FORBIDDEN_COURSES,
     REGRESSION_WATCH_BATCH,
@@ -123,26 +127,50 @@ def tokens_match(grid_tok, course_tok):
             and grid_tok[0] == course_tok[0]):
         return (_is_subsequence(grid_tok, course_tok)
                 or _is_subsequence(course_tok, grid_tok))
+    # A two-letter stub against a long word: "MP Inter. & Prog" for
+    # "Microprocessor Interfacing & Programming". Restricted to a genuinely
+    # long target and a shared first letter so "mp" can't reach half the
+    # catalogue — and every other token still has to match too.
+    if (len(grid_tok) == 2 and len(course_tok) >= 6
+            and grid_tok[0] == course_tok[0]):
+        return _is_subsequence(grid_tok, course_tok)
     return False
 
 
-def title_token_match(grid_toks, course_toks):
+def _ordered_match_count(grid_toks, course_toks):
+    """How many grid tokens the course title accounts for, in order."""
+    best = [0] * (len(course_toks) + 1)
+    for gt in grid_toks:
+        prev = 0
+        for j, ct in enumerate(course_toks, 1):
+            carry = best[j]
+            best[j] = prev + 1 if tokens_match(gt, ct) else max(best[j], best[j - 1])
+            prev = carry
+    return best[-1]
+
+
+def title_token_match(grid_toks, course_toks, max_unmatched=0):
     """
     True if every grid token is accounted for, in order, by the course
     title's tokens. The course title may carry EXTRA words the grid dropped
     ("Obj. Oriented Data Struct." vs "Object Oriented Data Structures and
-    Algorithms"); the grid may not carry words the course title lacks.
+    Algorithms").
+
+    `max_unmatched` lets the GRID carry words of its own that the course
+    title lacks — "Fund. Database Systems" for "Database Systems", "Prog
+    Fundamentals & Eng." for "Programming Fundamentals". Used only as a
+    second pass, and never to the point where fewer than two tokens carry
+    the match.
     """
     if not grid_toks:
         return False
-    i = 0
-    for ct in course_toks:
-        if i < len(grid_toks) and tokens_match(grid_toks[i], ct):
-            i += 1
-    return i == len(grid_toks)
+    matched = _ordered_match_count(grid_toks, course_toks)
+    if len(grid_toks) - matched > max_unmatched:
+        return False
+    return matched >= min(2, len(grid_toks)) if max_unmatched else matched == len(grid_toks)
 
 
-def match_abbreviated_title(grid_title, course_lookup, common):
+def match_abbreviated_title(grid_title, course_lookup, common, sections=None):
     """
     Find the courses-tab title that a heavily abbreviated grid title refers
     to. Tried ONLY after an exact-key miss.
@@ -160,10 +188,28 @@ def match_abbreviated_title(grid_title, course_lookup, common):
     if not grid_toks:
         return None, []
 
-    candidates = [
-        key for key in course_lookup
-        if title_token_match(grid_toks, key.split(" "))
-    ]
+    def match(max_unmatched):
+        return [key for key in course_lookup
+                if title_token_match(grid_toks, key.split(" "), max_unmatched)]
+
+    def offers(keys):
+        """Do any of these rows offer every section the cell names?"""
+        if not sections:
+            return True
+        return any(set(sections) <= set(rec.get("sections") or [])
+                   for key in keys for rec in course_lookup[key])
+
+    candidates = match(0)
+    # An exact-word match that doesn't offer the cell's sections is the wrong
+    # row. "Understanding of Holy Quran I/Ethics I & II A,B" matches the MS
+    # block word for word, but only the 2025 block runs a section B — so let
+    # the grid keep a word of its own and look again.
+    if candidates and not offers(candidates):
+        covering = [k for k in match(1) if offers([k])]
+        if covering:
+            candidates = covering
+    if not candidates:
+        candidates = match(1)
     if not candidates:
         return None, []
 
@@ -181,6 +227,19 @@ def match_abbreviated_title(grid_title, course_lookup, common):
         candidates = [k for k in candidates if len(k.split(" ")) == fewest]
 
     if len(candidates) > 1:
+        # Titles that all resolve to the same dept, batch and repeat status
+        # are not ambiguous in any way that matters — SS1021 and SS1022 are
+        # two halves of one class, both EE 2025. Merge and carry on.
+        merged, signatures = [], set()
+        for key in candidates:
+            for rec in course_lookup[key]:
+                sig = (rec["dept"], rec["batch"], rec["is_repeat"])
+                signatures.add(sig)
+                if sig not in {(r["dept"], r["batch"], r["is_repeat"]) for r in merged}:
+                    merged.append(rec)
+        if len(signatures) == 1:
+            return candidates[0], merged
+
         common.dlog_warn(
             f"  FSE: '{grid_title}' matches {len(candidates)} courses-tab "
             f"titles ambiguously ({sorted(candidates)}) — refusing to guess, "
@@ -235,6 +294,34 @@ def parse_repeat_annotation(title):
 # Schedule-grid cell parsing (Classes Schedule FSE SP-26 tab)
 # ---------------------------------------------------------------------------
 
+def _split_multi_suffix(suffix):
+    """
+    Read a multi-section suffix into (programs, sections).
+
+      "CE-A, CE-B"  -> (["CE"], ["A", "B"])
+      "A,B"         -> ([],     ["A", "B"])
+      "EE-A,B,C"    -> (["EE"], ["A", "B", "C"])
+
+    A programme named once applies to the whole list — the sheet writes
+    "EE-A,B,C", not "EE-A, EE-B, EE-C". Returns None if any part isn't a
+    section the school offers, so a stray capital can't invent one.
+    """
+    programs, sections = [], []
+    for part in re.split(r'\s*,\s*', suffix):
+        m = FSE_SUFFIX_RE.match(re.sub(r'\s*([-/])\s*', r'\1', part.strip()))
+        if not m:
+            return None
+        letter = m.group(2).upper()
+        if letter not in FSE_VALID_SECTIONS or letter in sections:
+            return None
+        sections.append(letter)
+        for p in re.split(r'[-/]', m.group(1) or ""):
+            p = p.strip().upper()
+            if p and p not in programs:
+                programs.append(p)
+    return programs, sections
+
+
 def parse_fse_course_title(title):
     """
     Parse an FSE engineering course title to extract:
@@ -268,6 +355,48 @@ def parse_fse_course_title(title):
     if re.match(r'^\d{1,2}:\d{2}', t) or re.match(r'^Room\b', t, re.IGNORECASE):
         return None
 
+    # A batch the cell states outright sits after the section suffix and hid
+    # it: "Applied Physics A (Batch 2025)" parsed as nothing at all.
+    batch_hint = None
+    bm = FSE_BATCH_ANNOTATION_RE.search(t)
+    if bm:
+        batch_hint = bm.group(1)
+        t = t[:bm.start()].strip()
+
+    parsed = _read_section_suffix(t)
+    if not parsed:
+        # Still unreadable — the instructor, time or venue the grid appends is
+        # standing between the title and its section suffix. Strip that and
+        # try once more. Deliberately a fallback: the same rules applied
+        # up-front cost "Physics for Engr. EE-A" its own name.
+        stripped = t
+        for noise in FSE_TRAILING_NOISE_RES:
+            stripped = noise.sub("", stripped).strip(" ,-")
+        if stripped and stripped != t:
+            parsed = _read_section_suffix(stripped)
+    if not parsed:
+        return None
+
+    # A time written into the cell beats the column's slot, exactly as one on
+    # the instructor row does.
+    tm = FSE_CELL_TIME_RE.search(t[len(parsed["course"]):])
+    parsed["time_override"] = (f"{tm.group(1)}-{tm.group(2)}" if tm else None)
+    parsed["batch_hint"] = batch_hint
+    return parsed
+
+
+def _read_section_suffix(t):
+    """Course name + programmes + sections from a title, or None."""
+    # One cell, several sections: "CE-A, CE-B", "A,B", "EE-A,B,C".
+    mm = FSE_MULTI_SECTION_RE.match(t)
+    if mm:
+        split = _split_multi_suffix(mm.group("suffix"))
+        if split and len(mm.group("course").strip()) >= 3:
+            programs, sections = split
+            return {"course": mm.group("course").strip(),
+                    "programs": programs,
+                    "section": sections[0], "sections": sections}
+
     m = FSE_SECTION_RE.match(t)
     if not m:
         return None
@@ -297,6 +426,7 @@ def parse_fse_course_title(title):
         "course": course_name,
         "programs": programs,
         "section": section,
+        "sections": [section],
     }
 
 
@@ -711,6 +841,17 @@ def build_course_lookup(service, school_info, common):
 # Phase 2/3 — structural resolution of dept + batch + repeat status
 # ---------------------------------------------------------------------------
 
+def fse_dept_key(code, batch):
+    """
+    Department key for a programme code and the batch it resolved to.
+
+    A batch of "MS" is a degree, not an entry year, so the department is
+    "MS EE" — the key the MS rows already use. Built as "BS MS" instead, a
+    postgraduate course landed in a BS department named after a degree.
+    """
+    return f"{'MS' if batch == 'MS' else 'BS'} {code}"
+
+
 def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
     """
     Resolve department(s) + batch + repeat-status for a parsed FSE schedule
@@ -729,14 +870,15 @@ def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
     norm_name = token_key(parsed["course"])
     candidates = course_lookup.get(norm_name, [])
 
+    sections = parsed.get("sections") or ([parsed["section"]] if parsed.get("section") else [])
     if not candidates:
         matched_key, candidates = match_abbreviated_title(
-            parsed["course"], course_lookup, common)
+            parsed["course"], course_lookup, common, sections)
         if matched_key and aliases is not None:
             aliases[norm_name] = matched_key
 
     results = []
-    programs = parsed.get("programs", [])
+    programs = [p for p in parsed.get("programs", []) if p.upper() != "MS"]
 
     if programs:
         for p in programs:
@@ -754,7 +896,8 @@ def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
                 match = next((c for c in candidates if c["dept"] is None), None)
 
             if match:
-                results.append((f"BS {p_upper}", match["batch"], match["is_repeat"]))
+                results.append((fse_dept_key(p_upper, match["batch"]),
+                                match["batch"], match["is_repeat"]))
             else:
                 dlog_warn(
                     f"  FSE: no Courses-tab match for '{parsed['course']}' "
@@ -767,19 +910,33 @@ def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
         if len(distinct_depts) == 1:
             dept = next(iter(distinct_depts))
             match = next(c for c in candidates if c["dept"] == dept)
-            results.append((f"BS {dept}", match["batch"], match["is_repeat"]))
+            results.append((fse_dept_key(dept, match["batch"]),
+                            match["batch"], match["is_repeat"]))
         elif len(distinct_depts) > 1:
             section = parsed.get("section")
             picked = [c for c in candidates if c["dept"] and section in c.get("sections", [])]
             if len(picked) == 1:
                 c = picked[0]
-                results.append((f"BS {c['dept']}", c["batch"], c["is_repeat"]))
+                results.append((fse_dept_key(c["dept"], c["batch"]),
+                                c["batch"], c["is_repeat"]))
             else:
-                dlog_warn(
-                    f"  FSE: ambiguous dept for '{parsed['course']}' section "
-                    f"{section} (candidates: {sorted(distinct_depts)}) — defaulting to BS EE"
-                )
-                results.append(("BS EE", infer_fse_batch_fallback(parsed["course"]), False))
+                # Which department owns the cell is unclear, but that does not
+                # make the batch unclear. MT2003 is 2025 for EE and for CE
+                # alike, and giving up here filed six "Comp. Variables &
+                # Trans." classes under 2024 on a course-name guess. When the
+                # candidates agree on batch and repeat status, the course is
+                # genuinely shared: record it for each department that offers it.
+                offerings = {(c["dept"], c["batch"], c["is_repeat"])
+                             for c in (picked or candidates) if c["dept"]}
+                if len({b for _d, b, _rp in offerings}) == 1:
+                    for dept, batch, is_repeat in sorted(offerings):
+                        results.append((fse_dept_key(dept, batch), batch, is_repeat))
+                else:
+                    dlog_warn(
+                        f"  FSE: ambiguous dept for '{parsed['course']}' section "
+                        f"{section} (candidates: {sorted(distinct_depts)}) — defaulting to BS EE"
+                    )
+                    results.append(("BS EE", infer_fse_batch_fallback(parsed["course"]), False))
         else:
             dlog_warn(
                 f"  FSE: no Courses-tab match for '{parsed['course']}' — "
@@ -930,6 +1087,11 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                 if not parsed:
                     continue
 
+                # A time in the course cell itself, not just the instructor
+                # row below it — "... CE-A, CE-B Ms. Maria Mazhar 12:45 - 02:40".
+                if parsed.get("time_override"):
+                    effective_time = parsed["time_override"]
+
                 resolved = resolve_fse_entry(parsed, course_lookup, common, aliases)
                 grid_key = token_key(parsed["course"])
                 if grid_key in course_lookup or grid_key in aliases:
@@ -944,7 +1106,6 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                         is_ms = True
                         resolved = [("MS EE", "MS", False)]
 
-                section = parsed["section"]
                 day = row_days[r]
                 if not day:
                     continue
@@ -956,9 +1117,12 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                     store_batch = REPEAT_BATCH_KEY if is_repeat else batch
                     bare_dept = dept.split(" ")[-1]
                     matched_records.add((norm_name, bare_dept))
-                    if add_course(tt, dept, store_batch, section, day,
-                                  parsed["course"], room, effective_time):
-                        added += 1
+                    # One cell can name several sections ("EE-A,B,C"); each is
+                    # a real class for that section.
+                    for section in parsed.get("sections") or [parsed["section"]]:
+                        if add_course(tt, dept, store_batch, section, day,
+                                      parsed["course"], room, effective_time):
+                            added += 1
 
             r += 2  # skip to next course row (past instructor row)
 

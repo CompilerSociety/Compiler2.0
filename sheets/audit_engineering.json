@@ -1,0 +1,429 @@
+{
+ "counts": {
+  "json": 216,
+  "cells": 228,
+  "cells_parsed": 200,
+  "alloc_rows": 81,
+  "alloc_titles": 68
+ },
+ "problems": [],
+ "A_no_cell": [],
+ "A_wrong_time": [],
+ "B_unmatched_cells": [
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "8:30-09:50",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "09:55-11:15",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "11:20-12:40",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "12:45-02:05",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "02:20-03:40",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-127",
+   "time": "03:45-05:05",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "COMP-III",
+   "time": "8:30-09:50",
+   "text": "Reseved For CS",
+   "parsed": false,
+   "is_lab": true,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "8:30-09:50",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "09:55-11:15",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "11:25-12:45",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "12:50-02:10",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "02:20-03:40",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Tuesday",
+   "room": "B-127",
+   "time": "03:45-05:05",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-019",
+   "time": "11:25-12:45",
+   "text": "FSE Faculty Meeting Every Wednesday",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-127",
+   "time": "8:30-09:50",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-127",
+   "time": "09:55-11:15",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-127",
+   "time": "12:50-02:10",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-127",
+   "time": "02:20-03:40",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-127",
+   "time": "03:45-05:05",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "8:30-09:50",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "09:55-11:15",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "11:25-12:45",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "12:50-02:10",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "02:20-03:40",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "B-127",
+   "time": "03:45-05:05",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Friday",
+   "room": "B-127",
+   "time": "8:30-09:50",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Friday",
+   "room": "B-127",
+   "time": "09:55-11:15",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Friday",
+   "room": "B-127",
+   "time": "11:25-12:45",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  }
+ ],
+ "C_not_a_real_course": [],
+ "C_ambiguous": [],
+ "D_dept_mismatch": [],
+ "D_batch_mismatch": [],
+ "D_section_not_offered": [
+  {
+   "dept": "BS EE",
+   "batch": "2025",
+   "section": "C",
+   "day": "Wednesday",
+   "course": "Comp. Variables & Trans.",
+   "room": "B-030",
+   "time": "11:25-12:45",
+   "alloc_sections": [
+    "A",
+    "B"
+   ],
+   "codes": [
+    "MT2003"
+   ]
+  },
+  {
+   "dept": "BS EE",
+   "batch": "2025",
+   "section": "C",
+   "day": "Thursday",
+   "course": "Comp. Variables & Trans.",
+   "room": "B-028",
+   "time": "03:45-05:05",
+   "alloc_sections": [
+    "A",
+    "B"
+   ],
+   "codes": [
+    "MT2003"
+   ]
+  },
+  {
+   "dept": "BS CE",
+   "batch": "2025",
+   "section": "C",
+   "day": "Wednesday",
+   "course": "Comp. Variables & Trans.",
+   "room": "B-030",
+   "time": "11:25-12:45",
+   "alloc_sections": [
+    "A",
+    "B"
+   ],
+   "codes": [
+    "MT2003"
+   ]
+  },
+  {
+   "dept": "BS CE",
+   "batch": "2025",
+   "section": "C",
+   "day": "Thursday",
+   "course": "Comp. Variables & Trans.",
+   "room": "B-028",
+   "time": "03:45-05:05",
+   "alloc_sections": [
+    "A",
+    "B"
+   ],
+   "codes": [
+    "MT2003"
+   ]
+  }
+ ],
+ "E_time_override_ignored": [],
+ "alloc_never_scheduled": [
+  "Understanding of Holy Quran I/Ethics I [EE 2025 SS1021]",
+  "Understanding of Holy Quran I/Ethics II [EE 2025 SS1022]",
+  "Final Year Project \u2013 I [EE 2023 EE4091]",
+  "Digital Integrated Circuits [EE MS EE5036]",
+  "Analog and Discrete Electronics [EE MS EE5013]",
+  "Digital ICs: Synthesis and Physical Design [EE MS EE5037]"
+ ]
+}

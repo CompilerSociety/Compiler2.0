@@ -2,7 +2,7 @@
 
 import re
 
-from ..colour_mapper import colour_to_batch, is_yellow
+from ..colour_mapper import colour_dept_label, colour_to_batch, is_yellow
 from ..config import (
     ALL_SECTIONS,
     BATCH_MAP,
@@ -11,9 +11,11 @@ from ..config import (
     SECTION_ONLY_RE,
     CLASSROOM_LEFT,
     CLASSROOM_RIGHT,
-    COMPUTING_PROGRAM_CODES,
     DAYS,
     LAB_BLOCK,
+    PHD_BATCH_KEY,
+    PHD_CODES,
+    PHD_DEPT_KEY,
     REPEAT_BATCH_KEY,
     SCHOOLS,
     SLOT_COLS,
@@ -30,6 +32,40 @@ from ..helpers import (
     one_line,
 )
 
+# A cell that is just a course title — no "(DEPT-SECTION)" parenthetical at
+# all, e.g. "Fund of SPM", "PPIT Seminar", "Securing Cloud". These were
+# dropped outright; they are real classes whose department has to be inferred
+# from context instead (see flush_bare).
+BARE_COURSE_RE = re.compile(r"^[A-Za-z][A-Za-z0-9&/.,'’\- ]{2,}$")
+
+# Things written in a class cell that are not classes. Word-anchored so a
+# real title keeps its place — "admin" must not reject "Administration".
+NOT_A_CLASS_RE = re.compile(
+    r"\b(?:reserved|reseved|resrved|tutorial|meeting|lunch|holiday|travel|admin)\b"
+    r"|^(?:fsm|fsa|fcss|fyp|ee)$",
+    re.IGNORECASE)
+
+# The sheet writes its banners letter-spaced ("P R A Y E R  B R E A K"), so
+# these are matched against the text with whitespace removed.
+BANNER_RE = re.compile(r"prayer|break", re.IGNORECASE)
+
+
+def parse_bare_course_cell(text):
+    """A cell naming a course but no department. None if it isn't a class."""
+    if not BARE_COURSE_RE.match(text):
+        return None
+    if NOT_A_CLASS_RE.search(text) or BANNER_RE.search(re.sub(r"\s+", "", text)):
+        return None
+    return {
+        "course": text,
+        "depts": [],
+        "section": None,
+        "has_section": False,
+        "time_override": None,
+        "bare": True,
+    }
+
+
 def parse_timetable_cell(text):
     if not text:
         return None
@@ -43,7 +79,7 @@ def parse_timetable_cell(text):
     time_override = f"{ov.group(1)}-{ov.group(2)}" if ov else None
     m = CELL_RE.match(core)
     if not m:
-        return None
+        return parse_bare_course_cell(t)
     course  = m.group(1).strip()
     dept_str = m.group(2)
     section  = m.group(3)
@@ -59,6 +95,13 @@ def parse_timetable_cell(text):
             section = raw_codes[0].upper()
         else:
             return None
+    # "UHQ-I & II (MS-SE)" names the degree first and the programme where a
+    # section letter would normally go. Read as-is it produced department
+    # "MS" with section "SE", which the accumulator then filed as a BS
+    # department holding sections named after programmes. The programme is
+    # the department here, and the cell names no section.
+    if depts == ["MS"] and section and len(section) >= 2:
+        depts, section = [section.upper()], None
     if not section and group:
         section = f"G-{group.upper()}"
     if subgroup:
@@ -72,7 +115,12 @@ def parse_timetable_cell(text):
         "section": section,
         "has_section": bool(section),
         "time_override": time_override,
+        "bare": False,
     }
+
+# A programme code as the sheet writes it inside a cell: "CS", "AIHS", "CI".
+PROGRAMME_CODE_RE = re.compile(r"^[A-Z]{2,5}$")
+
 
 def is_ms_context(batch, dept):
     return batch == "MS" or str(dept or "").startswith("MS")
@@ -94,9 +142,18 @@ def resolve_departments_for_cell(parsed, header_dept, batch):
     is only used as a fallback when the cell doesn't specify a department at all.
     """
     parsed_depts = parsed["depts"]
+    if any(dept in PHD_CODES for dept in parsed_depts):
+        return [PHD_DEPT_KEY]
     if is_ms_context(batch, header_dept) and (
             not parsed["has_section"] or is_ms_context(batch, header_dept)):
-        ms_depts = [f"MS ({dept})" for dept in parsed_depts if dept in COMPUTING_PROGRAM_CODES]
+        # The code written in the cell is the programme, whether or not it is
+        # one of the five BS programmes: the school also runs MS Computational
+        # Intelligence and MS AI in Health Sciences. Restricting this to
+        # COMPUTING_PROGRAM_CODES sent every "(CI)" and "(AIHS)" cell to
+        # whatever the column header said, which parked both programmes in
+        # "BS SE" — a BS department holding MS courses.
+        ms_depts = [f"MS ({dept})" for dept in parsed_depts
+                    if PROGRAMME_CODE_RE.match(dept)]
         if ms_depts:
             return ms_depts
         if header_dept and is_ms_context(batch, header_dept):
@@ -170,6 +227,10 @@ def resolve_batch(cell_colour, cell_text, course_name, dept_codes=None):
     for the handful of fills the sheet reuses across two cohorts — see
     colour_to_batch().
     """
+    # Tier 0 — a doctoral cell has no entry year to resolve at all.
+    if dept_codes and any(d in PHD_CODES for d in dept_codes):
+        return PHD_BATCH_KEY
+
     # Tier 1 — explicit suffix
     m = re.search(r",\s*(\d{2})\s*\)", cell_text)
     if m:
@@ -255,6 +316,106 @@ def find_lab_header_row(text_grid, after_row):
                     return r
     return -1
 
+# A header cell's time label, e.g. "08:30-09:50" or the lab row's
+# "05:20 - 08:05 (inc. 10 min. break)".
+TIME_LABEL_RE = re.compile(r"(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})")
+
+
+def _slot_labels(row):
+    """{column: 'HH:MM-HH:MM'} for every time label in one header row."""
+    labels = {}
+    for col, value in enumerate(row):
+        m = TIME_LABEL_RE.match(one_line(value))
+        if m:
+            labels[col] = f"{m.group(1)}-{m.group(2)}"
+    return labels
+
+
+def _room_cols(row):
+    return [c for c, v in enumerate(row) if one_line(v).lower() == "room"]
+
+
+def detect_blocks(text_grid, header_row, lab_row):
+    """
+    Read this tab's block geometry from its own header rows.
+
+    Every "Room" column opens a block, and the time labels to its right — up
+    to the next Room column — are that block's slots, each spanning until the
+    next label. The classroom header row describes the daytime and evening
+    blocks; the lab header row describes the lab block.
+
+    Friday is why this is detected rather than assumed. Its day slots sit at
+    columns 1, 6, 11, 16, 19, 24 (not 21, 26), its evening Room column is 28
+    (not 30), and its labs have two slots, not four. Read through the
+    hardcoded config columns, 17 Friday classes were stored at the wrong time
+    — the labs three hours early — and four evening classes landed in the
+    afternoon band wearing the daytime room.
+
+    Returns a list of blocks shaped like the config constants, so
+    parse_matrix_block does not care where they came from. Falls back to the
+    config geometry for a tab whose headers can't be read.
+    """
+    blocks = []
+
+    def build(name, labels_row, room_col, first_col, stop_col, rows):
+        labels = _slot_labels(text_grid[labels_row])
+        cols = sorted(c for c in labels
+                      if first_col <= c and (stop_col is None or c < stop_col))
+        if not cols:
+            return None
+        return {
+            "name": name,
+            "room_col": room_col,
+            "end_col": stop_col,
+            "slot_cols": cols,
+            "slot_map": {c: labels[c] for c in cols},
+            "rows": rows,
+        }
+
+    classroom_end = lab_row if lab_row > 0 else len(text_grid)
+    room_cols = _room_cols(text_grid[header_row]) if header_row < len(text_grid) else []
+    for i, room_col in enumerate(room_cols):
+        stop = room_cols[i + 1] if i + 1 < len(room_cols) else None
+        block = build("classroom" if i == 0 else "evening", header_row,
+                      room_col, room_col + 1, stop, (header_row + 1, classroom_end))
+        if not block:
+            continue
+        if i > 0:
+            # The evening block has its own Room column, and the rooms genuinely
+            # differ from the daytime ones (Wednesday row 9 is C-305 in the day
+            # column but D-305 in the evening one), so the daytime column must
+            # never be substituted here. The sheet only fills the evening Room
+            # column on Wednesday, which dropped every Mon/Tue/Thu evening class
+            # — essentially the whole MS programme. Emit them with an unknown
+            # room instead of losing them. The real fix is upstream: fill the
+            # evening Room column on the other day tabs.
+            block["blank_room_fallback"] = "TBA"
+        blocks.append(block)
+
+    if not blocks:
+        dlog_warn("  no Room columns found in the header row — using config geometry")
+        blocks = [dict(CLASSROOM_LEFT, name="classroom",
+                       rows=(header_row + 1, classroom_end)),
+                  dict(CLASSROOM_RIGHT, name="evening",
+                       rows=(header_row + 1, classroom_end))]
+
+    if lab_row > 0:
+        lab_room_cols = _room_cols(text_grid[lab_row]) or [0]
+        lab_blocks = []
+        for i, room_col in enumerate(lab_room_cols):
+            stop = lab_room_cols[i + 1] if i + 1 < len(lab_room_cols) else None
+            block = build("lab" if i == 0 else f"lab-{i}", lab_row, room_col,
+                          room_col + 1, stop, (lab_row + 1, len(text_grid)))
+            if block:
+                lab_blocks.append(block)
+        if not lab_blocks:
+            lab_blocks = [dict(LAB_BLOCK, name="lab",
+                               rows=(lab_row + 1, len(text_grid)))]
+        blocks.extend(lab_blocks)
+
+    return blocks
+
+
 def build_col_dept_map(header_rows):
     """
     Build a mapping from column index to department prefix string.
@@ -292,7 +453,8 @@ def build_col_dept_map(header_rows):
 # Matrix block parser — now receives both text_grid and colour_grid
 # ---------------------------------------------------------------------------
 
-def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, tt, col_dept_map=None, pending=None):
+def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, tt,
+                       col_dept_map=None, pending=None, bare=None):
     """
     Parse one rectangular block of the computing school matrix.
 
@@ -301,6 +463,9 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
       - background colour comes from colour_grid[r][col]
       - batch is resolved via resolve_batch(colour, text, course_name)
       - department comes from the header column via col_dept_map (if available)
+
+    `bare` collects the cells that name a course but no department, together
+    with the evidence needed to place them later — see flush_bare.
     """
     if col_dept_map is None:
         col_dept_map = {}
@@ -347,6 +512,22 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 if r < len(colour_grid) and col < len(colour_grid[r]):
                     cell_colour = colour_grid[r][col]
 
+                # An explicit time in the cell beats the column's slot.
+                slot_time = parsed["time_override"] or block["slot_map"][time_col]
+
+                if parsed.get("bare"):
+                    # A course title with no department — "Fund of SPM",
+                    # "Securing Cloud". Nothing on the cell says whose class
+                    # it is, so hold it until the whole week has been read and
+                    # place it from context (flush_bare).
+                    if bare is not None:
+                        bare["cells"].append({
+                            "row_key": (day, block["name"], r),
+                            "course": parsed["course"], "day": day,
+                            "room": room, "time": slot_time, "colour": cell_colour,
+                        })
+                    continue
+
                 batch = resolve_batch(cell_colour, cell_text, parsed["course"],
                                       parsed["depts"])
                 if not batch:
@@ -358,14 +539,21 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 if not section and any(is_ms_context(batch, dept) for dept in depts_to_add):
                     section = "A"
 
-                # An explicit time in the cell beats the column's slot.
-                slot_time = parsed["time_override"] or block["slot_map"][time_col]
-
                 # Yellow cells are repeat classes: route them to a dedicated
                 # REPEAT bucket (regardless of the year they'd otherwise map
                 # to) so they surface under the frontend's "Repeat Courses"
                 # department instead of polluting a normal batch.
                 store_batch = REPEAT_BATCH_KEY if is_yellow(cell_colour) else batch
+
+                if bare is not None:
+                    # Evidence for the dept-less cells: what this row, and
+                    # this course, resolved to elsewhere.
+                    for dept_key in depts_to_add:
+                        bare["row"].setdefault((day, block["name"], r), []).append(
+                            (dept_key, store_batch))
+                        bare["course"].setdefault(
+                            course_key(parsed["course"]), []).append(
+                                (dept_key, store_batch))
 
                 if not section:
                     # Cells like "Project (AI/DS)" or "HCI (SE, 22)" name no
@@ -377,32 +565,34 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                         "depts": depts_to_add, "batch": store_batch, "day": day,
                         "course": parsed["course"], "room": room, "time": slot_time,
                     })
-                    break
+                    continue
 
                 for dept_key in depts_to_add:
                     if add_course(tt, dept_key, store_batch, section,
                                   day, parsed["course"], room, slot_time):
                         added += 1
-                break  # found the cell for this slot, move to next slot
+                # Keep scanning: a slot band can hold more than one class.
+                # Stopping at the first cell lost every second class in a
+                # shared band — "Ideology of Pak (AI-C) 12:30-02:15" sitting
+                # beside another class under the same 11:30-12:50 label.
 
     return added
 
-def parse_grid_to_tt(text_grid, colour_grid, day, tt, pending=None):
+def parse_grid_to_tt(text_grid, colour_grid, day, tt, pending=None, bare=None):
     hr = find_header_row(text_grid)
     if hr < 0:
         return 0
     lr = find_lab_header_row(text_grid, hr + 1)
-    classroom_end = lr if lr > 0 else len(text_grid)
 
     # Department labels are usually merged cells in the rows above the Room/time header.
     dept_header_rows = text_grid[max(0, hr - 3):hr + 1]
     col_dept_map = build_col_dept_map(dept_header_rows)
 
     added = 0
-    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_LEFT,  day, tt, col_dept_map, pending)
-    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_RIGHT, day, tt, col_dept_map, pending)
-    if lr > 0:
-        added += parse_matrix_block(text_grid, colour_grid, lr + 1, len(text_grid), LAB_BLOCK, day, tt, col_dept_map, pending)
+    for block in detect_blocks(text_grid, hr, lr):
+        start_row, end_row = block["rows"]
+        added += parse_matrix_block(text_grid, colour_grid, start_row, end_row,
+                                    block, day, tt, col_dept_map, pending, bare)
     return added
 
 
@@ -431,12 +621,97 @@ def flush_sectionless(tt, pending):
     return added
 
 
+def course_key(name):
+    """Comparison key for a course title, ignoring case/punctuation/spacing."""
+    return re.sub(r"[^a-z0-9]+", " ", one_line(name).lower()).strip()
+
+
+def _depts_from(evidence):
+    """The distinct department keys in a list of (dept, batch) pairs.
+
+    Only the department is taken. A row can mix batches — D-504 holds
+    "Blockchain (CY-A)" from one cohort and "Web Prog (CY-A)" from another —
+    and copying a cell into both would assert something the sheet does not
+    say. The batch comes from the cell's own fill instead.
+    """
+    out = []
+    for dept, _batch in evidence or []:
+        if dept not in out:
+            out.append(dept)
+    return out
+
+
+def flush_bare(tt, bare):
+    """
+    Place the cells that named a course but no department.
+
+    "Fund of SPM", "PPIT Seminar", "Securing Cloud" — the sheet writes these
+    with no "(DEPT-SECTION)" parenthetical at all, and they were dropped, so
+    14 real classes never reached the JSON. Nothing on the cell identifies the
+    cohort, so it is read the way a person reads the sheet, best evidence
+    first:
+
+      1. the rest of the cell's own row in the same block — "Fund of SPM"
+         sits in D-404 beside "App HCI (CS-A)" and "App HCI (CS-B)", so it is
+         that row's cohort;
+      2. the same course elsewhere in the week, for a row that offers no other
+         cell (Wednesday's "Fund of SPM" is alone in its row, but Monday's is
+         not);
+      3. the legend that owns the cell's fill — this is what places the
+         evening electives, whose swatch reads "MS Electives (All Prgrms)".
+
+    A cell that survives all three has nothing left to attribute it to and is
+    dropped, with a warning naming it.
+    """
+    added = 0
+    # Two passes: a cell placed from its row also teaches us where that course
+    # belongs, which is the only evidence available to the same course on a
+    # row where it sits alone (Wednesday's "Fund of SPM" has no neighbours;
+    # Monday's has two).
+    for use_course_evidence in (False, True):
+        for cell in bare["cells"]:
+            if cell.get("placed"):
+                continue
+            depts = _depts_from(bare["row"].get(cell["row_key"]))
+            if not depts and use_course_evidence:
+                depts = _depts_from(bare["course"].get(course_key(cell["course"])))
+            if not depts and use_course_evidence:
+                # Nothing but the fill is left. This is what places the evening
+                # electives, whose swatch reads "MS Electives (All Prgrms)".
+                label = colour_dept_label(cell["colour"])
+                depts = [label] if label else []
+            if not depts:
+                continue
+
+            # A repeat fill outranks everything: a retake offering is not part
+            # of the cohort whose row it happens to sit in.
+            codes = [re.sub(r"^(BS|MS)\s*", "", d).strip("() ") for d in depts]
+            batch = (REPEAT_BATCH_KEY if is_yellow(cell["colour"])
+                     else resolve_batch(cell["colour"], "", cell["course"], codes))
+
+            cell["placed"] = True
+            for dept in depts:
+                bare["course"].setdefault(
+                    course_key(cell["course"]), []).append((dept, batch))
+                if add_course(tt, dept, batch, ALL_SECTIONS, cell["day"],
+                              cell["course"], cell["room"], cell["time"]):
+                    added += 1
+
+    for cell in bare["cells"]:
+        if not cell.get("placed"):
+            dlog_warn(f"  {cell['day']}: no department for '{cell['course']}' "
+                      f"in {cell['room']} at {cell['time']} — dropped")
+    return added
+
+
 def generate(service):
     school_name = "computing"
     school_info = SCHOOLS[school_name]
     tt = {}
     total = 0
     pending = []   # cells naming no section; placed once every day is read
+    # cells naming no department; placed from context once every day is read
+    bare = {"cells": [], "row": {}, "course": {}}
 
     sheet_url = f"https://docs.google.com/spreadsheets/d/{school_info['id']}"
     dlog(f"--- {school_name.upper()} --- sheet: {sheet_url}")
@@ -476,7 +751,7 @@ def generate(service):
             dlog_warn(f"  {school_name}/{tab} returned empty grid")
             continue
 
-        added = parse_grid_to_tt(text_grid, colour_grid, day, tt, pending)
+        added = parse_grid_to_tt(text_grid, colour_grid, day, tt, pending, bare)
         total += added
         print(f"{added} entries")
         dlog(f"  {school_name}/{tab}: {added} entries parsed")
@@ -485,6 +760,12 @@ def generate(service):
         fanned = flush_sectionless(tt, pending)
         total += fanned
         dlog(f"  {school_name}: {len(pending)} section-less cells -> {fanned} entries")
+
+    if bare["cells"]:
+        placed = flush_bare(tt, bare)
+        total += placed
+        dlog(f"  {school_name}: {len(bare['cells'])} department-less cells "
+             f"-> {placed} entries")
 
     dlog(f"  {school_name} total: {total} entries, {len(tt)} depts")
     return tt, total
