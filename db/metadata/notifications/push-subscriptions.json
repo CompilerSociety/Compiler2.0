@@ -30,5 +30,21 @@
       }
     },
     "updated_at": 1783527545741
+  },
+  {
+    "nuid": "25I-0632",
+    "name": "Wajeeh Imran",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cHmJeLFeYug:APA91bHYm8p6FeU7hstbPQa9g8LFs5qTUUafWD8GxxysXlCNm70GQYJNpf1Xbeu4aN8G0CLVOAsTh2mRwWPzWoyhQolSJB4UfnsohZsrQPD9a6axTYNgSIrO7OyJO-8zNH-M6YP7jzCb",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BJ4If46sUWkfIw82E1WLO71NnlYWjRL7_fv3AnjD_DKYGMg6lHV4kTejlMlqQz-He_G4GXfhGfIAuC2J81flHMs",
+        "auth": "AUXwMUBbC4Fs2ItTOnVZXA"
+      }
+    },
+    "updated_at": 1786558081517
   }
 ]
