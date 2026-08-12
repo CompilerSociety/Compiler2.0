@@ -129,17 +129,38 @@ FSE_SUFFIX_RE = re.compile(
 # Known section letters for validation
 FSE_VALID_SECTIONS = set("ABCD")
 
-# Regex used to pull dept + batch out of a "Courses SP-26" semester-header
-# cell (e.g. "2nd Semester    Batch BS(EE) 2025"). Whitespace is normalized
-# to single spaces before matching.
+# Regexes used to pull dept + batch out of a courses-tab block header. The
+# header text is everything left of the Code column, joined and whitespace-
+# normalized, so these must cope with both layouts the sheet has used:
+#   "Courses SP-26":        one cell — "2nd Semester   Batch BS(EE) 2025"
+#   "Course Allocation FA26": split — "BS CE 1st Semester Courses/Labs" on the
+#                            block row, then "Batch BS(CE) 2026" on the row of
+#                            that block's first course.
 COURSES_HEADER_DEPT_BATCH_RE = re.compile(
     r'Batch\s+BS\s*\(\s*([A-Za-z]+)\s*\)\s+(\d{4})', re.IGNORECASE
 )
 # Shared/general block, no dept split, e.g. "6th Semester   Batch 2023"
 COURSES_HEADER_BATCH_ONLY_RE = re.compile(r'Batch\s+(\d{4})', re.IGNORECASE)
-# MS/PhD block, e.g. "MS/PhD EE"
-COURSES_HEADER_MSPHD_RE = re.compile(r'MS\s*/\s*PhD\s+([A-Za-z]+)', re.IGNORECASE)
+# MS/PhD block. Covers "MS/PhD EE", "MS/PhD (EE) Courses", "MS EE",
+# "MS(EE) - IC Design". The captured token is only trusted when it names a
+# known programme — otherwise "MS Electives" would read as dept "Ele".
+COURSES_HEADER_MSPHD_RE = re.compile(
+    r'\bMS(?:\s*/\s*PhD)?\s*\(?\s*([A-Za-z]{2,3})\b\)?', re.IGNORECASE
+)
 COURSES_HEADER_SEMESTER_RE = re.compile(r'(\d+)\w{2}\s+Semester', re.IGNORECASE)
+# Block header that names the dept but not the batch, e.g.
+# "BS CE 1st Semester Courses/Labs". Requires "Semester" so ordinary course
+# rows can't be mistaken for block boundaries.
+COURSES_HEADER_BLOCK_DEPT_RE = re.compile(
+    r'\bBS\s+([A-Za-z]{2,3})\b(?=.*Semester)', re.IGNORECASE
+)
+# Batch given as a bare year, optionally flagged as a repeat block:
+# "2025 (Repeat)" sitting in the batch column of a repeat offering.
+COURSES_HEADER_BARE_BATCH_RE = re.compile(r'(?<!\d)(20\d{2})(?!\d)')
+# Column header naming a section on a courses tab: "Section-A" / "Section A".
+COURSES_SECTION_HEADER_RE = re.compile(r'^Section\s*-?\s*([A-Za-z])$', re.IGNORECASE)
+# How far down a courses tab to look for the Code/Course/Section header row.
+COURSES_LAYOUT_SCAN_ROWS = 12
 
 # Parenthetical annotation on a Courses-tab title that marks a repeat /
 # retake offering, e.g. "Applied Calculus (EE & CE Repeat)", "OOP (Repeat)".

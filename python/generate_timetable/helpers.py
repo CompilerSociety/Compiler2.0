@@ -1,6 +1,7 @@
 """Generic helpers shared by timetable generators."""
 
 import re
+import sys
 from datetime import datetime
 
 from .config import DEBUG_LOG_FILE
@@ -11,11 +12,29 @@ from .config import DEBUG_LOG_FILE
 
 _debug_lines = []
 
+# Windows consoles default to cp1252, which cannot encode the arrows, em-dashes
+# and box characters used throughout these logs — printing one raised
+# UnicodeEncodeError and killed the run. Switch the streams to UTF-8 where the
+# interpreter supports it, and fall back to lossy printing where it doesn't
+# (a mangled character in a log line must never abort a generation).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
+def _safe_print(line):
+    try:
+        print(line)
+    except UnicodeEncodeError:
+        encoding = getattr(sys.stdout, "encoding", None) or "ascii"
+        print(line.encode(encoding, errors="replace").decode(encoding, errors="replace"))
+
 def dlog(msg, level="INFO"):
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{stamp}] [{level}] {msg}"
     _debug_lines.append(line)
-    print(line)
+    _safe_print(line)
 
 def dlog_error(msg):
     dlog(msg, level="ERROR")

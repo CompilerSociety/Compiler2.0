@@ -53,33 +53,72 @@ def is_yellow(colour):
 # a header legend swatch when they don't round to the exact same tuple.
 COLOUR_MATCH_TOLERANCE = 0.03
 
-def colour_to_batch(colour):
+def add_colour_entry(colour, dept, batch):
     """
-    Look up a colour tuple against COLOUR_BATCH_MAP.
-    Tries an exact match first, then falls back to the nearest legend
-    swatch within COLOUR_MATCH_TOLERANCE per channel — this is what lets
-    a slightly-drifted body cell (e.g. CS-2023's pale-skin fill) resolve
-    to its real legend batch instead of falling through to name-guessing.
-    Returns a year string like "2025"/"2023", "MS", or None if no swatch
-    is close enough / colour is white.
-    """
-    if colour is None or is_white(colour):
-        return None
+    Record that `colour` is the legend swatch for (dept, batch).
 
+    One fill can legitimately serve two legends — the computing sheet paints
+    both "MS (AI)" and "BS CS (2023)" the same #FFE699 — so entries accumulate
+    in a list rather than overwriting. dept is the legend's programme code
+    ("CS", "AI", ...) or None for headers that name no programme
+    (e.g. "MS Electives (All Prgrms)"); it is what disambiguates a shared
+    colour at lookup time.
+    """
+    entries = COLOUR_BATCH_MAP.setdefault(colour, [])
+    if not any(d == dept and b == batch for d, b in entries):
+        entries.append((dept, batch))
+
+def _entries_for_colour(colour):
+    """
+    Legend entries for a colour: exact match first, then the nearest legend
+    swatch within COLOUR_MATCH_TOLERANCE per channel — this is what lets a
+    slightly-drifted body cell resolve to its real legend instead of falling
+    through to name-guessing. Returns [] when nothing is close enough.
+    """
     exact = COLOUR_BATCH_MAP.get(colour)
     if exact:
         return exact
 
-    best_batch, best_dist = None, None
-    for swatch, batch in COLOUR_BATCH_MAP.items():
+    best_entries, best_dist = [], None
+    for swatch, entries in COLOUR_BATCH_MAP.items():
         dr = abs(colour[0] - swatch[0])
         dg = abs(colour[1] - swatch[1])
         db = abs(colour[2] - swatch[2])
         if dr <= COLOUR_MATCH_TOLERANCE and dg <= COLOUR_MATCH_TOLERANCE and db <= COLOUR_MATCH_TOLERANCE:
             dist = dr + dg + db
             if best_dist is None or dist < best_dist:
-                best_batch, best_dist = batch, dist
-    return best_batch
+                best_entries, best_dist = entries, dist
+    return best_entries
+
+def colour_to_batch(colour, dept_codes=None):
+    """
+    Resolve a cell's background colour to a batch key.
+
+    dept_codes is the list of programme codes parsed out of the cell text
+    itself (e.g. ["CS"] for "Cloud Comp (CS-A)"). When a colour is shared by
+    more than one legend, the entry whose legend dept matches the cell wins:
+    the #FFE699 fill means "BS CS (2023)" on a (CS-…) cell and "MS (AI)" on an
+    (AI-…) one. Without that, whichever legend the header scan happened to see
+    first swallowed the other cohort entirely.
+
+    Colours mapped by a single legend ignore dept_codes and behave exactly as
+    before. Returns a year string like "2025"/"2023", "MS", or None if no
+    swatch is close enough / colour is white.
+    """
+    if colour is None or is_white(colour):
+        return None
+
+    entries = _entries_for_colour(colour)
+    if not entries:
+        return None
+
+    if dept_codes and len(entries) > 1:
+        wanted = {str(d).strip().upper() for d in dept_codes if d}
+        for dept, batch in entries:
+            if dept and dept in wanted:
+                return batch
+
+    return entries[0][1]
 
 def build_colour_map(service):
     """
@@ -91,6 +130,10 @@ def build_colour_map(service):
 
     year_re = re.compile(r'\b(20\d{2})\b')
     ms_re   = re.compile(r'\bMS\b', re.IGNORECASE)
+    # Programme code carried by the header: "BS CS (2023)" -> CS, "MS (AI)" -> AI.
+    # Headers that name no programme ("MS Electives (All Prgrms)") yield None.
+    bs_dept_re = re.compile(r'\bBS\s+([A-Z]{2,3})\b')
+    ms_dept_re = re.compile(r'\bMS\s*\(\s*([A-Za-z]{2,3})\s*\)')
 
     for school_name, school_info in SCHOOLS.items():
         for tab in school_info["tabs"]:
@@ -105,17 +148,32 @@ def build_colour_map(service):
                 for text, colour in zip(t_row, c_row):
                     if colour is None or is_white(colour):
                         continue
-                    if colour in COLOUR_BATCH_MAP:
-                        continue  # already mapped
+
+                    # A cohort legend always names its programme level. Without
+                    # this guard, business course codes that happen to sit in the
+                    # header band ("MG 2011 Environmental Science") register as
+                    # bogus batch years on whatever fill they carry.
+                    if not re.search(r'\b(BS|MS)\b', text, re.IGNORECASE):
+                        continue
 
                     m = year_re.search(text)
                     if m:
-                        COLOUR_BATCH_MAP[colour] = m.group(1)
+                        dept_m = bs_dept_re.search(text.upper())
+                        add_colour_entry(colour,
+                                         dept_m.group(1) if dept_m else None,
+                                         m.group(1))
                         continue
 
                     # MS header with no year e.g. 'MS (CS)', 'MS (DS)'
                     if ms_re.search(text) and 'BS' not in text.upper():
-                        COLOUR_BATCH_MAP[colour] = "MS"
+                        dept_m = ms_dept_re.search(text)
+                        add_colour_entry(colour,
+                                         dept_m.group(1).upper() if dept_m else None,
+                                         "MS")
 
-    print(f"  Auto-mapped {len(COLOUR_BATCH_MAP)} colours: "
-          + ", ".join(sorted(set(COLOUR_BATCH_MAP.values()))))
+    batches = sorted({batch for entries in COLOUR_BATCH_MAP.values()
+                      for _dept, batch in entries})
+    shared = sum(1 for entries in COLOUR_BATCH_MAP.values() if len(entries) > 1)
+    print(f"  Auto-mapped {len(COLOUR_BATCH_MAP)} colours"
+          + (f" ({shared} shared by 2+ legends)" if shared else "")
+          + ": " + ", ".join(batches))

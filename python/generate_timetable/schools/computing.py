@@ -136,7 +136,7 @@ def infer_batch_from_course(course_name):
         return "2025"
     return None
 
-def resolve_batch(cell_colour, cell_text, course_name):
+def resolve_batch(cell_colour, cell_text, course_name, dept_codes=None):
     """
     Three-tier batch resolution for a single data cell:
 
@@ -146,6 +146,8 @@ def resolve_batch(cell_colour, cell_text, course_name):
     2. Cell background colour → COLOUR_BATCH_MAP lookup
        Reliable once COLOUR_BATCH_MAP is filled in from --discover output.
        This is THE primary mechanism for the computing school matrix format.
+       dept_codes (the programme codes in the cell text) disambiguates fills
+       the sheet shares between two legends — see colour_to_batch.
 
     3. Course-name inference (last resort)
        Fragile — only works for courses with distinctive names.
@@ -158,7 +160,7 @@ def resolve_batch(cell_colour, cell_text, course_name):
         return BATCH_MAP.get(short, "20" + short)
 
     # Tier 2 — colour lookup
-    batch = colour_to_batch(cell_colour)
+    batch = colour_to_batch(cell_colour, dept_codes)
     if batch:
         return batch
 
@@ -309,7 +311,8 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 if r < len(colour_grid) and col < len(colour_grid[r]):
                     cell_colour = colour_grid[r][col]
 
-                batch = resolve_batch(cell_colour, cell_text, parsed["course"])
+                batch = resolve_batch(cell_colour, cell_text, parsed["course"],
+                                      parsed["depts"])
                 if not batch:
                     continue
 

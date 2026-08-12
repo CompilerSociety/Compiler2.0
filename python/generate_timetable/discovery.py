@@ -69,11 +69,14 @@ def discover_colours(service):
 
     print("\n" + "=" * 60)
     print("Copy the entries below into COLOUR_BATCH_MAP at the top of this script,")
-    print("replacing 'YEAR' with the correct batch year (2022 / 2023 / 2024 / 2025):\n")
+    print("replacing 'DEPT' with the legend's programme code (CS / DS / AI / ...,")
+    print("or None) and 'YEAR' with the batch year (2022 / 2023 / 2024 / 2025).")
+    print("Each colour maps to a LIST — a fill shared by two legends carries one")
+    print("entry per legend, and the cell's own dept code picks between them:\n")
     print("COLOUR_BATCH_MAP = {")
     for colour, occurrences in sorted(all_colours.items(), key=sort_key):
         r, g, b = colour
         ex = occurrences[0]
-        print(f"    ({r:.2f}, {g:.2f}, {b:.2f}): \"YEAR\",  # e.g. '{ex[4][:50]}'")
+        print(f"    ({r:.2f}, {g:.2f}, {b:.2f}): [(\"DEPT\", \"YEAR\")],  # e.g. '{ex[4][:50]}'")
     print("}")
     print()

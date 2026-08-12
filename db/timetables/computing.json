@@ -1738,47 +1738,309 @@
         }
       },
       "2023": {
-        "B": {
+        "A": {
           "Monday": [
             {
-              "name": "PDC",
+              "name": "App HCI",
+              "location": "D-404",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Cloud Comp",
+              "location": "D-411",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Deep Learn",
+              "location": "D-412",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "PPIT",
+              "location": "D-404",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-404",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "MLOps",
+              "location": "D-404",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Gen AI",
+              "location": "D-405",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Agentic AI",
               "location": "D-406",
-              "time": "01:00-02:20"
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "02:30-03:50"
             }
           ],
           "Wednesday": [
             {
+              "name": "App HCI",
+              "location": "D-405",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Cloud Comp",
+              "location": "D-411",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Deep Learn",
+              "location": "D-412",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "PPIT",
+              "location": "D-404",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-404",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "MLOps",
+              "location": "D-404",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Gen AI",
+              "location": "D-405",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Agentic AI",
+              "location": "D-406",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "PDC",
+              "location": "D-411",
+              "time": "02:30-03:50"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "App HCI",
+              "location": "D-404",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "PDC",
+              "location": "D-406",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Cloud Comp",
+              "location": "D-411",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Deep Learn",
+              "location": "D-412",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Info Sec",
+              "location": "D-405",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-405",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Gen AI",
+              "location": "D-405",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Agentic AI",
+              "location": "D-406",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "MLOps",
+              "location": "D-413",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "App HCI",
+              "location": "D-405",
+              "time": "10:00-11:20"
+            },
+            {
               "name": "PDC",
               "location": "D-406",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "Cloud Comp",
+              "location": "D-411",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Deep Learn",
+              "location": "D-412",
+              "time": "02:30-03:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Info Sec",
+              "location": "D-405",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-405",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Gen AI",
+              "location": "D-405",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Agentic AI",
+              "location": "D-406",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "MLOps",
+              "location": "D-412",
+              "time": "10:00-11:20"
             }
           ]
         },
         "C": {
           "Monday": [
             {
+              "name": "App HCI",
+              "location": "D-405",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Agentic AI",
+              "location": "D-406",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "PDC",
               "location": "D-406",
               "time": "02:30-03:50"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "PPIT",
+              "location": "D-406",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-406",
+              "time": "10:00-11:20"
+            }
+          ],
           "Wednesday": [
+            {
+              "name": "App HCI",
+              "location": "D-406",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Agentic AI",
+              "location": "D-406",
+              "time": "01:00-02:20"
+            },
             {
               "name": "PDC",
               "location": "D-406",
               "time": "03:55-05:15"
             }
+          ],
+          "Thursday": [
+            {
+              "name": "PPIT",
+              "location": "D-406",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-406",
+              "time": "10:00-11:20"
+            }
           ]
         },
         "D": {
+          "Monday": [
+            {
+              "name": "App HCI",
+              "location": "D-405",
+              "time": "10:00-11:20"
+            }
+          ],
           "Tuesday": [
+            {
+              "name": "Info Sec",
+              "location": "D-411",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-411",
+              "time": "10:00-11:20"
+            },
             {
               "name": "PDC",
               "location": "D-411",
               "time": "01:00-02:20"
             }
           ],
+          "Wednesday": [
+            {
+              "name": "App HCI",
+              "location": "D-406",
+              "time": "10:00-11:20"
+            }
+          ],
           "Thursday": [
+            {
+              "name": "Info Sec",
+              "location": "D-411",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-411",
+              "time": "10:00-11:20"
+            },
             {
               "name": "PDC",
               "location": "D-411",
@@ -1786,19 +2048,155 @@
             }
           ]
         },
-        "A": {
+        "E": {
+          "Monday": [
+            {
+              "name": "PPIT",
+              "location": "D-406",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-406",
+              "time": "10:00-11:20"
+            }
+          ],
           "Tuesday": [
             {
-              "name": "PDC",
+              "name": "App HCI",
+              "location": "D-412",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "PPIT",
               "location": "D-411",
-              "time": "02:30-03:50"
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-411",
+              "time": "10:00-11:20"
             }
           ],
           "Thursday": [
             {
-              "name": "PDC",
+              "name": "App HCI",
+              "location": "D-412",
+              "time": "08:30-09:50"
+            }
+          ]
+        },
+        "F": {
+          "Monday": [
+            {
+              "name": "Info Sec",
               "location": "D-411",
-              "time": "02:30-03:50"
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-411",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "App HCI",
+              "location": "D-413",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Info Sec",
+              "location": "D-412",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PPIT",
+              "location": "D-412",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "App HCI",
+              "location": "D-413",
+              "time": "08:30-09:50"
+            }
+          ]
+        },
+        "G": {
+          "Monday": [
+            {
+              "name": "PPIT",
+              "location": "D-412",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-412",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "App HCI",
+              "location": "D-412",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "PPIT",
+              "location": "D-413",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Info Sec",
+              "location": "D-413",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "App HCI",
+              "location": "D-413",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "Robo": {
+          "Monday": [
+            {
+              "name": "Embed Robo",
+              "location": "D-413",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Embed Robo",
+              "location": "D-413",
+              "time": "01:00-02:20"
+            }
+          ]
+        },
+        "H": {
+          "Tuesday": [
+            {
+              "name": "PPIT",
+              "location": "D-411",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "PPIT",
+              "location": "D-411",
+              "time": "11:30-12:50"
             }
           ]
         }
@@ -5316,76 +5714,7 @@
     "MS (CS)": {
       "MS": {
         "A": {
-          "Monday": [
-            {
-              "name": "App HCI",
-              "location": "D-404",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "SMD",
-              "location": "D-405",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Cloud Comp",
-              "location": "D-411",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Deep Learn",
-              "location": "D-412",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "PPIT",
-              "location": "D-404",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-404",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "MLOps",
-              "location": "D-404",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Gen AI",
-              "location": "D-405",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "11:30-12:50"
-            }
-          ],
           "Wednesday": [
-            {
-              "name": "App HCI",
-              "location": "D-405",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "SMD",
-              "location": "D-405",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Cloud Comp",
-              "location": "D-411",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Deep Learn",
-              "location": "D-412",
-              "time": "01:00-02:20"
-            },
             {
               "name": "App Prog",
               "location": "D-301",
@@ -5402,370 +5731,11 @@
               "time": "06:45-08:05"
             }
           ],
-          "Thursday": [
-            {
-              "name": "PPIT",
-              "location": "D-404",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-404",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "MLOps",
-              "location": "D-404",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Gen AI",
-              "location": "D-405",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "11:30-12:50"
-            }
-          ],
           "Friday": [
             {
               "name": "Research Methodology",
               "location": "C-301",
               "time": "03:55-05:15"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "App HCI",
-              "location": "D-404",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Cloud Comp",
-              "location": "D-411",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Deep Learn",
-              "location": "D-412",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Info Sec",
-              "location": "D-405",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-405",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Gen AI",
-              "location": "D-405",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "MLOps",
-              "location": "D-413",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "App HCI",
-              "location": "D-405",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Cloud Comp",
-              "location": "D-411",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Deep Learn",
-              "location": "D-412",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Info Sec",
-              "location": "D-405",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-405",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Gen AI",
-              "location": "D-405",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "MLOps",
-              "location": "D-412",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "C": {
-          "Monday": [
-            {
-              "name": "App HCI",
-              "location": "D-405",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "PPIT",
-              "location": "D-406",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-406",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "App HCI",
-              "location": "D-406",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-406",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "PPIT",
-              "location": "D-406",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-406",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "D": {
-          "Monday": [
-            {
-              "name": "App HCI",
-              "location": "D-405",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Info Sec",
-              "location": "D-411",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "App HCI",
-              "location": "D-406",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Info Sec",
-              "location": "D-411",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "E": {
-          "Monday": [
-            {
-              "name": "PPIT",
-              "location": "D-406",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-406",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "App HCI",
-              "location": "D-412",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-411",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "App HCI",
-              "location": "D-412",
-              "time": "08:30-09:50"
-            }
-          ]
-        },
-        "F": {
-          "Monday": [
-            {
-              "name": "Info Sec",
-              "location": "D-411",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "App HCI",
-              "location": "D-413",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Info Sec",
-              "location": "D-412",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "PPIT",
-              "location": "D-412",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "App HCI",
-              "location": "D-413",
-              "time": "08:30-09:50"
-            }
-          ]
-        },
-        "G": {
-          "Monday": [
-            {
-              "name": "PPIT",
-              "location": "D-412",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-412",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "App HCI",
-              "location": "D-412",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "PPIT",
-              "location": "D-413",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Info Sec",
-              "location": "D-413",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "App HCI",
-              "location": "D-413",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "Robo": {
-          "Monday": [
-            {
-              "name": "Embed Robo",
-              "location": "D-413",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Embed Robo",
-              "location": "D-413",
-              "time": "01:00-02:20"
-            }
-          ]
-        },
-        "H": {
-          "Tuesday": [
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "PPIT",
-              "location": "D-411",
-              "time": "11:30-12:50"
             }
           ]
         }
@@ -5882,6 +5852,6 @@
       }
     }
   },
-  "count": 980,
-  "generatedAt": "2026-08-12T09:37:06.828647+00:00"
+  "count": 978,
+  "generatedAt": "2026-08-12T10:22:50.666411+00:00"
 }
