@@ -2257,7 +2257,15 @@ initLiveSheetSync();
   const hash=location.hash.replace('#','');
   const slugs=['timetable','freerooms','showup','exams','seating','faculty'];
   const idx=slugs.indexOf(hash);
-  if(idx>=0) sw(idx,false);
+  // Deferred to a microtask, not called inline. sw() runs the opened tab's
+  // init, and those inits read bindings declared further down this file
+  // (SHOWUP_SCHEDULE_URL, EXAM_SCHEDULE_URL, SEATING_PLAN_URL, FACULTY_DATA).
+  // Calling it here reached them inside their temporal dead zone, and the
+  // ReferenceError aborted the rest of app.js — so deep-linking to #showup,
+  // #exams, #seating or #faculty left the app half-initialized. A microtask
+  // runs once this script finishes but still before first paint, so the tab
+  // opens with everything defined and without a flash of the default tab.
+  if(idx>=0) queueMicrotask(()=>sw(idx,false));
   window.addEventListener('hashchange',()=>{
     const h=location.hash.replace('#','');
     const i=slugs.indexOf(h);
