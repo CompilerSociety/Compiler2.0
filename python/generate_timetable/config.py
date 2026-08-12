@@ -10,7 +10,7 @@ DEBUG_LOG_FILE = "python/generate_timetable/runtime/debug.log"
 SCHOOLS = OrderedDict([
     ("computing", OrderedDict([
         ("id", "1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q"),
-        ("tabs", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]),
+        ("tabs", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]),
     ])),
     ("business", OrderedDict([
         ("id", "1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw"),
@@ -24,7 +24,7 @@ SCHOOLS = OrderedDict([
     ])),
 ])
 
-DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 # ---------------------------------------------------------------------------
 # COLOUR_BATCH_MAP
@@ -96,7 +96,7 @@ FSM_SECTION_RE = re.compile(r'^([A-Z]{2,5})(\d{2})([A-Z])(\d)?$')
 
 FSM_COMBINED_RE = re.compile(r'^([A-Z]{2,5}\d{2})\s*([A-Z](?:\s*[/&]\s*[A-Z])+)$')
 
-FSM_DAY_RE = re.compile(r'^(Monday|Tuesday|Wednesday|Thursday|Friday)$', re.IGNORECASE)
+FSM_DAY_RE = re.compile(r'^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$', re.IGNORECASE)
 
 FSM_PROGRAM_MAP = {
     "FT": "BS Fintech",

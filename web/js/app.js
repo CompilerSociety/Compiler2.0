@@ -163,7 +163,7 @@ function profileIsComputing(profile){
 }
 function currentWeekdayName(){
   const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
-  return ['Monday','Tuesday','Wednesday','Thursday','Friday'].includes(d)?d:'';
+  return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].includes(d)?d:'';
 }
 function _readPref(key){ try{ const r=localStorage.getItem(key); return r?JSON.parse(r):null; }catch(e){ return null; } }
 function _writePref(key,val){ try{ localStorage.setItem(key,JSON.stringify(val)); }catch(e){} }
@@ -684,7 +684,7 @@ const DEFAULT_BLOCK_FLOORS={
 };
 let BLOCK_FLOORS=cloneFloors(DEFAULT_BLOCK_FLOORS);
 
-const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const DAYNAMES=["SUN","MON","TUE","WED","THU","FRI","SAT"];
 const CLASSROOM_SLOTS=["08:30-09:50","10:00-11:20","11:30-12:50","01:00-02:20","02:30-03:50","03:55-05:15","05:20-06:40","06:45-08:05"];
 const LAB_SLOTS=["08:30-11:15","11:30-02:15","02:30-05:15","05:20-08:05"];
@@ -742,12 +742,12 @@ function isLabFloor(floorName){
 
 /* ══════════════════════════════════════════
    LIVE GOOGLE SHEET SYNC
-   - Pulls Monday–Friday tabs from your Google Sheet
+   - Pulls Monday–Saturday tabs from your Google Sheet
    - Rebuilds TT in the same shape used by Class Timetable and Free Rooms
    - Refreshes every 10 minutes without redeploying on Vercel
 ══════════════════════════════════════════ */
 const SCHOOLS={
-  computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday"],label:"Computing (FSC)"},
+  computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],label:"Computing (FSC)"},
   engineering:{id:"1S3mWYvoM7HbIeiqAbt65FngdmYDUA8MWOQSjcUYsFXU",tabs:["Monday"],label:"Engineering (FSE)"},
   business:{id:"1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw",tabs:["Monday"],label:"Business (FSM)"},
 };
@@ -1246,7 +1246,7 @@ function setDefaultDay(){
   const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const currentDayIndex=new Date().getDay();
   const currentDayName=dayNames[currentDayIndex===0?1:currentDayIndex];
-  if([..."Monday Tuesday Wednesday Thursday Friday".split(' ')].includes(currentDayName)){
+  if([..."Monday Tuesday Wednesday Thursday Friday Saturday".split(' ')].includes(currentDayName)){
     daySel.value=currentDayName;
   }
 }
@@ -1466,7 +1466,7 @@ function refreshRoomSelectorsAfterDataUpdate(){
 
 function selectedDayIsToday(day){
   const todayIndex=new Date().getDay();
-  return todayIndex>=1&&todayIndex<=5&&DAYS[todayIndex-1]===day;
+  return todayIndex>=1&&todayIndex<=6&&DAYS[todayIndex-1]===day;
 }
 function getSlotsForDay(day,slots){return selectedDayIsToday(day)?getUpcomingSlots(slots):[...(slots||CLASSROOM_SLOTS)];}
 
@@ -1611,7 +1611,7 @@ async function refreshTimetableFromGoogleSheet(){
       // Reference JSON is day-first: {Monday:{BS CS:{2025:{A:[...]}}}}
       // Convert to dept-first for applyTimetablePayload
       const tt={};
-      const dayKeys=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+      const dayKeys=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
       dayKeys.forEach(day=>{
         const dayData=fbData[day];
         if(!dayData) return;
@@ -1937,7 +1937,7 @@ function onFloorChange(){
   });
   // Auto-select today if it's a weekday
   const todayIndex=new Date().getDay();
-  const todayName=todayIndex>=1&&todayIndex<=5 ? DAYS[todayIndex-1] : '';
+  const todayName=todayIndex>=1&&todayIndex<=6 ? DAYS[todayIndex-1] : '';
   if(todayName){daySel.value=todayName;onDayChange();}
 }
 
@@ -2123,7 +2123,7 @@ function loadRepeatTT(){
     const [selDept,selSec]=secVal.split('~~');
     rows=rows.filter(r=>r.dept===selDept&&r.section===selSec);
   }
-  const dayOrder=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const dayOrder=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   rows.sort((a,b)=>{
     const d=dayOrder.indexOf(a.day)-dayOrder.indexOf(b.day);
     if(d!==0) return d;

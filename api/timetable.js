@@ -5,7 +5,7 @@
 const SCHOOLS = {
   computing: {
     id: "1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",
-    tabs: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    tabs: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     format: "matrix"
   },
   engineering: {
@@ -20,7 +20,7 @@ const SCHOOLS = {
   }
 };
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 /* ── Text helpers ── */
 
@@ -453,7 +453,7 @@ const FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48];
 const FSM_SLOT_WIDTH = 9;
 const FSM_SECTION_OFFSET = 7;
 
-const FSM_DAY_RE = /^(Monday|Tuesday|Wednesday|Thursday|Friday)$/i;
+const FSM_DAY_RE = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$/i;
 
 const FSM_PROGRAM_MAP = {
   "FT": "BS Fintech",

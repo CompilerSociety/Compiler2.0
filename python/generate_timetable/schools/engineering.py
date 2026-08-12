@@ -42,7 +42,7 @@ COMMON = SimpleNamespace(
     fetch_sheet_with_colours=fetch_sheet_with_colours,
     normalise_room=normalise_room,
     add_course=add_course,
-    DAYS=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    DAYS=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     REPEAT_BATCH_KEY=REPEAT_BATCH_KEY,
 )
 
@@ -65,11 +65,12 @@ def normalizeDay(raw):
     if not raw:
         return None
     raw = raw.strip().capitalize()
-    DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     if raw in DAYS:
         return raw
     abbr = {"Mon": "Monday", "Tue": "Tuesday", "Tues": "Tuesday", "Wed": "Wednesday",
-            "Thu": "Thursday", "Thur": "Thursday", "Fri": "Friday"}
+            "Thu": "Thursday", "Thur": "Thursday", "Fri": "Friday",
+            "Sat": "Saturday"}
     return abbr.get(raw)
 
 

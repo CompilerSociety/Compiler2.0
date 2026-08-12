@@ -39,7 +39,7 @@ function finish(code) {
 // ── Config ────────────────────────────────────────────────────────────────────
 
 const SCHOOLS = ["computing", "engineering", "business"];
-const DAYS    = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const DAYS    = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const [, , argSchool, argDay] = process.argv;
 const targetSchools = argSchool ? [argSchool] : SCHOOLS;
@@ -85,7 +85,7 @@ function validateTT(tt, label) {
           errors.push(`${label}: "${dept}/${batch}" has weird section "${section}"`);
 
         for (const [day, entries] of Object.entries(days)) {
-          if (!["Monday","Tuesday","Wednesday","Thursday","Friday"].includes(day))
+          if (!["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].includes(day))
             errors.push(`${label}: "${dept}/${batch}/${section}" has unknown day "${day}"`);
 
           if (!Array.isArray(entries)) {
@@ -278,7 +278,7 @@ function mergeTTs(partials) {
   console.log("\n\x1b[1m─────────────── ROOMS · CLASSES · SUBJECTS ───────────────\x1b[0m\n");
 
   const rooms = {};
-  const ORDERED_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+  const ORDERED_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
   for (const [dept, batches] of Object.entries(finalPayload.tt)) {
     for (const [batch, sections] of Object.entries(batches)) {
