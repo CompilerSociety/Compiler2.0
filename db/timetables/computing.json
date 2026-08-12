@@ -1125,12 +1125,12 @@
             }
           ]
           "Saturday": [
-  {
-    "name": "SDA ReSch",
-    "location": "D-501",
-    "time": "05:20-06:40"
-  }
-]
+            {
+            "name": "SDA ReSch",
+            "location": "D-501",
+             "time": "05:20-06:40"
+         }
+         ]
         },
         "H": {
           "Monday": [
