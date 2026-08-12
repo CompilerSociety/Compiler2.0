@@ -1,13 +1,23 @@
 // Runs when a timetable JSON changes. Notifies affected users (matched by
 // department + batch + section) when a class becomes Cancelled or Rescheduled.
 //
-// De-dup is PER DEVICE and PERMANENT: db/metadata/notifications/class-notify-state.json maps each
-// subscription endpoint -> { "<slotKey>||<status|time|venue>": true } for every
-// cancel/reschedule that device has already been sent. We only ever send a
-// cancel/reschedule a device has NOT received before; anything it already got
-// is never sent again (whether or not it was opened), even though that entry
-// keeps living in the timetable JSON. A genuinely different change to the same
-// class (new time/venue) is a new composite, so it is sent.
+// De-dup is PER DEVICE and RECOVERABLE. class-notify-state.json maps each
+// subscription endpoint -> { <slotKey>: "<status|time|venue>" }, keyed by the
+// CLASS's stable identity (dept|batch|section|day|course), not by a composite
+// that includes the disturbance details. On each run:
+//
+//   - a cancelled/rescheduled class whose slotKey is NOT in this device's
+//     state, or whose stored value differs (new time/venue), sends and stores
+//   - a cancelled/rescheduled class whose stored value matches exactly is
+//     silently skipped (already told)
+//   - a class that reappears as Normal has its slotKey pruned from the state,
+//     WITHOUT any "recovery" notification — so if it is cancelled again later,
+//     it will notify fresh
+//
+// This replaces the old permanent-composite behaviour, where the entry
+// "<slotKey>||<value>" was written once and never cleared, meaning a class
+// that got cancelled, recovered, then cancelled again would only ever notify
+// on the first cancellation.
 //
 // Env: VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY (required), VAPID_SUBJECT (optional)
 // Reads:  db/timetables/*.json, db/metadata/notifications/push-subscriptions.json
@@ -86,7 +96,13 @@ const subs = readJson(SUBS, []);
 const state = readJson(STATE, {}); // { endpoint: { slotKey: value } }
 const liveEndpoints = new Set();
 
-let sent = 0, skipped = 0;
+// Pre-index every class currently in the timetable by its stable slotKey.
+// Used below to decide, per stored entry, whether the class is still
+// cancelled/rescheduled (keep) or has recovered to normal (prune).
+const currentBySlotKey = new Map();
+for (const s of slots) currentBySlotKey.set(s.slotKey, s);
+
+let sent = 0, skipped = 0, pruned = 0;
 
 // Wrap in async IIFE to support await
 (async () => {
@@ -104,12 +120,28 @@ let sent = 0, skipped = 0;
       const seen = state[endpoint] || (state[endpoint] = {});
       const name = String(entry.name || '').trim() || 'Student';
 
+      // Recovery pruning, per device. For each class this device has been
+      // told about, check its current state: if it is no longer cancelled/
+      // rescheduled — either back to Normal, or gone from the timetable
+      // entirely (e.g. renamed) — drop the entry so a future re-cancellation
+      // is treated as new and notifies again. No "class recovered"
+      // notification is sent, by request.
+      for (const storedSlotKey of Object.keys(seen)) {
+        const cur = currentBySlotKey.get(storedSlotKey);
+        if (!cur || cur.status === 'Normal') {
+          delete seen[storedSlotKey];
+          pruned++;
+        }
+      }
+
       // Only this device's matching, currently cancelled/rescheduled classes.
       const mine = slots.filter((s) => s.status !== 'Normal' && s.deptKey === dep && s.batch === batch && s.secLetter === secLetter);
 
       for (const s of mine) {
-        const composite = `${s.slotKey}||${s.value}`;
-        if (seen[composite]) { continue; } // this device already received this exact cancel/reschedule
+        // Skip if this device was already told about this exact
+        // cancellation/reschedule (same status, time and venue). A different
+        // time/venue is a new composite and will notify.
+        if (seen[s.slotKey] === s.value) { continue; }
         const body = s.status === 'Cancelled'
           ? `Dear ${name}, your class ${s.course} (${s.section}) has been cancelled.`
           : `Dear ${name}, your class ${s.course} (${s.section}) has been rescheduled to ${s.time} at ${s.venue}.`;
@@ -119,7 +151,7 @@ let sent = 0, skipped = 0;
         });
         try {
           await webpush.sendNotification(subscription, payload);
-          seen[composite] = true; // remember permanently — never send this one to this device again
+          seen[s.slotKey] = s.value; // remembered until the class recovers
           sent++;
         } catch (err) {
           const code = err?.statusCode;
@@ -133,5 +165,5 @@ let sent = 0, skipped = 0;
   for (const ep of Object.keys(state)) { if (!liveEndpoints.has(ep)) delete state[ep]; }
 
   writeJson(STATE, state);
-  console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}`);
+  console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}, recovered/pruned: ${pruned}`);
 })();
