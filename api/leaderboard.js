@@ -41,6 +41,18 @@ async function readPublic(file) {
   return normalizeDB(JSON.parse(await res.text()));
 }
 
+// GitHub rejecting the credential is a server misconfiguration, not a blip.
+// Tagging it lets the handler say so plainly instead of returning a generic
+// 500 that the UI can only report as "could not submit score".
+function authError(status) {
+  const err = new Error(
+    `GitHub rejected GH_TOKEN (${status}). The token is missing, expired, ` +
+    `revoked, or lacks contents:write on the repo.`
+  );
+  err.isAuthFailure = true;
+  return err;
+}
+
 async function ghGet(token, file) {
   const url = `https://api.github.com/repos/${repo()}/contents/${file}?ref=${branch()}`;
   const res = await fetch(url, {
@@ -51,6 +63,7 @@ async function ghGet(token, file) {
     },
   });
   if (res.status === 404) return { db: emptyDB(), sha: null };
+  if (res.status === 401 || res.status === 403) throw authError(res.status);
   if (!res.ok) throw new Error(`read leaderboard failed (${res.status})`);
   const data = await res.json();
   let db = emptyDB();
@@ -78,6 +91,7 @@ async function ghPut(token, file, db, sha) {
     },
     body: JSON.stringify(body),
   });
+  if (res.status === 401 || res.status === 403) throw authError(res.status);
   if (!res.ok) throw new Error(`write leaderboard failed (${res.status})`);
 }
 
@@ -127,7 +141,10 @@ export default async function handler(req, res) {
 
     // Writing a score does need the token: it commits back to the repo.
     if (!token) {
-      return res.status(500).json({ error: 'Server not configured (missing GH_TOKEN)' });
+      return res.status(503).json({
+        error: 'leaderboard_read_only',
+        message: 'Scores cannot be saved: GH_TOKEN is not set on the server.',
+      });
     }
 
     if (req.method === 'POST') {
@@ -184,6 +201,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   } catch (err) {
     console.error('leaderboard API error:', err);
+    if (err?.isAuthFailure) {
+      // 503, not 500: the service is fine, its credential is not. The client
+      // shows this message verbatim so the cause is visible rather than hiding
+      // behind a generic failure.
+      return res.status(503).json({
+        error: 'leaderboard_read_only',
+        message: 'Scores cannot be saved right now — the server credential was rejected.',
+        detail: err.message,
+      });
+    }
     return res.status(500).json({
       error: 'Internal error',
       message: err?.message || String(err),

@@ -700,6 +700,36 @@ const LB_STATIC_PATHS={
   duck_hunter:'/db/leaderboard-duck-hunter.json',
   flappy_bird:'/db/leaderboard-flappy-bird.json',
 };
+/* Submit a score. Returns {entries, status} — status is '' on success, or a
+   message to show the player. Shared by all three games so they report a
+   failure the same way; they previously each rolled their own and two of them
+   set the message without repainting, so it only surfaced on the next poll or
+   the next time the game was opened, long after the run it belonged to. */
+async function submitLeaderboardScore(game,profile,score){
+  try{
+    const res=await fetch('/api/leaderboard',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({game,nuid:profile.nuid,name:profile.name,section:profile.section,
+        department:profile.department,batch:profile.batch,score})
+    });
+    let data=null;
+    try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
+    if(!res.ok){
+      // 503 means the server knows it cannot save (bad or missing credential).
+      // Show its reason rather than a generic failure, and still fall back to
+      // reading the board so the player at least sees the standings.
+      const msg=(res.status===503&&data&&data.message)?data.message:'Could not submit score.';
+      let entries=[];
+      try{ entries=await fetchLeaderboard(game); }catch(e){ /* leave empty */ }
+      return {entries,status:msg};
+    }
+    return {entries:(data&&data.leaderboard)||[],status:''};
+  }catch(err){
+    let entries=[];
+    try{ entries=await fetchLeaderboard(game); }catch(e){ /* leave empty */ }
+    return {entries,status:'Could not submit score — you appear to be offline.'};
+  }
+}
 async function fetchLeaderboard(game){
   const q=game&&game!=='compiler_run'?`?game=${encodeURIComponent(game)}`:'';
   try{
@@ -3825,27 +3855,9 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
       // No synced profile — nothing to submit under, just refresh local view.
       return;
     }
-    try{
-      const res=await fetch('/api/leaderboard',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          nuid:profile.nuid,
-          name:profile.name,
-          section:profile.section,
-          department:profile.department,
-          batch:profile.batch,
-          score:finalScore
-        })
-      });
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json();
-      LB_STATUS='';
-      renderLeaderboard(data.leaderboard||[]);
-    }catch(err){
-      LB_STATUS='Could not submit score.';
-      renderLeaderboard(null);
-    }
+    const {entries,status}=await submitLeaderboardScore('compiler_run',profile,finalScore);
+    LB_STATUS=status;
+    renderLeaderboard(entries);
   }
 
   // ── drawing ──
@@ -3924,6 +3936,9 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
     overlay.classList.add('on');
     cancelAnimationFrame(rafId);
     rafId=requestAnimationFrame(loop);
+    // Clear any message left over from the previous run so a failure from an
+    // earlier game cannot surface as if it belonged to this one.
+    LB_STATUS=''; LB_LOADED_ONCE=false;
     loadLeaderboard();
     clearInterval(lbPollId);
     lbPollId=setInterval(loadLeaderboard,15000);
@@ -4057,12 +4072,8 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   async function submitScore(finalScore){
     const profile=(typeof getProfileCookie==='function')?getProfileCookie():null;
     if(!profile||!profile.nuid) return;
-    try{
-      const res=await fetch('/api/leaderboard',{ method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ game:'duck_hunter', nuid:profile.nuid, name:profile.name, section:profile.section, department:profile.department, batch:profile.batch, score:finalScore }) });
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json(); LB_STATUS=''; renderLB(data.leaderboard||[]);
-    }catch(err){ LB_STATUS='Could not submit score.'; }
+    const {entries,status}=await submitLeaderboardScore('duck_hunter',profile,finalScore);
+    LB_STATUS=status; renderLB(entries);
   }
 
   // ── drawing ──
@@ -4135,7 +4146,7 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   window.openDuckHunter=function(){
     reset(); overlay.classList.add('on');
     cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop);
-    LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
+    LB_STATUS=''; LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
   };
   window.closeDuckHunter=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };
 })();
@@ -4209,12 +4220,8 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   async function submitScore(finalScore){
     const profile=(typeof getProfileCookie==='function')?getProfileCookie():null;
     if(!profile||!profile.nuid) return;
-    try{
-      const res=await fetch('/api/leaderboard',{ method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ game:'flappy_bird', nuid:profile.nuid, name:profile.name, section:profile.section, department:profile.department, batch:profile.batch, score:finalScore }) });
-      if(!res.ok) throw new Error('bad status');
-      const data=await res.json(); LB_STATUS=''; renderLB(data.leaderboard||[]);
-    }catch(err){ LB_STATUS='Could not submit score.'; }
+    const {entries,status}=await submitLeaderboardScore('flappy_bird',profile,finalScore);
+    LB_STATUS=status; renderLB(entries);
   }
 
   function draw(){
@@ -4260,7 +4267,7 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
   window.openFlappy=function(){
     reset(); overlay.classList.add('on');
     cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop);
-    LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
+    LB_STATUS=''; LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
   };
   window.closeFlappy=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };
 })();
