@@ -22,8 +22,8 @@
    ══════════════════════════════════════════ */
 
 window.SITE_STATUS = {
-  waitingPage: true,
-  live: false,
+  waitingPage: false,
+  live: true,
 
   /* Countdown target: 14 August, 12:01 AM Pakistan Standard Time.
      The +05:00 offset is written explicitly so the countdown ends at the same
