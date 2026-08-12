@@ -22,6 +22,11 @@ const SCHOOLS = {
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+// Section key for batch-wide cells that name a department and year but no
+// section letter (e.g. "Project (AI/DS)"). Stored once under this key; the
+// frontend merges it into whichever section the student selects.
+const ALL_SECTIONS = "ALL";
+
 /* ── Text helpers ── */
 
 function cleanTxt(v) {
@@ -137,6 +142,15 @@ function normalizeRoomName(room) {
   let m = r.match(/CYBER\s*\(?\s*([A-D])-(\d{3})/i);
   if (m) return `Cyber (${m[1].toUpperCase()}-${m[2]})`;
   if (/\bAUDI(TORIUM)?\b/.test(r)) return "D-AUDI";
+  // Rebuild from the canonical prefix, which drops trailing qualifiers such as
+  // the "(GPU)" in "C-Rawal 3 (GPU)". Without this the same room arrives under
+  // several names and Free Rooms shows one of them idle while a class is in it.
+  m = r.match(/^([A-D])\s*-\s*(\d{3}|IT\s*LAB\s*\d+|MARGALA\s*\d*|RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)/);
+  if (m) return `${m[1]}-${m[2].trim()}`;
+  // Same rooms written without their block letter at all ("Rawal 3", "Rawal-3").
+  // The Margala and Rawal labs are all C block.
+  m = r.match(/^(MARGALA|RAWAL)\s*-?\s*(\d+)\b/);
+  if (m) return `C-${m[1]} ${m[2]}`;
   return r;
 }
 
@@ -246,11 +260,20 @@ function inferBatchFromCourse(courseName) {
   return null;
 }
 
+// A time written after the closing paren overrides the column's slot time,
+// e.g. "PF (SE-E) 09:30-10:50" runs 09:30-10:50, not the column's 08:30-09:50.
+const CELL_TIME_OVERRIDE_RE = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
+// A parenthetical holding nothing but a section letter, e.g. "Web Comp (A)".
+const SECTION_ONLY_RE = /^[A-H]\d?$/i;
+
 function parseTimetableCell(text) {
   const t = oneLine(text);
   if (!t) return null;
   const parenEnd = t.indexOf(")");
   const core = parenEnd >= 0 ? t.slice(0, parenEnd + 1) : t;
+  const tail = parenEnd >= 0 ? t.slice(parenEnd + 1) : "";
+  const ov = tail.match(CELL_TIME_OVERRIDE_RE);
+  const timeOverride = ov ? `${ov[1]}-${ov[2]}` : null;
   const m = core.match(CELL_REGEX);
   if (!m) return null;
   const course = m[1].trim();
@@ -258,8 +281,18 @@ function parseTimetableCell(text) {
   let section = m[3];
   const group = m[4];
   if (!section && group) section = `G-${group.toUpperCase()}`;
-  const depts = deptStr.split(/\s*[\/,]\s*/).map((dept) => dept.trim().toUpperCase()).filter(Boolean);
-  return { depts, section: section || null, hasSection: Boolean(section), course };
+  const rawCodes = deptStr.split(/\s*[\/,]\s*/).map((dept) => dept.trim().toUpperCase()).filter(Boolean);
+  const depts = rawCodes.filter((dept) => dept.length >= 2);
+  if (!depts.length) {
+    // "Web Comp (A)" — the parenthetical is a bare section letter, not a
+    // department. Keep the cell and let the column header supply the dept.
+    if (rawCodes.length === 1 && SECTION_ONLY_RE.test(rawCodes[0]) && !section) {
+      section = rawCodes[0].toUpperCase();
+    } else {
+      return null;
+    }
+  }
+  return { depts, section: section || null, hasSection: Boolean(section), course, timeOverride };
 }
 
 function isMSContext(batch, dept) {
@@ -392,7 +425,7 @@ function legacyTTToReferenceTT(tt) {
 
 /* ── Matrix parser for Computing school ── */
 
-function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMap) {
+function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMap, pending = []) {
   let added = 0;
   for (let r = startRow; r < Math.min(endRow, grid.length); r++) {
     const row = grid[r] || [];
@@ -413,9 +446,18 @@ function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMa
           if (!batch) continue;
           const depts = resolveDepartmentsForCell(parsed, headerInfo, batch);
           const section = parsed.section || (depts.some((dept) => isMSContext(batch, dept)) ? "A" : "");
-          if (!section) continue;
+          // An explicit time in the cell beats the column's slot.
+          const time = parsed.timeOverride || block.slotMap[timeCol];
+          if (!section) {
+            // Cells like "Project (AI/DS)" or "HCI (SE, 22)" name no section
+            // because they apply to the whole batch. Dropping them silently
+            // emptied the final-year timetables, so hold them here and fan
+            // them out across that batch's sections once every day is read.
+            pending.push({ depts, batch, day, course: parsed.course, room, time });
+            break;
+          }
           for (const dept of depts) {
-            if (addCourseToTT(target, { dept, batch, section, day, course: parsed.course, room, time: block.slotMap[timeCol] })) added++;
+            if (addCourseToTT(target, { dept, batch, section, day, course: parsed.course, room, time })) added++;
           }
           break;
         }
@@ -425,16 +467,43 @@ function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMa
   return added;
 }
 
-function parseGridToTT(grid, day, target) {
+function parseGridToTT(grid, day, target, pending = []) {
   const colBatchMap = buildColBatchMap(grid);
   const hr = findHeaderRow(grid);
   if (hr < 0) return 0;
   const lr = findLabHeaderRow(grid, hr + 1);
   const classroomEnd = lr > 0 ? lr : grid.length;
   let added = 0;
-  added += parseMatrixBlock(grid, hr + 1, classroomEnd, CLASSROOM_LEFT_BLOCK, day, target, colBatchMap);
-  added += parseMatrixBlock(grid, hr + 1, classroomEnd, CLASSROOM_RIGHT_BLOCK, day, target, colBatchMap);
-  if (lr > 0) added += parseMatrixBlock(grid, lr + 1, grid.length, LAB_BLOCK, day, target, colBatchMap);
+  added += parseMatrixBlock(grid, hr + 1, classroomEnd, CLASSROOM_LEFT_BLOCK, day, target, colBatchMap, pending);
+  added += parseMatrixBlock(grid, hr + 1, classroomEnd, CLASSROOM_RIGHT_BLOCK, day, target, colBatchMap, pending);
+  if (lr > 0) added += parseMatrixBlock(grid, lr + 1, grid.length, LAB_BLOCK, day, target, colBatchMap, pending);
+  return added;
+}
+
+/**
+ * Place the cells that named no section.
+ *
+ * These are batch-wide listings — "Project (AI/DS)", "HCI (SE, 22)" — where the
+ * sheet gives a department and year but no section letter. Previously they were
+ * dropped, which left the final-year timetables nearly empty.
+ *
+ * They are stored ONCE under the reserved ALL_SECTIONS key rather than copied
+ * into every section. Copying would both inflate the file and assert something
+ * the sheet does not say: a single lab cannot hold an entire batch, so "every
+ * section attends this" would be a fabrication. The frontend merges ALL_SECTIONS
+ * into whichever section the student picks, so the class is visible to the whole
+ * batch while the data stays truthful about what the sheet actually states.
+ */
+function flushSectionless(target, pending) {
+  let added = 0;
+  for (const item of pending) {
+    for (const dept of item.depts) {
+      if (addCourseToTT(target, {
+        dept, batch: item.batch, section: ALL_SECTIONS, day: item.day,
+        course: item.course, room: item.room, time: item.time,
+      })) added++;
+    }
+  }
   return added;
 }
 
@@ -951,6 +1020,7 @@ async function fetchReferenceTimetable() {
 function buildTTForSchool(grids, school) {
   const tt = {};
   SLOTS.length = 0;
+  const pending = [];   // cells naming no section; placed once every day is read
 
   for (const sheet of grids) {
     if (sheet.error) continue;
@@ -959,7 +1029,7 @@ function buildTTForSchool(grids, school) {
       // Computing uses one tab per weekday; the tab name IS the day.
       const day = normalizeDay(sheet.name);
       if (!day) continue;
-      parseGridToTT(sheet.grid, day, tt);
+      parseGridToTT(sheet.grid, day, tt, pending);
     } else if (school.format === "paired-matrix") {
       // Business and engineering keep all weekdays on a single tab and read
       // the day from the grid itself, so the tab name need not be a weekday.
@@ -968,6 +1038,8 @@ function buildTTForSchool(grids, school) {
       parseEngineeringGrid(sheet.grid, sheet.name, tt);
     }
   }
+
+  if (pending.length) flushSectionless(tt, pending);
 
   Object.values(tt).forEach((batches) =>
     Object.values(batches).forEach((sections) =>

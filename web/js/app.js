@@ -685,6 +685,16 @@ const DEFAULT_BLOCK_FLOORS={
 let BLOCK_FLOORS=cloneFloors(DEFAULT_BLOCK_FLOORS);
 
 const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+// Section key used by the generator for batch-wide classes the sheet lists
+// without a section letter. Never shown as a pickable section — it is merged
+// into whatever section the student selects.
+const ALL_SECTIONS="ALL";
+// Merge batch-wide entries into a section's own list, skipping any the section
+// already lists (same course, room and time) so nothing appears twice.
+function mergeSectionEntries(secData,allData){
+  const seen=new Set(secData.map(e=>`${e.name||e.c}|${e.location||e.l}|${e.time||e.t}`));
+  return secData.concat(allData.filter(e=>!seen.has(`${e.name||e.c}|${e.location||e.l}|${e.time||e.t}`)));
+}
 const DAYNAMES=["SUN","MON","TUE","WED","THU","FRI","SAT"];
 const CLASSROOM_SLOTS=["08:30-09:50","10:00-11:20","11:30-12:50","01:00-02:20","02:30-03:50","03:55-05:15","05:20-06:40","06:45-08:05"];
 const LAB_SLOTS=["08:30-11:15","11:30-02:15","02:30-05:15","05:20-08:05"];
@@ -1372,7 +1382,7 @@ function refreshTTFilters(){
   fillSelectOptions(batchSel,batches,null,'-- Batch --');
   if(prefs.batch&&batches.includes(prefs.batch)) batchSel.value=prefs.batch;
   const bat=batchSel.value;
-  const secs=Object.keys(((TT[dep]||{})[bat])||{}).sort();
+  const secs=Object.keys(((TT[dep]||{})[bat])||{}).filter(s=>s!==ALL_SECTIONS).sort();
   fillSelectOptions(secSel,secs,null,'-- Section --');
   if(prefs.sec&&secs.includes(prefs.sec)) secSel.value=prefs.sec;
   else if(secs.length===1) secSel.value=secs[0];
@@ -1420,7 +1430,7 @@ function setupTTFilterListeners(){
       // keeps the previous value when the new dept also offers that batch, and changing
       // dept fires no 'change' on the batch select, so blanking the section list here
       // left it empty until the next page load.
-      const secs=Object.keys(((TT[dep]||{})[batchSel.value])||{}).sort();
+      const secs=Object.keys(((TT[dep]||{})[batchSel.value])||{}).filter(s=>s!==ALL_SECTIONS).sort();
       fillSelectOptions(secSel,secs,null,'-- Section --');
       if(secs.length===1) secSel.value=secs[0];
       saveTTPrefs();loadTT();
@@ -1435,7 +1445,7 @@ function setupTTFilterListeners(){
     batchSel.dataset.liveBound='1';
     batchSel.addEventListener('change',()=>{
       const dep=deptSel.value,bat=batchSel.value;
-      const secs=Object.keys(((TT[dep]||{})[bat])||{}).sort();
+      const secs=Object.keys(((TT[dep]||{})[bat])||{}).filter(s=>s!==ALL_SECTIONS).sort();
       fillSelectOptions(secSel,secs,null,'-- Section --');
       if(secs.length===1) secSel.value=secs[0];
       saveTTPrefs();loadTT();
@@ -2170,7 +2180,12 @@ function loadTT(){
   const bat=document.getElementById('batch').value;
   const sec=document.getElementById('sec').value;
   const day=document.getElementById('day').value;
-  const rawData=(TT[dep]&&TT[dep][bat]&&TT[dep][bat][sec]&&TT[dep][bat][sec][day])||[];
+  // Batch-wide classes (the sheet names a dept and year but no section, e.g.
+  // "Project (AI/DS)") are stored once under ALL_SECTIONS. Fold them into
+  // whichever section is selected so the whole batch sees them.
+  const secData=(TT[dep]&&TT[dep][bat]&&TT[dep][bat][sec]&&TT[dep][bat][sec][day])||[];
+  const allData=(sec&&TT[dep]&&TT[dep][bat]&&TT[dep][bat][ALL_SECTIONS]&&TT[dep][bat][ALL_SECTIONS][day])||[];
+  const rawData=allData.length?mergeSectionEntries(secData,allData):secData;
   // A repeat (yellow) class must appear ONLY under "Repeat Courses", never in
   // the regular batch/section view. Drop any entry that matches a repeat one
   // for this dept+section+day (matched by time + room, or time + course name).

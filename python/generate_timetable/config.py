@@ -41,6 +41,11 @@ COLOUR_BATCH_MAP = {}  # filled automatically at runtime
 # overrides year-suffix / colour-map batch resolution — see resolve_batch.
 REPEAT_BATCH_KEY = "REPEAT"
 
+# Section key for batch-wide cells that name a department and year but no
+# section letter (e.g. "Project (AI/DS)"). Stored once under this key; the
+# frontend merges it into whichever section the student selects.
+ALL_SECTIONS = "ALL"
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -53,6 +58,14 @@ CELL_RE = re.compile(
     r"(?:,\s*(?:Gp?-([IV]+)|(\d{2})))?\s*\)",
     re.IGNORECASE
 )
+
+# A time written after the closing paren overrides the column's slot time,
+# e.g. "PF (SE-E) 09:30-10:50" runs 09:30-10:50, not the column's 08:30-09:50.
+CELL_TIME_OVERRIDE_RE = re.compile(r"(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})")
+
+# A parenthetical holding nothing but a section letter (optionally a subgroup
+# digit), e.g. "Web Comp (A)". The department then comes from the column header.
+SECTION_ONLY_RE = re.compile(r"^([A-H])(\d)?$", re.IGNORECASE)
 
 SLOT_COLS = {
     1: "08:30-09:50", 6: "10:00-11:20", 11: "11:30-12:50",

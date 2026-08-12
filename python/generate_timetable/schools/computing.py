@@ -4,8 +4,11 @@ import re
 
 from ..colour_mapper import colour_to_batch, is_yellow
 from ..config import (
+    ALL_SECTIONS,
     BATCH_MAP,
     CELL_RE,
+    CELL_TIME_OVERRIDE_RE,
+    SECTION_ONLY_RE,
     CLASSROOM_LEFT,
     CLASSROOM_RIGHT,
     COMPUTING_PROGRAM_CODES,
@@ -33,6 +36,11 @@ def parse_timetable_cell(text):
     t = one_line(text)
     paren = t.find(")")
     core = t[:paren + 1] if paren >= 0 else t
+    tail = t[paren + 1:] if paren >= 0 else ""
+    # Anything after the closing paren may carry an explicit time for this
+    # class, which takes precedence over the column it sits in.
+    ov = CELL_TIME_OVERRIDE_RE.search(tail)
+    time_override = f"{ov.group(1)}-{ov.group(2)}" if ov else None
     m = CELL_RE.match(core)
     if not m:
         return None
@@ -41,11 +49,16 @@ def parse_timetable_cell(text):
     section  = m.group(3)
     subgroup = m.group(4)
     group = m.group(5)
-    depts = [d.strip().upper() for d in re.split(r"\s*[/,]\s*", dept_str) if d.strip()]
+    raw_codes = [d.strip().upper() for d in re.split(r"\s*[/,]\s*", dept_str) if d.strip()]
     # Reject single-letter codes that aren't valid department codes (e.g. "G" from "G-I")
-    depts = [d for d in depts if len(d) >= 2]
+    depts = [d for d in raw_codes if len(d) >= 2]
     if not depts:
-        return None
+        # "Web Comp (A)" — the parenthetical is a bare section letter, not a
+        # department. Keep the cell and let the column header supply the dept.
+        if len(raw_codes) == 1 and SECTION_ONLY_RE.match(raw_codes[0]) and not section:
+            section = raw_codes[0].upper()
+        else:
+            return None
     if not section and group:
         section = f"G-{group.upper()}"
     if subgroup:
@@ -58,6 +71,7 @@ def parse_timetable_cell(text):
         "depts": depts,
         "section": section,
         "has_section": bool(section),
+        "time_override": time_override,
     }
 
 def is_ms_context(batch, dept):
@@ -179,6 +193,13 @@ def normalise_room(room):
         r"RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)", r)
     if m:
         return f"{m.group(1).upper()}-{m.group(2).strip()}"
+    # Names written without their block letter. The sheet has the same room as
+    # "C-Rawal 3", "Rawal 3 (GPU)" and "Rawal-3"; left alone they became three
+    # different rooms, so Free Rooms showed one of them idle while a class was
+    # actually in it. The Margala and Rawal labs are all C block.
+    m = re.match(r"(MARGALA|RAWAL)\s*-?\s*(\d+)\b", r)
+    if m:
+        return f"C-{m.group(1)} {m.group(2)}"
     return r
 
 # ---------------------------------------------------------------------------
@@ -266,7 +287,7 @@ def build_col_dept_map(header_rows):
 # Matrix block parser — now receives both text_grid and colour_grid
 # ---------------------------------------------------------------------------
 
-def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, tt, col_dept_map=None):
+def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, tt, col_dept_map=None, pending=None):
     """
     Parse one rectangular block of the computing school matrix.
 
@@ -278,7 +299,9 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
     """
     if col_dept_map is None:
         col_dept_map = {}
-    
+    if pending is None:
+        pending = []
+
     added = 0
     for r in range(start_row, min(end_row, len(text_grid))):
         row = text_grid[r]
@@ -318,39 +341,77 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                 section = parsed["section"]
                 if not section and any(is_ms_context(batch, dept) for dept in depts_to_add):
                     section = "A"
-                if not section:
-                    continue
-                
+
+                # An explicit time in the cell beats the column's slot.
+                slot_time = parsed["time_override"] or block["slot_map"][time_col]
+
                 # Yellow cells are repeat classes: route them to a dedicated
                 # REPEAT bucket (regardless of the year they'd otherwise map
                 # to) so they surface under the frontend's "Repeat Courses"
                 # department instead of polluting a normal batch.
                 store_batch = REPEAT_BATCH_KEY if is_yellow(cell_colour) else batch
+
+                if not section:
+                    # Cells like "Project (AI/DS)" or "HCI (SE, 22)" name no
+                    # section because they apply to the whole batch. Dropping
+                    # them silently emptied the final-year timetables, so hold
+                    # them here and fan them out across that batch's sections
+                    # once every day has been read (see flush_sectionless).
+                    pending.append({
+                        "depts": depts_to_add, "batch": store_batch, "day": day,
+                        "course": parsed["course"], "room": room, "time": slot_time,
+                    })
+                    break
+
                 for dept_key in depts_to_add:
                     if add_course(tt, dept_key, store_batch, section,
-                                  day, parsed["course"], room,
-                                  block["slot_map"][time_col]):
+                                  day, parsed["course"], room, slot_time):
                         added += 1
                 break  # found the cell for this slot, move to next slot
 
     return added
 
-def parse_grid_to_tt(text_grid, colour_grid, day, tt):
+def parse_grid_to_tt(text_grid, colour_grid, day, tt, pending=None):
     hr = find_header_row(text_grid)
     if hr < 0:
         return 0
     lr = find_lab_header_row(text_grid, hr + 1)
     classroom_end = lr if lr > 0 else len(text_grid)
-    
+
     # Department labels are usually merged cells in the rows above the Room/time header.
     dept_header_rows = text_grid[max(0, hr - 3):hr + 1]
     col_dept_map = build_col_dept_map(dept_header_rows)
-    
+
     added = 0
-    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_LEFT,  day, tt, col_dept_map)
-    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_RIGHT, day, tt, col_dept_map)
+    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_LEFT,  day, tt, col_dept_map, pending)
+    added += parse_matrix_block(text_grid, colour_grid, hr + 1, classroom_end, CLASSROOM_RIGHT, day, tt, col_dept_map, pending)
     if lr > 0:
-        added += parse_matrix_block(text_grid, colour_grid, lr + 1, len(text_grid), LAB_BLOCK, day, tt, col_dept_map)
+        added += parse_matrix_block(text_grid, colour_grid, lr + 1, len(text_grid), LAB_BLOCK, day, tt, col_dept_map, pending)
+    return added
+
+
+def flush_sectionless(tt, pending):
+    """
+    Place the cells that named no section.
+
+    These are batch-wide listings — "Project (AI/DS)", "HCI (SE, 22)" — where
+    the sheet gives a department and year but no section letter. Previously
+    they were dropped, which left the final-year timetables nearly empty.
+
+    They are stored ONCE under the reserved ALL_SECTIONS key rather than copied
+    into every section. Copying would both inflate the file and assert
+    something the sheet does not say: a single lab cannot hold an entire batch,
+    so "every section attends this" would be a fabrication. The frontend merges
+    ALL_SECTIONS into whichever section the student picks (see loadTT), so the
+    class is visible to the whole batch while the data stays truthful about
+    what the sheet actually states.
+    """
+    added = 0
+    for item in pending:
+        for dept in item["depts"]:
+            if add_course(tt, dept, item["batch"], ALL_SECTIONS, item["day"],
+                          item["course"], item["room"], item["time"]):
+                added += 1
     return added
 
 
@@ -359,6 +420,7 @@ def generate(service):
     school_info = SCHOOLS[school_name]
     tt = {}
     total = 0
+    pending = []   # cells naming no section; placed once every day is read
 
     sheet_url = f"https://docs.google.com/spreadsheets/d/{school_info['id']}"
     dlog(f"--- {school_name.upper()} --- sheet: {sheet_url}")
@@ -398,10 +460,15 @@ def generate(service):
             dlog_warn(f"  {school_name}/{tab} returned empty grid")
             continue
 
-        added = parse_grid_to_tt(text_grid, colour_grid, day, tt)
+        added = parse_grid_to_tt(text_grid, colour_grid, day, tt, pending)
         total += added
         print(f"{added} entries")
         dlog(f"  {school_name}/{tab}: {added} entries parsed")
+
+    if pending:
+        fanned = flush_sectionless(tt, pending)
+        total += fanned
+        dlog(f"  {school_name}: {len(pending)} section-less cells -> {fanned} entries")
 
     dlog(f"  {school_name} total: {total} entries, {len(tt)} depts")
     return tt, total
