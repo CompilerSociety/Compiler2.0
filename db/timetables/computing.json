@@ -29,12 +29,12 @@
             },
             {
               "name": "Func Eng Lab (A1)",
-              "location": "A-KHYBER 3",
+              "location": "C-CALL-1",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "A-KHYBER 4",
+              "location": "C-CALL-2",
               "time": "11:30-02:15"
             }
           ],
@@ -169,12 +169,12 @@
             },
             {
               "name": "Func Eng Lab (C1)",
-              "location": "A-CALL-3",
+              "location": "C-RAWAL 3",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "MEHRAN-2",
+              "location": "B-DIGITAL",
               "time": "11:30-02:15"
             }
           ],
@@ -239,12 +239,12 @@
             },
             {
               "name": "Func Eng Lab (D1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-3",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "C-CALL-2",
+              "location": "MEHRAN-2",
               "time": "11:30-02:15"
             }
           ],
@@ -405,23 +405,23 @@
               "time": "08:30-11:15"
             }
           ],
-    "Thursday": [
-       {
-      "name": "Seerah Cancelled",
-      "location": "C-301",
-      "time": "11:30-12:25"
-     },
-      {
-       "name": "Func Eng ReSch",
-       "location": "C-309",
-       "time": "02:30-03:50"
-      },
-      {
-        "name": "IICT Lab",
-       "location": "D-IT LAB 2",
-        "time": "08:30-11:15"
-        }
-        ]
+          "Thursday": [
+            {
+              "name": "Calculus",
+              "location": "C-302",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "PF",
+              "location": "C-302",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Ideology of Pak",
+              "location": "C-302",
+              "time": "01:00-02:45"
+            }
+          ]
         },
         "H": {
           "Monday": [
@@ -613,7 +613,7 @@
             },
             {
               "name": "DLD Lab",
-              "location": "B-DIGITAL",
+              "location": "C-RAWAL 3",
               "time": "02:30-05:15"
             }
           ],
@@ -840,7 +840,7 @@
             },
             {
               "name": "DLD Lab",
-              "location": "B-DIGITAL",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             }
           ]
@@ -910,7 +910,7 @@
             },
             {
               "name": "DLD Lab",
-              "location": "B-DIGITAL",
+              "location": "C-RAWAL 3",
               "time": "02:30-05:15"
             }
           ]
@@ -1173,7 +1173,7 @@
             },
             {
               "name": "DLD Lab",
-              "location": "B-DIGITAL",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             }
           ],
@@ -2658,12 +2658,12 @@
             },
             {
               "name": "Func Eng Lab (B1)",
-              "location": "A-CALL-3",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "MEHRAN-2",
+              "location": "B-DIGITAL",
               "time": "08:30-11:15"
             }
           ],
@@ -5640,12 +5640,12 @@
             },
             {
               "name": "Func Eng Lab (B1)",
-              "location": "A-CALL-3",
+              "location": "C-RAWAL 3",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "MEHRAN-2",
+              "location": "B-DIGITAL",
               "time": "02:30-05:15"
             }
           ],
@@ -6881,5 +6881,5 @@
     }
   },
   "count": 1138,
-  "generatedAt": "2026-08-13T11:38:14.180379+00:00"
+  "generatedAt": "2026-08-13T12:30:59.752202+00:00"
 }
