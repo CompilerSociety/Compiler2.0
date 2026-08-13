@@ -1326,6 +1326,7 @@ function applyTimetablePayload(payload,sourceLabel){
   if(!payload.tt||typeof payload.tt!=='object') throw new Error('Timetable payload is missing timetable data');
 
   TT=payload.tt;
+  try{ console.debug('applyTimetablePayload: source=', sourceLabel, 'depts=', Object.keys(TT||{}).length); }catch(e){}
   if(Array.isArray(payload.slots)&&payload.slots.length) replaceSlots(payload.slots);
   else rebuildSlotsFromTimetable(TT);
 
@@ -1828,6 +1829,7 @@ function onSchoolChange(){
   const schoolSel=document.getElementById('school');
   if(!schoolSel) return;
   const school=schoolSel.value;
+  try{ console.debug('onSchoolChange: selected school ->', school); }catch(e){}
   setTimetableSelectorState(document.getElementById('dept'),'Loading departments...',true);
   setTimetableSelectorState(document.getElementById('batch'),'Select department first',true);
   setTimetableSelectorState(document.getElementById('sec'),'Select batch first',true);

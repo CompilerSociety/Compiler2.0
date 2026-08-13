@@ -662,12 +662,13 @@
 
   function renderLookup(){
     const fields=$('m-lookup-fields');
-    const programs=Object.keys(TT||{});
+    const src = ttFor(lk.school) || {};
+    const programs=Object.keys(src||{});
     if(lk.program&&!programs.includes(lk.program)) lk.program='';
-    const batches=lk.program?Object.keys(TT[lk.program]||{}):[];
+    const batches=lk.program?Object.keys(src[lk.program]||{}):[];
     if(lk.batch&&!batches.includes(lk.batch)) lk.batch='';
     const sections=(lk.program&&lk.batch)
-      ? Object.keys(TT[lk.program][lk.batch]||{}).filter(s=>s!==ALL_SECTIONS)
+      ? Object.keys(src[lk.program][lk.batch]||{}).filter(s=>s!==ALL_SECTIONS)
           .sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
       : [];
     if(lk.section&&!sections.includes(lk.section)) lk.section='';
