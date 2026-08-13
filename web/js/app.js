@@ -2305,7 +2305,7 @@ function onDayChange(){
     const cardClass=busyNow?'room-card busy-now':'room-card free-now';
 
     const statusBadge=busyNow
-      ?`<span class="status-now busy" title="${busyNow.course} · ${busyNow.dept} ${busyNow.batch}-${busyNow.section}">${busyNow.course}</span>`
+      ?`<span class="status-now busy" title="${escHtml(busyNow.course||'')} · ${escHtml(busyNow.dept||'')} ${escHtml(busyNow.batch||'')}-${escHtml(busyNow.section||'')}">${escHtml(busyNow.course||'')}</span>`
       :`<span class="status-now free">FREE NOW</span>`;
 
     const slotsHTML=slotInfo.map(({slot,occupiedBy})=>{
@@ -2319,7 +2319,7 @@ function onDayChange(){
         dotClass=occupiedBy?'busy':'free';
       }
       statusHTML=occupiedBy
-        ?`<span class="slot-status-busy" title="${occupiedBy.course} · ${occupiedBy.dept} ${occupiedBy.batch}-${occupiedBy.section}">${occupiedBy.course}</span>`
+        ?`<span class="slot-status-busy" title="${escHtml(occupiedBy.course||'')} · ${escHtml(occupiedBy.dept||'')} ${escHtml(occupiedBy.batch||'')}-${escHtml(occupiedBy.section||'')}">${escHtml(occupiedBy.course||'')}</span>`
         :`<span class="slot-status-free">FREE</span>`;
       return `<div class="slot-row ${slotClass}${isCurrent?' is-current':''}">
         <div class="slot-dot ${dotClass}"></div>
@@ -2331,7 +2331,7 @@ function onDayChange(){
 
     return `<div class="${cardClass}">
       <div class="room-card-head">
-        <span class="room-card-name">${room}</span>
+        <span class="room-card-name">${escHtml(room)}</span>
         ${statusBadge}
       </div>
       <div class="room-card-body">${slotsHTML}</div>
@@ -2446,7 +2446,7 @@ function loadRepeatTT(){
       const cls=/cancel/i.test(note)?'tt-course tt-repeat is-cancelled':'tt-course tt-repeat';
       const isCurrent=currentSlot && String(r.time||'').includes('-') && String(r.time||'').split('-')[0].trim()===currentSlot.split('-')[0].trim();
       const fmtTime = r.time && r.time.includes('-') ? fmtSlot(r.time) : r.time;
-      return `<tr class="${isCurrent?'is-current':''}"><td>${noteBadgeHTML(note)}<div class="${cls}">${stripNote(r.name)}</div></td><td><div class="tt-day">${r.day}</div></td><td><div class="tt-sec">${secLabel}</div></td><td><div class="tt-room">${r.location}</div></td><td><div class="tt-time">${fmtTime}</div></td></tr>`;
+      return `<tr class="${isCurrent?'is-current':''}"><td>${noteBadgeHTML(note)}<div class="${cls}">${escHtml(stripNote(r.name))}</div></td><td><div class="tt-day">${escHtml(r.day)}</div></td><td><div class="tt-sec">${escHtml(secLabel)}</div></td><td><div class="tt-room">${escHtml(r.location)}</div></td><td><div class="tt-time">${escHtml(fmtTime)}</div></td></tr>`;
     }).join('')}</tbody>
   </table>`;
 }
@@ -2521,7 +2521,7 @@ function loadTT(){
         const cls=/cancel/i.test(note)?'tt-course is-cancelled':'tt-course';
         const isCurrent=currentSlot && String(time).includes('-') && String(time).split('-')[0].trim()===currentSlot.split('-')[0].trim();
         const fmtTime = time && time.includes('-') ? fmtSlot(time) : time;
-        return `<tr class="${isCurrent?'is-current':''}"><td>${noteBadgeHTML(note)}<div class="${cls}">${stripNote(name)}</div></td><td><div class="tt-room">${location}</div></td><td><div class="tt-time">${fmtTime}</div></td></tr>`;
+        return `<tr class="${isCurrent?'is-current':''}"><td>${noteBadgeHTML(note)}<div class="${cls}">${escHtml(stripNote(name))}</div></td><td><div class="tt-room">${escHtml(location)}</div></td><td><div class="tt-time">${escHtml(fmtTime)}</div></td></tr>`;
       }).join('')}</tbody>
     </table>`;
   }
@@ -3065,7 +3065,7 @@ function searchSeatingPlan(){
       result.innerHTML=renderUiState({
         kind:'empty',
         title:'No seating record found',
-        message:`No seating record matched "${query.toUpperCase()}".`,
+        message:`No seating record matched "${escHtml(query.toUpperCase())}".`,
         note:'Check spelling or try your NU ID.'
       });
       return;
@@ -3891,7 +3891,7 @@ function renderFacultyVault() {
     grid.innerHTML = renderUiState({
       kind:'empty',
       title:'No teachers matched',
-      message:`No faculty members match "${search.toUpperCase()}".`,
+      message:`No faculty members match "${escHtml(search.toUpperCase())}".`,
       note:'Try another name or clear the search box.'
     });
     return;
