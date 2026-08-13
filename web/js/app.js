@@ -53,17 +53,34 @@ let PROFILE_SUCCESS_TIMEOUT=null;
 let PROFILE_MODAL_RETURN_FOCUS=null;
 let PROFILE_MODAL_KEYDOWN_HANDLER=null;
 
+// Profiles saved before AI was mapped to its timetable key still hold the bare
+// roster code, which matches no department in TT — so every Today/Week pane
+// comes back empty until the student signs in again. Repair those on read, and
+// write the repair back so the next seedProfileSchedulePrefs() seeds the
+// desktop tabs with the right department too.
+//
+// Deliberately limited to this one value: FSM department keys are mixed case
+// ("BS Business Analytics"), so a hand-picked profile must pass through
+// untouched rather than go near deptCodeToLabel's uppercasing.
+function healProfileDepartment(profile){
+  if(!profile) return profile;
+  const dept=String(profile.department||'').trim().toUpperCase();
+  if(dept!=='AI'&&dept!=='BAI') return profile;
+  const healed={...profile,department:'BS AI'};
+  setProfileCookie(healed);
+  return healed;
+}
 function getProfileCookie(){
   // Prefer localStorage (works on file:// where cookies are blocked), fall back to cookie.
   try{
     const stored=localStorage.getItem(PROFILE_COOKIE_KEY);
-    if(stored) return JSON.parse(stored);
+    if(stored) return healProfileDepartment(JSON.parse(stored));
   }catch(err){ /* localStorage unavailable */ }
   const cookies=document.cookie ? document.cookie.split(';') : [];
   const match=cookies.map(cookie=>cookie.trim()).find(cookie=>cookie.startsWith(`${PROFILE_COOKIE_KEY}=`));
   if(!match) return null;
   try{
-    return JSON.parse(decodeURIComponent(match.slice(PROFILE_COOKIE_KEY.length+1)));
+    return healProfileDepartment(JSON.parse(decodeURIComponent(match.slice(PROFILE_COOKIE_KEY.length+1))));
   }catch(err){
     return null;
   }
@@ -391,7 +408,11 @@ function closeProfileModal(){
 function deptCodeToLabel(code){
   const normalized=(code||'').toUpperCase();
   switch(normalized){
-    case 'BAI': return 'BS AI';
+    // Every roster row writes AI, never BAI — the timetable keys it "BS AI", so
+    // without this case an AI profile carries a department no timetable has and
+    // the student's Today/Week panes come back empty. BAI is kept only for rows
+    // an older deptLabelToCode published to db/students/<year>.json.
+    case 'AI': case 'BAI': return 'BS AI';
     case 'CS': return 'BS CS';
     case 'SE': return 'BS SE';
     case 'DS': return 'BS DS';
@@ -404,15 +425,12 @@ function deptCodeToLabel(code){
 // label straight through would break the round trip back out via
 // parseProfileFromStudent, which feeds every row through deptCodeToLabel.
 function deptLabelToCode(label){
-  const normalized=String(label||'').trim().toUpperCase();
-  switch(normalized){
-    case 'BS AI': return 'BAI';
-    case 'BS CS': return 'CS';
-    case 'BS SE': return 'SE';
-    case 'BS DS': return 'DS';
-    case 'BS CY': return 'CY';
-    default: return normalized.replace(/^BS\s+/,'');
-  }
+  // Dropping the "BS " prefix is the whole mapping: it produces exactly the
+  // codes the roster already stores (CS, SE, DS, CY, AI) and the same value
+  // profileDeptCode() feeds the show-up and exam tabs. "BS AI" used to be
+  // special-cased to BAI, which no roster row, COMPUTING_DEPTS or
+  // api/timetable.js ever recognised.
+  return String(label||'').trim().toUpperCase().replace(/^BS\s+/,'');
 }
 // Publish a just-registered student to db/students/<batch>.json so the roster
 // knows they exist — the seating-plan email is otherwise the only thing that
