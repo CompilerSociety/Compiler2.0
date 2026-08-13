@@ -120,18 +120,21 @@
     const booting=route==='splash';
     $('m-splash').classList.toggle('on',booting);
     if(booting){
-      ['m-signin','m-onboard','m-main'].forEach(id=>$(id).classList.remove('on'));
+      ['m-signin','m-onboard','m-manual','m-main'].forEach(id=>$(id).classList.remove('on'));
       return;
     }
     const signedIn=Boolean(profile());
     const onboarding=route==='onboard';
-    const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding);
+    const manual=route==='manual';
+    const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding&&!manual);
 
     $('m-signin').classList.toggle('on',signin);
     $('m-onboard').classList.toggle('on',onboarding);
-    $('m-main').classList.toggle('on',!signin&&!onboarding);
+    $('m-manual').classList.toggle('on',manual);
+    $('m-main').classList.toggle('on',!signin&&!onboarding&&!manual);
     const inner=['today','lookup','rooms','faculty','facdetail','exams','profile'];
-    if(signin||onboarding){
+    if(signin||onboarding||manual){
+      if(manual) renderManual();
       inner.forEach(id=>$('m-'+id).classList.remove('on'));
       return;
     }
@@ -149,7 +152,10 @@
     });
 
     const p=profile();
-    $('m-avatar-initials').textContent=p?initials(p.name):'—';
+    // A hand-picked FSE/FSM profile has no name to initial, so fall back to
+    // the department code ("EE", "BBA") which is what identifies it.
+    $('m-avatar-initials').textContent=p?(initials(p.name)!=='—'?initials(p.name)
+      :(String(p.department||'').replace(/^BS\s+/i,'').slice(0,2).toUpperCase()||'—')):'—';
 
     if(route==='today') renderToday();
     else if(route==='lookup') renderLookup();
@@ -217,14 +223,81 @@
     ).join('');
   }
 
+  /* ══ MANUAL SETUP (FSE / FSM) ══════════════════════════════════════
+     Only FSC publishes a roll-no → student roster, so these two schools
+     choose their section by hand. The result goes into the same profile
+     cookie the roll-no flow writes — it never leaves the device. */
+  const MANUAL_SCHOOLS={engineering:'FSE',business:'FSM'};
+  const mn={school:'',program:'',batch:'',section:''};
+
+  function renderManual(){
+    const src=mn.school?ttFor(mn.school):{};
+    const programs=Object.keys(src||{}).sort();
+    if(mn.program&&!programs.includes(mn.program)) mn.program='';
+    const batches=mn.program?Object.keys(src[mn.program]||{}).sort():[];
+    if(mn.batch&&!batches.includes(mn.batch)) mn.batch='';
+    const sections=(mn.program&&mn.batch)
+      ? Object.keys(src[mn.program][mn.batch]||{}).filter(s=>s!==ALL_SECTIONS)
+          .sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
+      : [];
+    if(mn.section&&!sections.includes(mn.section)) mn.section='';
+
+    const schoolEmpty=mn.school&&!programs.length
+      ? 'Still loading this school’s timetable — give it a moment.' : 'Pick a school first.';
+    $('m-manual-fields').innerHTML=[
+      fieldHTML('School','school',mn.school?MANUAL_SCHOOLS[mn.school]:'',
+                Object.keys(MANUAL_SCHOOLS),mn.school,k=>MANUAL_SCHOOLS[k]),
+      fieldHTML('Department','program',mn.program,programs,mn.program,null,schoolEmpty),
+      fieldHTML('Batch','batch',mn.batch,batches,mn.batch,null,'Pick a department first.'),
+      fieldHTML('Section','section',mn.section,sections,mn.section,null,'Pick a batch first.')
+    ].join('');
+    $('m-manual-fields').querySelectorAll('.m-chip').forEach(chip=>{
+      chip.addEventListener('click',()=>{
+        const f=chip.dataset.field,v=chip.dataset.value;
+        if(f==='school'){ if(mn.school!==v){ mn.school=v; mn.program=''; mn.batch=''; mn.section=''; } }
+        else if(f==='program'){ mn.program=mn.program===v?'':v; mn.batch=''; mn.section=''; }
+        else if(f==='batch'){ mn.batch=mn.batch===v?'':v; mn.section=''; }
+        else if(f==='section'){ mn.section=mn.section===v?'':v; }
+        renderManual();
+      });
+    });
+  }
+
+  function saveManual(){
+    const el=$('m-manual-status');
+    if(!mn.school||!mn.program||!mn.batch||!mn.section){
+      if(el){ el.textContent='Pick a school, department, batch and section first.'; el.classList.add('is-error'); }
+      return;
+    }
+    if(el){ el.textContent=''; el.classList.remove('is-error'); }
+    // No name/roll no to store — this profile is section-level only.
+    setProfileCookie({
+      name:'', nuid:'', department:mn.program, batch:mn.batch,
+      section:mn.section, school:mn.school, manual:true
+    });
+    setSkipped(false);
+    lk.school=mn.school;
+    go('today',true);
+    toast(MANUAL_SCHOOLS[mn.school]+' · '+mn.program+' '+mn.batch+'-'+mn.section);
+  }
+
   /* ══ TODAY / WEEK ══════════════════════════════════════════════════ */
   let weekMode=false;
 
   // The section's classes for one day, with batch-wide ("ALL") entries folded
   // in exactly as the desktop timetable does.
-  function classesFor(dept,batch,sec,day){
-    const base=(TT[dept]&&TT[dept][batch]&&TT[dept][batch][sec]&&TT[dept][batch][sec][day])||[];
-    const all=(sec&&TT[dept]&&TT[dept][batch]&&TT[dept][batch][ALL_SECTIONS]&&TT[dept][batch][ALL_SECTIONS][day])||[];
+  // Which timetable object a school's classes live in. The global TT only ever
+  // holds the school the desktop layer last loaded (computing by default);
+  // ROOM_TT holds all three at once, refreshed on a timer for Free Rooms, so
+  // it is the reliable source for an FSE/FSM profile.
+  function ttFor(school){
+    if(school&&school!=='computing'&&typeof ROOM_TT!=='undefined'&&ROOM_TT[school]) return ROOM_TT[school];
+    return TT;
+  }
+  function classesFor(dept,batch,sec,day,src){
+    const t=src||TT;
+    const base=(t[dept]&&t[dept][batch]&&t[dept][batch][sec]&&t[dept][batch][sec][day])||[];
+    const all=(sec&&t[dept]&&t[dept][batch]&&t[dept][batch][ALL_SECTIONS]&&t[dept][batch][ALL_SECTIONS][day])||[];
     const merged=all.length?mergeSectionEntries(base,all):base;
     return sortByTime(merged);
   }
@@ -232,10 +305,13 @@
     const p=profile();
     if(!p) return null;
     const dept=String(p.department||'').trim();
-    const batch=(typeof profileFullBatch==='function')?profileFullBatch(p):String(p.batch||'');
+    // A hand-picked FSE/FSM profile stores the batch exactly as the timetable
+    // keys it, so it must not go through the "25" -> "2025" roll-no expansion.
+    const batch=p.manual?String(p.batch||'')
+      :((typeof profileFullBatch==='function')?profileFullBatch(p):String(p.batch||''));
     const sec=String(p.section||'').trim().toUpperCase();
     if(!dept||!batch||!sec) return null;
-    return {dept,batch,sec,profile:p};
+    return {dept,batch,sec,profile:p,tt:ttFor(p.school)};
   }
 
   function lockedHTML(){
@@ -271,8 +347,8 @@
 
   function renderTodayList(keys,pane){
     const day=todayName();
-    const list=classesFor(keys.dept,keys.batch,keys.sec,day);
-    if(!Object.keys(TT).length){
+    const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+    if(!Object.keys(keys.tt||{}).length){
       pane.innerHTML='<div class="m-empty">Loading your timetable…</div>';
       return;
     }
@@ -364,10 +440,10 @@
   }
 
   function renderWeek(keys,pane){
-    if(!Object.keys(TT).length){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
+    if(!Object.keys(keys.tt||{}).length){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
     const today=todayName();
     const cards=DAYS.map(day=>{
-      const list=classesFor(keys.dept,keys.batch,keys.sec,day);
+      const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
       const body=list.length
         ? list.map(e=>{
             const time=e.time||e.t||'';
@@ -918,12 +994,17 @@
     }
     const cats=(typeof NOTIFICATION_CATEGORIES!=='undefined')?NOTIFICATION_CATEGORIES:[];
     const prefs=(typeof readNotifPrefs==='function')?readNotifPrefs():{};
-    const batch=(typeof profileFullBatch==='function')?profileFullBatch(p):p.batch;
+    const batch=p.manual?String(p.batch||'')
+      :((typeof profileFullBatch==='function')?profileFullBatch(p):p.batch);
+    const av=$('m-avatar-initials')?$('m-avatar-initials').textContent:initials(p.name);
+    // Manual profiles have no name or roll no — lead with the school instead.
+    const sub=[p.manual?MANUAL_SCHOOLS[p.school]:p.nuid,p.department,p.section]
+      .filter(Boolean).join(' · ');
     out.innerHTML=`<div class="m-pcard">
-        <div class="m-pcard-avatar">${esc(initials(p.name))}</div>
+        <div class="m-pcard-avatar">${esc(av)}</div>
         <div style="min-width:0">
-          <div class="m-pcard-name">${esc(p.name||'Student')}</div>
-          <div class="m-pcard-sub">${esc(p.nuid||'')} · ${esc(p.department||'')} · ${esc(p.section||'')}</div>
+          <div class="m-pcard-name">${esc(p.name||p.department||'Student')}</div>
+          <div class="m-pcard-sub">${esc(sub)}</div>
         </div>
       </div>
       <div class="m-section-label">Notifications</div>
@@ -963,12 +1044,9 @@
   function wire(){
     $('m-signin-btn').addEventListener('click',doSignIn);
     $('m-nuid').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
-    $('m-skip-btn').addEventListener('click',()=>{
-      setSkipped(true);
-      route='today';
-      render();
-      toast('Browsing without a profile');
-    });
+    $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
+    $('m-manual-go').addEventListener('click',saveManual);
+    $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });
     $('m-onboard-go').addEventListener('click',()=>{ go('today',true); });
     $('m-onboard-back').addEventListener('click',()=>{
       if(typeof clearProfileCookie==='function') clearProfileCookie();

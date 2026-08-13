@@ -22,7 +22,10 @@
       <p class="m-hero-sub">Your timetable, free rooms, faculty and exams — in one place.</p>
     </div>
     <div class="m-signin-bottom">
-      <label class="m-field-label" for="m-nuid">YOUR NU ID</label>
+      <!-- Only the FSC roster is published as a lookup table, so the roll-no
+           path can only resolve FSC students. FSE/FSM pick their section by
+           hand on the #m-manual screen instead. -->
+      <label class="m-field-label" for="m-nuid">YOUR NU ID (FOR FSC STUDENTS ONLY)</label>
       <div class="m-input-wrap">
         <input class="m-input" id="m-nuid" type="text" inputmode="text" autocomplete="username"
                placeholder="22i-1234" maxlength="20" aria-describedby="m-signin-status">
@@ -30,9 +33,23 @@
       </div>
       <div class="m-signin-status" id="m-signin-status" role="status" aria-live="polite"></div>
       <button class="m-btn-primary" id="m-signin-btn" type="button">Continue</button>
-      <button class="m-btn-ghost" id="m-skip-btn" type="button">Skip login</button>
+      <button class="m-btn-ghost" id="m-manual-btn" type="button">FOR FSE &amp; FSM</button>
       <div class="m-signin-foot">Built with love by Compiler Society</div>
     </div>
+  </section>
+
+  <!-- ── Manual setup (FSE / FSM) ────────────────────────────────────────
+       No roster lookup for these two schools, so the student picks school →
+       department → batch → section themselves. The result is kept in the same
+       profile cookie the roll-no flow writes; nothing is sent anywhere. -->
+  <section class="m-screen m-onboard" id="m-manual">
+    <div class="m-kicker">FSE &amp; FSM</div>
+    <h2 class="m-title-lg">Pick your section.</h2>
+    <p class="m-onboard-copy">Your school isn’t on the roll-no roster yet, so choose it here. This stays on your phone.</p>
+    <div id="m-manual-fields"></div>
+    <div class="m-signin-status" id="m-manual-status" role="status" aria-live="polite"></div>
+    <button class="m-btn-primary" id="m-manual-go" type="button">Save and continue</button>
+    <button class="m-btn-ghost" id="m-manual-back" type="button">Back to NU ID</button>
   </section>
 
   <!-- ── Onboarding confirm ──────────────────────────────────────────── -->
