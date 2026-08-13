@@ -4,10 +4,11 @@
   "description": "Class timetable, free rooms, seating plan, exam & show-up schedule, and faculty vault for FAST NUCES Islamabad.",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
   "orientation": "portrait",
-  "background_color": "#f0f7f0",
-  "theme_color": "#0a7a3a",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "/icons/icon-192.png",

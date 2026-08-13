@@ -716,7 +716,13 @@ registerServiceWorker();
 let _deferredInstallPrompt=null;
 const PWA_DISMISS_KEY='pwa_install_dismissed_at';
 function _isStandalone(){
-  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+  // The manifest asks for "fullscreen" (to drop the Android nav bar) and falls
+  // back through standalone/minimal-ui, so an installed app can report any of
+  // the three. Testing only for standalone made every fullscreen install look
+  // uninstalled and re-showed the "Download V Table app" bar to people who
+  // already had it. navigator.standalone covers iOS, which has no display-mode.
+  return ['fullscreen','standalone','minimal-ui'].some(m=>window.matchMedia(`(display-mode: ${m})`).matches)
+    || window.navigator.standalone===true;
 }
 function _isiOS(){
   const ua=window.navigator.userAgent||'';
