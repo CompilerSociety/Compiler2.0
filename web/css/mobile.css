@@ -416,26 +416,44 @@ body.has-pwa-bar{padding-bottom:0!important}
 /* Leaderboard: the desktop table, restyled in place. Scoped to .m-arcade so
    the desktop board keeps its own look. */
 .m-play-lb:empty{display:none}
-.m-arcade .cr-lb{margin:0;border:1px solid var(--line);border-radius:22px;background:#fff}
+/* Every rule below is written with THREE classes on purpose.
+
+   This table is the desktop's, borrowed into the phone, so it also carries the
+   desktop's dark-theme rules — and those are written as
+   `html[data-theme="dark"] .cr-lb-table td`, specificity (0,2,2), which beat a
+   plain `.m-arcade .cr-lb-table td` at (0,2,1). With the phone's own light
+   background still winning, dark mode painted near-white text (#e7f5ec) onto
+   the near-white highlight of your own row and it disappeared completely.
+
+   The phone layout is light-only for now (dark is deferred — see too_do.md),
+   so the borrowed table follows the phone's palette whatever the desktop theme
+   says. Going through `.m-play-lb` gets every rule to (0,3,x), which clears
+   the dark rules outright instead of racing them. */
+.m-arcade .m-play-lb .cr-lb{margin:0;border:1px solid var(--line);border-radius:22px;background:#fff}
 /* Stack the title over its status: side by side, "DUCK HUNTER LEADERBOARD" and
    a status message both wrap on a 390px screen and the head grows to four
    ragged lines. */
-.m-arcade .cr-lb-head{flex-direction:column;align-items:flex-start;gap:3px;background:#fff;
+.m-arcade .m-play-lb .cr-lb-head{flex-direction:column;align-items:flex-start;gap:3px;background:#fff;
   border-bottom:1px solid var(--line);padding:13px 17px}
-.m-arcade .cr-lb-title{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;
+.m-arcade .m-play-lb .cr-lb-title{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--green-deep)}
-.m-arcade .cr-lb-status{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute)}
-.m-arcade .cr-lb-table{font-family:var(--sans);font-size:13px}
-.m-arcade .cr-lb-table th{font-family:var(--mono);font-size:9px;letter-spacing:.11em;color:var(--mute);
+.m-arcade .m-play-lb .cr-lb-status{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute)}
+.m-arcade .m-play-lb .cr-lb-table{font-family:var(--sans);font-size:13px}
+.m-arcade .m-play-lb .cr-lb-table th{font-family:var(--mono);font-size:9px;letter-spacing:.11em;color:var(--mute);
   padding:9px 16px;border-bottom:1px solid var(--line)}
-.m-arcade .cr-lb-table td{padding:11px 16px;border-bottom:1px solid var(--line);color:var(--ink)}
-.m-arcade .cr-lb-table td.cr-rank{font-family:var(--mono);font-size:13px;color:var(--mute-2);width:34px}
-.m-arcade .cr-lb-table td.cr-score{font-family:var(--mono);color:var(--green-deep);font-weight:500}
-.m-arcade .cr-lb-row-me{background:var(--tint)}
-.m-arcade .cr-lb-row-me td{color:var(--green-deep);font-weight:700}
-.m-arcade .cr-lb-empty,.m-arcade .cr-lb-table td.cr-lb-cta{font-family:var(--sans);font-size:12.5px;
-  padding:18px 16px;text-align:center;letter-spacing:0}
-.m-arcade .cr-lb-table td.cr-lb-cta{color:var(--green-deep);font-weight:600;text-decoration:underline}
+.m-arcade .m-play-lb .cr-lb-table td{padding:11px 16px;border-bottom:1px solid var(--line);color:var(--ink)}
+.m-arcade .m-play-lb .cr-lb-table td.cr-rank{font-family:var(--mono);font-size:13px;color:var(--mute-2);width:34px}
+.m-arcade .m-play-lb .cr-lb-table td.cr-score{font-family:var(--mono);color:var(--green-deep);font-weight:500}
+/* Your row: solid green, white text — the same treatment a free room gets on
+   the Rooms tab, and legible without depending on any other rule losing. */
+.m-arcade .m-play-lb .cr-lb-row-me{background:var(--green)}
+.m-arcade .m-play-lb .cr-lb-row-me td{color:#fff;font-weight:700;border-bottom-color:transparent}
+.m-arcade .m-play-lb .cr-lb-row-me td.cr-rank,
+.m-arcade .m-play-lb .cr-lb-row-me td.cr-score{color:#fff}
+.m-arcade .m-play-lb .cr-lb-empty,
+.m-arcade .m-play-lb .cr-lb-table td.cr-lb-cta{font-family:var(--sans);font-size:12.5px;
+  padding:18px 16px;text-align:center;letter-spacing:0;color:var(--mute-2)}
+.m-arcade .m-play-lb .cr-lb-table td.cr-lb-cta{color:var(--green-deep);font-weight:600;text-decoration:underline}
 
 /* Chess is a mode picker plus a "coming soon" line on the desktop too — it is
    not a built game. Say so here rather than implying otherwise. */
