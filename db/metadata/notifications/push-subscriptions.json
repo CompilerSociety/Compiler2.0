@@ -108,5 +108,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0816",
+    "name": "Hammad Rehan",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eLDFLprKZZQ:APA91bGIC3Zm3U3MBrTUasFIYSwCdhucCee1W-Z5sCZcmKJTdNC8_1MYb45lvWWZQIQ9q5ch23B8Mu-leMOmWO_tbfwyaGovxawnXEtGC6sqMQ364lz1asEJZJSt7ApFg4rDUbDlsG7l",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BGjOQu1UUOhTDpGzh81Z1TD4jqyoTpRXaMw3RoRvt_qcA30SR7_blrgU0Bzp5sMqvnsbcGjAv3DZM2EnQ_gQuuo",
+        "auth": "dEzuElY1pMlOvD5_S83OjA"
+      }
+    },
+    "updated_at": 1786641573364,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
