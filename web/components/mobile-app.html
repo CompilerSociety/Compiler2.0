@@ -78,6 +78,12 @@
     <h2 class="m-title-lg" id="m-onboard-title">Got it — that's you.</h2>
     <p class="m-onboard-copy">We pulled this straight off the student roster, so there's nothing to fill in.</p>
     <div class="m-onboard-rows" id="m-onboard-rows"></div>
+    <!-- Opt-in here rather than only in Profile: this is the one moment we
+         know the student's identity is fresh, and permission must be asked
+         from a real click. Enrolling also sends their section to the server,
+         which is what the class/exam/seating senders read. -->
+    <button class="m-btn-ghost" id="m-onboard-push" type="button">Turn on notifications</button>
+    <div class="m-signin-status" id="m-onboard-push-status" role="status" aria-live="polite"></div>
     <button class="m-btn-primary" id="m-onboard-go" type="button">Open my timetable</button>
     <button class="m-btn-ghost" id="m-onboard-back" type="button">Use a different NU ID</button>
   </section>

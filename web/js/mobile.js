@@ -257,6 +257,28 @@
     ).join('');
   }
 
+  /* ══ NOTIFICATIONS ═════════════════════════════════════════════════
+     enableSeatAlerts() lives in app.js and writes its progress to a desktop
+     element inside the hidden .shell, so the phone would otherwise show
+     nothing at all — including the server's reason for a refusal, which is
+     the only clue a student gets when their roll number is not yet on the
+     published roster. Point the shared hook at whichever line is on screen. */
+  function enablePush(statusId,btnId){
+    const line=$(statusId), btn=$(btnId);
+    if(typeof enableSeatAlerts!=='function'){
+      if(line) line.textContent='Notifications are unavailable right now.';
+      return;
+    }
+    window.onPushStatus=msg=>{
+      if(!line) return;
+      line.textContent=msg;
+      // Only the success line starts with a tick; everything else is a problem.
+      line.classList.toggle('is-error',Boolean(msg)&&!/^✓/.test(msg));
+    };
+    if(btn) btn.disabled=true;
+    Promise.resolve(enableSeatAlerts()).finally(()=>{ if(btn) btn.disabled=false; });
+  }
+
   /* ══ REGISTRATION (roll no not on the roster) ══════════════════════
      db/students/<year>.json trails each new intake by months, so a lookup
      miss is normally a brand-new student rather than a typo. Collect the
@@ -1174,7 +1196,8 @@
         </div>
       </div>
       <div class="m-section-label">Notifications</div>
-      <button class="m-btn-ghost" id="m-enable-push" type="button" style="margin-bottom:12px">Enable notifications</button>
+      <button class="m-btn-ghost" id="m-enable-push" type="button">Enable notifications</button>
+      <div class="m-signin-status" id="m-push-status" role="status" aria-live="polite" style="margin-bottom:12px"></div>
       ${cats.map(c=>`<label class="m-toggle-row${c.dead?' is-pending':''}" for="m-pref-${c.key}">
           <span class="m-toggle-text">
             <span class="m-toggle-label">${esc(c.label)}${c.dead?'<span class="m-soon">Soon</span>':''}</span>
@@ -1195,7 +1218,7 @@
       });
     });
     const push=$('m-enable-push');
-    if(push) push.addEventListener('click',()=>{ if(typeof enableSeatAlerts==='function') enableSeatAlerts(); });
+    if(push) push.addEventListener('click',()=>enablePush('m-push-status','m-enable-push'));
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{
       if(typeof clearProfileCookie==='function') clearProfileCookie();
@@ -1216,6 +1239,7 @@
     $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
     $('m-manual-go').addEventListener('click',saveManual);
     $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });
+    $('m-onboard-push').addEventListener('click',()=>enablePush('m-onboard-push-status','m-onboard-push'));
     $('m-onboard-go').addEventListener('click',()=>{ go('today',true); });
     $('m-onboard-back').addEventListener('click',()=>{
       if(typeof clearProfileCookie==='function') clearProfileCookie();

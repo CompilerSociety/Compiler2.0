@@ -679,7 +679,16 @@ async function registerServiceWorker(){
   try{ return await navigator.serviceWorker.register('/service-worker.js'); }
   catch(err){ console.warn('SW register failed:',err); return null; }
 }
-function setPushStatus(msg){ const el=document.getElementById('profile-push-status'); if(el) el.textContent=msg||''; }
+function setPushStatus(msg){
+  const el=document.getElementById('profile-push-status');
+  if(el) el.textContent=msg||'';
+  // The phone view has its own status lines and cannot read the desktop
+  // element (it is inside the hidden .shell). One hook, so both surfaces
+  // report the same thing without duplicating enableSeatAlerts().
+  if(typeof window.onPushStatus==='function'){
+    try{ window.onPushStatus(msg||''); }catch(e){ /* never break the flow */ }
+  }
+}
 async function enableSeatAlerts(){
   const profile=getProfileCookie();
   if(!profile||!profile.nuid){ setPushStatus('Save your profile first, then enable alerts.'); return; }
