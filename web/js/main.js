@@ -132,13 +132,17 @@ function loadScript(src) {
     document.body.appendChild(script);
   });
 }
+// Bump alongside the ?v= on index.html's own script/link tags whenever
+// /css or /js changes — otherwise installed PWAs can keep running an old
+// cached app.js/mobile.js indefinitely even after index.html itself updates.
+const ASSET_VERSION = '3';
 function loadCompatibilityRuntime() {
-  return loadScript('/js/app.js');
+  return loadScript(`/js/app.js?v=${ASSET_VERSION}`);
 }
 // The phone view reads app.js's globals directly, so it must load after it and
 // as a classic script — a module would not share that global scope.
 function loadMobileRuntime() {
-  return loadScript('/js/mobile.js');
+  return loadScript(`/js/mobile.js?v=${ASSET_VERSION}`);
 }
 // Original initialization remains in app.js so its globals, listener order, and
 // inline-handler compatibility remain exactly as extracted. These boundaries
