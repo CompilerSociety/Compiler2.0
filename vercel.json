@@ -97,10 +97,6 @@
       "destination": "/db/students/26.json"
     },
     {
-      "source": "/db/class-notify-state.json",
-      "destination": "/db/metadata/notifications/class-notify-state.json"
-    },
-    {
       "source": "/db/exam-schedule-business.json",
       "destination": "/db/exams/business.json"
     },
@@ -129,28 +125,12 @@
       "destination": "/db/games/leaderboards/flappy-bird.json"
     },
     {
-      "source": "/db/push-exam-state.json",
-      "destination": "/db/metadata/notifications/push-exam-state.json"
-    },
-    {
-      "source": "/db/push-state.json",
-      "destination": "/db/metadata/notifications/push-state.json"
-    },
-    {
-      "source": "/db/push-subscriptions.json",
-      "destination": "/db/metadata/notifications/push-subscriptions.json"
-    },
-    {
       "source": "/db/repeat-computing.json",
       "destination": "/db/timetables/repeat-computing.json"
     },
     {
       "source": "/db/seating-plan.json",
       "destination": "/db/seating/plan.json"
-    },
-    {
-      "source": "/db/showup-notify-state.json",
-      "destination": "/db/metadata/notifications/showup-notify-state.json"
     },
     {
       "source": "/db/showup-schedule-computing.json",
