@@ -79,6 +79,8 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-main.on{display:flex}
 .m-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px 10px;flex-shrink:0;background:#fff}
 .m-head-title{font-family:var(--mono);font-weight:500;font-size:22px;line-height:1;letter-spacing:-.01em;margin-top:5px}
+.m-head-sub{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:7px}
+.m-head-sub[hidden]{display:none}
 .m-header-actions{display:flex;gap:8px;flex-shrink:0}
 .m-icon-btn,.m-avatar-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:var(--ink);position:relative}
 .m-icon-btn svg{width:19px;height:19px}
@@ -140,6 +142,11 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-now-head{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .m-now-dot{width:8px;height:8px;border-radius:50%;background:var(--green-bright);animation:m-pulse 2s infinite}
 .m-now-name{font-family:var(--mono);font-weight:500;font-size:24px;line-height:1.15;margin:12px 0 16px;position:relative}
+/* Idle variant: same card, shown when nothing is running right now. No live
+   dot pulse, and the copy sets its own smaller size so two lines still fit
+   inside a 390px screen. */
+.m-now.is-idle .m-now-dot{animation:none}
+.m-now.is-idle .m-now-name{font-size:21px;line-height:1.3;margin-bottom:2px}
 .m-now-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;position:relative}
 .m-now-stat-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 .m-now-stat-value{font-family:var(--mono);font-weight:500;font-size:18px;margin-top:3px;word-break:break-word}

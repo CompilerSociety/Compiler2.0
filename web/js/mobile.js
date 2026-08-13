@@ -45,6 +45,14 @@
   function profile(){ return (typeof getProfileCookie==='function')?getProfileCookie():null; }
   function skipped(){ try{ return localStorage.getItem(SKIP_KEY)==='1'; }catch(e){ return false; } }
   function setSkipped(v){ try{ v?localStorage.setItem(SKIP_KEY,'1'):localStorage.removeItem(SKIP_KEY); }catch(e){} }
+  // The real calendar day, for the header. Deliberately not todayName(), which
+  // folds Sunday onto Monday so the class list has something to show.
+  function headerDate(){
+    const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Karachi',
+      weekday:'long',day:'numeric',month:'long',year:'numeric'}).formatToParts(new Date());
+    const get=t=>(parts.find(x=>x.type===t)||{}).value||'';
+    return `${get('weekday')} · ${get('day')} ${get('month')} ${get('year')}`.toUpperCase();
+  }
   function todayName(){
     const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
     return d==='Sunday'?'Monday':d;
@@ -114,6 +122,9 @@
     }
     inner.forEach(id=>{ $('m-'+id).classList.toggle('on',route===id); });
     $('m-head-title').textContent=TITLES[route]||'VTable';
+    const sub=$('m-head-sub');
+    sub.hidden=route!=='today';
+    if(route==='today') sub.textContent=headerDate();
 
     const tabRoute=route==='facdetail'?'faculty':route;
     document.querySelectorAll('.m-tab').forEach(btn=>{
@@ -263,9 +274,11 @@
     });
     const current=rows.find(r=>r.isNow);
 
+    // The banner is always on screen: the live class when there is one, the
+    // idle card otherwise (between classes, or outside the 08:30-20:05 grid).
     let html='';
     if(current){
-      html+=`<div class="m-now" id="m-now-banner" title="">
+      html+=`<div class="m-now" id="m-now-banner">
         <div class="m-now-head"><span class="m-now-dot"></span><span>IN CLASS NOW · ENDS ${esc(to24(current.end))}</span></div>
         <div class="m-now-name">${esc(cleanName(current.name))}</div>
         <div class="m-now-stats">
@@ -273,8 +286,13 @@
           <div><div class="m-now-stat-label">Time</div><div class="m-now-stat-value">${esc(to24(current.start))}</div></div>
         </div>
       </div>`;
+    }else{
+      html+=`<div class="m-now is-idle" id="m-now-banner">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>NO CLASSES FOUND</span></div>
+        <div class="m-now-name">The university cannot<br>hurt you right now.</div>
+      </div>`;
     }
-    html+=`<div class="m-meta-row"><span>${esc(day.toUpperCase())} · ${rows.length} CLASS${rows.length===1?'':'ES'}</span>
+    html+=`<div class="m-meta-row"><span>${rows.length} CLASS${rows.length===1?'':'ES'}</span>
       <b>${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}</b></div>`;
 
     if(!rows.length){
