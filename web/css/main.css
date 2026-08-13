@@ -674,7 +674,12 @@ html[data-theme="dark"] .theme-toggle-moon{display:block}
 .cr-close{background:rgba(10,122,58,0.1);border:1px solid rgba(10,122,58,0.3);color:#0a7a3a;font-family:'VT323',monospace;font-size:20px;padding:2px 12px;border-radius:6px;cursor:pointer;letter-spacing:1px}
 .cr-close:hover{background:#0a7a3a;color:#fff}
 .cr-canvas-wrap{position:relative;border:2px solid rgba(10,122,58,0.25);border-radius:10px;overflow:hidden;background:#fbfffc}
-#cr-canvas{display:block;width:100%;height:auto;image-rendering:pixelated}
+/* All three arcade canvases. Only Compiler Run had this rule, so in a narrow
+   desktop window Duck Hunter and Flappy rendered at their intrinsic 720px and
+   the wrapper's overflow:hidden clipped the right of the field away.
+   The phone arcade overrides the sizing inline; see layoutStage() in
+   js/mobile.js. */
+#cr-canvas,#dh-canvas,#fb-canvas{display:block;width:100%;height:auto;image-rendering:pixelated}
 .cr-hint{margin-top:10px;font-size:11px;letter-spacing:1px;color:#4a8a60;text-align:center}
 .cr-hint b{color:#0a7a3a}
 .cr-lb{margin-top:14px;border:1.5px solid rgba(10,122,58,0.22);border-radius:10px;background:#fbfffc;overflow:hidden}

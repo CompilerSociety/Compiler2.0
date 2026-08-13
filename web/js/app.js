@@ -4237,25 +4237,80 @@ function announceGameOver(game,score,best){
     document.dispatchEvent(new CustomEvent('vtable:gameover',{detail:{game,score,best}}));
   }catch(e){ /* never let a notification break the game */ }
 }
+
+/* ── The play field ────────────────────────────────────────────────────────
+   The games were built against a canvas frozen at 720x220. Laid flat on a
+   phone that is a ~390x119 letterbox, so the arcade used to rotate the canvas
+   90deg to fill the screen — which is why a game played in a portrait-locked
+   app came out sideways.
+
+   The field is a variable now instead. The desktop overlay still gets exactly
+   720x220; the phone arcade calls setGameField() with the upright portrait box
+   it has, and each game re-derives its geometry to fit. Everything that moves
+   horizontally is scaled by the field width (see SX in each game), so a
+   narrower field costs proportionally less speed and the spacing and reaction
+   time a run demands stay what the desktop was tuned for — scores from a phone
+   stay comparable with the ones already on the shared leaderboard. */
+const GAME_FIELD={};        // canvas id -> {w,h} in CSS px, when overridden
+const GAME_REFIT={};        // canvas id -> that game's own fit()
+
+function fitGameCanvas(canvas){
+  const want=GAME_FIELD[canvas.id];
+  const cssW=want?want.w:720, cssH=want?want.h:220;
+  // Only the overridden path takes a DPR-scaled backing store: on the desktop
+  // the intrinsic 720x220 and the CSS `width:100%` are what the modal expects.
+  const dpr=want?Math.min(3,window.devicePixelRatio||1):1;
+  canvas.style.width=want?cssW+'px':'';
+  canvas.style.height=want?cssH+'px':'';
+  canvas.width=Math.round(cssW*dpr);
+  canvas.height=Math.round(cssH*dpr);
+  // Assigning width/height resets the context, so the scale goes on after.
+  canvas.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+  return {w:cssW, h:cssH};
+}
+
+// js/mobile.js calls this with the stage it has; w<=0 hands the field back to
+// the desktop 720x220.
+window.setGameField=function(canvasId,w,h){
+  if(w>0&&h>0) GAME_FIELD[canvasId]={w:Math.round(w), h:Math.round(h)};
+  else delete GAME_FIELD[canvasId];
+  const refit=GAME_REFIT[canvasId];
+  if(refit) refit();
+};
+
 (function CompilerRun(){
   const overlay=document.getElementById('cr-overlay');
   const canvas=document.getElementById('cr-canvas');
   if(!overlay||!canvas) return;
   const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
-  const GROUND=H-26;              // y of ground line
   const HI_KEY='compiler_run_hi';
 
   const GREEN='#0a7a3a', GREEN2='#2d8a50', RED='#b3261e', BLUE='#1a4a8a';
   let hi=parseInt(localStorage.getItem(HI_KEY)||'0',10)||0;
 
-  let player, obstacles, speed, score, spawnTimer, state, rafId, lastT;
+  // Field geometry — see fitGameCanvas. SX scales horizontal motion against the
+  // original 720px field so a narrower one keeps the same reaction time.
+  let W=720, H=220, GROUND=194, SX=1;
+  function playerX(){ return Math.max(24, Math.round(W*0.085)); }
+  function fit(){
+    const box=fitGameCanvas(canvas);
+    W=box.w; H=box.h;
+    GROUND=H-Math.max(26, Math.round(H*0.12));   // y of ground line
+    SX=W/720;
+    if(player){
+      player.x=playerX();
+      if(player.onGround) player.y=GROUND-player.h;
+    }
+  }
+  GAME_REFIT[canvas.id]=fit;
+
+  let player, obstacles, speed, score, spawnTimer, state, rafId;
   // state: 'ready' | 'run' | 'over' | 'paused'
 
   function reset(){
-    player={x:60,w:26,h:28,duckH:14,y:GROUND-28,vy:0,ducking:false,onGround:true};
+    player={x:playerX(),w:26,h:28,duckH:14,y:GROUND-28,vy:0,ducking:false,onGround:true};
     obstacles=[];
-    speed=3.6;                 // 40% slower than before
+    speed=3.6;                 // 40% slower than before, in 720-wide units
     score=0;
     spawnTimer=48;
     state='ready';
@@ -4305,7 +4360,7 @@ function announceGameOver(game,score,best){
     const pbox={x:player.x, y:curTop, w:player.w, h:curH};
 
     // obstacles
-    for(const o of obstacles) o.x -= speed;
+    for(const o of obstacles) o.x -= speed*SX;
     obstacles = obstacles.filter(o=>o.x + o.w > -4);
     if(--spawnTimer<=0){
       spawn();
@@ -4399,7 +4454,7 @@ function announceGameOver(game,score,best){
     ctx.strokeStyle=GREEN; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(0,GROUND+1); ctx.lineTo(W,GROUND+1); ctx.stroke();
     ctx.setLineDash([4,10]); ctx.strokeStyle='rgba(10,122,58,0.4)';
-    const off=(score*speed)%14;
+    const off=(score*speed*SX)%14;
     ctx.beginPath(); ctx.moveTo(-off,GROUND+8); ctx.lineTo(W,GROUND+8); ctx.stroke(); ctx.setLineDash([]);
 
     // player (desktop) - shrinks when ducking so the AI passes overhead
@@ -4435,9 +4490,21 @@ function announceGameOver(game,score,best){
   function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
   function centerText(t,color,dy){ ctx.fillStyle=color; ctx.font='22px "VT323",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(t, W/2, H/2+(dy||0)); ctx.textAlign='left'; ctx.textBaseline='alphabetic'; }
 
+  // The physics constants above are per-tick, not per-second, so driving them
+  // straight off requestAnimationFrame ran the game at double speed on a 120Hz
+  // phone. Fixed 60Hz steps with an accumulator instead: identical motion on
+  // every display, and a backgrounded tab resumes rather than fast-forwarding.
+  const STEP=1000/60;
+  let acc=0, lastT=0;
+  function resetClock(){ acc=0; lastT=0; }
   function loop(t){
     if(!overlay.classList.contains('on')) return;      // stopped
-    update();
+    if(!lastT) lastT=t;
+    acc+=Math.min(250, t-lastT);
+    lastT=t;
+    let steps=0;
+    while(acc>=STEP && steps<5){ update(); acc-=STEP; steps++; }
+    if(acc>=STEP) acc=0;                               // dropped frames: don't bank them
     draw();
     rafId=requestAnimationFrame(loop);
   }
@@ -4458,9 +4525,11 @@ function announceGameOver(game,score,best){
   // scores from other players appear without reopening.
   let lbPollId=null;
   window.openCompilerRun=function(){
-    reset();
     overlay.classList.add('on');
+    fit();                       // needs the overlay visible to measure the field
+    reset();
     cancelAnimationFrame(rafId);
+    resetClock();
     rafId=requestAnimationFrame(loop);
     // Clear any message left over from the previous run so a failure from an
     // earlier game cannot surface as if it belonged to this one.
@@ -4525,19 +4594,24 @@ function announceGameOver(game,score,best){
   const canvas=document.getElementById('dh-canvas');
   if(!overlay||!canvas) return;
   const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
   const HI_KEY='duck_hunter_hi';
   const GREEN='#0a7a3a', GREEN2='#2d8a50', RED='#b3261e';
   let hi=parseInt(localStorage.getItem(HI_KEY)||'0',10)||0;
   let ducks, score, lives, state, rafId, spawnTimer;
   // state: 'ready' | 'run' | 'over'
 
+  // Field geometry — see fitGameCanvas. SX keeps a duck's crossing time the
+  // same on a narrower field.
+  let W=720, H=220, SX=1;
+  function fit(){ const box=fitGameCanvas(canvas); W=box.w; H=box.h; SX=W/720; }
+  GAME_REFIT[canvas.id]=fit;
+
   function reset(){ ducks=[]; score=0; lives=3; spawnTimer=70; state='ready'; }
 
   function spawn(){
     const fromLeft=Math.random()<0.5;
-    const y=20+Math.random()*(H-120);
-    const spd=1.7+Math.random()*1.5+score*0.03;
+    const y=20+Math.random()*Math.max(40, H-120);
+    const spd=(1.7+Math.random()*1.5+score*0.03)*SX;
     ducks.push({ x:fromLeft?-56:W+56, y, vx:spd*(fromLeft?1:-1), vy:(Math.random()-0.5)*1.4, w:54, h:44, alive:true, flash:0 });
   }
 
@@ -4659,7 +4733,21 @@ function announceGameOver(game,score,best){
   }
   function centerText(t,color,dy){ ctx.fillStyle=color; ctx.font='22px "VT323",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(t,W/2,H/2+(dy||0)); ctx.textAlign='left'; ctx.textBaseline='alphabetic'; }
 
-  function loop(){ if(!overlay.classList.contains('on')) return; update(); draw(); rafId=requestAnimationFrame(loop); }
+  // Fixed 60Hz steps — see the note on Compiler Run's loop.
+  const STEP=1000/60;
+  let acc=0, lastT=0;
+  function resetClock(){ acc=0; lastT=0; }
+  function loop(t){
+    if(!overlay.classList.contains('on')) return;
+    if(!lastT) lastT=t;
+    acc+=Math.min(250, t-lastT);
+    lastT=t;
+    let steps=0;
+    while(acc>=STEP && steps<5){ update(); acc-=STEP; steps++; }
+    if(acc>=STEP) acc=0;
+    draw();
+    rafId=requestAnimationFrame(loop);
+  }
 
   canvas.addEventListener('pointerdown',e=>{
     e.preventDefault();
@@ -4670,8 +4758,8 @@ function announceGameOver(game,score,best){
   overlay.addEventListener('pointerdown',e=>{ if(e.target===overlay) window.closeDuckHunter(); });
 
   window.openDuckHunter=function(){
-    reset(); overlay.classList.add('on');
-    cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop);
+    overlay.classList.add('on'); fit(); reset();
+    cancelAnimationFrame(rafId); resetClock(); rafId=requestAnimationFrame(loop);
     LB_STATUS=''; LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
   };
   window.closeDuckHunter=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };
@@ -4685,15 +4773,27 @@ function announceGameOver(game,score,best){
   const canvas=document.getElementById('fb-canvas');
   if(!overlay||!canvas) return;
   const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
   const HI_KEY='flappy_byte_hi';
   const GREEN='#0a7a3a', GREEN2='#2d8a50', RED='#b3261e';
   let hi=parseInt(localStorage.getItem(HI_KEY)||'0',10)||0;
-  const GAP=78, PIPE_W=46, GROUND=H-16;
+  const PIPE_W=46;
+  // Field geometry — see fitGameCanvas. SX scales the pipe speed so the gap
+  // between pipes stays the same in seconds; GAP opens up a little on a tall
+  // field, where the bird has more sky to fall through.
+  let W=720, H=220, GROUND=204, GAP=78, SX=1;
+  function birdX(){ return Math.max(40, Math.round(W*0.17)); }
+  function fit(){
+    const box=fitGameCanvas(canvas);
+    W=box.w; H=box.h; SX=W/720;
+    GROUND=H-16;
+    GAP=Math.max(78, Math.round(H*0.22));
+    if(bird) bird.x=birdX();
+  }
+  GAME_REFIT[canvas.id]=fit;
   let bird, pipes, score, state, rafId, spawnTimer;
   // state: 'ready' | 'run' | 'over'
 
-  function reset(){ bird={x:120,y:H/2,vy:0,r:12}; pipes=[]; score=0; spawnTimer=0; state='ready'; }
+  function reset(){ bird={x:birdX(),y:H/2,vy:0,r:12}; pipes=[]; score=0; spawnTimer=0; state='ready'; }
   function flap(){
     if(state==='ready'){ state='run'; bird.vy=-4.6; return; }
     if(state==='over'){ reset(); state='run'; bird.vy=-4.6; return; }
@@ -4708,7 +4808,7 @@ function announceGameOver(game,score,best){
     if(state!=='run') return;
     bird.vy+=0.32; bird.y+=bird.vy;
     if(--spawnTimer<=0){ spawnPipe(); spawnTimer=110; }
-    for(const p of pipes) p.x-=2.4;
+    for(const p of pipes) p.x-=2.4*SX;
     pipes=pipes.filter(p=>p.x+PIPE_W>-4);
     // score + collision
     for(const p of pipes){
@@ -4780,7 +4880,21 @@ function announceGameOver(game,score,best){
     }
   }
   function centerText(t,color,dy){ ctx.fillStyle=color; ctx.font='22px "VT323",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(t,W/2,H/2+(dy||0)); ctx.textAlign='left'; ctx.textBaseline='alphabetic'; }
-  function loop(){ if(!overlay.classList.contains('on')) return; update(); draw(); rafId=requestAnimationFrame(loop); }
+  // Fixed 60Hz steps — see the note on Compiler Run's loop.
+  const STEP=1000/60;
+  let acc=0, lastT=0;
+  function resetClock(){ acc=0; lastT=0; }
+  function loop(t){
+    if(!overlay.classList.contains('on')) return;
+    if(!lastT) lastT=t;
+    acc+=Math.min(250, t-lastT);
+    lastT=t;
+    let steps=0;
+    while(acc>=STEP && steps<5){ update(); acc-=STEP; steps++; }
+    if(acc>=STEP) acc=0;
+    draw();
+    rafId=requestAnimationFrame(loop);
+  }
 
   canvas.addEventListener('pointerdown',e=>{ e.preventDefault(); flap(); });
   document.addEventListener('keydown',e=>{
@@ -4791,8 +4905,8 @@ function announceGameOver(game,score,best){
   overlay.addEventListener('pointerdown',e=>{ if(e.target===overlay) window.closeFlappy(); });
 
   window.openFlappy=function(){
-    reset(); overlay.classList.add('on');
-    cancelAnimationFrame(rafId); rafId=requestAnimationFrame(loop);
+    overlay.classList.add('on'); fit(); reset();
+    cancelAnimationFrame(rafId); resetClock(); rafId=requestAnimationFrame(loop);
     LB_STATUS=''; LB_LOADED_ONCE=false; loadLB(); clearInterval(lbPollId); lbPollId=setInterval(loadLB,15000);
   };
   window.closeFlappy=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };

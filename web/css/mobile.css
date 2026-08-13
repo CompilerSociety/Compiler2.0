@@ -382,26 +382,16 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-stage-full[hidden]{display:none}
 .m-stage-holder{position:absolute;inset:0}
 .m-stage-holder canvas{display:block;position:absolute;left:50%;top:50%;
-  /* Sized and rotated by layoutStage() in js/mobile.js — a 720x220 field laid
-     flat across a 390px phone fills 14% of the screen, so it is turned onto
-     the long axis instead, which is ~4.7x the play area. Rotating about the
-     centre keeps the bounding box centred for free. */
+  /* Sized by layoutStage() in js/mobile.js, which asks the game for an upright
+     portrait field rather than turning a landscape one onto its side. */
   transform:translate(-50%,-50%);
   /* The canvas IS the controller: no scroll-chaining, no tap-to-zoom, no
      text-selection lasso on a long press. */
   touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-.m-stage-holder canvas.is-rot{transform:translate(-50%,-50%) rotate(90deg)}
 .m-stage-x{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:2;
   width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);background:rgba(255,255,255,.92);
   color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
 .m-stage-x svg{width:19px;height:19px}
-/* Upright, over a turned game: without it the sideways field just reads as a
-   rendering fault. Fades out on its own — it is a nudge, not a gate. */
-.m-turn-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);
-  z-index:2;white-space:nowrap;padding:10px 18px;border-radius:999px;background:rgba(22,33,15,.82);color:#fff;
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;pointer-events:none;animation:m-fade .25s ease-out}
-.m-turn-hint[hidden]{display:none}
-
 /* Death card — the only time the leaderboard appears. White, per request. */
 .m-dead{position:absolute;inset:0;z-index:3;background:rgba(255,255,255,.93);display:flex;
   align-items:center;justify-content:center;padding:20px;overflow-y:auto;animation:m-fade .2s ease-out}

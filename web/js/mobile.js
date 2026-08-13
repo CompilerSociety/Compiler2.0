@@ -1211,12 +1211,13 @@
      canvas:'cr-canvas',lb:'cr-lb',best:'compiler_run_hi',
      open:'openCompilerRun',close:'closeCompilerRun',
      duckZone:true,restartKey:'Space',overLabel:'SYSTEM CRASH',unit:'points'},
-    // needsAim: the only game whose input is a POSITION rather than a press,
-    // so it is the only one the rotation has to correct for. See wireAim().
+    // Duck Hunter's input is a POSITION rather than a press. It recovers that
+    // from the canvas rect itself, which is correct now the stage no longer
+    // applies a transform, so it needs nothing wired here.
     {id:'duck',name:'Duck Hunter',emoji:'🦆',desc:"Shoot the ducks, don't let them escape",
      canvas:'dh-canvas',lb:'dh-lb',best:'duck_hunter_hi',
      open:'openDuckHunter',close:'closeDuckHunter',
-     needsAim:true,overLabel:'OUT OF LIVES',unit:'ducks'},
+     overLabel:'OUT OF LIVES',unit:'ducks'},
     {id:'flappy',name:'Flappy Byte',emoji:'🐦',desc:'Tap to fly through the pipes',
      canvas:'fb-canvas',lb:'fb-lb',best:'flappy_byte_hi',
      open:'openFlappy',close:'closeFlappy',
@@ -1239,13 +1240,12 @@
   }
   function returnAllBorrowed(){
     borrowedHome.forEach((home,el)=>{
-      // layoutStage() sizes and turns the canvas with inline styles. Those must
-      // come off on the way out, or the desktop modal shows a rotated game.
-      if(el.tagName==='CANVAS'){ el.style.width=''; el.style.height=''; el.classList.remove('is-rot'); }
+      // Hand the field back to the desktop 720x220 — setGameField clears the
+      // inline sizing layoutStage() applied, so the modal gets its own shape.
+      if(el.tagName==='CANVAS' && typeof window.setGameField==='function') window.setGameField(el.id,0,0);
       if(home) home.appendChild(el);
     });
     borrowedHome.clear();
-    stageRotated=false;
   }
 
   function bestFor(g){
@@ -1325,54 +1325,28 @@
   }
 
   /* ── Filling the screen ────────────────────────────────────────────────
-     The play field is fixed at 720x220: each game reads canvas.width/height
-     once into a const at load and tunes its ground line, gravity and gap sizes
-     against them — and the leaderboard is shared with the desktop, so changing
-     the field would make phone scores incomparable with the ones already on
-     the board. Laid flat across a 390px phone that is 390x119, about 14% of
-     the screen.
+     The field used to be frozen at 720x220, which laid flat across a 390px
+     phone is 390x119 — about 14% of the screen. The arcade answered that by
+     turning the canvas 90deg onto the phone's long axis, so a game in a
+     portrait-locked app played sideways and asked the student to tilt the
+     phone the app itself refuses to rotate into.
 
-     So it is turned onto the phone's long axis instead: ~258x844, roughly 4.7x
-     the play area, without touching a single game constant. Only taken when it
-     is a clear win, so a wide window still gets the upright layout. */
-  let stageRotated=false;
+     The field is a variable in js/app.js now (setGameField), so the stage just
+     hands over the upright box it has and the game lays itself out to fit.
+     Portrait, full width, no transform, and roughly 6x the play area of the
+     old flat layout. */
   function layoutStage(){
     const g=arcadeGame; if(!g) return;
     const cv=document.getElementById(g.canvas), host=$('m-stage-full');
-    if(!cv||!host) return;
+    if(!cv||!host||typeof window.setGameField!=='function') return;
     const vw=host.clientWidth, vh=host.clientHeight;
     if(!vw||!vh) return;
-    const ar=cv.width/cv.height;
-    const flatW=vw, flatH=vw/ar;                  // upright: full width
-    let turnLen=vh, turnThick=vh/ar;              // turned: full height
-    if(turnThick>vw){ turnThick=vw; turnLen=vw*ar; }
-    stageRotated=(turnLen*turnThick)>(flatW*flatH)*1.2;
-    cv.classList.toggle('is-rot',stageRotated);
-    cv.style.width=(stageRotated?turnLen:flatW)+'px';
-    cv.style.height=(stageRotated?turnThick:flatH)+'px';
-    showTurnHint(stageRotated);
-  }
-  let turnHintTimer=null;
-  function showTurnHint(on){
-    const el=$('m-turn-hint');
-    if(!el) return;
-    clearTimeout(turnHintTimer);
-    el.hidden=!on;
-    if(on) turnHintTimer=setTimeout(()=>{ el.hidden=true; },4200);
-  }
-
-  /* Viewport point -> canvas point, through whatever transform is applied.
-     getBoundingClientRect() on a rotated element is its AXIS-ALIGNED box, so
-     the naive (clientX - left) * (W / width) the games use is wrong the moment
-     the canvas is turned. Everything that needs a position goes through here. */
-  function toCanvasPoint(cv,clientX,clientY){
-    const r=cv.getBoundingClientRect();
-    const cw=parseFloat(cv.style.width)||r.width;    // pre-transform CSS size
-    const ch=parseFloat(cv.style.height)||r.height;
-    const cx=r.left+r.width/2, cy=r.top+r.height/2;
-    let dx=clientX-cx, dy=clientY-cy;
-    if(stageRotated){ const t=dx; dx=dy; dy=-t; }    // inverse of rotate(90deg)
-    return {x:(dx+cw/2)*(cv.width/cw), y:(dy+ch/2)*(cv.height/ch)};
+    // Full width, and as much height as the stage gives — floored so the field
+    // is never shorter than it is wide, capped so a tall phone does not
+    // stretch it past what stays readable at arm's length.
+    const w=Math.round(vw);
+    const h=Math.round(Math.min(w*1.6, Math.max(w, vh)));
+    window.setGameField(g.canvas, w, h);
   }
 
   function startGame(g){
@@ -1383,7 +1357,6 @@
     borrow(g.canvas,$('m-play-stage'));
     layoutStage();
     if(g.duckZone) wireDuckZone(g);
-    if(g.needsAim) wireAim(g);
     // Starts the game's own loop and its leaderboard polling. The board stays
     // off screen until the run ends — it is still loading in the background so
     // it is ready the moment it is needed.
@@ -1395,7 +1368,6 @@
     arcadeGame=null;
     releaseDuck();
     returnAllBorrowed();
-    showTurnHint(false);
     const stage=$('m-stage-full');
     if(stage) stage.hidden=true;
     const dead=$('m-dead');
@@ -1431,9 +1403,8 @@
     duckWired=cv;
     cv.addEventListener('pointerdown',ev=>{
       if(!arcadeGame||arcadeGame.canvas!==cv.id) return;   // not the game on screen
-      // In GAME space, so the split lands in the same place whether the canvas
-      // is upright or turned onto the phone's long axis.
-      if(toCanvasPoint(cv,ev.clientX,ev.clientY).y/cv.height < DUCK_ZONE) return;
+      const r=cv.getBoundingClientRect();
+      if(!r.height || (ev.clientY-r.top)/r.height < DUCK_ZONE) return;
       ev.preventDefault();
       ev.stopImmediatePropagation();
       duckHeld=true;
@@ -1442,35 +1413,6 @@
     // Release wherever the finger lifts — including off the canvas, which would
     // otherwise leave the player ducking for the rest of the run.
     ['pointerup','pointercancel'].forEach(t=>window.addEventListener(t,releaseDuck));
-  }
-
-  /* ── Aim, through the rotation ─────────────────────────────────────────
-     Duck Hunter is the one game whose input is a POSITION, and it recovers
-     that position with `(clientX - rect.left) * (W / rect.width)`. That is
-     correct for a plain scaled canvas and wrong for a rotated one, because the
-     rect is then the axis-aligned box.
-
-     Rather than reach into the game (its shoot() is closure-private), the real
-     tap is intercepted, mapped properly, and re-issued at whatever clientX /
-     clientY the game's own formula needs in order to arrive at the right
-     square. Untrusted events are ignored so the re-issue is not re-intercepted. */
-  let aimWired=null;
-  function wireAim(g){
-    const cv=document.getElementById(g.canvas);
-    if(!cv||cv===aimWired) return;
-    aimWired=cv;
-    cv.addEventListener('pointerdown',ev=>{
-      if(!ev.isTrusted) return;                            // our own re-issue
-      if(!arcadeGame||arcadeGame.canvas!==cv.id) return;
-      if(!stageRotated) return;                            // upright: already correct
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      const p=toCanvasPoint(cv,ev.clientX,ev.clientY);
-      const r=cv.getBoundingClientRect();
-      cv.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,
-        clientX:r.left+p.x*r.width/cv.width,
-        clientY:r.top +p.y*r.height/cv.height}));
-    },true);
   }
 
   /* ── You died ──────────────────────────────────────────────────────────
