@@ -33,7 +33,7 @@
 }
 
 /* Desktop chrome stands down on phones. */
-.shell,#bg3d,.profile-launcher,.theme-toggle,#pwa-install-bar{display:none!important}
+.shell,#bg3d,.profile-launcher,.theme-toggle{display:none!important}
 body{padding-bottom:0!important;background:var(--page)}
 body.has-pwa-bar{padding-bottom:0!important}
 #app{border-radius:0;box-shadow:none;min-height:100vh}
@@ -125,6 +125,37 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-pill.is-green{background:var(--green);color:#fff}
 .m-toast{position:fixed;left:20px;right:20px;bottom:104px;z-index:60;background:var(--ink);color:#fff;font-family:var(--mono);font-size:13px;text-align:center;padding:13px 16px;border-radius:999px;box-shadow:0 12px 32px rgba(22,45,18,.35)}
 .m-toast[hidden]{display:none}
+
+/* ── Install prompt ──────────────────────────────────────────────────
+   Shared with the desktop (#pwa-install-bar lives in all-modals.html and is
+   driven by app.js), restyled here to the phone's design language. It floats
+   ABOVE the tab bar rather than pinning to bottom:0 like the desktop bar —
+   sitting at the very bottom would bury the primary navigation. */
+.pwa-install-bar{
+  position:fixed; left:12px; right:12px; z-index:55;
+  bottom:calc(78px + env(safe-area-inset-bottom));
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px; border-radius:22px;
+  background:var(--surface); border:1px solid var(--line-strong); border-top:1px solid var(--line-strong);
+  box-shadow:0 14px 34px rgba(22,45,18,.22);
+  font-family:var(--sans); max-width:none;
+}
+.pwa-install-icon{width:42px;height:42px;border-radius:12px;flex-shrink:0}
+.pwa-install-text{min-width:0;gap:2px}
+.pwa-install-title{font-family:var(--mono);font-weight:500;font-size:14px;letter-spacing:0;color:var(--ink)}
+.pwa-install-sub{font-size:11.5px;line-height:1.35;color:var(--mute-2)}
+.pwa-install-btn{
+  background:var(--green); border-radius:999px; padding:10px 16px;
+  font-family:var(--mono); font-weight:500; font-size:13px; letter-spacing:.02em;
+  flex-shrink:0; width:auto;
+}
+.pwa-install-btn:hover{background:var(--green-deep)}
+.pwa-install-close{color:var(--mute-3);font-size:22px;flex-shrink:0;padding:0 2px}
+/* The iOS "Add to Home Screen" sheet sits over everything, tab bar included. */
+.pwa-ios-sheet{z-index:70}
+.pwa-ios-card{border-radius:26px;font-family:var(--sans)}
+.pwa-ios-card h3{font-family:var(--mono);font-weight:500;font-size:20px;letter-spacing:0;color:var(--green-deep)}
+.pwa-ios-close{background:var(--green);border-radius:999px;font-family:var(--mono);font-weight:500;font-size:14px;letter-spacing:.02em}
 .m-back{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;font-family:var(--mono);font-size:12.5px;color:var(--ink);padding:8px 15px;margin:4px 0 14px;cursor:pointer}
 
 /* ── Class rows (Today / Week / Lookup) ──────────────────────────────── */
