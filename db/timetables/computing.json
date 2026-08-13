@@ -3920,6 +3920,11 @@
               "name": "Cloud Comp",
               "location": "D-504",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "Security Ops",
+              "location": "CYBER (D-514)",
+              "time": "08:30-11:15"
             }
           ],
           "Tuesday": [
@@ -4009,6 +4014,11 @@
               "name": "Cloud Comp",
               "location": "D-506",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Security Ops",
+              "location": "CYBER (D-514)",
+              "time": "11:30-02:15"
             }
           ],
           "Thursday": [
@@ -4103,6 +4113,11 @@
               "name": "Sec Ops",
               "location": "D-505",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
             }
           ],
           "Thursday": [
@@ -4110,6 +4125,11 @@
               "name": "Sec Ops",
               "location": "D-505",
               "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
             }
           ]
         },
@@ -6860,6 +6880,6 @@
       }
     }
   },
-  "count": 1134,
-  "generatedAt": "2026-08-13T08:48:59.221621+00:00"
+  "count": 1138,
+  "generatedAt": "2026-08-13T09:53:02.568272+00:00"
 }

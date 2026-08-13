@@ -354,7 +354,7 @@
             },
             {
               "name": "Instrumentation and Measurements - Lab",
-              "location": "PWR",
+              "location": "CONT",
               "time": "02:20-03:40"
             }
           ],
@@ -1327,5 +1327,5 @@
     }
   },
   "count": 216,
-  "generatedAt": "2026-08-13T08:49:01.662900+00:00"
+  "generatedAt": "2026-08-13T09:53:05.206861+00:00"
 }
