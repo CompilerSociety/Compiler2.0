@@ -1190,12 +1190,16 @@
   // Kept across re-renders: flipping the switch re-renders the whole section,
   // which would otherwise wipe the one line explaining what just happened.
   let pushMsg='';
+  // A switch operation is in flight. While it is, `pushLive` is what the user
+  // ASKED for rather than what the browser currently reports, so every reader
+  // that would otherwise overwrite it has to stand down until it settles.
+  let pushBusy=false;
 
   // Success lines from app.js start with a tick; the switch-off path reports
   // plainly instead ("Notifications are off."), and both are normal outcomes.
   // Everything else — a refused permission, a failed unsubscribe, an
   // unsupported browser — is a problem and reads red.
-  const PUSH_OK=/^(✓|Notifications are off|Turning notifications off)/;
+  const PUSH_OK=/^(✓|Notifications are off)/;
   function paintPushStatus(){
     const line=$('m-push-status');
     if(!line) return;
@@ -1207,6 +1211,10 @@
   }
 
   function refreshPushState(){
+    // An optimistic update is showing. The browser still reports the old state
+    // until the unsubscribe lands, so reading it here would snap the switch
+    // straight back and undo what the user just did.
+    if(pushBusy) return Promise.resolve(pushLive);
     if(typeof pushAlertsActive!=='function') return Promise.resolve(false);
     return Promise.resolve(pushAlertsActive()).then(on=>{
       const changed=on!==pushLive;
@@ -1252,7 +1260,7 @@
             ? 'On for this device. Turning this off removes it from our list.'
             : 'Off. Turn this on to pick what you get alerted about.'}</span>
         </span>
-        <input class="m-toggle" id="m-push-master" type="checkbox" ${pushLive?'checked':''}>
+        <input class="m-toggle" id="m-push-master" type="checkbox" ${pushLive?'checked':''} ${pushBusy?'disabled':''}>
       </label>
       <div class="m-signin-status" id="m-push-status" role="status" aria-live="polite" style="margin-bottom:12px"></div>
       <div class="m-pref-group${pushLive?'':' is-locked'}"${pushLive?'':' aria-disabled="true"'}>
@@ -1286,30 +1294,53 @@
       });
     });
 
+    /* The two directions are deliberately NOT symmetrical.
+
+       OFF is applied optimistically — the switch flips and the categories grey
+       out on the click, before any network call. Turning notifications off is
+       a promise the browser can keep on its own: sub.unsubscribe() is local,
+       and deleting the server record is cleanup that only decides how quickly
+       an already-dead endpoint stops being written to. Holding the UI open for
+       a GitHub round-trip would leave the categories live and tappable for a
+       second or two after the user said stop.
+
+       ON is not, and must not be. It needs a permission prompt the user has
+       not answered yet and a subscription the push service may refuse, so
+       showing "on" up front would be showing something that may never become
+       true. */
     const master=$('m-push-master');
     if(master) master.addEventListener('change',()=>{
+      if(pushBusy){ master.checked=pushLive; return; } // an operation is already settling
       const want=master.checked;
-      master.disabled=true;
-      pushMsg=''; paintPushStatus();
       const fn=want?(typeof enableSeatAlerts==='function'?enableSeatAlerts:null)
                    :(typeof disableSeatAlerts==='function'?disableSeatAlerts:null);
       if(!fn){
         pushMsg='Notifications are unavailable right now.';
-        master.checked=!want; master.disabled=false; paintPushStatus();
+        master.checked=!want;
+        paintPushStatus();
         return;
+      }
+      pushBusy=true;
+      pushMsg='';
+      if(!want){
+        pushLive=false;
+        renderProfile(); // instantly: switch off, categories greyed and inert
+      }else{
+        master.disabled=true;
+        paintPushStatus();
       }
       Promise.resolve(fn()).catch(err=>{
         console.warn('push switch failed:',err);
       }).then(()=>{
-        // Never trust the click. Re-read the browser's own state so a refused
-        // permission prompt or a failed unsubscribe snaps the switch back
-        // instead of leaving it showing something that isn't true.
-        return (typeof pushAlertsActive==='function')?pushAlertsActive():false;
-      }).then(on=>{
-        pushLive=Boolean(on);
-        if(route!=='profile') return;
-        renderProfile(); // rebuilds the section (and re-paints pushMsg) from the real state
-        toast(pushLive?'Notifications on':'Notifications off');
+        pushBusy=false;
+        // Confirm against the browser's own state. A refused permission prompt
+        // or an unsubscribe that did not take snaps the switch back to the
+        // truth, and the status line says why.
+        return refreshPushState();
+      }).then(()=>{
+        // refreshPushState() only re-renders when it disagrees; render anyway
+        // so the master switch comes back out of its in-flight disabled state.
+        if(route==='profile') renderProfile();
       });
     });
 

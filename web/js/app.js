@@ -799,7 +799,10 @@ async function disableSeatAlerts(){
   if(!('serviceWorker' in navigator)||!('PushManager' in window)){
     setPushStatus('This browser does not support notifications.'); return false;
   }
-  setPushStatus('Turning notifications off…');
+  // No "turning off…" progress line. The phone applies this optimistically —
+  // the switch and the category list have already gone dark by the time this
+  // runs — so a line saying it is still happening would contradict the screen.
+  // Only the outcome is reported.
   let sub=null;
   try{
     const reg=await navigator.serviceWorker.getRegistration();
