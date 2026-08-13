@@ -71,9 +71,13 @@
   // The sheet writes afternoon slots 12-hour and unlabelled ("01:00" is 1 PM).
   // Everything shown to a student is normalised to 24h so "01:00" can never be
   // read as one in the morning.
+  // slotToMinutes, not timeToNumber: only the former consults SLOT_MINUTE_MAP,
+  // which is where the day's real boundaries live. timeToNumber's generic rule
+  // (8-11 => AM) turned the last slot's 08:05 end into 08:05 instead of 20:05.
   function to24(hhmm){
     try{
-      const m=timeToNumber(hhmm);
+      const m=slotToMinutes(String(hhmm).trim());
+      if(!Number.isFinite(m)) return String(hhmm||'');
       return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
     }catch(e){ return String(hhmm||''); }
   }
@@ -454,7 +458,7 @@
   }
 
   /* ══ FREE ROOMS ════════════════════════════════════════════════════ */
-  const rm={block:'',floor:''};
+  const rm={block:'',floor:'',open:''};
 
   // Whole-day occupancy for one room. Deliberately NOT getRoomSlotInfo(),
   // which hides slots that have already passed when the day is today — the
@@ -506,6 +510,7 @@
       btn.addEventListener('click',()=>{
         rm.block=rm.block===btn.dataset.block?'':btn.dataset.block;
         rm.floor='';
+        rm.open='';
         renderRooms();
       });
     });
@@ -527,6 +532,7 @@
     $('m-floor-row').querySelectorAll('.m-chip').forEach(btn=>{
       btn.addEventListener('click',()=>{
         rm.floor=rm.floor===btn.dataset.floor?'':btn.dataset.floor;
+        rm.open='';
         renderRooms();
       });
     });
@@ -535,6 +541,37 @@
       $('m-rooms-out').innerHTML='<div class="m-empty">Now pick a floor.</div>';
       return;
     }
+    renderRoomList();
+  }
+
+  // A one-line answer to "when can I actually get in here?", derived from the
+  // same slot vector the bar is drawn from.
+  function roomSummary(slots){
+    const now=nowMinutes();
+    const rows=slots.map(s=>{
+      const b=slotBounds(s.slot);
+      return {slot:s.slot,busy:Boolean(s.occupiedBy),start:b?b[0]:0,end:b?b[1]:0};
+    });
+    const startOf=r=>to24(r.slot.split('-')[0]);
+    const live=rows.find(r=>now>=r.start&&now<=r.end);
+    if(live&&!live.busy){
+      const nextBusy=rows.find(r=>r.start>live.start&&r.busy);
+      return nextBusy?`Free now — booked again at ${startOf(nextBusy)}`
+                     :'Free now — nothing booked after this';
+    }
+    if(live&&live.busy){
+      const nextFree=rows.find(r=>r.start>live.start&&!r.busy);
+      return nextFree?`In use — free from ${startOf(nextFree)}`
+                     :'In use — booked for the rest of the day';
+    }
+    // Outside the slot grid (before 08:30, or after the last slot ends).
+    const nextFree=rows.find(r=>r.start>now&&!r.busy);
+    if(nextFree) return `Free from ${startOf(nextFree)}`;
+    return rows.some(r=>!r.busy)?'Nothing free later today':'Booked all day';
+  }
+
+  function renderRoomList(){
+    const day=todayName();
     const rooms=(BLOCK_FLOORS[rm.block]||{})[rm.floor]||[];
     if(!rooms.length){
       $('m-rooms-out').innerHTML='<div class="m-empty">No rooms listed on this floor yet.</div>';
@@ -543,16 +580,39 @@
     const cards=rooms.map(room=>{
       const slots=roomSlots(room,day);
       const free=isFreeNow(room,day);
-      const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}" title="${esc(s.slot)}${s.occupiedBy?' · '+esc(s.occupiedBy):' · free'}"></span>`).join('');
+      const open=rm.open===room;
+      const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
       const status=free===true?'Free now':free===false?'Class':'—';
-      return `<div class="m-room${free===true?' is-free':''}">
-        <div class="m-room-name">${esc(room)}</div>
-        <div class="m-slots">${bars}</div>
-        <div class="m-room-status">${esc(status)}</div>
+      const detail=open?`<div class="m-room-detail" id="m-room-detail">
+          <div class="m-room-summary">${esc(roomSummary(slots))}</div>
+          <div class="m-slotrows">${slots.map(s=>{
+            const busy=Boolean(s.occupiedBy);
+            const who=busy?[s.occupiedBy.course,s.occupiedBy.section].filter(Boolean).join(' · '):'Free';
+            return `<div class="m-slotrow">
+              <span class="m-slotpill">${esc(to24(s.slot.split('-')[0]))}–${esc(to24(s.slot.split('-')[1]))}</span>
+              <span class="m-slotwho${busy?'':' is-free'}">${esc(who)}</span>
+            </div>`;
+          }).join('')}</div>
+        </div>`:'';
+      return `<div class="m-room-card${open?' is-open':''}">
+        <button class="m-room${free===true?' is-free':''}" type="button" data-room="${esc(room)}"
+                aria-expanded="${open}">
+          <span class="m-room-name">${esc(room)}</span>
+          <span class="m-slots">${bars}</span>
+          <span class="m-room-status">${esc(status)}</span>
+          <svg class="m-room-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        ${detail}
       </div>`;
     }).join('');
     $('m-rooms-out').innerHTML=`<div class="m-roomlist m-reveal">${cards}</div>
-      <div class="m-caption">Each bar is the day’s slots — green is free, grey is booked. Labs run four long slots instead of eight.</div>`;
+      <div class="m-caption">Each bar is the day’s slots — green is free, grey is booked. Tap a room to see when it frees up. Labs run four long slots instead of eight.</div>`;
+    $('m-rooms-out').querySelectorAll('.m-room').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        rm.open=rm.open===btn.dataset.room?'':btn.dataset.room;
+        renderRoomList();
+      });
+    });
   }
   function tickRoomsClock(){
     const el=$('m-rooms-clock');
