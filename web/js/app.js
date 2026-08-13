@@ -72,11 +72,11 @@ function setProfileCookie(profile){
   const json=JSON.stringify(profile);
   try{ localStorage.setItem(PROFILE_COOKIE_KEY,json); }catch(err){ /* ignore */ }
   // Also set a cookie when the protocol supports it (http/https).
-  try{ document.cookie=`${PROFILE_COOKIE_KEY}=${encodeURIComponent(json)}; path=/; max-age=31536000; SameSite=Lax`; }catch(err){ /* ignore */ }
+  try{ document.cookie=`${PROFILE_COOKIE_KEY}=${encodeURIComponent(json)}; path=/; max-age=31536000; SameSite=Lax; Secure`; }catch(err){ /* ignore */ }
 }
 function clearProfileCookie(){
   try{ localStorage.removeItem(PROFILE_COOKIE_KEY); }catch(err){ /* ignore */ }
-  try{ document.cookie=`${PROFILE_COOKIE_KEY}=; path=/; max-age=0; SameSite=Lax`; }catch(err){ /* ignore */ }
+  try{ document.cookie=`${PROFILE_COOKIE_KEY}=; path=/; max-age=0; SameSite=Lax; Secure`; }catch(err){ /* ignore */ }
 }
 function showProfileSuccessToast(message,isError){
   const toast=document.getElementById('profile-success-toast');

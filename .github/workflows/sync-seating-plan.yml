@@ -4,6 +4,16 @@ on:
   # Primary (fast) trigger: a Google Apps Script polls the mailbox every minute
   # and fires this via the GitHub API the moment a new "seating"/"schedule"/
   # "showup" email arrives — see docs/seating-gmail-trigger.gs for setup.
+  #
+  # SECURITY: this is a public repo, so anyone on the internet can POST a
+  # repository_dispatch. The "Validate repository_dispatch trigger" step below
+  # fails the run BEFORE any Gmail work unless the client_payload contains the
+  # secret that matches the repo secret SYNC_DISPATCH_SECRET (set both in the
+  # repo settings and in the Apps Script PropertiesService — see
+  # docs/apps-script/seating-gmail-trigger.gs). Optionally set the repo secret
+  # SYNC_DISPATCH_ALLOWED_SENDERS to a comma-separated allowlist of GitHub
+  # logins and the sender is checked too. Until both secrets are configured the
+  # dispatch trigger fails fast; the 30-min cron below still works.
   repository_dispatch:
     types: [new-seating-email]
   # Safety-net trigger: in case the Apps Script trigger is ever paused/removed,
@@ -20,6 +30,40 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate repository_dispatch trigger
+        # Only repository_dispatch can be forged on a public repo (schedule and
+        # workflow_dispatch are trusted: cron is GitHub-controlled, manual
+        # dispatch needs write access). Fail fast, before any Gmail/API work.
+        if: github.event_name == 'repository_dispatch'
+        env:
+          CLIENT_SECRET: ${{ github.event.client_payload.secret }}
+          EXPECTED_SECRET: ${{ secrets.SYNC_DISPATCH_SECRET }}
+          ALLOWED_SENDERS: ${{ secrets.SYNC_DISPATCH_ALLOWED_SENDERS }}
+          SENDER: ${{ github.event.sender.login }}
+        run: |
+          if [ -z "$EXPECTED_SECRET" ]; then
+            echo "::error::SYNC_DISPATCH_SECRET repo secret is not set — add it to the repo settings and to the Apps Script PropertiesService"
+            exit 1
+          fi
+          if [ "$CLIENT_SECRET" != "$EXPECTED_SECRET" ]; then
+            echo "::error::repository_dispatch payload secret mismatch — forged or misconfigured dispatch"
+            exit 1
+          fi
+          if [ -n "$ALLOWED_SENDERS" ]; then
+            found=0
+            IFS=',' read -ra senders <<< "$ALLOWED_SENDERS"
+            for login in "${senders[@]}"; do
+              login="${login// /}"
+              if [ "$login" = "$SENDER" ]; then
+                found=1
+              fi
+            done
+            if [ "$found" -ne 1 ]; then
+              echo "::error::repository_dispatch sender '$SENDER' is not in SYNC_DISPATCH_ALLOWED_SENDERS"
+              exit 1
+            fi
+          fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
