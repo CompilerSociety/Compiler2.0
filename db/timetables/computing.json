@@ -3463,7 +3463,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Cy Sec",
+              "name": "Data St",
               "location": "D-414",
               "time": "08:30-09:50"
             },
@@ -3473,7 +3473,7 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Data St",
+              "name": "Cy Sec",
               "location": "D-414",
               "time": "01:00-02:20"
             }
@@ -3502,7 +3502,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Cy Sec",
+              "name": "Data St",
               "location": "D-501",
               "time": "08:30-09:50"
             },
@@ -3512,7 +3512,7 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Data St",
+              "name": "Cy Sec",
               "location": "D-501",
               "time": "01:00-02:20"
             }
@@ -3538,7 +3538,7 @@
         "B": {
           "Monday": [
             {
-              "name": "Cy Sec",
+              "name": "Data St",
               "location": "D-415",
               "time": "10:00-11:20"
             },
@@ -3548,7 +3548,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Data St",
+              "name": "Cy Sec",
               "location": "D-415",
               "time": "02:30-03:50"
             }
@@ -3577,12 +3577,12 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Cy Sec",
+              "name": "Data St",
               "location": "D-501",
               "time": "10:00-11:20"
             },
             {
-              "name": "Data St",
+              "name": "Cy Sec",
               "location": "D-502",
               "time": "02:30-03:50"
             }
@@ -6295,17 +6295,17 @@
           "Monday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-301",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv Algo",
-              "location": "TBA",
+              "location": "D-302",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv OS",
-              "location": "TBA",
+              "location": "D-302",
               "time": "06:45-08:05"
             }
           ],
@@ -6329,7 +6329,7 @@
           "Friday": [
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-301",
               "time": "05:20-06:40"
             }
           ]
@@ -6342,24 +6342,24 @@
           "Monday": [
             {
               "name": "Secure Sys",
-              "location": "TBA",
+              "location": "D-303",
               "time": "05:20-06:40"
             },
             {
               "name": "Applied Info Sec",
-              "location": "TBA",
+              "location": "D-303",
               "time": "06:45-08:05"
             }
           ],
           "Tuesday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-301",
               "time": "05:20-06:40"
             },
             {
               "name": "ML",
-              "location": "TBA",
+              "location": "D-301",
               "time": "06:45-08:05"
             }
           ],
@@ -6378,24 +6378,24 @@
           "Thursday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-301",
               "time": "05:20-06:40"
             },
             {
               "name": "ML",
-              "location": "TBA",
+              "location": "D-301",
               "time": "06:45-08:05"
             }
           ],
           "Friday": [
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-302",
               "time": "05:20-06:40"
             },
             {
               "name": "UHQ-I & II",
-              "location": "TBA",
+              "location": "D-304",
               "time": "05:20-07:10"
             }
           ]
@@ -6408,19 +6408,19 @@
           "Monday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-304",
               "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
             {
               "name": "Adv Quality Assur",
-              "location": "TBA",
+              "location": "D-314",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv S/w Arch",
-              "location": "TBA",
+              "location": "D-314",
               "time": "06:45-08:05"
             }
           ],
@@ -6432,31 +6432,31 @@
             },
             {
               "name": "UHQ-I & II",
-              "location": "TBA",
+              "location": "D-403",
               "time": "05:20-07:10"
             }
           ],
           "Thursday": [
             {
               "name": "Adv Quality Assur",
-              "location": "TBA",
+              "location": "D-314",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv S/w Arch",
-              "location": "TBA",
+              "location": "D-314",
               "time": "06:45-08:05"
             },
             {
               "name": "UHQ-I & II",
-              "location": "TBA",
+              "location": "D-315",
               "time": "05:20-07:10"
             }
           ],
           "Friday": [
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-303",
               "time": "05:20-06:40"
             }
           ]
@@ -6469,29 +6469,29 @@
           "Monday": [
             {
               "name": "App Comp Vision",
-              "location": "TBA",
+              "location": "D-305",
               "time": "05:20-06:40"
             },
             {
               "name": "Math Foundations of AI",
-              "location": "TBA",
+              "location": "D-316",
               "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-303",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv AI",
-              "location": "TBA",
+              "location": "D-304",
               "time": "05:20-06:40"
             },
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-313",
               "time": "06:45-08:05"
             }
           ],
@@ -6510,17 +6510,17 @@
           "Thursday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-303",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv AI",
-              "location": "TBA",
+              "location": "D-304",
               "time": "05:20-06:40"
             },
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-313",
               "time": "06:45-08:05"
             }
           ]
@@ -6529,29 +6529,29 @@
           "Monday": [
             {
               "name": "Agentic AI",
-              "location": "TBA",
+              "location": "D-305",
               "time": "06:45-08:05"
             },
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-315",
               "time": "05:20-06:40"
             },
             {
               "name": "Math Foundations of AI",
-              "location": "TBA",
+              "location": "D-316",
               "time": "06:45-08:05"
             }
           ],
           "Tuesday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-303",
               "time": "06:45-08:05"
             },
             {
               "name": "Adv AI",
-              "location": "TBA",
+              "location": "D-304",
               "time": "06:45-08:05"
             }
           ],
@@ -6575,12 +6575,12 @@
           "Thursday": [
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-303",
               "time": "06:45-08:05"
             },
             {
               "name": "Adv AI",
-              "location": "TBA",
+              "location": "D-304",
               "time": "06:45-08:05"
             }
           ]
@@ -6593,39 +6593,39 @@
           "Monday": [
             {
               "name": "Agentic AI",
-              "location": "TBA",
+              "location": "D-306",
               "time": "05:20-06:40"
             },
             {
               "name": "Adv Topics in Gen AI",
-              "location": "TBA",
+              "location": "D-306",
               "time": "06:45-08:05"
             },
             {
               "name": "App Prog",
-              "location": "TBA",
+              "location": "D-311",
               "time": "05:20-06:40"
             },
             {
               "name": "DS Tools & Tech",
-              "location": "TBA",
+              "location": "D-311",
               "time": "06:45-08:05"
             }
           ],
           "Tuesday": [
             {
               "name": "NLP",
-              "location": "TBA",
+              "location": "D-306",
               "time": "05:20-06:40"
             },
             {
               "name": "Stat & Math",
-              "location": "TBA",
+              "location": "D-306",
               "time": "06:45-08:05"
             },
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-313",
               "time": "05:20-06:40"
             }
           ],
@@ -6654,17 +6654,17 @@
           "Thursday": [
             {
               "name": "NLP",
-              "location": "TBA",
+              "location": "D-306",
               "time": "05:20-06:40"
             },
             {
               "name": "Stat & Math",
-              "location": "TBA",
+              "location": "D-306",
               "time": "06:45-08:05"
             },
             {
               "name": "Research Methodology",
-              "location": "TBA",
+              "location": "D-313",
               "time": "05:20-06:40"
             }
           ]
@@ -6677,24 +6677,24 @@
           "Monday": [
             {
               "name": "Prog for AI",
-              "location": "TBA",
+              "location": "D-312",
               "time": "05:20-06:40"
             },
             {
               "name": "Data St & Algo",
-              "location": "TBA",
+              "location": "D-312",
               "time": "06:45-08:05"
             }
           ],
           "Tuesday": [
             {
               "name": "DB & OS",
-              "location": "TBA",
+              "location": "D-311",
               "time": "05:20-06:40"
             },
             {
               "name": "Math for CI",
-              "location": "TBA",
+              "location": "D-311",
               "time": "06:45-08:05"
             }
           ],
@@ -6713,12 +6713,12 @@
           "Thursday": [
             {
               "name": "DB & OS",
-              "location": "TBA",
+              "location": "D-311",
               "time": "05:20-06:40"
             },
             {
               "name": "Math for CI",
-              "location": "TBA",
+              "location": "D-311",
               "time": "06:45-08:05"
             }
           ]
@@ -6731,19 +6731,19 @@
           "Monday": [
             {
               "name": "Found of Health Info Sys",
-              "location": "TBA",
+              "location": "D-313",
               "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
             {
               "name": "Prog for Digital Health",
-              "location": "TBA",
+              "location": "D-312",
               "time": "05:20-06:40"
             },
             {
               "name": "Found of AI",
-              "location": "TBA",
+              "location": "D-312",
               "time": "06:45-08:05"
             }
           ],
@@ -6757,12 +6757,12 @@
           "Thursday": [
             {
               "name": "Prog for Digital Health",
-              "location": "TBA",
+              "location": "D-312",
               "time": "05:20-06:40"
             },
             {
               "name": "Found of AI",
-              "location": "TBA",
+              "location": "D-312",
               "time": "06:45-08:05"
             }
           ]
@@ -6771,12 +6771,26 @@
     },
     "PhD": {
       "PhD": {
+        "C": {
+          "Tuesday": [
+            {
+              "name": "UHQ-I & II",
+              "location": "D-315",
+              "time": "05:20-07:10"
+            }
+          ]
+        },
         "A": {
           "Wednesday": [
             {
               "name": "UHQ-I & II",
               "location": "C-404",
               "time": "04:00-05:50"
+            },
+            {
+              "name": "UHQ-I & II",
+              "location": "D-402",
+              "time": "05:20-06:40"
             }
           ]
         },
@@ -6784,7 +6798,7 @@
           "Wednesday": [
             {
               "name": "UHQ-I & II",
-              "location": "TBA",
+              "location": "D-402",
               "time": "06:00-07:50"
             }
           ]
@@ -6797,24 +6811,24 @@
           "Monday": [
             {
               "name": "Empirical S/w Engg",
-              "location": "TBA",
+              "location": "D-314",
               "time": "05:20-06:40"
             },
             {
               "name": "Engg AI",
-              "location": "TBA",
+              "location": "D-314",
               "time": "06:45-08:05"
             },
             {
               "name": "CS Elect",
-              "location": "TBA",
+              "location": "D-401",
               "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
             {
               "name": "Securing Cloud",
-              "location": "TBA",
+              "location": "D-302",
               "time": "05:20-06:40"
             }
           ],
@@ -6831,14 +6845,14 @@
             },
             {
               "name": "CS Elect",
-              "location": "TBA",
+              "location": "D-401",
               "time": "05:20-06:40"
             }
           ],
           "Thursday": [
             {
               "name": "Securing Cloud",
-              "location": "TBA",
+              "location": "D-302",
               "time": "05:20-06:40"
             }
           ]
@@ -6846,6 +6860,6 @@
       }
     }
   },
-  "count": 1132,
-  "generatedAt": "2026-08-13T07:18:41.780198+00:00"
+  "count": 1134,
+  "generatedAt": "2026-08-13T08:48:59.221621+00:00"
 }
