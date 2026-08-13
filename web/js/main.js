@@ -132,17 +132,22 @@ function loadScript(src) {
     document.body.appendChild(script);
   });
 }
-// Bump alongside the ?v= on index.html's own script/link tags whenever
-// /css or /js changes — otherwise installed PWAs can keep running an old
-// cached app.js/mobile.js indefinitely even after index.html itself updates.
-const ASSET_VERSION = '3';
+// Read back off this module's own URL (index.html loads it as
+// /js/main.js?v=N) so index.html stays the single place a deploy bumps.
+// Hardcoding it here too meant app.js/mobile.js could silently keep serving
+// a stale cached copy whenever only one of the two spots got updated.
+const ASSET_VERSION = (() => {
+  try { return new URL(import.meta.url).searchParams.get('v') || ''; }
+  catch (e) { return ''; }
+})();
+const versioned = (path) => (ASSET_VERSION ? `${path}?v=${ASSET_VERSION}` : path);
 function loadCompatibilityRuntime() {
-  return loadScript(`/js/app.js?v=${ASSET_VERSION}`);
+  return loadScript(versioned('/js/app.js'));
 }
 // The phone view reads app.js's globals directly, so it must load after it and
 // as a classic script — a module would not share that global scope.
 function loadMobileRuntime() {
-  return loadScript(`/js/mobile.js?v=${ASSET_VERSION}`);
+  return loadScript(versioned('/js/mobile.js'));
 }
 // Original initialization remains in app.js so its globals, listener order, and
 // inline-handler compatibility remain exactly as extracted. These boundaries
