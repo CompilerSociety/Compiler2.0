@@ -50,22 +50,22 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "CAL-I LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "CAL-I LAB",
               "time": "01:00-02:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "CAL-II LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "CAL-II LAB",
               "time": "01:00-02:20"
             }
@@ -108,22 +108,22 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D1)",
               "location": "KHYBER III",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D1)",
               "location": "KHYBER III",
               "time": "01:00-02:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D2)",
               "location": "KHYBER IV",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D2)",
               "location": "KHYBER IV",
               "time": "01:00-02:20"
             }
@@ -261,22 +261,22 @@
               "time": "03:50-05:10"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "CAL-I LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "CAL-I LAB",
               "time": "01:00-02:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "CAL-II LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "CAL-II LAB",
               "time": "01:00-02:20"
             }
@@ -302,22 +302,22 @@
               "time": "08:30-10:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "CAL-I LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "CAL-I LAB",
               "time": "01:00-02:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "CAL-II LAB",
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "CAL-II LAB",
               "time": "01:00-02:20"
             }
@@ -684,6 +684,18 @@
               "time": "01:00-02:20"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "Digital Marketing (MG4051)",
+              "location": "A-303",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Digital Marketing (MG4051)",
+              "location": "A-303",
+              "time": "03:50-05:10"
+            }
+          ],
           "Wednesday": [
             {
               "name": "Entreprenureship (MG4011)",
@@ -694,6 +706,18 @@
               "name": "Business Data and Text Mining (BA3002)",
               "location": "A-202",
               "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Empowering Organizations with Analytics and Data Visualization (BA4007)",
+              "location": "A-01",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Empowering Organizations with Analytics and Data Visualization (BA4007)",
+              "location": "A-01",
+              "time": "03:50-05:10"
             }
           ]
         },
@@ -710,6 +734,18 @@
               "time": "11:30-12:50"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "Digital Marketing (MG4051)",
+              "location": "A-303",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Digital Marketing (MG4051)",
+              "location": "A-303",
+              "time": "03:50-05:10"
+            }
+          ],
           "Wednesday": [
             {
               "name": "Entreprenureship (MG4011)",
@@ -720,6 +756,18 @@
               "name": "Business Data and Text Mining (BA3002)",
               "location": "A-202",
               "time": "11:30-12:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Empowering Organizations with Analytics and Data Visualization (BA4007)",
+              "location": "A-01",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Empowering Organizations with Analytics and Data Visualization (BA4007)",
+              "location": "A-01",
+              "time": "03:50-05:10"
             }
           ]
         }
@@ -967,22 +1015,22 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "KHYBER III",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "KHYBER III",
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "KHYBER IV",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "KHYBER IV",
               "time": "10:00-11:20"
             }
@@ -992,11 +1040,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-01",
               "time": "02:25-04:15"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-01",
-              "time": "03:50-05:10"
             },
             {
               "name": "English - I (SS1016)",
@@ -1105,9 +1148,9 @@
           ],
           "Thursday": [
             {
-              "name": "BBA07A/B",
+              "name": "Fundamental of Management (MG1001)",
               "location": "A-303",
-              "time": "10:00-11:20"
+              "time": "11:30-12:50"
             },
             {
               "name": "Intro to Financial Accounting (AF1003)",
@@ -1115,22 +1158,22 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "KHYBER III",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "KHYBER III",
               "time": "03:50-05:10"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "KHYBER IV",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "KHYBER IV",
               "time": "03:50-05:10"
             }
@@ -1140,11 +1183,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-303",
               "time": "02:25-04:15"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-303",
-              "time": "10:00-11:20"
             }
           ]
         },
@@ -1164,11 +1202,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-316",
               "time": "02:25-04:15"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-316",
-              "time": "01:00-02:20"
             }
           ],
           "Tuesday": [
@@ -1178,22 +1211,22 @@
               "time": "02:25-04:15"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "CAL-I LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "CAL-I LAB",
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "CAL-II LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "CAL-II LAB",
               "time": "10:00-11:20"
             }
@@ -1260,6 +1293,18 @@
               "time": "03:50-05:10"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "Brand Management (MG4062)",
+              "location": "A-04",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Brand Management (MG4062)",
+              "location": "A-04",
+              "time": "01:00-02:20"
+            }
+          ],
           "Wednesday": [
             {
               "name": "Strategic Management (MG4003)",
@@ -1270,6 +1315,18 @@
               "name": "Financial Institutions & Markets (AF3003)",
               "location": "A-101",
               "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "location": "A-303",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "location": "A-303",
+              "time": "10:00-11:20"
             }
           ],
           "Friday": [
@@ -1298,6 +1355,18 @@
               "time": "02:25-03:45"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "Brand Management (MG4062)",
+              "location": "A-04",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Brand Management (MG4062)",
+              "location": "A-04",
+              "time": "01:00-02:20"
+            }
+          ],
           "Wednesday": [
             {
               "name": "Strategic Management (MG4003)",
@@ -1308,6 +1377,18 @@
               "name": "Financial Institutions & Markets (AF3003)",
               "location": "A-101",
               "time": "02:25-03:45"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "location": "A-303",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "location": "A-303",
+              "time": "10:00-11:20"
             }
           ]
         }
@@ -1845,700 +1926,36 @@
         }
       }
     },
-    "BS Accounting & Finance": {
-      "2023": {
-        "B": {
-          "Monday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-02",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Audit & Assurance (AF4005)",
-              "location": "A-03",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Investment Analysis & Management (AF4006)",
-              "location": "A-02",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Audit & Assurance (AF4005)",
-              "location": "A-01",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-02",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Investment Analysis & Management (AF4006)",
-              "location": "A-01",
-              "time": "01:00-02:20"
-            }
-          ]
-        },
-        "A": {
-          "Monday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-02",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Audit & Assurance (AF4005)",
-              "location": "A-03",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Investment Analysis & Management (AF4006)",
-              "location": "A-02",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Audit & Assurance (AF4005)",
-              "location": "A-01",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-02",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Investment Analysis & Management (AF4006)",
-              "location": "A-01",
-              "time": "11:30-12:50"
-            }
-          ]
-        }
-      },
-      "2026": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Introduction to Financial Accounting (AF1003)",
-              "location": "A-103",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Business Mathematics (MG1011)",
-              "location": "A-103",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "English - I (SS1016)",
-              "location": "A-103",
-              "time": "11:30-01:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Marketing Management (MG1002)",
-              "location": "A-315",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Psychology 8:30 - 10:20 (SS2019)",
-              "location": "A-316",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "CAL-I LAB",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "CAL-I LAB",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "CAL-II LAB",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "CAL-II LAB",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Business Mathematics (MG1011)",
-              "location": "A-103",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Pakistan Studies (SS1015)",
-              "location": "A-103",
-              "time": "11:30-01:20"
-            },
-            {
-              "name": "Introduction to Financial Accounting (AF1003)",
-              "location": "A-314",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Marketing Management (MG1002)",
-              "location": "A-202",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-II",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-II",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Business Mathematics (MG1011)",
-              "location": "A-104",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Introduction to Financial Accounting (AF1003)",
-              "location": "A-104",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Pakistan Studies (SS1015)",
-              "location": "A-104",
-              "time": "11:30-01:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Marketing Management (MG1002)",
-              "location": "A-315",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-I",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-I",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "English - I (SS1016)",
-              "location": "A-102",
-              "time": "11:30-01:20"
-            },
-            {
-              "name": "Business Mathematics (MG1011)",
-              "location": "A-103",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Introduction to Financial Accounting (AF1003)",
-              "location": "A-314",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Marketing Management (MG1002)",
-              "location": "A-202",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Psychology (SS2019)",
-              "location": "A-316",
-              "time": "08:30-10:20"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "KHYBER III",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "KHYBER III",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "KHYBER IV",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
-              "location": "KHYBER IV",
-              "time": "01:00-02:20"
-            }
-          ]
-        }
-      },
-      "2024": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-203",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-314",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-314",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-103",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-103",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER I",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER I",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-203",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-311",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-311",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-104",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-104",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-II",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-II",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-203",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-315",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-315",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-104",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-104",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-III",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-III",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-203",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-314",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-314",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-201",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-201",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-I",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-I",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER III",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER III",
-              "time": "10:00-11:20"
-            }
-          ]
-        },
-        "C": {
-          "Monday": [
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-310",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-310",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-201",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-201",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-311",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Business Law (MG3002)",
-              "location": "A-02",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-02",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER IV",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Management Information System Lab (CL3003)",
-              "location": "KHYBER IV",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Cost and Management Accounting (AF2005)",
-              "location": "A-202",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-202",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Management Information System (CS3003)",
-              "location": "A-202",
-              "time": "11:30-12:50"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "MEHRAN-II",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "MEHRAN-II",
-              "time": "10:00-11:20"
-            }
-          ]
-        }
-      },
-      "2025": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Business Economics (MG2012)",
-              "location": "A-314",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Environmental Science and Sustainability for Business (MG2011)",
-              "location": "A-314",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-I",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-I",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Data Analysis for Business II (MG2009)",
-              "location": "A-103",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Corporate Accounting - I (AF2001)",
-              "location": "A-201",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Business Communication (MG2010)",
-              "location": "A-201",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "U-Holy Quran-I&II (SS1022)",
-              "location": "A-104",
-              "time": "11:30-01:20"
-            },
-            {
-              "name": "Business Economics (MG2012)",
-              "location": "A-201",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Environmental Science and Sustainability for Business (MG2011)",
-              "location": "A-201",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Data Analysis for Business II (MG2009)",
-              "location": "A-104",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Corporate Accounting - I (AF2001)",
-              "location": "A-211",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Business Communication (MG2010)",
-              "location": "A-211",
-              "time": "01:00-02:20"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Environmental Science and Sustainability for Business (MG2011)",
-              "location": "A-315",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Economics (MG2012)",
-              "location": "A-315",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Data Analysis for Business II (MG2009)",
-              "location": "A-103",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Communication (MG2010)",
-              "location": "A-202",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Corporate Accounting - I (AF2001)",
-              "location": "A-202",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Environmental Science and Sustainability for Business (MG2011)",
-              "location": "A-202",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Economics (MG2012)",
-              "location": "A-202",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-III",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-III",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Data Analysis for Business II (MG2009)",
-              "location": "A-104",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Business Communication (MG2010)",
-              "location": "A-301",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Corporate Accounting - I (AF2001)",
-              "location": "A-301",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "U-Holy Quran-I&II (SS1022)",
-              "location": "A-302",
-              "time": "08:30-10:20"
-            }
-          ]
-        }
-      }
-    },
     "BS Fintech": {
       "2023": {
         "A": {
           "Monday": [
             {
+              "name": "Cybersecurity for FinTech (CY4053)",
+              "location": "A-01",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Cybersecurity for FinTech (CY4053)",
+              "location": "A-01",
+              "time": "03:50-05:10"
+            },
+            {
               "name": "Investment and Portfolio Analytics (AF4011)",
               "location": "A-04",
               "time": "11:30-12:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Digital Assets and Cryptocurrencies; Conventional and Shariah Perspectives (AF4017)",
+              "location": "A-102",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Digital Assets and Cryptocurrencies; Conventional and Shariah Perspectives (AF4017)",
+              "location": "A-102",
+              "time": "03:50-05:10"
             }
           ],
           "Thursday": [
@@ -2546,15 +1963,59 @@
               "name": "Investment and Portfolio Analytics (AF4011)",
               "location": "C-406",
               "time": "11:30-12:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Digital Bank and Payment Industry (FT4005)",
+              "location": "A-301",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Digital Bank and Payment Industry (FT4005)",
+              "location": "A-301",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Financing New Ventures (AF3006)",
+              "location": "A-301",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Financing New Ventures (AF3006)",
+              "location": "A-301",
+              "time": "03:50-05:10"
             }
           ]
         },
         "B": {
           "Monday": [
             {
+              "name": "Cybersecurity for FinTech (CY4053)",
+              "location": "A-01",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Cybersecurity for FinTech (CY4053)",
+              "location": "A-01",
+              "time": "03:50-05:10"
+            },
+            {
               "name": "Investment and Portfolio Analytics (AF4011)",
               "location": "A-04",
               "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Digital Assets and Cryptocurrencies; Conventional and Shariah Perspectives (AF4017)",
+              "location": "A-102",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Digital Assets and Cryptocurrencies; Conventional and Shariah Perspectives (AF4017)",
+              "location": "A-102",
+              "time": "03:50-05:10"
             }
           ],
           "Thursday": [
@@ -2562,6 +2023,28 @@
               "name": "Investment and Portfolio Analytics (AF4011)",
               "location": "C-406",
               "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Digital Bank and Payment Industry (FT4005)",
+              "location": "A-301",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Digital Bank and Payment Industry (FT4005)",
+              "location": "A-301",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Financing New Ventures (AF3006)",
+              "location": "A-301",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Financing New Ventures (AF3006)",
+              "location": "A-301",
+              "time": "03:50-05:10"
             }
           ]
         }
@@ -2629,11 +2112,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-211",
               "time": "08:30-10:20"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-211",
-              "time": "10:00-11:20"
             }
           ],
           "Friday": [
@@ -2648,22 +2126,22 @@
               "time": "03:50-05:10"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "CAL-I LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A1)",
               "location": "CAL-I LAB",
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "CAL-II LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group A2)",
               "location": "CAL-II LAB",
               "time": "10:00-11:20"
             }
@@ -2697,11 +2175,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-210",
               "time": "08:30-10:20"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-210",
-              "time": "10:00-11:20"
             }
           ],
           "Wednesday": [
@@ -2750,22 +2223,22 @@
               "time": "10:00-11:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "KK-II",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B1)",
               "location": "KK-II",
               "time": "03:50-05:10"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "KK-III",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group B2)",
               "location": "KK-III",
               "time": "03:50-05:10"
             }
@@ -2779,22 +2252,22 @@
               "time": "08:30-10:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "KHYBER III",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C1)",
               "location": "KHYBER III",
               "time": "03:50-05:10"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "KHYBER IV",
               "time": "02:25-03:45"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group C2)",
               "location": "KHYBER IV",
               "time": "03:50-05:10"
             }
@@ -2821,11 +2294,6 @@
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-211",
               "time": "02:25-04:15"
-            },
-            {
-              "name": "U-Sirat Nabi",
-              "location": "A-211",
-              "time": "03:50-05:10"
             },
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
@@ -2881,27 +2349,22 @@
               "time": "02:25-04:15"
             },
             {
-              "name": "U-Sirat Nabi",
-              "location": "A-211",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D1)",
               "location": "CAL-I LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D1)",
               "location": "CAL-I LAB",
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D2)",
               "location": "CAL-II LAB",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016)",
+              "name": "English - I- Lab (SL1016) (Group D2)",
               "location": "CAL-II LAB",
               "time": "10:00-11:20"
             }
@@ -3152,9 +2615,9 @@
           ],
           "Tuesday": [
             {
-              "name": "AF07A/B",
+              "name": "Business Finance (AF2004)",
               "location": "A-301",
-              "time": "10:00-11:20"
+              "time": "11:30-12:50"
             },
             {
               "name": "Introduction to Object Oriented Programming (CS2012)",
@@ -3563,8 +3026,734 @@
           ]
         }
       }
+    },
+    "BS Accounting & Finance": {
+      "2023": {
+        "B": {
+          "Monday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-02",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Audit & Assurance (AF4005)",
+              "location": "A-03",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Investment Analysis & Management (AF4006)",
+              "location": "A-02",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Strategic Business Reporting (MG4045)",
+              "location": "A-104",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Strategic Business Reporting (MG4045)",
+              "location": "A-104",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Islamic Banking and Finance",
+              "location": "A-301",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Islamic Banking and Finance",
+              "location": "A-301",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Audit & Assurance (AF4005)",
+              "location": "A-01",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-02",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Investment Analysis & Management (AF4006)",
+              "location": "A-01",
+              "time": "01:00-02:20"
+            }
+          ]
+        },
+        "A": {
+          "Monday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-02",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Audit & Assurance (AF4005)",
+              "location": "A-03",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Investment Analysis & Management (AF4006)",
+              "location": "A-02",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Strategic Business Reporting (MG4045)",
+              "location": "A-104",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Strategic Business Reporting (MG4045)",
+              "location": "A-104",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Islamic Banking and Finance",
+              "location": "A-301",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Islamic Banking and Finance",
+              "location": "A-301",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Audit & Assurance (AF4005)",
+              "location": "A-01",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-02",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Investment Analysis & Management (AF4006)",
+              "location": "A-01",
+              "time": "11:30-12:50"
+            }
+          ]
+        }
+      },
+      "2026": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Introduction to Financial Accounting (AF1003)",
+              "location": "A-103",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Business Mathematics (MG1011)",
+              "location": "A-103",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "English - I (SS1016)",
+              "location": "A-103",
+              "time": "11:30-01:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Marketing Management (MG1002)",
+              "location": "A-315",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Psychology 8:30 - 10:20 (SS2019)",
+              "location": "A-316",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "CAL-I LAB",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "CAL-I LAB",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "CAL-II LAB",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "CAL-II LAB",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Business Mathematics (MG1011)",
+              "location": "A-103",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Pakistan Studies (SS1015)",
+              "location": "A-103",
+              "time": "11:30-01:20"
+            },
+            {
+              "name": "Introduction to Financial Accounting (AF1003)",
+              "location": "A-314",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Marketing Management (MG1002)",
+              "location": "A-202",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Introduction to Financial Accounting- Lab (FL1003)",
+              "location": "KK-II",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Introduction to Financial Accounting- Lab (FL1003)",
+              "location": "KK-II",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "Business Mathematics (MG1011)",
+              "location": "A-104",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Introduction to Financial Accounting (AF1003)",
+              "location": "A-104",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Pakistan Studies (SS1015)",
+              "location": "A-104",
+              "time": "11:30-01:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Marketing Management (MG1002)",
+              "location": "A-315",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Introduction to Financial Accounting- Lab (FL1003)",
+              "location": "KK-I",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Introduction to Financial Accounting- Lab (FL1003)",
+              "location": "KK-I",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "English - I (SS1016)",
+              "location": "A-102",
+              "time": "11:30-01:20"
+            },
+            {
+              "name": "Business Mathematics (MG1011)",
+              "location": "A-103",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Introduction to Financial Accounting (AF1003)",
+              "location": "A-314",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Marketing Management (MG1002)",
+              "location": "A-202",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Psychology (SS2019)",
+              "location": "A-316",
+              "time": "08:30-10:20"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group B1)",
+              "location": "KHYBER III",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group B1)",
+              "location": "KHYBER III",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group B2)",
+              "location": "KHYBER IV",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group B2)",
+              "location": "KHYBER IV",
+              "time": "01:00-02:20"
+            }
+          ]
+        }
+      },
+      "2024": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-203",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-314",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-314",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-103",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-103",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER I",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER I",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-203",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-311",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-311",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-104",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-104",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-II",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-II",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-203",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-315",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-315",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-104",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-104",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-III",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-III",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-203",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-314",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-314",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-201",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-201",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KK-I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KK-I",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER III",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER III",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "C": {
+          "Monday": [
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-310",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-310",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-201",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-201",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-311",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Business Law (MG3002)",
+              "location": "A-02",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-02",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER IV",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Management Information System Lab (CL3003)",
+              "location": "KHYBER IV",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Cost and Management Accounting (AF2005)",
+              "location": "A-202",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-202",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Management Information System (CS3003)",
+              "location": "A-202",
+              "time": "11:30-12:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "MEHRAN-II",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "MEHRAN-II",
+              "time": "10:00-11:20"
+            }
+          ]
+        }
+      },
+      "2025": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Business Economics (MG2012)",
+              "location": "A-314",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Environmental Science and Sustainability for Business (MG2011)",
+              "location": "A-314",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Data Analysis for Business -II Lab (LG2009)",
+              "location": "KK-I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Data Analysis for Business -II Lab (LG2009)",
+              "location": "KK-I",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Data Analysis for Business II (MG2009)",
+              "location": "A-103",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Corporate Accounting - I (AF2001)",
+              "location": "A-201",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Business Communication (MG2010)",
+              "location": "A-201",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "U-Holy Quran-I&II (SS1022)",
+              "location": "A-104",
+              "time": "11:30-01:20"
+            },
+            {
+              "name": "Business Economics (MG2012)",
+              "location": "A-201",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Environmental Science and Sustainability for Business (MG2011)",
+              "location": "A-201",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Data Analysis for Business II (MG2009)",
+              "location": "A-104",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Corporate Accounting - I (AF2001)",
+              "location": "A-211",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Business Communication (MG2010)",
+              "location": "A-211",
+              "time": "01:00-02:20"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "Environmental Science and Sustainability for Business (MG2011)",
+              "location": "A-315",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Economics (MG2012)",
+              "location": "A-315",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Data Analysis for Business II (MG2009)",
+              "location": "A-103",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Communication (MG2010)",
+              "location": "A-202",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Corporate Accounting - I (AF2001)",
+              "location": "A-202",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Environmental Science and Sustainability for Business (MG2011)",
+              "location": "A-202",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Economics (MG2012)",
+              "location": "A-202",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Data Analysis for Business -II Lab (LG2009)",
+              "location": "KK-III",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Data Analysis for Business -II Lab (LG2009)",
+              "location": "KK-III",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Data Analysis for Business II (MG2009)",
+              "location": "A-104",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Business Communication (MG2010)",
+              "location": "A-301",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Corporate Accounting - I (AF2001)",
+              "location": "A-301",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "U-Holy Quran-I&II (SS1022)",
+              "location": "A-302",
+              "time": "08:30-10:20"
+            }
+          ]
+        }
+      }
     }
   },
-  "count": 605,
-  "generatedAt": "2026-08-13T18:45:23.515801+00:00"
+  "count": 638,
+  "generatedAt": "2026-08-13T19:15:43.663504+00:00"
 }

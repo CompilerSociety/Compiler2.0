@@ -1,6 +1,6 @@
 {
  "counts": {
-  "json": 216,
+  "json": 212,
   "cells": 228,
   "cells_parsed": 200,
   "alloc_rows": 81,
@@ -352,6 +352,24 @@
  "D_dept_mismatch": [],
  "D_batch_mismatch": [],
  "D_section_not_offered": [
+  {
+   "dept": "BS EE",
+   "batch": "2026",
+   "section": "B",
+   "day": "Tuesday",
+   "course": "Engineering Drawing",
+   "room": "KOH",
+   "time": "02:20-03:40",
+   "alloc_sections": [
+    "A",
+    "C",
+    "D",
+    "E"
+   ],
+   "codes": [
+    "ME1001"
+   ]
+  },
   {
    "dept": "BS EE",
    "batch": "2025",

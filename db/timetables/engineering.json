@@ -548,11 +548,6 @@
               "time": "8:30-09:50"
             },
             {
-              "name": "Data Com. & Netwks.",
-              "location": "B-027",
-              "time": "09:55-11:15"
-            },
-            {
               "name": "Electronic Circuit Design",
               "location": "B-028",
               "time": "09:55-11:15"
@@ -865,11 +860,6 @@
         "A": {
           "Monday": [
             {
-              "name": "Comp. Variables & Trans.",
-              "location": "B-019",
-              "time": "12:45-02:05"
-            },
-            {
               "name": "Elect Devices & Circuits",
               "location": "B-129",
               "time": "8:30-09:50"
@@ -907,11 +897,6 @@
               "name": "Linear Algebra",
               "location": "B-028",
               "time": "11:25-12:45"
-            },
-            {
-              "name": "Comp. Variables & Trans.",
-              "location": "B-019",
-              "time": "12:50-02:10"
             },
             {
               "name": "Discrete Strucures",
@@ -1000,11 +985,6 @@
             }
           ],
           "Wednesday": [
-            {
-              "name": "Comp. Variables & Trans.",
-              "location": "B-020",
-              "time": "02:20-03:40"
-            },
             {
               "name": "Object Oriented Prog.",
               "location": "B-130",
@@ -1326,6 +1306,6 @@
       }
     }
   },
-  "count": 216,
-  "generatedAt": "2026-08-13T18:45:27.593727+00:00"
+  "count": 212,
+  "generatedAt": "2026-08-13T19:15:49.184856+00:00"
 }

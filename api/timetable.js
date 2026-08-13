@@ -609,6 +609,26 @@ const FSM_COMBINED_RE = /^([A-Z]{2,5}\d{2})\s*([A-Z](?:\s*[\/&]\s*[A-Z])+)$/;
 const FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48];
 const FSM_SLOT_WIDTH = 9;
 
+// '10:20' -> minutes past midnight, using the sheet's unlabelled 12-hour
+// convention (1-7 afternoon, 8-11 morning, 12 noon) — the same rule as
+// timeToNumber() in web/js/app.js.
+function hhmmToMinutes(text) {
+  const m = /^\s*(\d{1,2}):(\d{2})\s*$/.exec(text || "");
+  if (!m) return null;
+  const hour = parseInt(m[1], 10), minute = parseInt(m[2], 10);
+  if (hour === 12) return 720 + minute;
+  if (hour >= 8 && hour < 12) return hour * 60 + minute;
+  if (hour >= 1 && hour < 8) return (hour + 12) * 60 + minute;
+  return null;
+}
+function slotStartMinutes(slot) {
+  return hhmmToMinutes(String(slot || "").split("-")[0]);
+}
+function slotEndMinutes(slot) {
+  const parts = String(slot || "").split("-");
+  return parts.length === 2 ? hhmmToMinutes(parts[1]) : null;
+}
+
 const FSM_DAY_RE = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$/i;
 
 const FSM_PROGRAM_MAP = {
@@ -653,9 +673,15 @@ function parseFSMSectionCode(raw) {
     const lettersStr = combo[2].replace(/[\/&]/g, " ");
       const letters = lettersStr.trim().split(/\s+/);
     const results = [];
+    // FSM_COMBINED_RE captures the base WITHOUT any section letter
+    // ("BBA07A/B" -> base "BBA07", letters A and B), so every letter is appended
+    // to the base. The old form kept the base as-is for the first letter and
+    // chopped a character off it for the rest, giving "BBA07" and "BBA0B" —
+    // neither matches FSM_SECTION_RE, so this branch returned null for every
+    // combined code and the cell was then read as a course name.
     for (let i = 0; i < letters.length; i++) {
       const l = letters[i];
-      const code = i === 0 ? base : base.slice(0, -1) + l;
+      const code = base + l;
       const m = code.match(FSM_SECTION_RE);
       if (m) {
         results.push({
@@ -775,6 +801,7 @@ function parseBusinessGrid(grid, tabName, target) {
     const maxCol = (slotStarts[slotStarts.length - 1] || 48) + FSM_SLOT_WIDTH;
 
     let pending = null; // { course, time, col } — last course cell awaiting its section
+    let overrideUntil = 0; // per room row: how late the last override runs
     for (let c = 3; c < maxCol && c < rowData.length; c++) {
       const cell = oneLine(rowData[c] || "");
       if (!cell) continue;
@@ -793,6 +820,13 @@ function parseBusinessGrid(grid, tabName, target) {
 
         // Generate one record per (section, combined-section-letter)
         for (const ps of secs) {
+          // A split lab runs both halves of a section at once in two rooms
+          // ("BBA01A1" in one, "BBA01A2" in the other). Both are section A, so
+          // the group has to live in the label — without it the student got two
+          // identical entries at the same time and no way to tell them apart.
+          const label = ps.subSection
+            ? `${courseLabel} (Group ${ps.section}${ps.subSection})`
+            : courseLabel;
           const dept = FSM_PROGRAM_MAP[ps.program] || ps.program;
           let batch = fsmSemesterToBatch(ps.semester);
 
@@ -804,7 +838,7 @@ function parseBusinessGrid(grid, tabName, target) {
           const effectiveTime = parsedCourse.timeOverride || slotTime;
 
           // Deduplicate: same dept+batch+section+day+course+room+time
-          const dedupKey = `${dept}|${batch}|${ps.section}|${currentDay}|${courseLabel}|${room}|${effectiveTime}`;
+          const dedupKey = `${dept}|${batch}|${ps.section}|${currentDay}|${label}|${room}|${effectiveTime}`;
           if (processedCourses.has(dedupKey)) continue;
           processedCourses.add(dedupKey);
 
@@ -813,10 +847,19 @@ function parseBusinessGrid(grid, tabName, target) {
             batch,
             section: ps.section,
             day: currentDay,
-            course: courseLabel,
+            course: label,
             room,
             time: effectiveTime
           })) added++;
+        }
+        // A course carrying a time override runs past its own band, so the next
+        // band's cell for this room is a continuation label for the same class
+        // rather than a new course, and it never carries a course code
+        // ("U-Sirat Nabi" under "SS1007 Islamic Studies/Ethics (08:30-10:20)").
+        // Remember how far this one runs so that cell can be skipped below.
+        if (parsedCourse.timeOverride) {
+          const end = slotEndMinutes(parsedCourse.timeOverride);
+          if (end !== null) overrideUntil = Math.max(overrideUntil, end);
         }
         continue;
       }
@@ -841,6 +884,10 @@ function parseBusinessGrid(grid, tabName, target) {
         return c >= sc && c < end;
       });
       if (band === undefined) continue;
+      // See overrideUntil above: a code-less cell whose band has already been
+      // consumed by the previous course's override is that course's second-half
+      // label, not a class of its own.
+      if (!parsedCourse.code && slotStartMinutes(headerTimes[band]) < overrideUntil) continue;
       pending = { course: parsedCourse, time: headerTimes[band], col: c };
     }
   }

@@ -1,6 +1,7 @@
 """Engineering-school timetable parser."""
 
 import re
+from collections import defaultdict
 from types import SimpleNamespace
 
 from ..config import (
@@ -929,8 +930,15 @@ def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
                 offerings = {(c["dept"], c["batch"], c["is_repeat"])
                              for c in (picked or candidates) if c["dept"]}
                 if len({b for _d, b, _rp in offerings}) == 1:
+                    # Flagged speculative: filing one cell under several
+                    # departments is right for a genuinely joint class and wrong
+                    # for two same-code offerings that only share a title.
+                    # prune_speculative_clashes() settles which, once the whole
+                    # grid is in and the impossible copies can be seen.
+                    speculative = len(offerings) > 1
                     for dept, batch, is_repeat in sorted(offerings):
-                        results.append((fse_dept_key(dept, batch), batch, is_repeat))
+                        results.append((fse_dept_key(dept, batch), batch,
+                                        is_repeat, speculative))
                 else:
                     dlog_warn(
                         f"  FSE: ambiguous dept for '{parsed['course']}' section "
@@ -944,12 +952,117 @@ def resolve_fse_entry(parsed, course_lookup, common, aliases=None):
             )
             results.append(("BS EE", infer_fse_batch_fallback(parsed["course"]), False))
 
-    return results
+    # Every path above yields (dept, batch, is_repeat); only the ambiguous
+    # fan-out adds the speculative flag. Pad the rest so callers unpack one shape.
+    return [r if len(r) == 4 else (r[0], r[1], r[2], False) for r in results]
 
 
 # ---------------------------------------------------------------------------
 # Main grid parser (Classes Schedule FSE SP-26 tab)
 # ---------------------------------------------------------------------------
+
+def _fse_minutes(hhmm):
+    """'02:20' -> minutes past midnight, using the sheet's unlabelled 12-hour
+    convention (1-7 afternoon, 8-11 morning, 12 noon)."""
+    m = re.match(r'^\s*(\d{1,2})[:.](\d{2})\s*$', hhmm or '')
+    if not m:
+        return None
+    hour, minute = int(m.group(1)), int(m.group(2))
+    if hour == 12:
+        return 12 * 60 + minute
+    if 8 <= hour < 12:
+        return hour * 60 + minute
+    if 1 <= hour < 8:
+        return (hour + 12) * 60 + minute
+    return None
+
+
+def _fse_bounds(slot):
+    parts = str(slot or '').split('-')
+    if len(parts) != 2:
+        return None
+    start, end = _fse_minutes(parts[0]), _fse_minutes(parts[1])
+    if start is None or end is None:
+        return None
+    return (start, end + 720) if end < start else (start, end)
+
+
+def prune_speculative_clashes(tt, speculative_entries, common):
+    """Drop shared-course copies that make a section's day impossible.
+
+    resolve_fse_entry() files a cell whose department is ambiguous under every
+    department that offers the course, because the batch is knowable even when
+    the department is not. That is correct for a genuinely joint class, and
+    wrong when two programmes merely run same-code offerings of their own: it
+    put MT2003 into BS CE at the same hour as Discrete Structures, which is
+    CE-only, so a CE section had two lectures at once in two rooms.
+
+    A speculative copy that collides with a class whose department was never in
+    doubt is the copy that does not belong. Nothing is dropped when the clash is
+    with another speculative entry, or when there is no clash at all — a joint
+    class survives untouched.
+    """
+    dlog = common.dlog
+    dlog_warn = common.dlog_warn
+    if not speculative_entries:
+        return 0
+
+    spec_keys = {(d, b, s, day, c, r, t)
+                 for d, b, s, day, c, r, t in speculative_entries}
+
+    # One sheet cell becomes one copy per candidate department. Group them so a
+    # copy is only ever dropped while a sibling survives — if every copy clashes,
+    # the conflict is in the sheet, not in our guess, and dropping them all would
+    # erase the class from the timetable entirely.
+    groups = defaultdict(list)
+    for dept, batch, section, day, course, room, time in speculative_entries:
+        groups[(day, course, room, time, section, batch)].append(dept)
+
+    def clashes_with_certain(dept, batch, section, day, course, room, time):
+        arr = tt.get(dept, {}).get(batch, {}).get(section, {}).get(day)
+        if not arr:
+            return None
+        mine = _fse_bounds(time)
+        if not mine:
+            return None
+        for other in arr:
+            if other["c"] == course and other["l"] == room and other["t"] == time:
+                continue
+            if (dept, batch, section, day, other["c"], other["l"], other["t"]) in spec_keys:
+                continue          # both sides speculative — no basis to choose
+            theirs = _fse_bounds(other["t"])
+            if theirs and mine[0] < theirs[1] and theirs[0] < mine[1]:
+                return other
+        return None
+
+    dropped = 0
+    for (day, course, room, time, section, batch), depts in groups.items():
+        verdicts = {d: clashes_with_certain(d, batch, section, day, course, room, time)
+                    for d in depts}
+        losers = [d for d, conflict in verdicts.items() if conflict]
+        if not losers:
+            continue
+        if len(losers) == len(depts):
+            dlog_warn(
+                f"  FSE: '{course}' {batch}-{section} {day} {time} clashes in every "
+                f"department that offers it ({', '.join(sorted(depts))}) — keeping "
+                f"all copies; this looks like a conflict in the sheet itself")
+            continue
+        for dept in losers:
+            arr = tt[dept][batch][section][day]
+            for i, x in enumerate(arr):
+                if x["c"] == course and x["l"] == room and x["t"] == time:
+                    arr.pop(i)
+                    dropped += 1
+                    dlog(f"  FSE: dropped shared-course copy '{course}' from "
+                         f"{dept} {batch}-{section} {day} {time} — clashes with "
+                         f"'{verdicts[dept]['c']}' ({verdicts[dept]['t']}), "
+                         f"which is not shared")
+                    break
+    if dropped:
+        dlog(f"  FSE: pruned {dropped} speculative cross-listed entries")
+    return dropped
+
 
 def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
     """
@@ -984,6 +1097,9 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
 
     added = 0
     matched_records = set()
+    # Cells filed under more than one department because the department was
+    # ambiguous — settled by prune_speculative_clashes() once the grid is in.
+    speculative_entries = []
     # Grid title key -> courses-tab title key, for titles the grid abbreviates.
     aliases = {}
     structural_hits = 0
@@ -1104,7 +1220,7 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                     instr_text = one_line(instr_row[course_col] if course_col < len(instr_row) else "")
                     if re.search(r'\bPhd\b|\bMS\s+EE\b', instr_text, re.IGNORECASE):
                         is_ms = True
-                        resolved = [("MS EE", "MS", False)]
+                        resolved = [("MS EE", "MS", False, False)]
 
                 day = row_days[r]
                 if not day:
@@ -1113,7 +1229,7 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                 # Credit the courses-tab spelling, not the grid's abbreviation,
                 # so cross_validate() sees the entry as scheduled.
                 norm_name = aliases.get(grid_key, grid_key)
-                for dept, batch, is_repeat in resolved:
+                for dept, batch, is_repeat, speculative in resolved:
                     store_batch = REPEAT_BATCH_KEY if is_repeat else batch
                     bare_dept = dept.split(" ")[-1]
                     matched_records.add((norm_name, bare_dept))
@@ -1123,6 +1239,10 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                         if add_course(tt, dept, store_batch, section, day,
                                       parsed["course"], room, effective_time):
                             added += 1
+                            if speculative:
+                                speculative_entries.append(
+                                    (dept, store_batch, section, day,
+                                     parsed["course"], room, effective_time))
 
             r += 2  # skip to next course row (past instructor row)
 
@@ -1130,6 +1250,8 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
     dlog(f"  FSE: structural resolution {structural_hits}/{resolved_total} "
          f"schedule entries ({len(aliases)} via abbreviation matching); "
          f"{structural_misses} on the keyword fallback")
+
+    added -= prune_speculative_clashes(tt, speculative_entries, common)
 
     return added, matched_records
 

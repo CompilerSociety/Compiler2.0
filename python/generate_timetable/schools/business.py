@@ -53,6 +53,33 @@ def _normalise_slot_time(text):
     return f'{start}-{end}'
 
 
+def _hhmm_to_minutes(text):
+    """'10:20' -> minutes past midnight, using the sheet's unlabelled 12-hour
+    convention (1-7 is afternoon, 8-11 morning, 12 noon) — the same rule as
+    timeToNumber() in web/js/app.js."""
+    m = re.match(r'^\s*(\d{1,2}):(\d{2})\s*$', text or '')
+    if not m:
+        return None
+    hour, minute = int(m.group(1)), int(m.group(2))
+    if hour == 12:
+        return 12 * 60 + minute
+    if 8 <= hour < 12:
+        return hour * 60 + minute
+    if 1 <= hour < 8:
+        return (hour + 12) * 60 + minute
+    return None
+
+
+def _slot_start_minutes(slot):
+    parts = str(slot or '').split('-')
+    return _hhmm_to_minutes(parts[0]) if parts else None
+
+
+def _slot_end_minutes(slot):
+    parts = str(slot or '').split('-')
+    return _hhmm_to_minutes(parts[1]) if len(parts) == 2 else None
+
+
 def parse_fsm_course_name(raw):
     raw = one_line(raw or "")
     if not raw:
@@ -85,8 +112,15 @@ def parse_fsm_section_code(raw):
         letters_str = re.sub(r'[/&]', ' ', combo.group(2))
         letters = letters_str.strip().split()
         results = []
-        for i, l in enumerate(letters):
-            code = base if i == 0 else base[:-1] + l
+        # FSM_COMBINED_RE captures the base WITHOUT any section letter
+        # ("BBA07A/B" -> base "BBA07", letters A and B), so every letter is
+        # appended to the base. The old form kept the base as-is for the first
+        # letter and chopped a character off it for the rest, producing "BBA07"
+        # and "BBA0B" — neither of which FSM_SECTION_RE accepts, so this branch
+        # returned None for every combined code and the cell fell through to be
+        # read as a course name.
+        for l in letters:
+            code = base + l
             m = FSM_SECTION_RE.match(code)
             if m:
                 results.append({
@@ -192,6 +226,7 @@ def parse_business_grid(text_grid, day, tt):
             row = row + [''] * (max_col + 1 - len(row))
 
         pending = None  # (code, title, time_override, slot_time, col)
+        override_until = 0  # per room row: how late the last override runs
         for c in range(3, max_col):
             cell = one_line(row[c] or "")
             if not cell:
@@ -214,6 +249,15 @@ def parse_business_grid(text_grid, day, tt):
                 effective_time = time_override if time_override else slot_time
 
                 for ps in parsed_sections:
+                    # A split lab runs both halves of a section at once in two
+                    # rooms ("BBA01A1" in one, "BBA01A2" in the other). Both
+                    # belong to section A, so the group has to live in the course
+                    # label — dropping it left the student two identical entries
+                    # at the same time with no way to tell which room was theirs.
+                    # Computing spells the same thing "Func Eng Lab (A1)".
+                    label = course_label
+                    if ps["sub_section"]:
+                        label = f"{course_label} (Group {ps['section']}{ps['sub_section']})"
                     dept = FSM_PROGRAM_MAP.get(ps["program"])
                     if not dept:
                         dept = normalize_dept_key(ps["program"])
@@ -223,13 +267,23 @@ def parse_business_grid(text_grid, day, tt):
 
                     sec = ps["section"]
 
-                    dedup_key = f"{dept}|{batch}|{sec}|{current_day}|{course_label}|{room}|{effective_time}"
+                    dedup_key = f"{dept}|{batch}|{sec}|{current_day}|{label}|{room}|{effective_time}"
                     if dedup_key in processed_keys:
                         continue
                     processed_keys.add(dedup_key)
 
-                    if add_course(tt, dept, batch, sec, current_day, course_label, room, effective_time):
+                    if add_course(tt, dept, batch, sec, current_day, label, room, effective_time):
                         added += 1
+                # A course carrying a time override runs past its own band. The
+                # next band's cell for this room is then a continuation label for
+                # the same class rather than a new course, and it never carries a
+                # course code ("U-Sirat Nabi" under "SS1007 Islamic
+                # Studies/Ethics (08:30-10:20)"). Remember how far this one runs
+                # so the code-less cell inside it can be skipped below.
+                if time_override:
+                    end = _slot_end_minutes(effective_time)
+                    if end is not None:
+                        override_until = max(override_until, end)
                 continue
 
             # Not a section code — a course cell (may be a stray "CS"/"MS", a
@@ -259,6 +313,11 @@ def parse_business_grid(text_grid, day, tt):
                     band = sc
                     break
             if band is None:
+                continue
+            # See override_until above: a code-less cell whose band has already
+            # been consumed by the previous course's override is that course's
+            # second-half label, not a class of its own.
+            if not course_code and _slot_start_minutes(header_times[band]) < override_until:
                 continue
             pending = (course_code, course_title, time_override, header_times[band], c)
 
