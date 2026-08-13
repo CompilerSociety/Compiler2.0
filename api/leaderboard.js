@@ -32,7 +32,11 @@ const LB_FILES = {
    - Rate limiting is per-IP: an in-process burst guard rejects fast repeats
      without touching GitHub, and a small state file in the repo
      (db/metadata/rate-limit.json) enforces the same window across instances. */
-const NUID_RE = /^\d{2}[A-Za-z]{1,4}-\d{4}$/;
+// The leading 2 digits are CAPTURED: rosterLookup reads m[1] to pick the
+// db/students/<batch>.json roster. Without the group m[1] is undefined for
+// every well-formed ID, so every lookup fetched .../students/undefined.json,
+// 404'd, and rejected the user with "No roster found for batch undefined".
+const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
 const RATE_LIMIT_PATH = 'db/metadata/rate-limit.json';
 const RATE_WINDOW_MS = 60_000;
 const MAX_WRITES_PER_MIN = 10;
