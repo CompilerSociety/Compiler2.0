@@ -1814,8 +1814,18 @@ function refreshTTFilters(){
   }
   if(prefs.dept===REPEAT_DEPT) deptSel.value=REPEAT_DEPT;
   else if(prefs.dept&&depts.includes(prefs.dept)) deptSel.value=prefs.dept;
+  // onSchoolChange() disables this select while the new school's sheet loads,
+  // and nothing ever re-enabled it — Batch and Section are recomputed below on
+  // every pass, but Department was not. So one school switch left Department
+  // dead with the right options inside it, and Batch/Section, which only unlock
+  // once a department is picked, stayed empty behind it until a page reload.
+  const hasDepts=deptSel.options.length>1; // >1: the placeholder is always there
+  deptSel.disabled=!hasDepts;
   const dep=deptSel.value;
-  setTimetableDependencyHelp('tt-dept-help',dep?'':'Pick a department first to unlock batch options.',!dep);
+  setTimetableDependencyHelp('tt-dept-help',
+    hasDepts?(dep?'':'Pick a department first to unlock batch options.')
+            :'No timetable is published for this school yet.',
+    !dep);
   if(dep===REPEAT_DEPT){
     applyRepeatModeUI();
     if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;

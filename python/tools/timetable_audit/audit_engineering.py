@@ -20,8 +20,24 @@ import json, os, re, sys
 from collections import defaultdict, Counter
 
 CACHE, REPO = sys.argv[1], sys.argv[2]
-SCHED = "engineering__Classes_Schedule_FA26__In_Progress_.json"
-ALLOC = "engineering__Course_Allocation_FA26.json"
+
+
+def cache_name(school, tab):
+    """Mirror how fetch_cache.py names its snapshots (non-alphanumerics -> '_').
+
+    Derived rather than hardcoded: the FSE tab has already been renamed once
+    ("Classes Schedule FA26 (In Progress)" -> "Classes Schedule FA26 "), which
+    silently changed this filename and would leave a hardcoded constant pointing
+    at a snapshot that no longer gets written.
+    """
+    return "".join(ch if ch.isalnum() else "_" for ch in f"{school}__{tab}") + ".json"
+
+
+sys.path.insert(0, REPO)
+from python.generate_timetable.config import SCHOOLS  # noqa: E402
+
+SCHED = cache_name("engineering", SCHOOLS["engineering"]["tabs"][0])
+ALLOC = cache_name("engineering", SCHOOLS["engineering"]["courses_tab"])
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 TIME_RE = re.compile(r"(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})")

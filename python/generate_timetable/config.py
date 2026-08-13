@@ -18,7 +18,11 @@ SCHOOLS = OrderedDict([
     ])),
     ("engineering", OrderedDict([
         ("id", "1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw"),
-        ("tabs", ["Classes Schedule FA26 (In Progress)"]),
+        # NOTE the trailing space — that is the tab's real name in the sheet. It
+        # was renamed from "Classes Schedule FA26 (In Progress)"; asking for the
+        # old name makes the Sheets API answer 400 "Unable to parse range" and
+        # the run then writes an empty engineering.json over the good one.
+        ("tabs", ["Classes Schedule FA26 "]),
         # Structural source of truth for dept/batch/repeat status — see schools/engineering.py
         ("courses_tab", "Course Allocation FA26"),
     ])),

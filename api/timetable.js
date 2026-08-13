@@ -13,12 +13,17 @@ const SCHOOLS = {
   },
   engineering: {
     id: "1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",
-    tabs: ["Classes Schedule FA26 (In Progress)"],
+    // NOTE the trailing space — that is the tab's real name in the sheet. It was
+    // renamed from "Classes Schedule FA26 (In Progress)"; asking for the old
+    // name makes the Sheets API answer 400 "Unable to parse range".
+    tabs: ["Classes Schedule FA26 "],
     format: "flat"
   },
   business: {
     id: "1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw",
-    tabs: ["Monday"],
+    // The FSM sheet has no weekday tabs; the whole week lives on one "Timetable"
+    // tab (the other two are 'Course Plan ' and 'Electives').
+    tabs: ["Timetable"],
     format: "paired-matrix"
   }
 };
