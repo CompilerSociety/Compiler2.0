@@ -22,6 +22,64 @@ const SCHOOLS = {
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+/* ── Caching + rate limiting ─────────────────────────────────────────────
+   The client appends cachebust=Date.now() to every call and fetches with
+   cache:'no-store', so per-URL browser/CDN caching never engages. Instead we
+   cache the parsed payload in-process for a short TTL (ignoring the cachebust
+   param), which collapses N concurrent/repeated requests into one Google
+   Sheets fetch per warm instance. A per-instance sliding-window rate limit
+   stops trivial floods; it deliberately does NOT use the repo-backed state
+   file from api/leaderboard.js because this endpoint serves every page load
+   and must stay dependency-free and fast. */
+
+const CACHE_TTL_MS = 10 * 60 * 1000;
+const RATE_WINDOW_MS = 60_000;
+const MAX_REQS_PER_MIN = 60;
+
+const _cache = new Map(); // key -> { at, payload }
+const _rl = new Map();    // ip -> { at, count } (in-process only)
+
+function clientIp(req) {
+  const fwd = String(req.headers["x-forwarded-for"] || "");
+  return fwd.split(",")[0].trim() || "unknown";
+}
+
+function rateLimited(ip) {
+  const now = Date.now();
+  const rec = _rl.get(ip);
+  if (!rec || now - rec.at > RATE_WINDOW_MS) {
+    _rl.set(ip, { at: now, count: 1 });
+    return false;
+  }
+  rec.count += 1;
+  rec.at = now;
+  return rec.count > MAX_REQS_PER_MIN;
+}
+
+// Cache key ignores cachebust/v/t so repeated fetches with a fresh timestamp
+// still collapse onto the same entry.
+function cacheKey(schoolParam, query) {
+  const parts = [schoolParam];
+  if (query.sheet) parts.push("sheet=" + String(query.sheet));
+  if (query.rooms) parts.push("rooms=" + String(query.rooms));
+  return parts.join("|");
+}
+
+function cacheHit(res, payload) {
+  res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+  res.setHeader("X-Cache", "HIT");
+  return res.status(200).json(payload);
+}
+
+function cacheStore(key, payload) {
+  _cache.set(key, { at: Date.now(), payload });
+  // Keep the map from growing forever under many school/sheet combinations.
+  if (_cache.size > 64) {
+    const oldest = [..._cache.entries()].sort((a, b) => a[1].at - b[1].at)[0];
+    if (oldest) _cache.delete(oldest[0]);
+  }
+}
+
 // Section key for batch-wide cells that name a department and year but no
 // section letter (e.g. "Project (AI/DS)"). Stored once under this key; the
 // frontend merges it into whichever section the student selects.
@@ -1063,10 +1121,21 @@ function buildTTForSchool(grids, school) {
    ══════════════════════════════════════════ */
 
 module.exports = async (req, res) => {
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
+  if (req.method !== "GET") return res.status(405).json({ ok: false, error: "Method not allowed" });
+
+  // Per-IP sliding-window guard (in-process; no external dependency).
+  const ip = clientIp(req);
+  if (rateLimited(ip)) {
+    res.setHeader("Retry-After", "60");
+    return res.status(429).json({
+      ok: false,
+      error: "rate_limited",
+      message: "You're sending requests too quickly. Wait a minute and try again.",
+    });
+  }
 
   try {
     const schoolParam = req.query?.school || "computing";
@@ -1075,17 +1144,27 @@ module.exports = async (req, res) => {
       return res.status(400).json({ ok: false, error: `Unknown school '${schoolParam}'. Use: computing, engineering, business` });
     }
 
+    const key = cacheKey(schoolParam, req.query);
+    const cached = _cache.get(key);
+    if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+      return cacheHit(res, cached.payload);
+    }
+
     const sheetId = getGoogleSheetId(school.id);
     const roomsMode = req.query?.rooms;
 
     if (roomsMode === "cd") {
       const computingId = getGoogleSheetId(SCHOOLS.computing.id);
       const { occupancy, count } = await fetchCDRoomOccupancyFromSheets(computingId);
-      return res.status(200).json({
+      const payload = {
         ok: true, count, occupancy,
         updatedAt: new Date().toISOString(),
         source: "google-sheet-cd-rooms"
-      });
+      };
+      cacheStore(key, payload);
+      res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+      res.setHeader("X-Cache", "MISS");
+      return res.status(200).json(payload);
     }
 
     const tabs = req.query?.sheet ? [req.query.sheet] : school.tabs;
@@ -1126,11 +1205,15 @@ module.exports = async (req, res) => {
       });
     }
 
-    return res.status(200).json({
+    const payload = {
       ok: true, count, tt: refTT, school: schoolParam,
       updatedAt: new Date().toISOString(),
       source: `google-sheet-${schoolParam}`
-    });
+    };
+    if (!req.query?.raw) cacheStore(key, payload);
+    res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+    res.setHeader("X-Cache", req.query?.raw ? "BYPASS" : "MISS");
+    return res.status(200).json(payload);
   } catch (err) {
     console.error('timetable API error:', err);
     return res.status(500).json({
