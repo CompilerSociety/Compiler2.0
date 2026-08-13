@@ -742,28 +742,38 @@
   // Whole-day occupancy for one room. Deliberately NOT getRoomSlotInfo(),
   // which hides slots that have already passed when the day is today — the
   // design's bar is the day's full slot grid, green for free, grey for busy.
-  function roomSlots(room,day){
-    const list=slotsForRoom(room);
+  function slotOccupant(room,day,slot){
     const sources=BLOCK_SOURCES[roomBlock(room)]||['computing'];
-    const useSheet=(typeof isCDBlockRoom==='function')&&isCDBlockRoom(room);
-    return list.map(slot=>{
-      let occupiedBy=useSheet?findCDOccupancy(room,day,slot):null;
-      for(let i=0;i<sources.length&&!occupiedBy;i++){
-        occupiedBy=findOccupancyInTT(ROOM_TT[sources[i]],room,day,slot);
-      }
-      return {slot,occupiedBy};
-    });
+    let occupiedBy=((typeof isCDBlockRoom==='function')&&isCDBlockRoom(room))
+      ?findCDOccupancy(room,day,slot):null;
+    for(let i=0;i<sources.length&&!occupiedBy;i++){
+      occupiedBy=findOccupancyInTT(ROOM_TT[sources[i]],room,day,slot);
+    }
+    return occupiedBy;
+  }
+  function roomSlots(room,day){
+    return slotsForRoom(room).map(slot=>({slot,occupiedBy:slotOccupant(room,day,slot)}));
   }
   function roomsOfBlock(block){
     const floors=BLOCK_FLOORS[block]||{};
     return Object.keys(floors).reduce((acc,f)=>acc.concat(floors[f]||[]),[]);
   }
+  // The current slot only. This used to build the room's whole day and then
+  // throw away seven eighths of it, and the block grid calls it once for every
+  // room in the building.
   function isFreeNow(room,day){
     if(day!==todayName()) return null;
-    const list=slotsForRoom(room);
-    const cur=getCurrentSlotFor(list);
+    const cur=getCurrentSlotFor(slotsForRoom(room));
     if(!cur) return null;
-    const info=roomSlots(room,day).find(s=>s.slot===cur);
+    return !slotOccupant(room,day,cur);
+  }
+  // Same answer as isFreeNow(), read off a day vector the caller already has,
+  // so a room that has just been computed is not computed a second time.
+  function freeNowFromSlots(room,day,slots){
+    if(day!==todayName()) return null;
+    const cur=getCurrentSlotFor(slotsForRoom(room));
+    if(!cur) return null;
+    const info=slots.find(s=>s.slot===cur);
     return info?!info.occupiedBy:null;
   }
 
@@ -861,7 +871,7 @@
     }
     const cards=rooms.map(room=>{
       const slots=roomSlots(room,day);
-      const free=isFreeNow(room,day);
+      const free=freeNowFromSlots(room,day,slots);
       const open=rm.open===room;
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
       const status=free===true?'Free now':free===false?'Class':'—';

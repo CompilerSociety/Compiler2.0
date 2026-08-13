@@ -1183,6 +1183,32 @@ function cdRoomsApiUrl(){
   return `/api/timetable?rooms=cd&cachebust=${Date.now()}`;
 }
 
+/* Both the Timetable tab (which fills TT) and Free Rooms (which fills ROOM_TT)
+   ask for the same db/timetables/<school>.json, milliseconds apart, on every
+   load and again on every 15-minute refresh — 175 KB of computing.json fetched
+   twice over.
+
+   They cannot share the PARSED object: canonicalizeTTLocations() rewrites
+   entries in place, so handing both consumers one object would let Free Rooms
+   silently rewrite the timetable's own data. They can share the download.
+   Concurrent callers await the same response text and each parse their own
+   copy; the entry is dropped as soon as it settles, so the next refresh is a
+   real fetch and freshness is unchanged. */
+const _ttFetchInFlight=new Map();
+function fetchTimetableJSON(url){
+  const key=String(url).replace(/[?&]cachebust=\d+/,'');
+  let pending=_ttFetchInFlight.get(key);
+  if(!pending){
+    pending=fetch(url,{cache:'no-store'}).then(res=>{
+      if(!res.ok) throw new Error(`Timetable HTTP ${res.status} for ${key}`);
+      return res.text();
+    });
+    _ttFetchInFlight.set(key,pending);
+    pending.catch(()=>{}).then(()=>{ _ttFetchInFlight.delete(key); });
+  }
+  return pending.then(text=>JSON.parse(text));
+}
+
 function setSheetStatus(msg,ok=true){
   const el=document.getElementById('sheet-sync');
   if(!el) return;
@@ -1373,7 +1399,22 @@ function registerSlot(slot){
   SLOTS.sort((a,b)=>slotToMinutes(a.split('-')[0])-slotToMinutes(b.split('-')[0]));
 }
 
+// Pure function of its argument and hot enough to be worth a cache: room-name
+// normalisation used to run hundreds of thousands of times per Free Rooms
+// render, once for every (timetable entry x queried room) pair. The distinct
+// input set is tiny — a couple of hundred spellings across the whole building.
+const _roomNameCache=new Map();
 function normalizeRoomName(room){
+  if(typeof room!=='string') return _normalizeRoomName(room);
+  const hit=_roomNameCache.get(room);
+  if(hit!==undefined) return hit;
+  const out=_normalizeRoomName(room);
+  // Bound it. Nothing should approach this, but a parser fault that fed in
+  // unique strings must not turn the cache into a leak.
+  if(_roomNameCache.size<5000) _roomNameCache.set(room,out);
+  return out;
+}
+function _normalizeRoomName(room){
   let r=cleanTxt(room).toUpperCase();
   r=r.replace(/\s+/g,' ');
   let m;
@@ -2016,9 +2057,7 @@ async function refreshTimetableFromGoogleSheet(){
   setSheetStatus('SHEET: SYNCING...',true);
   setTimetableLiveBadge('Syncing…','syncing');
   try{
-    const apiRes=await fetch(timetableApiUrl(),{cache:'no-store'});
-    if(!apiRes.ok) throw new Error(`Timetable API HTTP ${apiRes.status}`);
-    const apiData=await apiRes.json();
+    const apiData=await fetchTimetableJSON(timetableApiUrl());
     if(!apiData.ok) throw new Error(apiData.error||'Timetable API returned an error');
     applyTimetablePayload(apiData,'SHEET: LIVE API');
   }catch(apiErr){
@@ -2095,11 +2134,8 @@ async function fetchSchoolTT(school){
     }
   }catch(err){/* fall through to static snapshot */}
   try{
-    const res=await fetch(`/db/timetables/${school}.json?cachebust=${Date.now()}`,{cache:'no-store'});
-    if(res.ok){
-      const data=await res.json();
-      if(data&&data.tt) return data.tt;
-    }
+    const data=await fetchTimetableJSON(`/db/timetables/${school}.json?cachebust=${Date.now()}`);
+    if(data&&data.tt) return data.tt;
   }catch(err){console.warn(`Free Rooms: ${school} timetable load failed`,err);}
   return null;
 }
@@ -2261,23 +2297,72 @@ function slotRange(t){
   const a=slotToMinutes(p[0].trim()),b=slotToMinutes(p[1].trim());
   return (Number.isNaN(a)||Number.isNaN(b))?null:[a,b];
 }
+/* ── Room occupancy index ────────────────────────────────────────────────
+   findOccupancyInTT() answers "is this room busy in this slot?". It used to do
+   that with a four-level linear scan (dept -> batch -> section -> day) of the
+   whole school timetable, once per question. Free Rooms asks the question for
+   every room on every slot, so opening the tab walked ~237,000 timetable
+   entries and took ~2.5s on a mid-range phone — and repeated the identical
+   walk on every block and floor tap.
+
+   The work is the same every time because the answer only changes when the
+   timetable data does, so it is now done once: a single pass builds
+   room -> day -> [{start,end,...}] and each question becomes a hash lookup
+   plus a scan of the few classes that room actually holds that day.
+
+   Keyed by the timetable OBJECT in a WeakMap, not by school name.
+   refreshRoomTimetables() assigns a freshly parsed object to ROOM_TT[school]
+   (nothing ever mutates one in place), so a refresh misses the map and
+   rebuilds automatically — there is no cache to remember to invalidate, and a
+   stale index cannot outlive the data it was built from. */
+const _ttRoomIndex=new WeakMap();
+function buildRoomIndex(tt){
+  const index=Object.create(null);
+  // Iterate in exactly the order the old scan did — dept, then batch, then
+  // section, then array order. Where several classes overlap one room and slot
+  // the old code returned the first one it met, and this keeps that the same
+  // one, so the reported course/section never changes.
+  for(const [dept,batches] of Object.entries(tt||{})){
+    for(const [batch,sections] of Object.entries(batches||{})){
+      for(const [section,days] of Object.entries(sections||{})){
+        for(const [day,arr] of Object.entries(days||{})){
+          for(const c of (arr||[])){
+            // An unparseable time failed the old `cr&&…` guard and could never
+            // match, so dropping it here is the same behaviour, not a filter.
+            const range=slotRange(entryTime(c));
+            if(!range) continue;
+            const key=normalizeRoomName(entryLocation(c));
+            const byDay=index[key]||(index[key]=Object.create(null));
+            (byDay[day]||(byDay[day]=[])).push({
+              start:range[0],end:range[1],
+              course:entryCourse(c),dept,batch,section
+            });
+          }
+        }
+      }
+    }
+  }
+  return index;
+}
+function roomIndexFor(tt){
+  if(!tt||typeof tt!=='object') return null;
+  let index=_ttRoomIndex.get(tt);
+  if(!index){ index=buildRoomIndex(tt); _ttRoomIndex.set(tt,index); }
+  return index;
+}
 // A room is busy in a displayed slot if any class there overlaps its time
 // range. Overlap (not exact equality) lets the FSC/FSM grid line up with the
 // offset FSE grid used on Block B.
 function findOccupancyInTT(tt,room,day,slot){
   const sr=slotRange(slot);
   if(!sr) return null;
-  for(const [dep,batches] of Object.entries(tt||{})){
-    for(const [bat,sections] of Object.entries(batches||{})){
-      for(const [sec,days] of Object.entries(sections||{})){
-        for(const c of (days[day]||[])){
-          if(!sameRoom(entryLocation(c),room)) continue;
-          const cr=slotRange(entryTime(c));
-          if(cr&&cr[0]<sr[1]&&cr[1]>sr[0]){
-            return {course:entryCourse(c),dept:dep,batch:bat,section:sec};
-          }
-        }
-      }
+  const index=roomIndexFor(tt);
+  if(!index) return null;
+  const list=(index[normalizeRoomName(room)]||{})[day];
+  if(!list) return null;
+  for(const e of list){
+    if(e.start<sr[1]&&e.end>sr[0]){
+      return {course:e.course,dept:e.dept,batch:e.batch,section:e.section};
     }
   }
   return null;
