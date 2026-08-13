@@ -26,10 +26,11 @@
            path can only resolve FSC students. FSE/FSM pick their section by
            hand on the #m-manual screen instead. -->
       <label class="m-field-label" for="m-nuid">YOUR NU ID (FOR FSC STUDENTS ONLY)</label>
+      <!-- No "@nu.edu.pk" suffix: this field takes a ROLL NUMBER, not an email
+           address, and showing a domain next to it had people typing one. -->
       <div class="m-input-wrap">
         <input class="m-input" id="m-nuid" type="text" inputmode="text" autocomplete="username"
                placeholder="22i-1234" maxlength="20" aria-describedby="m-signin-status">
-        <span class="m-input-suffix">@nu.edu.pk</span>
       </div>
       <div class="m-signin-status" id="m-signin-status" role="status" aria-live="polite"></div>
       <button class="m-btn-primary" id="m-signin-btn" type="button">Continue</button>
@@ -84,7 +85,7 @@
          which is what the class/exam/seating senders read. -->
     <button class="m-btn-ghost" id="m-onboard-push" type="button">Turn on notifications</button>
     <div class="m-signin-status" id="m-onboard-push-status" role="status" aria-live="polite"></div>
-    <button class="m-btn-primary" id="m-onboard-go" type="button">Open my timetable</button>
+    <button class="m-btn-primary" id="m-onboard-go" type="button">Save your profile</button>
     <button class="m-btn-ghost" id="m-onboard-back" type="button">Use a different NU ID</button>
   </section>
 

@@ -1179,6 +1179,44 @@
   }
 
   /* ══ PROFILE ═══════════════════════════════════════════════════════ */
+
+  /* Master notification switch state.
+     Cached at module scope because renderProfile() is synchronous while the
+     honest answer — does this browser hold a live push subscription? — needs
+     an await. The cache paints the last known state instantly and
+     refreshPushState() corrects it a tick later, so the switch never sits in a
+     "checking…" limbo and never claims to be on while nothing is delivered. */
+  let pushLive=false;
+  // Kept across re-renders: flipping the switch re-renders the whole section,
+  // which would otherwise wipe the one line explaining what just happened.
+  let pushMsg='';
+
+  // Success lines from app.js start with a tick; the switch-off path reports
+  // plainly instead ("Notifications are off."), and both are normal outcomes.
+  // Everything else — a refused permission, a failed unsubscribe, an
+  // unsupported browser — is a problem and reads red.
+  const PUSH_OK=/^(✓|Notifications are off|Turning notifications off)/;
+  function paintPushStatus(){
+    const line=$('m-push-status');
+    if(!line) return;
+    line.textContent=pushMsg;
+    // Collapse when there is nothing to say, rather than holding open a gap
+    // between the master switch and the categories it governs.
+    line.hidden=!pushMsg;
+    line.classList.toggle('is-error',Boolean(pushMsg)&&!PUSH_OK.test(pushMsg));
+  }
+
+  function refreshPushState(){
+    if(typeof pushAlertsActive!=='function') return Promise.resolve(false);
+    return Promise.resolve(pushAlertsActive()).then(on=>{
+      const changed=on!==pushLive;
+      pushLive=on;
+      // Guarded by `changed`, so this settles rather than looping.
+      if(changed&&route==='profile') renderProfile();
+      return on;
+    }).catch(()=>pushLive);
+  }
+
   function renderProfile(){
     const p=profile();
     const out=$('m-profile-out');
@@ -1203,29 +1241,82 @@
         </div>
       </div>
       <div class="m-section-label">Notifications</div>
-      <button class="m-btn-ghost" id="m-enable-push" type="button">Enable notifications</button>
+      <!-- One master switch, then the categories it governs. The categories are
+           inert until it is on: a per-category choice is meaningless while
+           nothing can be delivered, and letting them be toggled anyway implied
+           notifications were already running. -->
+      <label class="m-toggle-row m-toggle-master" for="m-push-master">
+        <span class="m-toggle-text">
+          <span class="m-toggle-label">Push notifications</span>
+          <span class="m-toggle-help">${pushLive
+            ? 'On for this device. Turning this off removes it from our list.'
+            : 'Off. Turn this on to pick what you get alerted about.'}</span>
+        </span>
+        <input class="m-toggle" id="m-push-master" type="checkbox" ${pushLive?'checked':''}>
+      </label>
       <div class="m-signin-status" id="m-push-status" role="status" aria-live="polite" style="margin-bottom:12px"></div>
-      ${cats.map(c=>`<label class="m-toggle-row${c.dead?' is-pending':''}" for="m-pref-${c.key}">
+      <div class="m-pref-group${pushLive?'':' is-locked'}"${pushLive?'':' aria-disabled="true"'}>
+        ${cats.map(c=>{
+          const off=c.dead||!pushLive;
+          return `<label class="m-toggle-row${c.dead?' is-pending':''}" for="m-pref-${c.key}">
           <span class="m-toggle-text">
             <span class="m-toggle-label">${esc(c.label)}${c.dead?'<span class="m-soon">Soon</span>':''}</span>
             <span class="m-toggle-help">${esc(c.help)}</span>
           </span>
-          <input class="m-toggle" id="m-pref-${c.key}" type="checkbox" ${prefs[c.key]?'checked':''} ${c.dead?'disabled':''}>
-        </label>`).join('')}
+          <input class="m-toggle" id="m-pref-${c.key}" type="checkbox" ${prefs[c.key]?'checked':''} ${off?'disabled':''}>
+        </label>`;
+        }).join('')}
+      </div>
       <div class="m-section-label">Your section</div>
       <div class="m-drow"><div class="m-drow-label">Program · batch · section</div>
         <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')} · ${esc(p.section||'—')}</div></div>
       <button class="m-btn-ghost" id="m-signout" type="button" style="margin-top:18px">Sign out</button>`;
 
+    // app.js writes every push status line through this hook; point it at the
+    // line that is currently on screen. renderProfile() re-claims it on each
+    // pass, so returning here after the onboarding screen borrowed it is fine.
+    window.onPushStatus=msg=>{ pushMsg=msg||''; paintPushStatus(); };
+    paintPushStatus();
+
     cats.forEach(c=>{
       const el=$('m-pref-'+c.key);
-      if(el&&!c.dead) el.addEventListener('change',()=>{
+      if(el&&!c.dead&&pushLive) el.addEventListener('change',()=>{
         if(typeof onNotificationPrefChange==='function') onNotificationPrefChange(c.key,el.checked);
         toast('Saved');
       });
     });
-    const push=$('m-enable-push');
-    if(push) push.addEventListener('click',()=>enablePush('m-push-status','m-enable-push'));
+
+    const master=$('m-push-master');
+    if(master) master.addEventListener('change',()=>{
+      const want=master.checked;
+      master.disabled=true;
+      pushMsg=''; paintPushStatus();
+      const fn=want?(typeof enableSeatAlerts==='function'?enableSeatAlerts:null)
+                   :(typeof disableSeatAlerts==='function'?disableSeatAlerts:null);
+      if(!fn){
+        pushMsg='Notifications are unavailable right now.';
+        master.checked=!want; master.disabled=false; paintPushStatus();
+        return;
+      }
+      Promise.resolve(fn()).catch(err=>{
+        console.warn('push switch failed:',err);
+      }).then(()=>{
+        // Never trust the click. Re-read the browser's own state so a refused
+        // permission prompt or a failed unsubscribe snaps the switch back
+        // instead of leaving it showing something that isn't true.
+        return (typeof pushAlertsActive==='function')?pushAlertsActive():false;
+      }).then(on=>{
+        pushLive=Boolean(on);
+        if(route!=='profile') return;
+        renderProfile(); // rebuilds the section (and re-paints pushMsg) from the real state
+        toast(pushLive?'Notifications on':'Notifications off');
+      });
+    });
+
+    // Correct the cached state on entry, in case permission was revoked or the
+    // subscription was dropped since the last time this screen was open.
+    refreshPushState();
+
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{
       if(typeof clearProfileCookie==='function') clearProfileCookie();

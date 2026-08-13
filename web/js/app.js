@@ -764,11 +764,78 @@ async function enableSeatAlerts(){
     await postPushSubscription(profile,sub,readNotifPrefs());
     renderNotificationPrefs();
     setPushStatus('✓ Notifications are on for '+profile.nuid+'.');
+    return true;
   }catch(err){
     console.warn('enableSeatAlerts failed:',err);
     setPushStatus('Could not enable alerts right now. '+(err.message||err));
     if(btn) btn.disabled=false;
+    return false;
   }
+}
+/* ── Turning notifications OFF ────────────────────────────────────────────
+   Two halves, and both of them matter:
+
+     - the SERVER record is what the GitHub Actions senders iterate, so it has
+       to be deleted or this device keeps being targeted;
+     - the BROWSER subscription is what makes delivery possible at all, so
+       dropping it is the half that holds even when the server write fails.
+
+   Server first, and not by preference: the endpoint is the only handle the
+   server record can be found by, and unsubscribing destroys it. */
+async function deletePushSubscription(endpoint){
+  const res=await fetch(PUSH_SUBSCRIBE_URL,{
+    method:'DELETE',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({endpoint})
+  });
+  if(!res.ok){
+    let data=null;
+    try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
+    if(data&&data.detail) console.warn('Push unsubscribe unavailable:',data.detail);
+    throw new Error((data&&data.message)||('HTTP '+res.status));
+  }
+}
+async function disableSeatAlerts(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)){
+    setPushStatus('This browser does not support notifications.'); return false;
+  }
+  setPushStatus('Turning notifications off…');
+  let sub=null;
+  try{
+    const reg=await navigator.serviceWorker.getRegistration();
+    sub=reg?await reg.pushManager.getSubscription():null;
+  }catch(err){ console.warn('disableSeatAlerts lookup failed:',err); }
+  if(!sub){ setPushStatus('Notifications are off.'); return true; }
+  let serverCleared=true;
+  try{ await deletePushSubscription(sub.endpoint); }
+  catch(err){ serverCleared=false; console.warn('unsubscribe (server) failed:',err); }
+  let localCleared=false;
+  try{ localCleared=await sub.unsubscribe(); }
+  catch(err){ console.warn('unsubscribe (browser) failed:',err); }
+  if(!localCleared){
+    // Still subscribed, so leaving the switch "off" would be a lie.
+    setPushStatus('Could not turn notifications off. Try again in a moment.');
+    return false;
+  }
+  setPushStatus(serverCleared
+    ? 'Notifications are off.'
+    : 'Notifications are off on this device. The stored copy clears on the next send.');
+  return true;
+}
+// Is push actually live on THIS device right now? A stored preference is not
+// evidence — permission can be revoked from browser settings, and a reinstalled
+// service worker loses the subscription without telling the page. Ask the
+// browser instead, so a switch built on this can never claim to be on while
+// nothing is being delivered.
+function pushAlertsSupported(){
+  return ('serviceWorker' in navigator)&&('PushManager' in window)&&typeof Notification!=='undefined';
+}
+async function pushAlertsActive(){
+  if(!pushAlertsSupported()||Notification.permission!=='granted') return false;
+  try{
+    const reg=await navigator.serviceWorker.getRegistration();
+    return Boolean(reg&&await reg.pushManager.getSubscription());
+  }catch(err){ return false; }
 }
 // Register the worker on load (no permission prompt yet — that needs a click).
 registerServiceWorker();
@@ -880,6 +947,9 @@ function initTabKeyboardNavigation(){
 initInstallPrompt();
 initTabKeyboardNavigation();
 window.enableSeatAlerts=enableSeatAlerts;
+window.disableSeatAlerts=disableSeatAlerts;
+window.pushAlertsActive=pushAlertsActive;
+window.pushAlertsSupported=pushAlertsSupported;
 window.onNotificationPrefChange=onNotificationPrefChange;
 window.applyProfileToFacultyVault=applyProfileToFacultyVault;
 document.getElementById('profile-launcher')?.addEventListener('click',openProfileModal);

@@ -64,7 +64,12 @@ self.addEventListener('push', event => {
     // look like the site, and let a payload override it if it ever wants a
     // per-type icon.
     icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/icon-192.png',
+    // The badge is the small status-bar mark, and Android throws its COLOUR
+    // away and keeps only the alpha channel. Passing icon-192 here — a fully
+    // opaque square — therefore rendered as a featureless grey block. The
+    // badge asset is a white "CS" silhouette on transparency, so the shape
+    // survives that reduction.
+    badge: data.badge || '/icons/icon-badge-96.png',
     data: { url: data.url || '/' }
   };
   event.waitUntil(self.registration.showNotification(title, options));

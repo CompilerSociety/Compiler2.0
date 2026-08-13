@@ -329,15 +329,95 @@ async function ghPut(token, subs, sha) {
   if (!res.ok) throw new Error(`write subscriptions failed (${res.status})`);
 }
 
+function parseBody(req) {
+  return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+}
+
+// DELETE — the user turned notifications off.
+//
+// Authorisation is the endpoint itself. A push endpoint is an unguessable
+// bearer capability minted by the browser's push service: whoever holds it can
+// already send this device notifications, so being able to stop them is
+// strictly less power than they have. No NU ID is required or accepted, which
+// also means this cannot be used to enumerate or clear anyone else's row.
+//
+// Removing the row is the half that stops the GitHub Actions senders from
+// targeting the device; the client also unsubscribes locally, which is what
+// stops delivery outright.
+async function handleUnsubscribe(req, res) {
+  const payload = parseBody(req);
+  const endpoint = String(payload.endpoint || payload?.subscription?.endpoint || '').trim();
+  if (!endpoint || !isValidEndpoint(endpoint)) {
+    return res.status(400).json({
+      ok: false,
+      error: 'invalid_subscription',
+      message: 'A valid push endpoint is required.',
+    });
+  }
+
+  const ip = clientIp(req);
+  if (!burstAllowed(ip)) {
+    res.setHeader('Retry-After', '60');
+    return res.status(429).json({
+      ok: false,
+      error: 'rate_limited',
+      message: "You're sending requests too quickly. Wait a minute and try again.",
+    });
+  }
+  const retryAfter = await persistentBlocked(ip);
+  if (retryAfter !== null) {
+    res.setHeader('Retry-After', String(retryAfter));
+    return res.status(429).json({
+      ok: false,
+      error: 'rate_limited',
+      message: "You're sending requests too quickly. Wait a moment and try again.",
+    });
+  }
+
+  const token = process.env.GH_TOKEN;
+  if (!token) {
+    return res.status(503).json({
+      ok: false,
+      error: 'unsubscribe_unavailable',
+      message: "Notifications can't be changed right now — this is on us, not you.",
+      detail: 'GH_TOKEN is not set on the server.',
+    });
+  }
+
+  // Same retry as the POST: a concurrent write moves the file sha.
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const { subs, sha } = await ghGet(token);
+    const kept = subs.filter((s) => s?.subscription?.endpoint !== endpoint);
+    const removed = subs.length - kept.length;
+    // Already gone — report success rather than 404. Turning something off
+    // twice is not an error, and the caller only cares that it is off now.
+    if (!removed) return res.status(200).json({ ok: true, removed: 0, count: subs.length });
+    try {
+      await ghPut(token, kept, sha);
+      await noteSuccessfulWrite(token, ip);
+      return res.status(200).json({ ok: true, removed, count: kept.length });
+    } catch (e) {
+      lastErr = e;
+      await new Promise((r) => setTimeout(r, 800));
+    }
+  }
+  throw lastErr || new Error('Could not remove subscription');
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  if (req.method !== 'POST' && req.method !== 'DELETE') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
 
   try {
-    const payload = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    if (req.method === 'DELETE') return await handleUnsubscribe(req, res);
+
+    const payload = parseBody(req);
     const nuid = String(payload.nuid || '').trim().toUpperCase();
     const name = String(payload.name || '').trim();
     const department = String(payload.department || '').trim();

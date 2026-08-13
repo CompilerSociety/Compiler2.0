@@ -63,7 +63,6 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-input-wrap{display:flex;align-items:center;gap:8px;height:58px;border:1px solid var(--line-strong);border-radius:999px;padding:0 18px;background:var(--surface)}
 .m-input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:var(--mono);font-size:17px;color:var(--ink)}
 .m-input::placeholder{color:var(--mute-3)}
-.m-input-suffix{font-family:var(--mono);font-size:13px;color:var(--mute-3);white-space:nowrap}
 .m-signin-status{font-size:12.5px;line-height:1.45;color:var(--mute-2);min-height:18px;margin:10px 2px 0}
 .m-signin-status.is-error{color:#a8352a}
 .m-btn-primary{width:100%;height:58px;margin-top:12px;border:none;border-radius:999px;background:var(--green);color:#fff;font-family:var(--mono);font-weight:500;font-size:15px;letter-spacing:.04em;cursor:pointer;box-shadow:0 10px 24px rgba(47,107,49,.26);transition:background .16s,transform .16s}
@@ -322,6 +321,14 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-toggle:checked{background:var(--green)}
 .m-toggle:checked::after{transform:translateX(21px)}
 .m-toggle[disabled]{cursor:not-allowed}
+/* The master switch sits above the categories it governs, so it reads as the
+   heading of the group rather than another row in it. */
+.m-toggle-master{background:var(--tint);border-color:transparent}
+/* Categories while push is off. pointer-events blocks the label wrapper too —
+   a disabled <input> alone still lets a tap on the surrounding <label> toggle
+   it in some engines. The inputs are also genuinely disabled, so this is
+   presentation, not the mechanism. */
+.m-pref-group.is-locked{opacity:.42;filter:grayscale(1);pointer-events:none;user-select:none}
 .m-soon{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(184,108,0,.12);color:#8a5200;margin-left:6px;vertical-align:middle}
 
 :focus-visible{outline:2px solid #2f6b31;outline-offset:2px}
