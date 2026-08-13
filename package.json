@@ -1,6 +1,9 @@
 {
   "name": "compiler2",
   "private": true,
+  "scripts": {
+    "dev": "node scripts/devserver.mjs"
+  },
   "dependencies": {
     "web-push": "^3.6.7"
   }
