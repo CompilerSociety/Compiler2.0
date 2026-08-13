@@ -145,10 +145,10 @@
         "auth": "96E89FOGsJbc2RGLCKQQFw"
       }
     },
-    "updated_at": 1786647074347,
+    "updated_at": 1786647078759,
     "prefs": {
       "cls": true,
-      "exam": true,
+      "exam": false,
       "show": true,
       "seat": true,
       "room": false
