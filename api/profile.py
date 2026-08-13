@@ -11,14 +11,42 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 DB_DIR = ROOT / "db"
 
+# Origins that may read /api/profile cross-origin. Same-origin calls (the real
+# usage: the frontend and /api/profile live on the same host) need no CORS at
+# all, so an unlisted Origin simply gets no Access-Control-Allow-* headers and
+# browsers block the response. CORS is defense-in-depth, not authorization.
+ALLOWED_ORIGINS = {
+    "https://www.vtable.site",
+    "https://vtable.site",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+}
+
+
+def _request_origin(handler: BaseHTTPRequestHandler) -> str:
+    return str(handler.headers.get("Origin") or "").strip()
+
+
+def _cors_headers(handler: BaseHTTPRequestHandler) -> list[tuple[str, str]]:
+    origin = _request_origin(handler)
+    if origin in ALLOWED_ORIGINS:
+        return [
+            ("Access-Control-Allow-Origin", origin),
+            ("Vary", "Origin"),
+            ("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+            ("Access-Control-Allow-Headers", "Content-Type"),
+        ]
+    return [("Vary", "Origin")]
+
 
 def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[str, Any]) -> None:
     body = json.dumps(payload, indent=2, ensure_ascii=False).encode("utf-8")
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json")
-    handler.send_header("Access-Control-Allow-Origin", "*")
-    handler.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    handler.send_header("Access-Control-Allow-Headers", "Content-Type")
+    for key, value in _cors_headers(handler):
+        handler.send_header(key, value)
     handler.send_header("Content-Length", str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
@@ -108,9 +136,8 @@ class handler(SimpleHTTPRequestHandler):
     def do_OPTIONS(self) -> None:
         if self.path.startswith("/api/profile"):
             self.send_response(204)
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            for key, value in _cors_headers(self):
+                self.send_header(key, value)
             self.end_headers()
             return
         self.send_response(404)
