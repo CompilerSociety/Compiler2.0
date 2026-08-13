@@ -4177,6 +4177,14 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
    Player = desktop 🖥️ · ground obstacle = virus 🦠 · flyer = "AI"
    Opens on double-click of the logo.
 ══════════════════════════════════════════ */
+// Are we being played on the phone layout? Compiler Run's prompts named a key
+// that a touch screen does not have ("PRESS SPACE TO RUN"), which is the one
+// instruction a student on a phone cannot follow. The mobile arcade runs this
+// same game under a finger, so the prompt follows the input that is actually
+// available. Desktop wording is untouched.
+function touchPlay(){
+  try{ return window.matchMedia('(max-width:767px)').matches; }catch(e){ return false; }
+}
 (function CompilerRun(){
   const overlay=document.getElementById('cr-overlay');
   const canvas=document.getElementById('cr-canvas');
@@ -4364,9 +4372,9 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
     ctx.fillText('HI '+String(hi).padStart(5,'0')+'   '+String(Math.floor(score/6)).padStart(5,'0'), W-12, 26);
     ctx.textAlign='left';
 
-    if(state==='ready') centerText('PRESS SPACE TO RUN', GREEN);
+    if(state==='ready') centerText(touchPlay()?'TAP TO RUN':'PRESS SPACE TO RUN', GREEN);
     if(state==='over'){
-      centerText('SYSTEM CRASH! PRESS SPACE TO RETRY', RED, -14);
+      centerText(touchPlay()?'SYSTEM CRASH! TAP TO RETRY':'SYSTEM CRASH! PRESS SPACE TO RETRY', RED, -14);
       ctx.fillStyle=GREEN; ctx.font='18px "VT323",monospace'; ctx.textAlign='center';
       ctx.fillText('SCORE '+Math.floor(score/6)+'   ·   BEST '+hi, W/2, H/2+16); ctx.textAlign='left';
     }

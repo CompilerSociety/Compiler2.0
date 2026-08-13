@@ -97,6 +97,30 @@ Still outstanding on it:
   `pushAlertsActive()` in `web/js/app.js` are shared, so porting it is markup
   plus a listener.
 
+### Arcade
+**Built.** Double-tapping the Today banner opens `#m-arcade` — a phone-native
+picker for the four games, then a play view per game. The games themselves are
+still app.js's: mobile.js borrows each `<canvas>` and its leaderboard out of the
+hidden desktop overlay for as long as the game is on screen and puts them back
+afterwards, so nothing is reimplemented and the desktop arcade is byte-identical.
+Touch controls (JUMP / DUCK / FLAP) work by dispatching the same keyboard events
+the desktop build listens for.
+
+Still outstanding on it:
+
+- **Compiler Chess is not a game yet** — on desktop it is a mode picker whose
+  three options all answer "coming soon", and the phone shows the same three
+  and the same answer. Whoever builds the engine gets both surfaces at once.
+- **The play stage is a 720x220 strip.** Each game reads `canvas.width/height`
+  once, at page load, into a `const`, and every constant in it (ground line,
+  player size, gravity, pipe gap) is tuned against those numbers. So the canvas
+  scales to 348x106 on a 390px phone rather than reflowing to portrait. Making
+  them resolution-aware is a retune of all three games, not a resize.
+- **Rotating to landscape drops out of the mobile layout entirely** — a phone
+  in landscape is ~844px wide, past the 767px breakpoint, so `.m-app` hides and
+  the desktop shell appears mid-game. Pre-existing for the whole app, but the
+  arcade is where someone is most likely to turn their phone sideways.
+
 ### Decided against
 - **Room Rush** — double-clicking the Today banner opens the existing game
   picker instead, same as the logo double-click does now.

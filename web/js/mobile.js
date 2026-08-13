@@ -553,12 +553,13 @@
     tickBanner();
     const banner=$('m-now-banner');
     if(banner){
-      // Same easter egg as double-clicking the header logo on desktop.
-      banner.addEventListener('dblclick',()=>{ if(window.openGamePicker) window.openGamePicker(); });
+      // Same easter egg as double-clicking the header logo on desktop, but it
+      // opens the phone's own arcade rather than the desktop overlay.
+      banner.addEventListener('dblclick',()=>openArcade());
       let lastTap=0;
       banner.addEventListener('pointerup',ev=>{
         const t=Date.now();
-        if(t-lastTap>0&&t-lastTap<450){ ev.preventDefault(); if(window.openGamePicker) window.openGamePicker(); lastTap=0; }
+        if(t-lastTap>0&&t-lastTap<450){ ev.preventDefault(); openArcade(); lastTap=0; }
         else lastTap=t;
       });
       banner.style.touchAction='manipulation';
@@ -1188,6 +1189,217 @@
     });
   }
 
+  /* ══ ARCADE ════════════════════════════════════════════════════════
+     Double-tap the Today banner. The games are app.js's — this only supplies
+     the phone chrome and the touch controls.
+
+     How the borrowing works: each game IIFE in app.js closes over its own
+     <canvas> element and drives a rAF loop that runs for exactly as long as
+     its desktop overlay carries the class `on`. So the overlay must stay
+     "open" while a game is running; css/mobile.css hides it instead, and the
+     canvas is moved into the stage below. Nothing about the games' state,
+     scoring, or leaderboards is duplicated here.
+
+     Compiler Chess is not a built game on the desktop either — it is a mode
+     picker that answers "coming soon" — so it is presented as exactly that. */
+  const GAMES=[
+    {id:'run',name:'Compiler Run',emoji:'🖥️',desc:'Jump the virus, duck the AI',
+     canvas:'cr-canvas',lb:'cr-lb',best:'compiler_run_hi',
+     open:'openCompilerRun',close:'closeCompilerRun',
+     hint:'TAP THE SCREEN TO JUMP · HOLD DUCK TO SLIDE UNDER THE AI',
+     // Desktop plays this on Space/ArrowUp/ArrowDown. Dispatching those keys is
+     // how the buttons drive it without reaching into the game's closure — and
+     // DUCK had no touch equivalent at all before, which left the AI flyers
+     // impossible to avoid on a phone.
+     controls:[{label:'JUMP',code:'Space'},{label:'DUCK',code:'ArrowDown',hold:true,alt:true}]},
+    {id:'duck',name:'Duck Hunter',emoji:'🦆',desc:"Shoot the ducks, don't let them escape",
+     canvas:'dh-canvas',lb:'dh-lb',best:'duck_hunter_hi',
+     open:'openDuckHunter',close:'closeDuckHunter',
+     // Aiming IS the input, so no buttons: a shot has to land where you tapped.
+     hint:'TAP A DUCK TO SHOOT IT',controls:[]},
+    {id:'flappy',name:'Flappy Byte',emoji:'🐦',desc:'Tap to fly through the pipes',
+     canvas:'fb-canvas',lb:'fb-lb',best:'flappy_byte_hi',
+     open:'openFlappy',close:'closeFlappy',
+     hint:'TAP THE SCREEN OR THE BUTTON TO FLY',
+     controls:[{label:'FLAP',code:'Space'}]},
+    {id:'chess',name:'Compiler Chess',emoji:'♛',desc:'Choose how to play',soon:true,
+     modes:[['♟','1V1','Two players, one device'],
+            ['🤝','PLAY WITH FRIEND','Invite a friend to a match'],
+            ['🤖','VS COMPILER ENGINE','Play against the computer']]}
+  ];
+
+  let arcadeGame=null;              // the game currently on screen
+  const borrowedHome=new Map();     // element -> the parent it must go back to
+
+  function borrow(id,into){
+    const el=id&&document.getElementById(id);
+    if(!el||!into) return;
+    if(!borrowedHome.has(el)) borrowedHome.set(el,el.parentNode);
+    into.appendChild(el);
+  }
+  function returnAllBorrowed(){
+    borrowedHome.forEach((home,el)=>{ if(home) home.appendChild(el); });
+    borrowedHome.clear();
+  }
+
+  function bestFor(g){
+    if(!g.best) return '';
+    try{ return String(parseInt(localStorage.getItem(g.best)||'0',10)||0); }catch(e){ return ''; }
+  }
+
+  function openArcade(){
+    const wrap=$('m-arcade');
+    if(!wrap) return;
+    wrap.hidden=false;
+    showPicker();
+  }
+  function closeArcade(){
+    stopGame();
+    const wrap=$('m-arcade');
+    if(wrap) wrap.hidden=true;
+  }
+
+  function showPicker(){
+    stopGame();
+    $('m-arcade-kicker').textContent='COMPILER SOCIETY';
+    $('m-arcade-title').textContent='Arcade';
+    $('m-arcade-play').hidden=true;
+    const pick=$('m-arcade-pick');
+    pick.hidden=false;
+    pick.innerHTML=GAMES.map(g=>{
+      const best=bestFor(g);
+      return `<button class="m-game-card${g.soon?' is-soon':''}" type="button" data-game="${g.id}">
+        <span class="m-game-emoji">${g.emoji}</span>
+        <span class="m-game-text">
+          <span class="m-game-name">${esc(g.name)}${g.soon?'<span class="m-soon">Soon</span>':''}</span>
+          <span class="m-game-desc">${esc(g.desc)}</span>
+        </span>
+        ${best&&best!=='0'?`<span class="m-game-best">Best ${esc(best)}</span>`:''}
+      </button>`;
+    }).join('');
+    pick.querySelectorAll('.m-game-card').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const g=GAMES.find(x=>x.id===btn.dataset.game);
+        if(g) g.soon?showSoon(g):startGame(g);
+      });
+    });
+  }
+
+  // Chess: the three modes, each answering "coming soon" — the same thing the
+  // desktop mode picker does, rather than a card that leads nowhere.
+  function showSoon(g){
+    arcadeGame=null;
+    $('m-arcade-kicker').textContent='CHOOSE HOW TO PLAY';
+    $('m-arcade-title').textContent=g.name;
+    $('m-arcade-pick').hidden=true;
+    $('m-arcade-play').hidden=false;
+    $('m-play-stage').innerHTML='';
+    $('m-play-hint').textContent='';
+    $('m-play-controls').innerHTML='';
+    $('m-play-lb').innerHTML=(g.modes||[]).map(([emoji,name,desc])=>
+      `<button class="m-game-card" type="button" data-mode="${esc(name)}">
+        <span class="m-game-emoji">${emoji}</span>
+        <span class="m-game-text">
+          <span class="m-game-name">${esc(name)}</span>
+          <span class="m-game-desc">${esc(desc)}</span>
+        </span>
+      </button>`).join('')+
+      `<div class="m-soon-note" id="m-chess-soon" hidden></div>`;
+    $('m-play-lb').querySelectorAll('.m-game-card').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const note=$('m-chess-soon');
+        if(note){ note.textContent='🚧 '+btn.dataset.mode+' — stay tuned, coming soon!'; note.hidden=false; }
+      });
+    });
+  }
+
+  function startGame(g){
+    stopGame();
+    arcadeGame=g;
+    $('m-arcade-kicker').textContent='ARCADE';
+    $('m-arcade-title').textContent=g.name;
+    $('m-arcade-pick').hidden=true;
+    $('m-arcade-play').hidden=false;
+    $('m-play-lb').innerHTML='';
+    borrow(g.canvas,$('m-play-stage'));
+    borrow(g.lb,$('m-play-lb'));
+    $('m-play-hint').textContent=g.hint||'';
+    renderControls(g);
+    // Starts the game's own loop and its leaderboard polling.
+    if(typeof window[g.open]==='function') window[g.open]();
+    $('m-arcade-body').scrollTop=0;
+  }
+
+  function stopGame(){
+    if(arcadeGame&&typeof window[arcadeGame.close]==='function') window[arcadeGame.close]();
+    arcadeGame=null;
+    releaseHeldKeys();
+    returnAllBorrowed();
+    const stage=$('m-play-stage'), lb=$('m-play-lb'), ctl=$('m-play-controls');
+    if(stage) stage.innerHTML='';
+    if(lb) lb.innerHTML='';
+    if(ctl) ctl.innerHTML='';
+  }
+
+  // The games listen on `document` for keydown/keyup and gate on their own
+  // overlay being open, so a synthetic key is indistinguishable from a real
+  // one — and no game code has to change to gain touch controls.
+  const heldKeys=new Set();
+  function sendKey(type,code){
+    // cancelable, like a real key event: the games call preventDefault() on the
+    // keys they act on, and dispatchEvent's return value is then a direct
+    // signal that the game consumed it rather than ignored it.
+    const ev=new KeyboardEvent(type,{code,key:code==='Space'?' ':code,bubbles:true,cancelable:true});
+    return document.dispatchEvent(ev)===false;
+  }
+  function releaseHeldKeys(){
+    heldKeys.forEach(code=>sendKey('keyup',code));
+    heldKeys.clear();
+  }
+
+  function renderControls(g){
+    const box=$('m-play-controls');
+    box.innerHTML=(g.controls||[]).map((c,i)=>
+      `<button class="m-ctrl${c.alt?' is-alt':''}" type="button" data-i="${i}">${esc(c.label)}</button>`
+    ).join('');
+    box.querySelectorAll('.m-ctrl').forEach(btn=>{
+      const c=g.controls[Number(btn.dataset.i)];
+      if(!c) return;
+      if(c.hold){
+        // Held controls must be released on cancel and on pointerleave too, or
+        // a finger sliding off the button leaves the player ducking forever.
+        const down=ev=>{ ev.preventDefault(); btn.classList.add('is-down'); heldKeys.add(c.code); sendKey('keydown',c.code); };
+        const up=()=>{ btn.classList.remove('is-down'); if(heldKeys.delete(c.code)) sendKey('keyup',c.code); };
+        btn.addEventListener('pointerdown',down);
+        ['pointerup','pointercancel','pointerleave'].forEach(t=>btn.addEventListener(t,up));
+      }else{
+        // pointerdown, not click: a tap-to-jump that waits for click feels late.
+        btn.addEventListener('pointerdown',ev=>{ ev.preventDefault(); sendKey('keydown',c.code); });
+        btn.addEventListener('pointerup',()=>sendKey('keyup',c.code));
+      }
+    });
+  }
+
+  function wireArcade(){
+    const wrap=$('m-arcade');
+    if(!wrap) return;
+    $('m-arcade-close').addEventListener('click',closeArcade);
+    $('m-play-back').addEventListener('click',showPicker);
+    // The leaderboard's signed-out row is desktop markup with an inline
+    // onclick that opens the DESKTOP profile modal — invisible inside the
+    // mobile breakpoint, so the tap would appear to do nothing. Catch it in
+    // the capture phase (before the inline handler runs) and send the student
+    // to the phone's own sign-in instead.
+    wrap.addEventListener('click',ev=>{
+      const cta=ev.target.closest&&ev.target.closest('.cr-lb-cta');
+      if(!cta) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      closeArcade();
+      if(profile()) go('profile'); else { route='signin'; render(); }
+    },true);
+  }
+
   /* ══ PROFILE ═══════════════════════════════════════════════════════ */
 
   /* Master notification switch state.
@@ -1390,6 +1602,7 @@
     });
     $('m-avatar-btn').addEventListener('click',()=>go('profile'));
     $('m-bell-btn').addEventListener('click',()=>toast('Notification inbox is coming soon'));
+    wireArcade();
 
     $('m-seg-today').addEventListener('click',()=>{ weekMode=false; renderToday(); });
     $('m-seg-week').addEventListener('click',()=>{ weekMode=true; renderToday(); });
@@ -1401,6 +1614,10 @@
     $('m-fac-back').addEventListener('click',()=>go('faculty'));
 
     window.addEventListener('hashchange',()=>{
+      // The arcade is an overlay, not a route, so it would otherwise sit on top
+      // of whatever the back button navigated to. Closing it here also stops
+      // the running game, which is what "back" should mean here.
+      closeArcade();
       const r=readHash();
       if(r&&r!==route){ route=r; render(); }
     });

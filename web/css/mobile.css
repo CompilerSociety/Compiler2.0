@@ -331,6 +331,91 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-pref-group.is-locked{opacity:.42;filter:grayscale(1);pointer-events:none;user-select:none}
 .m-soon{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(184,108,0,.12);color:#8a5200;margin-left:6px;vertical-align:middle}
 
+/* ══ ARCADE ═══════════════════════════════════════════════════════════════
+   The desktop game overlays are a dark full-screen scrim with a boxy modal —
+   right for a browser window, wrong next to everything else on the phone. The
+   games themselves are untouched; only their surroundings are rebuilt here in
+   the same white / rounded / mono language as the rest of the app.
+
+   Hide the desktop overlays outright: js/mobile.js borrows the <canvas> and
+   the leaderboard out of them, and app.js keeps `.on` set on the overlay for
+   as long as the game runs (its loop reads that class to know it is alive), so
+   the overlay must be invisible rather than closed. That covers the desktop
+   game picker and the chess picker too — the phone has its own. */
+.cr-overlay{display:none!important}
+
+.m-arcade{position:absolute;inset:0;z-index:20;background:#fff;display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top);animation:m-fade .18s ease-out}
+.m-arcade[hidden]{display:none}
+.m-arcade-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px}
+.m-arcade-head-text{min-width:0}
+.m-arcade-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px calc(24px + env(safe-area-inset-bottom))}
+
+/* Picker */
+.m-game-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);
+  border:1px solid var(--line);border-radius:24px;padding:15px 17px;margin-bottom:10px;cursor:pointer;
+  font-family:var(--sans);color:var(--ink);transition:background .15s,border-color .15s,transform .12s}
+.m-game-card:active{transform:scale(.985);background:var(--tint)}
+.m-game-emoji{font-size:30px;line-height:1;width:52px;height:52px;flex-shrink:0;border-radius:18px;
+  background:var(--tint);display:grid;place-items:center}
+/* Both children are spans, so the column has to be declared — inline is what
+   makes a name and its description run together on one line. */
+.m-game-text{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.m-game-name{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.m-game-desc{display:block;font-size:11.5px;line-height:1.4;color:var(--mute-2)}
+.m-game-best{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);flex-shrink:0}
+.m-game-card.is-soon .m-game-emoji{background:rgba(184,108,0,.12)}
+
+/* Stage — the borrowed canvas. The games render an internal 720x220 strip, so
+   the frame keeps that ratio and scales it to the width of the phone rather
+   than distorting it. */
+.m-play-stage{border-radius:22px;overflow:hidden;background:#fbfffc;border:1px solid var(--line-strong);
+  line-height:0;box-shadow:0 8px 26px rgba(22,33,15,.07)}
+.m-play-stage canvas{display:block;width:100%;height:auto;touch-action:none}
+.m-play-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;line-height:1.5;color:var(--mute);
+  text-align:center;margin:12px 4px 0}
+
+/* Controls. Big, thumb-reachable, and never a text-selection or double-tap-to-
+   zoom target — both of which make a game feel broken on a phone. */
+.m-play-controls{display:flex;gap:10px;margin-top:14px}
+.m-play-controls:empty{display:none}
+.m-ctrl{flex:1;height:62px;border:none;border-radius:22px;background:var(--green);color:#fff;
+  font-family:var(--mono);font-weight:500;font-size:15px;letter-spacing:.1em;cursor:pointer;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 8px 20px rgba(47,107,49,.24);transition:transform .1s,background .1s}
+.m-ctrl:active,.m-ctrl.is-down{transform:translateY(2px);background:var(--green-deep)}
+.m-ctrl.is-alt{background:var(--tint);color:var(--green-deep);box-shadow:none}
+.m-ctrl.is-alt:active,.m-ctrl.is-alt.is-down{background:var(--tint-hover)}
+
+/* Leaderboard: the desktop table, restyled in place. Scoped to .m-arcade so
+   the desktop board keeps its own look. */
+.m-play-lb{margin-top:18px}
+.m-play-lb:empty{display:none}
+.m-arcade .cr-lb{margin:0;border:1px solid var(--line);border-radius:22px;background:var(--surface)}
+/* Stack the title over its status: side by side, "DUCK HUNTER LEADERBOARD" and
+   a status message both wrap on a 390px screen and the head grows to four
+   ragged lines. */
+.m-arcade .cr-lb-head{flex-direction:column;align-items:flex-start;gap:3px;background:var(--tint);border-bottom:none;padding:13px 17px}
+.m-arcade .cr-lb-title{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--green-deep)}
+.m-arcade .cr-lb-status{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute)}
+.m-arcade .cr-lb-table{font-family:var(--sans);font-size:13px}
+.m-arcade .cr-lb-table th{font-family:var(--mono);font-size:9px;letter-spacing:.11em;color:var(--mute);
+  padding:9px 16px;border-bottom:1px solid var(--line)}
+.m-arcade .cr-lb-table td{padding:11px 16px;border-bottom:1px solid var(--line);color:var(--ink)}
+.m-arcade .cr-lb-table td.cr-rank{font-family:var(--mono);font-size:13px;color:var(--mute-2);width:34px}
+.m-arcade .cr-lb-table td.cr-score{font-family:var(--mono);color:var(--green-deep);font-weight:500}
+.m-arcade .cr-lb-row-me{background:var(--tint)}
+.m-arcade .cr-lb-row-me td{color:var(--green-deep);font-weight:700}
+.m-arcade .cr-lb-empty,.m-arcade .cr-lb-table td.cr-lb-cta{font-family:var(--sans);font-size:12.5px;
+  padding:18px 16px;text-align:center;letter-spacing:0}
+.m-arcade .cr-lb-table td.cr-lb-cta{color:var(--green-deep);font-weight:600;text-decoration:underline}
+
+/* Chess is a mode picker plus a "coming soon" line on the desktop too — it is
+   not a built game. Say so here rather than implying otherwise. */
+.m-soon-note{margin-top:14px;border-radius:22px;background:rgba(184,108,0,.1);color:#7a4900;
+  padding:15px 17px;font-size:12.5px;line-height:1.5}
+
 :focus-visible{outline:2px solid #2f6b31;outline-offset:2px}
 
 } /* end mobile breakpoint */

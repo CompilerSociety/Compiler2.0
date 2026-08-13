@@ -28,13 +28,13 @@
        file under /css or /js. Browsers (especially installed PWAs, which
        revalidate far less eagerly than a normal tab) otherwise keep serving
        an old cached bundle indefinitely, silently masking bug fixes. -->
-  <link rel="stylesheet" href="/css/main.css?v=9">
+  <link rel="stylesheet" href="/css/main.css?v=10">
   <!-- Phone layout. Additive: everything inside is scoped to the mobile
        breakpoint, so the desktop look is unchanged. See css/mobile.css. -->
-  <link rel="stylesheet" href="/css/mobile.css?v=9">
+  <link rel="stylesheet" href="/css/mobile.css?v=10">
   <!-- Launch switch. Plain script so it runs before the deferred /js/main.js
        module and can gate the whole app. See js/status.js. -->
-  <script src="/js/status.js?v=9"></script>
+  <script src="/js/status.js?v=10"></script>
   <script>
     (function () {
       try {
@@ -71,6 +71,6 @@
     </div>
     <div id="mobile-container"></div>
   </div>
-  <script type="module" src="/js/main.js?v=9"></script>
+  <script type="module" src="/js/main.js?v=10"></script>
 </body>
 </html>
