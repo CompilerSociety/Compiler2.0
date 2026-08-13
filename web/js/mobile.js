@@ -605,8 +605,9 @@
             </div>`;
           }).join('')}</div>
         </div>`:'';
-      return `<div class="m-room-card${free===true?' is-free':''}${open?' is-open':''}">
-        <button class="m-room${free===true?' is-free':''}" type="button" data-room="${esc(room)}"
+      const stateClass=free===true?' is-free':free===false?' is-busy':'';
+      return `<div class="m-room-card${stateClass}${open?' is-open':''}">
+        <button class="m-room${stateClass}" type="button" data-room="${esc(room)}"
                 aria-expanded="${open}">
           <span class="m-room-name">${esc(room)}</span>
           <span class="m-slots">${bars}</span>
@@ -617,7 +618,7 @@
       </div>`;
     }).join('');
     $('m-rooms-out').innerHTML=`<div class="m-roomlist m-reveal">${cards}</div>
-      <div class="m-caption">Each bar is the day’s slots — green is free, grey is booked. Tap a room to see when it frees up. Labs run four long slots instead of eight.</div>`;
+      <div class="m-caption">Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.</div>`;
     $('m-rooms-out').querySelectorAll('.m-room').forEach(btn=>{
       btn.addEventListener('click',()=>{
         rm.open=rm.open===btn.dataset.room?'':btn.dataset.room;

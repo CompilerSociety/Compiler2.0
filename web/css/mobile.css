@@ -19,6 +19,7 @@
   --ink:#16210f; --green:#2f6b31; --green-deep:#1f4a22; --green-bright:#8fc78d;
   --tint:#edf5eb; --tint-hover:#e0eedd; --surface:#fbfdfa; --page:#f2f6f0;
   --neutral:#eef1ec; --slot-free:#7fb87d; --slot-busy:#dfe3dc; --seat-section:#cfe6cb;
+  --red:#b3402f; --red-deep:#8a2f22; --red-bright:#e2897c;
   --line:rgba(22,33,15,.09); --line-strong:rgba(22,33,15,.14);
   --mute:rgba(22,33,15,.5); --mute-2:rgba(22,33,15,.62); --mute-3:rgba(22,33,15,.45);
   --mono:'DM Mono','JetBrains Mono',monospace; --sans:'Figtree','Inter',system-ui,sans-serif;
@@ -196,15 +197,22 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-room-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
 .m-room-card.is-open{border-color:rgba(47,107,49,.45);border-radius:26px}
 .m-room{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;padding:13px 16px;cursor:pointer;color:var(--ink);font-family:inherit}
-/* Free right now = the banner's solid green, so the answer is readable in one
-   pass down the list instead of having to decode eight little bars. */
+/* Free right now = the banner's solid green, in use = solid red, so the
+   answer is readable in one pass down the list instead of having to decode
+   eight little bars. */
 .m-room-card.is-free{border-color:var(--green)}
 .m-room.is-free{background:var(--green);color:#fff}
 .m-room.is-free .m-room-status{color:#fff}
 .m-room.is-free .m-slot{background:rgba(255,255,255,.3)}
 .m-room.is-free .m-slot.is-free{background:var(--green-bright)}
 .m-room.is-free .m-room-chev{color:rgba(255,255,255,.85)}
-.m-room-card.is-open .m-room:not(.is-free){background:var(--tint)}
+.m-room-card.is-busy{border-color:var(--red)}
+.m-room.is-busy{background:var(--red);color:#fff}
+.m-room.is-busy .m-room-status{color:#fff}
+.m-room.is-busy .m-slot{background:rgba(255,255,255,.3)}
+.m-room.is-busy .m-slot.is-free{background:var(--red-bright)}
+.m-room.is-busy .m-room-chev{color:rgba(255,255,255,.85)}
+.m-room-card.is-open .m-room:not(.is-free):not(.is-busy){background:var(--tint)}
 .m-room-chev{width:16px;height:16px;flex-shrink:0;color:var(--mute);transition:transform .2s cubic-bezier(.22,1,.36,1)}
 .m-room-card.is-open .m-room-chev{transform:rotate(180deg);color:var(--green-deep)}
 .m-room-detail{padding:2px 16px 15px;background:var(--tint);animation:m-expand .22s cubic-bezier(.22,1,.36,1)}
