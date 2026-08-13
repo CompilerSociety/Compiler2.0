@@ -21,6 +21,11 @@ Required environment variables:
   GMAIL_PASS  – Gmail App Password (not your regular password)
   GH_TOKEN    – GitHub PAT with repo contents write access (Vercel handler only;
                 the GitHub Actions CLI commits with its own built-in token)
+  SYNC_SECRET – shared secret that must accompany every request to the Vercel
+                handler. Read from the Authorization: Bearer header, the
+                X-Sync-Secret header, or the ?secret= query parameter. When
+                this is not set the handler refuses to run (fail closed), so
+                the sync endpoint can never be triggered by anonymous traffic.
 
 Optional environment variables:
   GH_REPO     – "owner/repo" (defaults to VERCEL_GIT_REPO_OWNER/SLUG)
@@ -31,6 +36,7 @@ from __future__ import annotations
 
 import base64
 import email
+import hmac
 import imaplib
 import json
 import os
@@ -46,6 +52,7 @@ from email.header import decode_header
 from http.server import BaseHTTPRequestHandler
 from typing import Any
 from urllib.error import HTTPError, URLError
+from urllib.parse import unquote
 from urllib.request import Request, urlopen
 
 # ── Constants ────────────────────────────────────────────────────────────────
@@ -1286,7 +1293,48 @@ def _write_json_file(path: str, document: dict[str, Any]) -> None:
 # ── Vercel handler ───────────────────────────────────────────────────────────
 
 class handler(BaseHTTPRequestHandler):
-    """Vercel Python entrypoint – trigger via GET or POST /api/fetch-timetable."""
+    """Vercel Python entrypoint – trigger via GET or POST /api/fetch-timetable.
+
+    Gated behind SYNC_SECRET (Authorization: Bearer <secret>, X-Sync-Secret
+    header, or ?secret= query). Without a configured secret the handler refuses
+    to run, so anonymous traffic can never force a Gmail poll or a commit.
+    """
+
+    def _secret_from(self) -> str | None:
+        auth = self.headers.get("Authorization") or ""
+        if auth.lower().startswith("bearer "):
+            return auth[len("Bearer "):].strip()
+        secret = self.headers.get("X-Sync-Secret")
+        if secret:
+            return secret.strip()
+        # Query parameter fallback for simple curl / scheduled callers.
+        path = self.path or ""
+        if "?" in path:
+            query = path.split("?", 1)[1]
+            for part in query.split("&"):
+                key, _, value = part.partition("=")
+                if key.strip() == "secret":
+                    return unquote(value).strip()
+        return None
+
+    def _authenticated(self) -> bool:
+        expected = os.environ.get("SYNC_SECRET") or ""
+        if not expected:
+            return False
+        supplied = self._secret_from()
+        if not supplied:
+            return False
+        return hmac.compare_digest(supplied.encode("utf-8"), expected.encode("utf-8"))
+
+    def _reject(self, status: int, payload: dict) -> None:
+        json_response(self, status, payload)
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Sync-Secret")
+        self.end_headers()
 
     def do_GET(self) -> None:
         self._run_sync()
@@ -1295,6 +1343,16 @@ class handler(BaseHTTPRequestHandler):
         self._run_sync()
 
     def _run_sync(self) -> None:
+        if not os.environ.get("SYNC_SECRET"):
+            # Fail closed: without a configured secret there is no way to call
+            # this safely, so refuse rather than expose the sync unauthenticated.
+            self._reject(503, {"ok": False, "error": "sync_disabled",
+                               "message": "SYNC_SECRET is not configured on the server."})
+            return
+        if not self._authenticated():
+            self._reject(401, {"ok": False, "error": "unauthorized",
+                               "message": "Missing or invalid sync secret."})
+            return
         try:
             kind, subject, body, attachment, attachment_filename = fetch_latest_matching_email()
             if kind == "seating":
