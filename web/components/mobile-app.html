@@ -226,13 +226,30 @@
       <!-- Game picker -->
       <div id="m-arcade-pick"></div>
 
-      <!-- Play view. The canvas and the leaderboard are moved in at runtime. -->
+      <!-- Chess mode list (not a game — see js/mobile.js) -->
       <div id="m-arcade-play" hidden>
-        <div class="m-play-stage" id="m-play-stage"></div>
-        <div class="m-play-hint" id="m-play-hint"></div>
-        <div class="m-play-controls" id="m-play-controls"></div>
-        <div class="m-play-lb" id="m-play-lb"></div>
-        <button class="m-btn-ghost" id="m-play-back" type="button">&lsaquo; All games</button>
+        <div id="m-play-modes"></div>
+      </div>
+    </div>
+
+    <!-- Full-screen play. Everything except the game itself gets out of the
+         way: no header, no hint, no buttons, no leaderboard — the games are
+         already touch-driven, so the screen is the controller. Just a close
+         button, and the board raised over the top once you die. -->
+    <div class="m-stage-full" id="m-stage-full" hidden>
+      <button class="m-stage-x" id="m-stage-x" type="button" aria-label="Leave the game">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="m-stage-holder" id="m-play-stage"></div>
+      <div class="m-turn-hint" id="m-turn-hint" hidden>Turn your phone sideways to play</div>
+      <div class="m-dead" id="m-dead" hidden>
+        <div class="m-dead-card">
+          <div class="m-dead-kicker" id="m-dead-kicker">GAME OVER</div>
+          <div class="m-dead-score" id="m-dead-score"></div>
+          <div class="m-play-lb" id="m-play-lb"></div>
+          <button class="m-btn-primary" id="m-dead-again" type="button">Play again</button>
+          <button class="m-btn-ghost" id="m-dead-quit" type="button">All games</button>
+        </div>
       </div>
     </div>
   </section>

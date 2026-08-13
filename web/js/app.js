@@ -4185,6 +4185,14 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
 function touchPlay(){
   try{ return window.matchMedia('(max-width:767px)').matches; }catch(e){ return false; }
 }
+// "You died." The phone arcade keeps the leaderboard off screen while a game is
+// running and only raises it on a loss, so it needs to know the moment a run
+// ends. Nothing on the desktop listens, so its behaviour is unchanged.
+function announceGameOver(game,score,best){
+  try{
+    document.dispatchEvent(new CustomEvent('vtable:gameover',{detail:{game,score,best}}));
+  }catch(e){ /* never let a notification break the game */ }
+}
 (function CompilerRun(){
   const overlay=document.getElementById('cr-overlay');
   const canvas=document.getElementById('cr-canvas');
@@ -4275,6 +4283,7 @@ function touchPlay(){
     hi=Math.max(hi, finalScore);
     localStorage.setItem(HI_KEY, String(hi));
     submitScoreToLeaderboard(finalScore);
+    announceGameOver('run',finalScore,hi);
   }
 
   // ── shared leaderboard (server-backed) ──
@@ -4518,7 +4527,7 @@ function touchPlay(){
     }
   }
 
-  function gameOver(){ state='over'; localStorage.setItem(HI_KEY,String(hi)); submitScore(score); }
+  function gameOver(){ state='over'; localStorage.setItem(HI_KEY,String(hi)); submitScore(score); announceGameOver('duck',score,hi); }
 
   // ── leaderboard (its own JSON via ?game=duck_hunter) ──
   let LB_STATUS='', LB_LOADED_ONCE=false, lbPollId=null;
@@ -4666,7 +4675,7 @@ function touchPlay(){
     }
     if(bird.y+bird.r>=GROUND || bird.y-bird.r<=0){ gameOver(); }
   }
-  function gameOver(){ if(state==='over')return; state='over'; if(bird.y+bird.r>GROUND) bird.y=GROUND-bird.r; localStorage.setItem(HI_KEY,String(hi)); submitScore(score); }
+  function gameOver(){ if(state==='over')return; state='over'; if(bird.y+bird.r>GROUND) bird.y=GROUND-bird.r; localStorage.setItem(HI_KEY,String(hi)); submitScore(score); announceGameOver('flappy',score,hi); }
 
   // ── leaderboard (its own JSON via ?game=flappy_bird) ──
   let LB_STATUS='', LB_LOADED_ONCE=false, lbPollId=null;

@@ -111,15 +111,23 @@ Still outstanding on it:
 - **Compiler Chess is not a game yet** — on desktop it is a mode picker whose
   three options all answer "coming soon", and the phone shows the same three
   and the same answer. Whoever builds the engine gets both surfaces at once.
-- **The play stage is a 720x220 strip.** Each game reads `canvas.width/height`
-  once, at page load, into a `const`, and every constant in it (ground line,
-  player size, gravity, pipe gap) is tuned against those numbers. So the canvas
-  scales to 348x106 on a 390px phone rather than reflowing to portrait. Making
-  them resolution-aware is a retune of all three games, not a resize.
-- **Rotating to landscape drops out of the mobile layout entirely** — a phone
-  in landscape is ~844px wide, past the 767px breakpoint, so `.m-app` hides and
-  the desktop shell appears mid-game. Pre-existing for the whole app, but the
-  arcade is where someone is most likely to turn their phone sideways.
+- **The play field is fixed at 720x220 and cannot be reshaped.** Each game
+  reads `canvas.width/height` once, at page load, into a `const`, and every
+  constant in it (ground line, gravity, pipe gap, duck size) is tuned against
+  those numbers — and the leaderboard is shared with the desktop, so a
+  different field would make phone scores incomparable with the ones already
+  on the board. The phone therefore TURNS the canvas onto its long axis
+  (~258x844, 66% of the screen) rather than reflowing it; laid flat it covered
+  14%. `layoutStage()` picks the orientation and `toCanvasPoint()` corrects
+  input for it.
+- **The turned game reads sideways in portrait,** so a hint invites the player
+  to turn the phone. Doing that crosses the 767px breakpoint, at which point
+  `.m-app` hides — the arcade now hands the live canvas back to the desktop
+  overlay on that transition (and re-borrows it coming back), so the run
+  continues in the desktop modal, which is the right shape for a 720x220 game.
+  It is a chrome change mid-game, though. A single consistent surface needs the
+  mobile layout to survive landscape, which is a breakpoint change for the
+  whole app, not just the arcade.
 
 ### Decided against
 - **Room Rush** — double-clicking the Today banner opens the existing game

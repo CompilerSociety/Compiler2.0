@@ -1203,25 +1203,23 @@
      Compiler Chess is not a built game on the desktop either — it is a mode
      picker that answers "coming soon" — so it is presented as exactly that. */
   const GAMES=[
+    // duckZone: Compiler Run is the one game with a second action (ArrowDown)
+    // and no touch equivalent, so its canvas is split instead of given a
+    // button. See wireDuckZone().
     {id:'run',name:'Compiler Run',emoji:'🖥️',desc:'Jump the virus, duck the AI',
      canvas:'cr-canvas',lb:'cr-lb',best:'compiler_run_hi',
      open:'openCompilerRun',close:'closeCompilerRun',
-     hint:'TAP THE SCREEN TO JUMP · HOLD DUCK TO SLIDE UNDER THE AI',
-     // Desktop plays this on Space/ArrowUp/ArrowDown. Dispatching those keys is
-     // how the buttons drive it without reaching into the game's closure — and
-     // DUCK had no touch equivalent at all before, which left the AI flyers
-     // impossible to avoid on a phone.
-     controls:[{label:'JUMP',code:'Space'},{label:'DUCK',code:'ArrowDown',hold:true,alt:true}]},
+     duckZone:true,restartKey:'Space',overLabel:'SYSTEM CRASH',unit:'points'},
+    // needsAim: the only game whose input is a POSITION rather than a press,
+    // so it is the only one the rotation has to correct for. See wireAim().
     {id:'duck',name:'Duck Hunter',emoji:'🦆',desc:"Shoot the ducks, don't let them escape",
      canvas:'dh-canvas',lb:'dh-lb',best:'duck_hunter_hi',
      open:'openDuckHunter',close:'closeDuckHunter',
-     // Aiming IS the input, so no buttons: a shot has to land where you tapped.
-     hint:'TAP A DUCK TO SHOOT IT',controls:[]},
+     needsAim:true,overLabel:'OUT OF LIVES',unit:'ducks'},
     {id:'flappy',name:'Flappy Byte',emoji:'🐦',desc:'Tap to fly through the pipes',
      canvas:'fb-canvas',lb:'fb-lb',best:'flappy_byte_hi',
      open:'openFlappy',close:'closeFlappy',
-     hint:'TAP THE SCREEN OR THE BUTTON TO FLY',
-     controls:[{label:'FLAP',code:'Space'}]},
+     restartKey:'Space',overLabel:'CRASHED',unit:'pipes'},
     {id:'chess',name:'Compiler Chess',emoji:'♛',desc:'Choose how to play',soon:true,
      modes:[['♟','1V1','Two players, one device'],
             ['🤝','PLAY WITH FRIEND','Invite a friend to a match'],
@@ -1229,6 +1227,7 @@
   ];
 
   let arcadeGame=null;              // the game currently on screen
+  let arcadeOpenedAt=0;             // see the guard in the picker's click handler
   const borrowedHome=new Map();     // element -> the parent it must go back to
 
   function borrow(id,into){
@@ -1238,8 +1237,14 @@
     into.appendChild(el);
   }
   function returnAllBorrowed(){
-    borrowedHome.forEach((home,el)=>{ if(home) home.appendChild(el); });
+    borrowedHome.forEach((home,el)=>{
+      // layoutStage() sizes and turns the canvas with inline styles. Those must
+      // come off on the way out, or the desktop modal shows a rotated game.
+      if(el.tagName==='CANVAS'){ el.style.width=''; el.style.height=''; el.classList.remove('is-rot'); }
+      if(home) home.appendChild(el);
+    });
     borrowedHome.clear();
+    stageRotated=false;
   }
 
   function bestFor(g){
@@ -1250,6 +1255,7 @@
   function openArcade(){
     const wrap=$('m-arcade');
     if(!wrap) return;
+    arcadeOpenedAt=Date.now();
     wrap.hidden=false;
     showPicker();
   }
@@ -1279,6 +1285,12 @@
     }).join('');
     pick.querySelectorAll('.m-game-card').forEach(btn=>{
       btn.addEventListener('click',()=>{
+        // A double-TAP opens this screen, and the browser then delivers the
+        // second tap's `click` to whatever now sits under the finger — which
+        // was a game card, so the arcade appeared to skip the picker and boot
+        // straight into Duck Hunter. Ignore anything arriving in the same
+        // breath as the open.
+        if(Date.now()-arcadeOpenedAt<500) return;
         const g=GAMES.find(x=>x.id===btn.dataset.game);
         if(g) g.soon?showSoon(g):startGame(g);
       });
@@ -1288,15 +1300,11 @@
   // Chess: the three modes, each answering "coming soon" — the same thing the
   // desktop mode picker does, rather than a card that leads nowhere.
   function showSoon(g){
-    arcadeGame=null;
     $('m-arcade-kicker').textContent='CHOOSE HOW TO PLAY';
     $('m-arcade-title').textContent=g.name;
     $('m-arcade-pick').hidden=true;
     $('m-arcade-play').hidden=false;
-    $('m-play-stage').innerHTML='';
-    $('m-play-hint').textContent='';
-    $('m-play-controls').innerHTML='';
-    $('m-play-lb').innerHTML=(g.modes||[]).map(([emoji,name,desc])=>
+    $('m-play-modes').innerHTML=(g.modes||[]).map(([emoji,name,desc])=>
       `<button class="m-game-card" type="button" data-mode="${esc(name)}">
         <span class="m-game-emoji">${emoji}</span>
         <span class="m-game-text">
@@ -1304,92 +1312,225 @@
           <span class="m-game-desc">${esc(desc)}</span>
         </span>
       </button>`).join('')+
-      `<div class="m-soon-note" id="m-chess-soon" hidden></div>`;
-    $('m-play-lb').querySelectorAll('.m-game-card').forEach(btn=>{
+      `<div class="m-soon-note" id="m-chess-soon" hidden></div>
+       <button class="m-btn-ghost" id="m-modes-back" type="button">&lsaquo; All games</button>`;
+    $('m-play-modes').querySelectorAll('.m-game-card').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const note=$('m-chess-soon');
         if(note){ note.textContent='🚧 '+btn.dataset.mode+' — stay tuned, coming soon!'; note.hidden=false; }
       });
     });
+    $('m-modes-back').addEventListener('click',showPicker);
+  }
+
+  /* ── Filling the screen ────────────────────────────────────────────────
+     The play field is fixed at 720x220: each game reads canvas.width/height
+     once into a const at load and tunes its ground line, gravity and gap sizes
+     against them — and the leaderboard is shared with the desktop, so changing
+     the field would make phone scores incomparable with the ones already on
+     the board. Laid flat across a 390px phone that is 390x119, about 14% of
+     the screen.
+
+     So it is turned onto the phone's long axis instead: ~258x844, roughly 4.7x
+     the play area, without touching a single game constant. Only taken when it
+     is a clear win, so a wide window still gets the upright layout. */
+  let stageRotated=false;
+  function layoutStage(){
+    const g=arcadeGame; if(!g) return;
+    const cv=document.getElementById(g.canvas), host=$('m-stage-full');
+    if(!cv||!host) return;
+    const vw=host.clientWidth, vh=host.clientHeight;
+    if(!vw||!vh) return;
+    const ar=cv.width/cv.height;
+    const flatW=vw, flatH=vw/ar;                  // upright: full width
+    let turnLen=vh, turnThick=vh/ar;              // turned: full height
+    if(turnThick>vw){ turnThick=vw; turnLen=vw*ar; }
+    stageRotated=(turnLen*turnThick)>(flatW*flatH)*1.2;
+    cv.classList.toggle('is-rot',stageRotated);
+    cv.style.width=(stageRotated?turnLen:flatW)+'px';
+    cv.style.height=(stageRotated?turnThick:flatH)+'px';
+    showTurnHint(stageRotated);
+  }
+  let turnHintTimer=null;
+  function showTurnHint(on){
+    const el=$('m-turn-hint');
+    if(!el) return;
+    clearTimeout(turnHintTimer);
+    el.hidden=!on;
+    if(on) turnHintTimer=setTimeout(()=>{ el.hidden=true; },4200);
+  }
+
+  /* Viewport point -> canvas point, through whatever transform is applied.
+     getBoundingClientRect() on a rotated element is its AXIS-ALIGNED box, so
+     the naive (clientX - left) * (W / width) the games use is wrong the moment
+     the canvas is turned. Everything that needs a position goes through here. */
+  function toCanvasPoint(cv,clientX,clientY){
+    const r=cv.getBoundingClientRect();
+    const cw=parseFloat(cv.style.width)||r.width;    // pre-transform CSS size
+    const ch=parseFloat(cv.style.height)||r.height;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    let dx=clientX-cx, dy=clientY-cy;
+    if(stageRotated){ const t=dx; dx=dy; dy=-t; }    // inverse of rotate(90deg)
+    return {x:(dx+cw/2)*(cv.width/cw), y:(dy+ch/2)*(cv.height/ch)};
   }
 
   function startGame(g){
     stopGame();
     arcadeGame=g;
-    $('m-arcade-kicker').textContent='ARCADE';
-    $('m-arcade-title').textContent=g.name;
-    $('m-arcade-pick').hidden=true;
-    $('m-arcade-play').hidden=false;
-    $('m-play-lb').innerHTML='';
+    $('m-stage-full').hidden=false;
+    $('m-dead').hidden=true;
     borrow(g.canvas,$('m-play-stage'));
-    borrow(g.lb,$('m-play-lb'));
-    $('m-play-hint').textContent=g.hint||'';
-    renderControls(g);
-    // Starts the game's own loop and its leaderboard polling.
+    layoutStage();
+    if(g.duckZone) wireDuckZone(g);
+    if(g.needsAim) wireAim(g);
+    // Starts the game's own loop and its leaderboard polling. The board stays
+    // off screen until the run ends — it is still loading in the background so
+    // it is ready the moment it is needed.
     if(typeof window[g.open]==='function') window[g.open]();
-    $('m-arcade-body').scrollTop=0;
   }
 
   function stopGame(){
     if(arcadeGame&&typeof window[arcadeGame.close]==='function') window[arcadeGame.close]();
     arcadeGame=null;
-    releaseHeldKeys();
+    releaseDuck();
     returnAllBorrowed();
-    const stage=$('m-play-stage'), lb=$('m-play-lb'), ctl=$('m-play-controls');
-    if(stage) stage.innerHTML='';
+    showTurnHint(false);
+    const stage=$('m-stage-full');
+    if(stage) stage.hidden=true;
+    const dead=$('m-dead');
+    if(dead) dead.hidden=true;
+    const lb=$('m-play-lb');
     if(lb) lb.innerHTML='';
-    if(ctl) ctl.innerHTML='';
   }
 
-  // The games listen on `document` for keydown/keyup and gate on their own
-  // overlay being open, so a synthetic key is indistinguishable from a real
-  // one — and no game code has to change to gain touch controls.
-  const heldKeys=new Set();
+  /* ── Compiler Run's duck, without a button ─────────────────────────────
+     Every other input in these games is "tap the canvas", which is why there
+     are no on-screen controls. Compiler Run is the exception: it has a second
+     action bound to ArrowDown with no touch equivalent at all, which left the
+     AI flyers impossible to avoid on a phone.
+
+     So the canvas is split: a touch in the lower part ducks and holds, and
+     anywhere above it is the jump the game already handles. The listener runs
+     in the capture phase and stops the event, so the game's own
+     pointerdown -> jump() never sees a duck. */
+  const DUCK_ZONE=0.62;   // fraction of the canvas height below which a touch ducks
+  let duckHeld=false, duckWired=null;
   function sendKey(type,code){
-    // cancelable, like a real key event: the games call preventDefault() on the
-    // keys they act on, and dispatchEvent's return value is then a direct
-    // signal that the game consumed it rather than ignored it.
     const ev=new KeyboardEvent(type,{code,key:code==='Space'?' ':code,bubbles:true,cancelable:true});
     return document.dispatchEvent(ev)===false;
   }
-  function releaseHeldKeys(){
-    heldKeys.forEach(code=>sendKey('keyup',code));
-    heldKeys.clear();
+  function releaseDuck(){
+    if(!duckHeld) return;
+    duckHeld=false;
+    sendKey('keyup','ArrowDown');
+  }
+  function wireDuckZone(g){
+    const cv=document.getElementById(g.canvas);
+    if(!cv||cv===duckWired) return;   // listeners are permanent; wire each canvas once
+    duckWired=cv;
+    cv.addEventListener('pointerdown',ev=>{
+      if(!arcadeGame||arcadeGame.canvas!==cv.id) return;   // not the game on screen
+      // In GAME space, so the split lands in the same place whether the canvas
+      // is upright or turned onto the phone's long axis.
+      if(toCanvasPoint(cv,ev.clientX,ev.clientY).y/cv.height < DUCK_ZONE) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      duckHeld=true;
+      sendKey('keydown','ArrowDown');
+    },true);
+    // Release wherever the finger lifts — including off the canvas, which would
+    // otherwise leave the player ducking for the rest of the run.
+    ['pointerup','pointercancel'].forEach(t=>window.addEventListener(t,releaseDuck));
   }
 
-  function renderControls(g){
-    const box=$('m-play-controls');
-    box.innerHTML=(g.controls||[]).map((c,i)=>
-      `<button class="m-ctrl${c.alt?' is-alt':''}" type="button" data-i="${i}">${esc(c.label)}</button>`
-    ).join('');
-    box.querySelectorAll('.m-ctrl').forEach(btn=>{
-      const c=g.controls[Number(btn.dataset.i)];
-      if(!c) return;
-      if(c.hold){
-        // Held controls must be released on cancel and on pointerleave too, or
-        // a finger sliding off the button leaves the player ducking forever.
-        const down=ev=>{ ev.preventDefault(); btn.classList.add('is-down'); heldKeys.add(c.code); sendKey('keydown',c.code); };
-        const up=()=>{ btn.classList.remove('is-down'); if(heldKeys.delete(c.code)) sendKey('keyup',c.code); };
-        btn.addEventListener('pointerdown',down);
-        ['pointerup','pointercancel','pointerleave'].forEach(t=>btn.addEventListener(t,up));
-      }else{
-        // pointerdown, not click: a tap-to-jump that waits for click feels late.
-        btn.addEventListener('pointerdown',ev=>{ ev.preventDefault(); sendKey('keydown',c.code); });
-        btn.addEventListener('pointerup',()=>sendKey('keyup',c.code));
-      }
-    });
+  /* ── Aim, through the rotation ─────────────────────────────────────────
+     Duck Hunter is the one game whose input is a POSITION, and it recovers
+     that position with `(clientX - rect.left) * (W / rect.width)`. That is
+     correct for a plain scaled canvas and wrong for a rotated one, because the
+     rect is then the axis-aligned box.
+
+     Rather than reach into the game (its shoot() is closure-private), the real
+     tap is intercepted, mapped properly, and re-issued at whatever clientX /
+     clientY the game's own formula needs in order to arrive at the right
+     square. Untrusted events are ignored so the re-issue is not re-intercepted. */
+  let aimWired=null;
+  function wireAim(g){
+    const cv=document.getElementById(g.canvas);
+    if(!cv||cv===aimWired) return;
+    aimWired=cv;
+    cv.addEventListener('pointerdown',ev=>{
+      if(!ev.isTrusted) return;                            // our own re-issue
+      if(!arcadeGame||arcadeGame.canvas!==cv.id) return;
+      if(!stageRotated) return;                            // upright: already correct
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      const p=toCanvasPoint(cv,ev.clientX,ev.clientY);
+      const r=cv.getBoundingClientRect();
+      cv.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,
+        clientX:r.left+p.x*r.width/cv.width,
+        clientY:r.top +p.y*r.height/cv.height}));
+    },true);
+  }
+
+  /* ── You died ──────────────────────────────────────────────────────────
+     app.js fires this from each game's gameOver(). Only now does the
+     leaderboard come on screen. */
+  function onGameOver(ev){
+    if(!arcadeGame||!MQ.matches) return;
+    const d=(ev&&ev.detail)||{};
+    if(d.game&&d.game!==arcadeGame.id) return;
+    releaseDuck();
+    $('m-dead-kicker').textContent=arcadeGame.overLabel||'GAME OVER';
+    $('m-dead-score').innerHTML=esc(String(d.score==null?'—':d.score))+
+      ` <span>${esc(arcadeGame.unit||'points')} · best ${esc(String(d.best==null?'—':d.best))}</span>`;
+    borrow(arcadeGame.lb,$('m-play-lb'));
+    $('m-dead').hidden=false;
+  }
+
+  function playAgain(){
+    if(!arcadeGame) return;
+    $('m-dead').hidden=true;
+    // Each game restarts out of its 'over' state on the same input that plays
+    // it, so replay that input rather than reaching into the game's closure.
+    // A key where one exists — a synthetic tap would have to dodge Compiler
+    // Run's duck zone, and Duck Hunter ignores the coordinates while it is over.
+    if(arcadeGame.restartKey){ sendKey('keydown',arcadeGame.restartKey); sendKey('keyup',arcadeGame.restartKey); return; }
+    const cv=document.getElementById(arcadeGame.canvas);
+    if(cv) cv.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,clientX:0,clientY:0}));
   }
 
   function wireArcade(){
     const wrap=$('m-arcade');
     if(!wrap) return;
     $('m-arcade-close').addEventListener('click',closeArcade);
-    $('m-play-back').addEventListener('click',showPicker);
-    // The leaderboard's signed-out row is desktop markup with an inline
-    // onclick that opens the DESKTOP profile modal — invisible inside the
-    // mobile breakpoint, so the tap would appear to do nothing. Catch it in
-    // the capture phase (before the inline handler runs) and send the student
-    // to the phone's own sign-in instead.
+    $('m-stage-x').addEventListener('click',showPicker);
+    $('m-dead-again').addEventListener('click',playAgain);
+    $('m-dead-quit').addEventListener('click',showPicker);
+    document.addEventListener('vtable:gameover',onGameOver);
+    window.addEventListener('resize',()=>{ if(arcadeGame&&MQ.matches) layoutStage(); });
+    // Turning the phone sideways puts the window past the mobile breakpoint, so
+    // .m-app — and the canvas borrowed into it — goes display:none while the
+    // desktop overlay reappears empty. Hand the game back at that moment and
+    // the desktop modal picks it up mid-run, which is the right shape for a
+    // 720x220 field anyway. Coming back to portrait re-borrows it.
+    const onBreakpoint=()=>{
+      if(!arcadeGame) return;
+      if(MQ.matches){
+        borrow(arcadeGame.canvas,$('m-play-stage'));
+        if(!$('m-dead').hidden) borrow(arcadeGame.lb,$('m-play-lb'));
+        layoutStage();
+      }else{
+        releaseDuck();
+        returnAllBorrowed();
+      }
+    };
+    if(MQ.addEventListener) MQ.addEventListener('change',onBreakpoint);
+    else if(MQ.addListener) MQ.addListener(onBreakpoint);
+    // The leaderboard's signed-out row is desktop markup with an inline onclick
+    // that opens the DESKTOP profile modal — invisible inside the mobile
+    // breakpoint, so the tap would appear to do nothing. Catch it in the
+    // capture phase (before the inline handler runs) and send the student to
+    // the phone's own sign-in instead.
     wrap.addEventListener('click',ev=>{
       const cta=ev.target.closest&&ev.target.closest('.cr-lb-cta');
       if(!cta) return;
@@ -1399,6 +1540,7 @@
       if(profile()) go('profile'); else { route='signin'; render(); }
     },true);
   }
+
 
   /* ══ PROFILE ═══════════════════════════════════════════════════════ */
 

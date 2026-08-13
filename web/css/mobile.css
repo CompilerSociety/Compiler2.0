@@ -366,36 +366,62 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-game-best{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);flex-shrink:0}
 .m-game-card.is-soon .m-game-emoji{background:rgba(184,108,0,.12)}
 
-/* Stage — the borrowed canvas. The games render an internal 720x220 strip, so
-   the frame keeps that ratio and scales it to the width of the phone rather
-   than distorting it. */
-.m-play-stage{border-radius:22px;overflow:hidden;background:#fbfffc;border:1px solid var(--line-strong);
-  line-height:0;box-shadow:0 8px 26px rgba(22,33,15,.07)}
-.m-play-stage canvas{display:block;width:100%;height:auto;touch-action:none}
-.m-play-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;line-height:1.5;color:var(--mute);
-  text-align:center;margin:12px 4px 0}
+/* ── Full-screen play surface ────────────────────────────────────────────
+   The game is the screen. No header, no hint line, no on-screen buttons and
+   no leaderboard while a run is live — every one of these games already takes
+   its input from the canvas itself.
 
-/* Controls. Big, thumb-reachable, and never a text-selection or double-tap-to-
-   zoom target — both of which make a game feel broken on a phone. */
-.m-play-controls{display:flex;gap:10px;margin-top:14px}
-.m-play-controls:empty{display:none}
-.m-ctrl{flex:1;height:62px;border:none;border-radius:22px;background:var(--green);color:#fff;
-  font-family:var(--mono);font-weight:500;font-size:15px;letter-spacing:.1em;cursor:pointer;
-  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
-  box-shadow:0 8px 20px rgba(47,107,49,.24);transition:transform .1s,background .1s}
-.m-ctrl:active,.m-ctrl.is-down{transform:translateY(2px);background:var(--green-deep)}
-.m-ctrl.is-alt{background:var(--tint);color:var(--green-deep);box-shadow:none}
-.m-ctrl.is-alt:active,.m-ctrl.is-alt.is-down{background:var(--tint-hover)}
+   The canvas cannot be reshaped to portrait: each game reads
+   canvas.width/height ONCE into a const at page load and tunes its ground
+   line, gravity and gap sizes against those numbers, so a 720x220 strip is
+   what there is. It is therefore scaled to the full width of the phone and
+   centred in the empty field, which is as much of the screen as it can take
+   without distorting the game or retuning it. */
+.m-stage-full{position:absolute;inset:0;z-index:30;background:#fff;display:flex;align-items:center;
+  justify-content:center;padding-top:env(safe-area-inset-top);animation:m-fade .18s ease-out}
+.m-stage-full[hidden]{display:none}
+.m-stage-holder{position:absolute;inset:0}
+.m-stage-holder canvas{display:block;position:absolute;left:50%;top:50%;
+  /* Sized and rotated by layoutStage() in js/mobile.js — a 720x220 field laid
+     flat across a 390px phone fills 14% of the screen, so it is turned onto
+     the long axis instead, which is ~4.7x the play area. Rotating about the
+     centre keeps the bounding box centred for free. */
+  transform:translate(-50%,-50%);
+  /* The canvas IS the controller: no scroll-chaining, no tap-to-zoom, no
+     text-selection lasso on a long press. */
+  touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.m-stage-holder canvas.is-rot{transform:translate(-50%,-50%) rotate(90deg)}
+.m-stage-x{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:2;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);background:rgba(255,255,255,.92);
+  color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.m-stage-x svg{width:19px;height:19px}
+/* Upright, over a turned game: without it the sideways field just reads as a
+   rendering fault. Fades out on its own — it is a nudge, not a gate. */
+.m-turn-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:2;white-space:nowrap;padding:10px 18px;border-radius:999px;background:rgba(22,33,15,.82);color:#fff;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;pointer-events:none;animation:m-fade .25s ease-out}
+.m-turn-hint[hidden]{display:none}
+
+/* Death card — the only time the leaderboard appears. White, per request. */
+.m-dead{position:absolute;inset:0;z-index:3;background:rgba(255,255,255,.93);display:flex;
+  align-items:center;justify-content:center;padding:20px;overflow-y:auto;animation:m-fade .2s ease-out}
+.m-dead[hidden]{display:none}
+.m-dead-card{width:100%;max-width:420px;background:#fff;border:1px solid var(--line);border-radius:28px;
+  padding:22px;box-shadow:0 18px 44px rgba(22,33,15,.13)}
+.m-dead-kicker{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--red)}
+.m-dead-score{font-family:var(--mono);font-size:26px;letter-spacing:.02em;color:var(--ink);margin:6px 0 16px}
+.m-dead-score span{font-size:13px;color:var(--mute);margin-left:10px}
 
 /* Leaderboard: the desktop table, restyled in place. Scoped to .m-arcade so
    the desktop board keeps its own look. */
-.m-play-lb{margin-top:18px}
 .m-play-lb:empty{display:none}
-.m-arcade .cr-lb{margin:0;border:1px solid var(--line);border-radius:22px;background:var(--surface)}
+.m-arcade .cr-lb{margin:0;border:1px solid var(--line);border-radius:22px;background:#fff}
 /* Stack the title over its status: side by side, "DUCK HUNTER LEADERBOARD" and
    a status message both wrap on a 390px screen and the head grows to four
    ragged lines. */
-.m-arcade .cr-lb-head{flex-direction:column;align-items:flex-start;gap:3px;background:var(--tint);border-bottom:none;padding:13px 17px}
+.m-arcade .cr-lb-head{flex-direction:column;align-items:flex-start;gap:3px;background:#fff;
+  border-bottom:1px solid var(--line);padding:13px 17px}
 .m-arcade .cr-lb-title{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--green-deep)}
 .m-arcade .cr-lb-status{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute)}
