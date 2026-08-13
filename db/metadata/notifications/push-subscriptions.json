@@ -131,5 +131,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0649",
+    "name": "Zaheen Masood",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QLu3OlNvLTWP6pGoFoY81lZzGdqjv0OYeIRHZUKcMBWCR44UnCdeg-KY5l0kvnFViUOwOglnlucsDF2PoTjTVr7E3Ch03OPpa8f_LUCRsgK2kxfQqsPV93LMlqutSHWCnIdN6KzQEJWzXOJNC2X_3OSOwzBFLR_VZ6VKUijd0-E",
+      "keys": {
+        "p256dh": "BL5ftFZgixoNsR0rKXkaqge-dmE3NgXJd0rd1uRnNzEQ421RUx4Su8ToMsr21oyzkj0FCT7ZbkZRzS6YltS6U1Q",
+        "auth": "96E89FOGsJbc2RGLCKQQFw"
+      }
+    },
+    "updated_at": 1786647074347,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
