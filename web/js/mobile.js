@@ -73,18 +73,38 @@
       return [start,end<start?end+720:end];
     }catch(e){ return null; }
   }
-  // The sheet writes afternoon slots 12-hour and unlabelled ("01:00" is 1 PM).
-  // Everything shown to a student is normalised to 24h so "01:00" can never be
-  // read as one in the morning.
+  // The sheet writes afternoon slots 12-hour and unlabelled ("01:00" is 1 PM),
+  // so a raw slot string is ambiguous. Resolve it to real minutes first, then
+  // render as 12-hour AM/PM — the same format the desktop uses (fmtTime), and
+  // the only one students actually read a timetable in.
   // slotToMinutes, not timeToNumber: only the former consults SLOT_MINUTE_MAP,
   // which is where the day's real boundaries live. timeToNumber's generic rule
   // (8-11 => AM) turned the last slot's 08:05 end into 08:05 instead of 20:05.
-  function to24(hhmm){
+  function toAmPm(hhmm){
     try{
       const m=slotToMinutes(String(hhmm).trim());
       if(!Number.isFinite(m)) return String(hhmm||'');
-      return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+      const h=Math.floor(m/60),mins=m%60;
+      const hour=h%12===0?12:h%12;
+      return `${hour}:${String(mins).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
     }catch(e){ return String(hhmm||''); }
+  }
+  // Seconds since midnight in Islamabad. nowMinutes() is minute-resolution,
+  // which would leave a live countdown looking frozen for up to 60s.
+  const _secFmt=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',
+    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  function nowSeconds(){
+    const p=_secFmt.formatToParts(new Date());
+    const get=t=>parseInt((p.find(x=>x.type===t)||{}).value,10)||0;
+    return (get('hour')%24)*3600+get('minute')*60+get('second');
+  }
+  // "1h 23m" / "23m 10s" / "10s" — coarse while far out, precise near the edge.
+  function countdown(secs){
+    if(secs<0) secs=0;
+    const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60;
+    if(h>0) return `${h}h ${m}m`;
+    if(m>0) return `${m}m ${String(s).padStart(2,'0')}s`;
+    return `${s}s`;
   }
   function sortByTime(list){
     return [...list].sort((a,b)=>{
@@ -365,16 +385,29 @@
     });
     const current=rows.find(r=>r.isNow);
 
-    // The banner is always on screen: the live class when there is one, the
-    // idle card otherwise (between classes, or outside the 08:30-20:05 grid).
+    // The banner is always on screen and has three states: the live class
+    // (red, counting down to the end), the next one still to come (green,
+    // counting down to the start), and the idle card once the day is done.
+    // data-until is seconds-since-midnight; tickBanner() re-reads it every
+    // second so the countdown moves without re-rendering the whole pane.
+    const next=rows.find(r=>r.startMin!=null&&r.startMin*60>nowSeconds());
     let html='';
     if(current){
-      html+=`<div class="m-now" id="m-now-banner">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>IN CLASS NOW · ENDS ${esc(to24(current.end))}</span></div>
+      html+=`<div class="m-now is-live" id="m-now-banner" data-until="${current.endMin*60}">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>IN CLASS NOW · ${esc(toAmPm(current.start))} – ${esc(toAmPm(current.end))}</span></div>
         <div class="m-now-name">${esc(cleanName(current.name))}</div>
         <div class="m-now-stats">
           <div><div class="m-now-stat-label">Room</div><div class="m-now-stat-value">${esc(current.room)}</div></div>
-          <div><div class="m-now-stat-label">Time</div><div class="m-now-stat-value">${esc(to24(current.start))}</div></div>
+          <div><div class="m-now-stat-label">Ends in</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
+        </div>
+      </div>`;
+    }else if(next){
+      html+=`<div class="m-now" id="m-now-banner" data-until="${next.startMin*60}">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>UP NEXT · ${esc(toAmPm(next.start))} – ${esc(toAmPm(next.end))}</span></div>
+        <div class="m-now-name">${esc(cleanName(next.name))}</div>
+        <div class="m-now-stats">
+          <div><div class="m-now-stat-label">Room</div><div class="m-now-stat-value">${esc(next.room)}</div></div>
+          <div><div class="m-now-stat-label">Starts in</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
         </div>
       </div>`;
     }else{
@@ -401,6 +434,7 @@
     }
     pane.innerHTML=html;
 
+    tickBanner();
     const banner=$('m-now-banner');
     if(banner){
       // Same easter egg as double-clicking the header logo on desktop.
@@ -422,7 +456,7 @@
     const note=noteOf(r.name);
     const noteCls=/cancel/i.test(note)?'cancel':'resch';
     return `<div class="m-row${r.isNow?' is-now':''}${r.isPast?' is-past':''}">
-      <div class="m-row-time"><div class="m-row-start">${esc(to24(r.start))}</div><div class="m-row-end">${esc(to24(r.end))}</div></div>
+      <div class="m-row-time"><div class="m-row-start">${esc(toAmPm(r.start))}</div><div class="m-row-end">${esc(toAmPm(r.end))}</div></div>
       <div class="m-row-rule"></div>
       <div class="m-row-main">
         ${note?`<span class="m-note ${noteCls}">${esc(note)}</span>`:''}
@@ -434,9 +468,23 @@
   function gapHTML(until){
     return `<button class="m-gap" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      <span class="m-gap-text">Free until ${esc(to24(until))} — see what rooms are open</span>
+      <span class="m-gap-text">Free until ${esc(toAmPm(until))} — see what rooms are open</span>
       <span class="m-gap-go">Find one &rsaquo;</span>
     </button>`;
+  }
+
+  // Drives the banner countdown once a second. When it reaches zero the class
+  // has started or ended, so the whole pane is re-rendered to move the banner
+  // on to its next state.
+  function tickBanner(){
+    const el=$('m-now-count');
+    const banner=$('m-now-banner');
+    if(!el||!banner) return;
+    const until=Number(banner.dataset.until);
+    if(!Number.isFinite(until)) return;
+    const left=until-nowSeconds();
+    if(left<=0){ if(route==='today'&&!weekMode) renderToday(); return; }
+    el.textContent=countdown(left);
   }
 
   function renderWeek(keys,pane){
@@ -448,7 +496,7 @@
         ? list.map(e=>{
             const time=e.time||e.t||'';
             return `<div class="m-dayrow">
-              <div class="m-dayrow-time">${esc(to24(time.split('-')[0]||''))}</div>
+              <div class="m-dayrow-time">${esc(toAmPm(time.split('-')[0]||''))}</div>
               <div class="m-dayrow-name">${esc(cleanName(e.name||e.c||''))}</div>
               <span class="m-pill">${esc(e.location||e.l||'—')}</span>
             </div>`;
@@ -578,7 +626,10 @@
   function renderRooms(){
     const day=todayName();
     const cur=(typeof getCurrentSlot==='function')?getCurrentSlot():null;
-    $('m-rooms-slot').textContent=cur?('SLOT '+cur):'OUTSIDE CLASS HOURS';
+    // cur is a raw "02:20-03:40" slot key — render it the way students read it.
+    $('m-rooms-slot').textContent=cur
+      ?('SLOT '+toAmPm(cur.split('-')[0])+' – '+toAmPm(cur.split('-')[1]))
+      :'OUTSIDE CLASS HOURS';
     tickRoomsClock();
 
     $('m-block-grid').innerHTML=['A','B','C','D'].map(b=>{
@@ -639,7 +690,7 @@
       const b=slotBounds(s.slot);
       return {slot:s.slot,busy:Boolean(s.occupiedBy),start:b?b[0]:0,end:b?b[1]:0};
     });
-    const startOf=r=>to24(r.slot.split('-')[0]);
+    const startOf=r=>toAmPm(r.slot.split('-')[0]);
     const live=rows.find(r=>now>=r.start&&now<=r.end);
     if(live&&!live.busy){
       const nextBusy=rows.find(r=>r.start>live.start&&r.busy);
@@ -676,7 +727,7 @@
             const busy=Boolean(s.occupiedBy);
             const who=busy?[s.occupiedBy.course,s.occupiedBy.section].filter(Boolean).join(' · '):'Free';
             return `<div class="m-slotrow">
-              <span class="m-slotpill">${esc(to24(s.slot.split('-')[0]))}–${esc(to24(s.slot.split('-')[1]))}</span>
+              <span class="m-slotpill">${esc(toAmPm(s.slot.split('-')[0]))}–${esc(toAmPm(s.slot.split('-')[1]))}</span>
               <span class="m-slotwho${busy?'':' is-free'}">${esc(who)}</span>
             </div>`;
           }).join('')}</div>
@@ -705,7 +756,7 @@
   function tickRoomsClock(){
     const el=$('m-rooms-clock');
     if(!el) return;
-    el.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Karachi',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
+    el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date());
   }
 
   /* ══ FACULTY ═══════════════════════════════════════════════════════ */
@@ -1075,6 +1126,7 @@
     // The desktop layer owns data loading; re-render when it lands something new.
     document.addEventListener('vtable:data',()=>{ if(MQ.matches) render(); });
     setInterval(()=>{ if(MQ.matches&&route==='rooms') tickRoomsClock(); },30000);
+    setInterval(()=>{ if(MQ.matches&&route==='today'&&!weekMode) tickBanner(); },1000);
   }
 
   function start(){

@@ -19,7 +19,7 @@
   --ink:#16210f; --green:#2f6b31; --green-deep:#1f4a22; --green-bright:#8fc78d;
   --tint:#edf5eb; --tint-hover:#e0eedd; --surface:#fbfdfa; --page:#f2f6f0;
   --neutral:#eef1ec; --slot-free:#7fb87d; --slot-busy:#dfe3dc; --seat-section:#cfe6cb;
-  --red:#b3402f; --red-deep:#8a2f22; --red-bright:#e2897c;
+  --red:#b3402f; --red-deep:#8a2f22; --red-bright:#e2897c; --red-soft:#c0563f;
   --line:rgba(22,33,15,.09); --line-strong:rgba(22,33,15,.14);
   --mute:rgba(22,33,15,.5); --mute-2:rgba(22,33,15,.62); --mute-3:rgba(22,33,15,.45);
   --mono:'DM Mono','JetBrains Mono',monospace; --sans:'Figtree','Inter',system-ui,sans-serif;
@@ -155,6 +155,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 /* Idle variant: same card, shown when nothing is running right now. No live
    dot pulse, and the copy sets its own smaller size so two lines still fit
    inside a 390px screen. */
+/* A class in progress reads as "occupied", the same language the room cards
+   use — light red rather than the green of a free/upcoming state. */
+.m-now.is-live{background:var(--red-soft);box-shadow:0 14px 30px rgba(179,64,47,.22)}
+.m-now.is-live .m-now-dot{background:var(--red-bright)}
 .m-now.is-idle .m-now-dot{animation:none}
 .m-now.is-idle .m-now-name{font-size:21px;line-height:1.3;margin-bottom:2px}
 .m-now-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;position:relative}
