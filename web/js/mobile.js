@@ -148,21 +148,24 @@
     const booting=route==='splash';
     $('m-splash').classList.toggle('on',booting);
     if(booting){
-      ['m-signin','m-onboard','m-manual','m-main'].forEach(id=>$(id).classList.remove('on'));
+      ['m-signin','m-onboard','m-manual','m-register','m-main'].forEach(id=>$(id).classList.remove('on'));
       return;
     }
     const signedIn=Boolean(profile());
     const onboarding=route==='onboard';
     const manual=route==='manual';
-    const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding&&!manual);
+    const registering=route==='register';
+    const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding&&!manual&&!registering);
 
     $('m-signin').classList.toggle('on',signin);
     $('m-onboard').classList.toggle('on',onboarding);
     $('m-manual').classList.toggle('on',manual);
-    $('m-main').classList.toggle('on',!signin&&!onboarding&&!manual);
+    $('m-register').classList.toggle('on',registering);
+    $('m-main').classList.toggle('on',!signin&&!onboarding&&!manual&&!registering);
     const inner=['today','lookup','rooms','faculty','facdetail','exams','profile'];
-    if(signin||onboarding||manual){
+    if(signin||onboarding||manual||registering){
       if(manual) renderManual();
+      if(registering) renderRegister();
       inner.forEach(id=>$('m-'+id).classList.remove('on'));
       return;
     }
@@ -219,7 +222,10 @@
       const students=await loadProfileStudents(nuid);
       const match=students.find(s=>String(s.nuid||'').trim().toUpperCase()===nuid);
       if(!match){
-        signinStatus('No student found for that NU ID. Check it, or skip login for now.',true);
+        // Not a dead end: the roster lags every new intake (26-* is published
+        // months after they can log in), so collect the details instead —
+        // the same thing the desktop registration form does.
+        startRegistration(nuid);
         return;
       }
       const p=parseProfileFromStudent(match);
@@ -249,6 +255,77 @@
     $('m-onboard-rows').innerHTML=rows.map(([l,v])=>
       `<div class="m-orow"><div class="m-orow-label">${esc(l)}</div><div class="m-orow-value">${esc(v)}</div></div>`
     ).join('');
+  }
+
+  /* ══ REGISTRATION (roll no not on the roster) ══════════════════════
+     db/students/<year>.json trails each new intake by months, so a lookup
+     miss is normally a brand-new student rather than a typo. Collect the
+     details by hand, exactly as the desktop registration form does, and
+     store them in the same profile cookie. Nothing is uploaded. */
+  const reg={nuid:'',batch:'',program:'',section:''};
+
+  function startRegistration(nuid){
+    reg.nuid=nuid;
+    reg.batch=(typeof getBatchFromNuid==='function')?getBatchFromNuid(nuid):String(nuid).slice(0,2);
+    reg.program=''; reg.section='';
+    const nameEl=$('m-reg-name'); if(nameEl) nameEl.value='';
+    regStatus('');
+    route='register';
+    render();
+  }
+  function regStatus(msg,isError){
+    const el=$('m-reg-status');
+    if(!el) return;
+    el.textContent=msg||'';
+    el.classList.toggle('is-error',Boolean(isError));
+  }
+  function regFullBatch(){
+    return (typeof profileFullBatch==='function')?profileFullBatch({batch:reg.batch}):('20'+reg.batch);
+  }
+
+  function renderRegister(){
+    const full=regFullBatch();
+    $('m-reg-kicker').textContent='NEW STUDENT · '+reg.nuid;
+    // Only offer departments that actually publish this batch, so a new
+    // intake never lands on a section with no timetable behind it.
+    const programs=Object.keys(TT||{}).filter(p=>TT[p]&&TT[p][full]);
+    if(reg.program&&!programs.includes(reg.program)) reg.program='';
+    const sections=reg.program
+      ? Object.keys(TT[reg.program][full]||{}).filter(s=>s!==ALL_SECTIONS)
+          .sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
+      : [];
+    if(reg.section&&!sections.includes(reg.section)) reg.section='';
+
+    $('m-reg-fields').innerHTML=[
+      `<div class="m-lk-field"><div class="m-meta-row"><span>Batch</span><b>${esc(full)}</b></div></div>`,
+      fieldHTML('Department','program',reg.program,programs,reg.program,null,
+                programs.length?'':'No timetable published for this batch yet.'),
+      fieldHTML('Section','section',reg.section,sections,reg.section,null,'Pick a department first.')
+    ].join('');
+    $('m-reg-fields').querySelectorAll('.m-chip').forEach(chip=>{
+      chip.addEventListener('click',()=>{
+        const f=chip.dataset.field,v=chip.dataset.value;
+        if(f==='program'){ reg.program=reg.program===v?'':v; reg.section=''; }
+        else if(f==='section'){ reg.section=reg.section===v?'':v; }
+        renderRegister();
+      });
+    });
+  }
+
+  function saveRegistration(){
+    const name=($('m-reg-name')?$('m-reg-name').value:'').trim();
+    if(!name){ regStatus('Please enter your name.',true); return; }
+    if(!reg.program||!reg.section){ regStatus('Pick your department and section.',true); return; }
+    regStatus('');
+    // Two-digit batch and no manual flag, so this profile behaves exactly like
+    // one resolved from the roster (profileFullBatch expands "26" -> "2026").
+    const p={nuid:reg.nuid,name,department:reg.program,batch:reg.batch,section:reg.section};
+    setProfileCookie(p);
+    if(typeof seedProfileSchedulePrefs==='function') seedProfileSchedulePrefs(p,true);
+    setSkipped(false);
+    renderOnboard(p);
+    route='onboard';
+    render();
   }
 
   /* ══ MANUAL SETUP (FSE / FSM) ══════════════════════════════════════
@@ -1133,6 +1210,9 @@
   function wire(){
     $('m-signin-btn').addEventListener('click',doSignIn);
     $('m-nuid').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
+    $('m-reg-go').addEventListener('click',saveRegistration);
+    $('m-reg-back').addEventListener('click',()=>{ route='signin'; render(); });
+    $('m-reg-name').addEventListener('keydown',e=>{ if(e.key==='Enter') saveRegistration(); });
     $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
     $('m-manual-go').addEventListener('click',saveManual);
     $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });

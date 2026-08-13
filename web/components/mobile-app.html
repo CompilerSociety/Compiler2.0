@@ -38,6 +38,26 @@
     </div>
   </section>
 
+  <!-- ── Registration (roll no not on the roster) ────────────────────────
+       Mirrors the desktop #profile-registration form. New intakes (26-*) are
+       published to db/students/26.json long after they can log in, so a miss
+       must collect the details rather than turn the student away. Saved to
+       the same profile cookie; nothing is uploaded. -->
+  <section class="m-screen m-onboard" id="m-register">
+    <div class="m-kicker" id="m-reg-kicker">NEW STUDENT</div>
+    <h2 class="m-title-lg">You’re not on the roster yet.</h2>
+    <p class="m-onboard-copy">Your roll number hasn’t been published yet, so fill this in once. It stays on your phone.</p>
+    <label class="m-field-label" for="m-reg-name">YOUR NAME</label>
+    <div class="m-input-wrap">
+      <input class="m-input" id="m-reg-name" type="text" autocomplete="name"
+             placeholder="Full name" maxlength="60" aria-describedby="m-reg-status">
+    </div>
+    <div id="m-reg-fields"></div>
+    <div class="m-signin-status" id="m-reg-status" role="status" aria-live="polite"></div>
+    <button class="m-btn-primary" id="m-reg-go" type="button">Save and continue</button>
+    <button class="m-btn-ghost" id="m-reg-back" type="button">Back to NU ID</button>
+  </section>
+
   <!-- ── Manual setup (FSE / FSM) ────────────────────────────────────────
        No roster lookup for these two schools, so the student picks school →
        department → batch → section themselves. The result is kept in the same
