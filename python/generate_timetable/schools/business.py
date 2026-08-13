@@ -7,7 +7,6 @@ from ..config import (
     FSM_COURSE_RE,
     FSM_DAY_RE,
     FSM_PROGRAM_MAP,
-    FSM_SECTION_OFFSET,
     FSM_SECTION_RE,
     FSM_SLOT_STARTS,
     FSM_TIME_OVERRIDE_RE,
@@ -24,6 +23,36 @@ from ..helpers import (
     one_line,
 )
 
+def _normalise_slot_time(text):
+    """Normalize an override time to 12-hour zero-padded slot labels, mirroring
+    api/timetable.js normalizeTimeSlot, e.g. '8:30 - 10:20' -> '08:30-10:20'."""
+    m = re.match(
+        r'(\d{1,2})[:.](\d{2})\s*(AM|PM)?\s*(?:-|to)\s*'
+        r'(\d{1,2})[:.](\d{2})\s*(AM|PM)?',
+        one_line(text or ''), re.IGNORECASE)
+    if not m:
+        return one_line(text or '')
+
+    def pad(h, minute, ampm):
+        hour = int(h)
+        ap = (ampm or '').upper()
+        if ap == 'PM' and hour < 12:
+            hour += 12
+        if ap == 'AM' and hour == 12:
+            hour = 0
+        if not ap and 1 <= hour <= 6:
+            hour += 12
+        if hour > 12:
+            hour -= 12
+        if hour == 0:
+            hour = 12
+        return f'{hour:02d}:{int(minute):02d}'
+
+    start = pad(m.group(1), m.group(2), m.group(3) or m.group(6))
+    end = pad(m.group(4), m.group(5), m.group(6) or m.group(3))
+    return f'{start}-{end}'
+
+
 def parse_fsm_course_name(raw):
     raw = one_line(raw or "")
     if not raw:
@@ -32,7 +61,7 @@ def parse_fsm_course_name(raw):
     time_override = None
     tm = FSM_TIME_OVERRIDE_RE.search(raw)
     if tm:
-        time_override = tm.group(1)
+        time_override = _normalise_slot_time(tm.group(1))
         raw = raw[:tm.start()].strip()
 
     code = None
@@ -152,58 +181,86 @@ def parse_business_grid(text_grid, day, tt):
         if current_type == "Labs" and type_cell == "Labs" and not raw_room:
             continue
 
+        # Walk the row left→right. Merged cells (a course carrying a time
+        # override) push the section code 7–13 columns right and can shift the
+        # course itself off its slot-start column, so pair each section code
+        # with the nearest preceding course cell instead of reading a fixed +7
+        # offset. Keep in step with api/timetable.js parseBusinessGrid.
         slot_starts = sorted(header_times.keys())
-        for si, sc in enumerate(slot_starts):
-            time = header_times[sc]
-            s_end = slot_starts[si + 1] if si + 1 < len(slot_starts) else sc + 9
-            section_col = sc + FSM_SECTION_OFFSET
+        max_col = (slot_starts[-1] if slot_starts else 48) + 9
+        if len(row) <= max_col:
+            row = row + [''] * (max_col + 1 - len(row))
 
-            course_raw = one_line(row[sc] if sc < len(row) else "")
-            if not course_raw:
+        pending = None  # (code, title, time_override, slot_time, col)
+        for c in range(3, max_col):
+            cell = one_line(row[c] or "")
+            if not cell:
                 continue
 
-            course_code, course_title, time_override = parse_fsm_course_name(course_raw)
+            parsed_sections = parse_fsm_section_code(cell)
+            if parsed_sections:
+                # A section code pairs with the pending course; anything
+                # further away than one slot band belongs to a course we
+                # already emitted (or none).
+                if not pending or c - pending[4] > 16:
+                    pending = None
+                    continue
+                course_code, course_title, time_override, slot_time, _ = pending
+                pending = None
+                if not course_title:
+                    continue
+
+                course_label = f"{course_title} ({course_code})" if course_code else course_title
+                effective_time = time_override if time_override else slot_time
+
+                for ps in parsed_sections:
+                    dept = FSM_PROGRAM_MAP.get(ps["program"])
+                    if not dept:
+                        dept = normalize_dept_key(ps["program"])
+                    batch = fsm_semester_to_batch(ps["semester"])
+                    if not batch:
+                        batch = "2025"
+
+                    sec = ps["section"]
+
+                    dedup_key = f"{dept}|{batch}|{sec}|{current_day}|{course_label}|{room}|{effective_time}"
+                    if dedup_key in processed_keys:
+                        continue
+                    processed_keys.add(dedup_key)
+
+                    if add_course(tt, dept, batch, sec, current_day, course_label, room, effective_time):
+                        added += 1
+                continue
+
+            # Not a section code — a course cell (may be a stray "CS"/"MS", a
+            # time label, or a Jumma/Seminar note; skip those so they never
+            # become a pending course that swallows the real entry after it).
+            course_code, course_title, time_override = parse_fsm_course_name(cell)
             if not course_title:
                 continue
+            if re.match(r'^(jumm[ae]|seminar|break\b)', course_title, re.IGNORECASE):
+                continue
+            if re.match(r'^\d{1,2}:\d{2}', course_title):
+                continue
+            if not course_code and len(course_title) < 6:
+                continue
 
-            # Find section code
-            section_raw = ""
-            for c in range(section_col, min(s_end, len(row))):
-                cell = one_line(row[c] or "")
-                if cell:
-                    section_raw = cell
+            # A new course that starts more than one band after the pending one
+            # means the pending course had no section — drop it and start fresh.
+            if pending and c - pending[4] > 12:
+                pending = None
+            if pending:
+                continue  # previous course still awaiting its section
+
+            band = None
+            for i, sc in enumerate(slot_starts):
+                end = slot_starts[i + 1] if i + 1 < len(slot_starts) else sc + 9
+                if sc <= c < end:
+                    band = sc
                     break
-            if not section_raw:
+            if band is None:
                 continue
-
-            # Skip non-section entries
-            if len(section_raw) < 4 and not re.search(r'\d', section_raw):
-                continue
-
-            parsed_sections = parse_fsm_section_code(section_raw)
-            if not parsed_sections:
-                continue
-
-            course_label = f"{course_title} ({course_code})" if course_code else course_title
-            effective_time = time_override if time_override else time
-
-            for ps in parsed_sections:
-                dept = FSM_PROGRAM_MAP.get(ps["program"])
-                if not dept:
-                    dept = normalize_dept_key(ps["program"])
-                batch = fsm_semester_to_batch(ps["semester"])
-                if not batch:
-                    batch = "2025"
-
-                sec = ps["section"]
-
-                dedup_key = f"{dept}|{batch}|{sec}|{current_day}|{course_label}|{room}|{effective_time}"
-                if dedup_key in processed_keys:
-                    continue
-                processed_keys.add(dedup_key)
-
-                if add_course(tt, dept, batch, sec, current_day, course_label, room, effective_time):
-                    added += 1
+            pending = (course_code, course_title, time_override, header_times[band], c)
 
     return added
 

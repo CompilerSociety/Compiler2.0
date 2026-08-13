@@ -2,6 +2,9 @@
 // Multi-school timetable parser for FAST NUCES Islamabad
 // Supports: computing (FSC), engineering (FSE), business (FSM)
 
+const fs = require("node:fs");
+const path = require("node:path");
+
 const SCHOOLS = {
   computing: {
     id: "1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",
@@ -14,7 +17,7 @@ const SCHOOLS = {
     format: "flat"
   },
   business: {
-    id: "1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw",
+    id: "1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw",
     tabs: ["Monday"],
     format: "paired-matrix"
   }
@@ -86,6 +89,25 @@ function cacheStore(key, payload) {
 const ALL_SECTIONS = "ALL";
 
 /* ── Text helpers ── */
+
+// Read the committed snapshot for a school (db/timetables/<school>.json).
+// Returns {tt, count} when it has entries, else null. This is the same file
+// the frontend fetches as its static fallback (see fetchSchoolTT in app.js).
+function readSnapshot(schoolParam) {
+  const safe = String(schoolParam).replace(/[^a-z0-9_-]/gi, "");
+  if (!safe || safe !== schoolParam) return null;
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), "db", "timetables", `${safe}.json`), "utf8");
+    const snap = JSON.parse(raw);
+    const tt = snap && snap.tt;
+    if (!tt || typeof tt !== "object") return null;
+    const count = typeof snap.count === "number" ? snap.count : countReferenceEntries(legacyTTToReferenceTT(tt));
+    if (!count) return null;
+    return { tt, count };
+  } catch (err) {
+    return null;
+  }
+}
 
 function cleanTxt(v) {
   return String(v ?? "")
@@ -565,10 +587,13 @@ function flushSectionless(target, pending) {
   return added;
 }
 
-/* ══════════════════════════════════════════
+ /* ══════════════════════════════════════════
    BUSINESS SCHOOL — Paired-Column Matrix Parser
-   Format: each time slot spans 9 columns (course at col N, section at col N+7)
-   Day name in col 0, Classes/Labs in col 1, Room in col 2
+   Format: each time slot spans 9 columns (course at col N, section ~col N+7)
+   Day name in col 0, Classes/Labs in col 1, Room in col 2.
+   Courses annotated with a time override are merged across extra columns,
+   which shifts both the course and its section code off the fixed +7 offset,
+   so sections are paired with the nearest preceding course instead.
    ══════════════════════════════════════════ */
 
 const FSM_COURSE_RE = /^([A-Za-z]{2,4}\s?\d{4,5})\s*/;
@@ -578,7 +603,6 @@ const FSM_COMBINED_RE = /^([A-Z]{2,5}\d{2})\s*([A-Z](?:\s*[\/&]\s*[A-Z])+)$/;
 
 const FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48];
 const FSM_SLOT_WIDTH = 9;
-const FSM_SECTION_OFFSET = 7;
 
 const FSM_DAY_RE = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$/i;
 
@@ -738,68 +762,81 @@ function parseBusinessGrid(grid, tabName, target) {
     // If this is a Labs header row (has time slots but no room after col 2), skip
     if (currentType === "Labs" && typeCell === "Labs" && !rawRoom) continue;
 
-    // Process each time slot
+    // Walk the row left→right. Merged cells (a course carrying a time override)
+    // push the section code 7–13 columns right and can shift the course itself
+    // off its slot-start column, so pair each section code with the nearest
+    // preceding course cell instead of reading fixed +7 offsets.
     const slotStarts = Object.keys(headerTimes).map(Number).sort((a, b) => a - b);
-    for (let si = 0; si < slotStarts.length; si++) {
-      const sc = slotStarts[si];
-      const time = headerTimes[sc];
-      const sEnd = si + 1 < slotStarts.length ? slotStarts[si + 1] : sc + FSM_SLOT_WIDTH;
-      const sectionCol = sc + FSM_SECTION_OFFSET;
+    const maxCol = (slotStarts[slotStarts.length - 1] || 48) + FSM_SLOT_WIDTH;
 
-      const courseRaw = oneLine(rowData[sc] || "");
-      if (!courseRaw) continue;
+    let pending = null; // { course, time, col } — last course cell awaiting its section
+    for (let c = 3; c < maxCol && c < rowData.length; c++) {
+      const cell = oneLine(rowData[c] || "");
+      if (!cell) continue;
 
-      const parsedCourse = parseFSMCourseName(courseRaw);
+      const secs = parseFSMSectionCode(cell);
+      if (secs) {
+        // A section code pairs with the pending course; anything further away
+        // than one slot band belongs to a course we already emitted (or none).
+        if (!pending || c - pending.col > 16) { pending = null; continue; }
+        const { course: parsedCourse, time: slotTime } = pending;
+        pending = null;
+
+        const courseLabel = parsedCourse.code
+          ? `${parsedCourse.title} (${parsedCourse.code})`
+          : parsedCourse.title;
+
+        // Generate one record per (section, combined-section-letter)
+        for (const ps of secs) {
+          const dept = FSM_PROGRAM_MAP[ps.program] || ps.program;
+          let batch = fsmSemesterToBatch(ps.semester);
+
+          // Fallback: infer batch from course title
+          if (!batch) batch = inferFSMBatchFromCourse(parsedCourse.title);
+          if (!batch) batch = "2025";
+
+          // Use time override if present
+          const effectiveTime = parsedCourse.timeOverride || slotTime;
+
+          // Deduplicate: same dept+batch+section+day+course+room+time
+          const dedupKey = `${dept}|${batch}|${ps.section}|${currentDay}|${courseLabel}|${room}|${effectiveTime}`;
+          if (processedCourses.has(dedupKey)) continue;
+          processedCourses.add(dedupKey);
+
+          if (addCourseToTT(target, {
+            dept,
+            batch,
+            section: ps.section,
+            day: currentDay,
+            course: courseLabel,
+            room,
+            time: effectiveTime
+          })) added++;
+        }
+        continue;
+      }
+
+      // Not a section code — a course cell (may be a stray "CS"/"MS", a time
+      // label, or a Jumma/Seminar note; skip those so they never become a
+      // pending course that swallows the real entry after it).
+      const parsedCourse = parseFSMCourseName(cell);
       if (!parsedCourse) continue;
+      const title = parsedCourse.title || "";
+      if (/^(jumm[ae]|seminar|break\b)/i.test(title)) continue;
+      if (/^\d{1,2}:\d{2}/.test(title)) continue;
+      if (!parsedCourse.code && title.length < 6) continue;
 
-      // Find section code – scan forward from section offset to end of slot
-      let sectionRaw = "";
-      for (let c = sectionCol; c < Math.min(sEnd, rowData.length); c++) {
-        const cell = oneLine(rowData[c] || "");
-        if (cell) { sectionRaw = cell; break; }
-      }
-      if (!sectionRaw) continue;
+      // A new course that starts more than one band after the pending one means
+      // the pending course had no section — drop it and start fresh.
+      if (pending && c - pending.col > 12) pending = null;
+      if (pending) continue; // previous course still awaiting its section
 
-      // Skip non-section entries in labs (like lone "CS")
-      if (sectionRaw.length < 4 && !/\d/.test(sectionRaw)) continue;
-
-      const parsedSections = parseFSMSectionCode(sectionRaw);
-      if (!parsedSections) continue;
-
-      const courseLabel = parsedCourse.code
-        ? `${parsedCourse.title} (${parsedCourse.code})`
-        : parsedCourse.title;
-
-      // Generate one record per (section, combined-section-letter)
-      for (const ps of parsedSections) {
-        const dept = FSM_PROGRAM_MAP[ps.program] || ps.program;
-        let batch = fsmSemesterToBatch(ps.semester);
-
-        // Fallback: infer batch from course title
-        if (!batch) batch = inferFSMBatchFromCourse(parsedCourse.title);
-        if (!batch) batch = "2025";
-
-        const section = ps.section;
-        const sub = ps.subSection || "";
-
-        // Use time override if present
-        const effectiveTime = parsedCourse.timeOverride || time;
-
-        // Deduplicate: same dept+batch+section+day+course+room+time
-        const dedupKey = `${dept}|${batch}|${section}|${currentDay}|${courseLabel}|${room}|${effectiveTime}`;
-        if (processedCourses.has(dedupKey)) continue;
-        processedCourses.add(dedupKey);
-
-        if (addCourseToTT(target, {
-          dept,
-          batch,
-          section,
-          day: currentDay,
-          course: courseLabel,
-          room,
-          time: effectiveTime
-        })) added++;
-      }
+      const band = slotStarts.find((sc, i) => {
+        const end = i + 1 < slotStarts.length ? slotStarts[i + 1] : sc + FSM_SLOT_WIDTH;
+        return c >= sc && c < end;
+      });
+      if (band === undefined) continue;
+      pending = { course: parsedCourse, time: headerTimes[band], col: c };
     }
   }
 
@@ -1198,6 +1235,22 @@ module.exports = async (req, res) => {
     const count = countReferenceEntries(refTT);
 
     if (!count) {
+      // The live sheet returned nothing parseable (e.g. the FSE tab was renamed
+      // or its content swapped for the course-allocation list). Fall back to the
+      // last committed snapshot so the timetable keeps working instead of 500ing.
+      const snap = readSnapshot(schoolParam);
+      if (snap) {
+        const payload = {
+          ok: true, count: snap.count, tt: snap.tt, school: schoolParam,
+          updatedAt: new Date().toISOString(),
+          source: `snapshot-fallback-${schoolParam}`,
+          note: "Live sheet had no parseable classes; serving last committed snapshot."
+        };
+        cacheStore(key, payload);
+        res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+        res.setHeader("X-Cache", "MISS");
+        return res.status(200).json(payload);
+      }
       return res.status(500).json({
         ok: false,
         error: `Parsed 0 classes for ${schoolParam}. Open /api/timetable?school=${schoolParam}&raw=1 to debug.`,

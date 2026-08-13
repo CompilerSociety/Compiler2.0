@@ -1136,7 +1136,7 @@ function isLabFloor(floorName){
 const SCHOOLS={
   computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],label:"Computing (FSC)"},
   engineering:{id:"1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",tabs:["Monday"],label:"Engineering (FSE)"},
-  business:{id:"1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw",tabs:["Monday"],label:"Business (FSM)"},
+  business:{id:"1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw",tabs:["Monday"],label:"Business (FSM)"},
 };
 const GOOGLE_SHEET_ID=SCHOOLS.computing.id;
 const GOOGLE_SHEET_TABS=SCHOOLS.computing.tabs;
@@ -2062,7 +2062,21 @@ async function refreshTimetableFromGoogleSheet(){
     applyTimetablePayload(apiData,'SHEET: LIVE API');
   }catch(apiErr){
     console.warn('Primary timetable source failed:',apiErr);
-    // Fallback to fastschedule.github.io reference JSON (day-first format)
+    // Fallback 1: the committed per-school snapshot (db/timetables/<school>.json),
+    // same source fetchSchoolTT() uses for Free Rooms. This is what keeps FSE
+    // selectable when the live sheet's tab is missing or returns nothing parseable.
+    try{
+      const school=document.getElementById('school')?.value||'computing';
+      const snapData=await fetchTimetableJSON(`/db/timetables/${school}.json?cachebust=${Date.now()}`);
+      if(snapData&&snapData.ok&&snapData.tt&&ttHasRealRooms(snapData.tt)){
+        applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase());
+        return;
+      }
+      if(snapData&&snapData.tt&&Object.keys(snapData.tt).length) applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase());
+    }catch(snapErr){
+      console.warn('Snapshot timetable source failed:',snapErr);
+    }
+    // Fallback 2: fastschedule.github.io reference JSON (day-first format)
     try{
       const fbRes=await fetch(`https://fastschedule.github.io/db/timetable.json?v=${Date.now()}`,{cache:'no-store'});
       if(!fbRes.ok) throw new Error(`Fallback HTTP ${fbRes.status}`);

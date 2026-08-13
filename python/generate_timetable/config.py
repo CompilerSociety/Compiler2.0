@@ -13,7 +13,7 @@ SCHOOLS = OrderedDict([
         ("tabs", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]),
     ])),
     ("business", OrderedDict([
-        ("id", "1m5yFyi0QgWx0JhdEicQQL2JOEpSmcmVDOIi15_4p9Dw"),
+        ("id", "1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw"),
         ("tabs", ["Timetable"]),
     ])),
     ("engineering", OrderedDict([
@@ -125,7 +125,6 @@ LAB_BLOCK = {
 # ---------------------------------------------------------------------------
 
 FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48]
-FSM_SECTION_OFFSET = 7
 
 FSM_COURSE_RE = re.compile(r'^([A-Za-z]{2,4}\s?\d{4,5})\s*')
 
