@@ -46,6 +46,11 @@ body.has-pwa-bar{padding-bottom:0!important}
 @keyframes m-pulse{0%{box-shadow:0 0 0 0 rgba(143,199,141,.7)}70%{box-shadow:0 0 0 8px rgba(143,199,141,0)}100%{box-shadow:0 0 0 0 rgba(143,199,141,0)}}
 .m-reveal{animation:m-fade .3s cubic-bezier(.22,1,.36,1)}
 
+/* ── Boot splash ─────────────────────────────────────────────────────── */
+.m-app>.m-splash.on{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;height:100%;background:#fff;animation:none}
+.m-splash-mark{font-family:var(--mono);font-weight:500;font-size:30px;letter-spacing:.16em;color:var(--green)}
+.m-splash-ring{width:34px;height:34px;border-radius:50%;border:3px solid rgba(47,107,49,.16);border-top-color:var(--green);animation:m-spin .7s linear infinite}
+
 /* ── Sign in ─────────────────────────────────────────────────────────── */
 .m-signin,.m-onboard{padding:24px 22px;justify-content:space-between;gap:24px}
 .m-signin-top{padding-top:28px}
@@ -191,8 +196,15 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-room-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
 .m-room-card.is-open{border-color:rgba(47,107,49,.45);border-radius:26px}
 .m-room{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;padding:13px 16px;cursor:pointer;color:var(--ink);font-family:inherit}
-.m-room.is-free{background:var(--tint)}
-.m-room-card.is-open .m-room{background:var(--tint)}
+/* Free right now = the banner's solid green, so the answer is readable in one
+   pass down the list instead of having to decode eight little bars. */
+.m-room-card.is-free{border-color:var(--green)}
+.m-room.is-free{background:var(--green);color:#fff}
+.m-room.is-free .m-room-status{color:#fff}
+.m-room.is-free .m-slot{background:rgba(255,255,255,.3)}
+.m-room.is-free .m-slot.is-free{background:var(--green-bright)}
+.m-room.is-free .m-room-chev{color:rgba(255,255,255,.85)}
+.m-room-card.is-open .m-room:not(.is-free){background:var(--tint)}
 .m-room-chev{width:16px;height:16px;flex-shrink:0;color:var(--mute);transition:transform .2s cubic-bezier(.22,1,.36,1)}
 .m-room-card.is-open .m-room-chev{transform:rotate(180deg);color:var(--green-deep)}
 .m-room-detail{padding:2px 16px 15px;background:var(--tint);animation:m-expand .22s cubic-bezier(.22,1,.36,1)}

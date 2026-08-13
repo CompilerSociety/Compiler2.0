@@ -25,8 +25,13 @@
   const TITLES={today:'Today',lookup:'Lookup',rooms:'Free rooms',faculty:'Faculty',
                 facdetail:'Faculty',exams:'Exams',profile:'Profile'};
 
-  let route='today';
+  // Starts on the splash and stays there until start() has read the stored
+  // profile and worked out where to land, so no screen is shown speculatively.
+  let route='splash';
   let toastTimer=null;
+  // Floor on the splash. The auth check itself is instant (localStorage), but
+  // without this the splash strobes on a warm load.
+  const MIN_SPLASH_MS=450;
 
   /* ── Small helpers ─────────────────────────────────────────────────── */
   function toast(msg){
@@ -112,6 +117,12 @@
   }
 
   function render(){
+    const booting=route==='splash';
+    $('m-splash').classList.toggle('on',booting);
+    if(booting){
+      ['m-signin','m-onboard','m-main'].forEach(id=>$(id).classList.remove('on'));
+      return;
+    }
     const signedIn=Boolean(profile());
     const onboarding=route==='onboard';
     const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding);
@@ -594,7 +605,7 @@
             </div>`;
           }).join('')}</div>
         </div>`:'';
-      return `<div class="m-room-card${open?' is-open':''}">
+      return `<div class="m-room-card${free===true?' is-free':''}${open?' is-open':''}">
         <button class="m-room${free===true?' is-free':''}" type="button" data-room="${esc(room)}"
                 aria-expanded="${open}">
           <span class="m-room-name">${esc(room)}</span>
@@ -990,10 +1001,16 @@
   function start(){
     if(!$('m-app')) return;
     wire();
+    render(); // paint the splash immediately
     const r=readHash();
-    if(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r)) route=r;
-    if(route==='facdetail') route='faculty';
-    render();
+    // render() decides sign-in vs app from the stored profile, so "today" is
+    // just the default landing spot — a signed-in user goes straight there and
+    // never sees the sign-in screen.
+    const target=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:'today';
+    setTimeout(()=>{
+      route=target;
+      render();
+    },Math.max(0,MIN_SPLASH_MS-(performance.now()||0)));
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);

@@ -4,8 +4,18 @@
      Lists are filled by js/mobile.js — this is the skeleton only. -->
 <div class="m-app" id="m-app">
 
+  <!-- ── Boot splash ─────────────────────────────────────────────────────
+       The screen that is `on` in this markup is whatever the user sees between
+       the component being injected and js/mobile.js deciding where to route.
+       That used to be the sign-in screen, so signed-in users got a sign-in
+       flash on every single load. It is now a neutral splash. -->
+  <section class="m-screen m-splash on" id="m-splash">
+    <div class="m-splash-mark">VTABLE</div>
+    <div class="m-splash-ring" role="status" aria-label="Loading"></div>
+  </section>
+
   <!-- ── Sign in ─────────────────────────────────────────────────────── -->
-  <section class="m-screen m-signin on" id="m-signin">
+  <section class="m-screen m-signin" id="m-signin">
     <div class="m-signin-top">
       <div class="m-wordmark">VTABLE</div>
       <h1 class="m-hero">Stop<br>wandering<br>FAST.</h1>
