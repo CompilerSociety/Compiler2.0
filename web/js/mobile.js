@@ -283,7 +283,11 @@
      db/students/<year>.json trails each new intake by months, so a lookup
      miss is normally a brand-new student rather than a typo. Collect the
      details by hand, exactly as the desktop registration form does, and
-     store them in the same profile cookie. Nothing is uploaded. */
+     store them in the same profile cookie. The row is also published to
+     db/students/<year>.json via /api/register so the server side learns about
+     the student too — without it the roster never grows, and everything keyed
+     off it (notification sign-up above all) keeps treating a real student as
+     someone who does not exist. */
   const reg={nuid:'',batch:'',program:'',section:''};
 
   function startRegistration(nuid){
@@ -343,6 +347,9 @@
     // one resolved from the roster (profileFullBatch expands "26" -> "2026").
     const p={nuid:reg.nuid,name,department:reg.program,batch:reg.batch,section:reg.section};
     setProfileCookie(p);
+    // Fire-and-forget: the profile is already saved locally, so a failed
+    // publish must not strand the user on the registration screen.
+    if(typeof publishProfileToRoster==='function') publishProfileToRoster(p);
     if(typeof seedProfileSchedulePrefs==='function') seedProfileSchedulePrefs(p,true);
     setSkipped(false);
     renderOnboard(p);

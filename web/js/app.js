@@ -399,6 +399,55 @@ function deptCodeToLabel(code){
     default: return normalized || 'Unknown';
   }
 }
+// Inverse of deptCodeToLabel. A profile carries the timetable's department key
+// ("BS CS"), but a roster row stores the short code ("CS", "BAI") — writing the
+// label straight through would break the round trip back out via
+// parseProfileFromStudent, which feeds every row through deptCodeToLabel.
+function deptLabelToCode(label){
+  const normalized=String(label||'').trim().toUpperCase();
+  switch(normalized){
+    case 'BS AI': return 'BAI';
+    case 'BS CS': return 'CS';
+    case 'BS SE': return 'SE';
+    case 'BS DS': return 'DS';
+    case 'BS CY': return 'CY';
+    default: return normalized.replace(/^BS\s+/,'');
+  }
+}
+// Publish a just-registered student to db/students/<batch>.json so the roster
+// knows they exist — the seating-plan email is otherwise the only thing that
+// ever adds anyone, and it trails each new intake by months.
+//
+// Strictly additive: the caller has already saved the profile locally, and a
+// failure here must not cost the user that profile or block the UI. Every
+// failure path is a console warning and a false return, never a throw.
+async function publishProfileToRoster(profile){
+  try{
+    const nuid=String(profile&&profile.nuid||'').trim().toUpperCase();
+    const name=String(profile&&profile.name||'').trim();
+    const section=String(profile&&profile.section||'').trim().toUpperCase();
+    const department=deptLabelToCode(profile&&profile.department);
+    if(!nuid||!name||!section||!department) return false;
+    const res=await fetch('/api/register',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nuid,name,section,department})
+    });
+    // On a static host with no serverless layer the catch-all rewrite answers
+    // /api/register with index.html and a 200, so "did it work" has to be the
+    // parsed ok flag rather than res.ok.
+    let data=null;
+    try{ data=await res.json(); }catch(err){ data=null; }
+    if(!res.ok||!data||data.ok!==true){
+      console.warn('Roster publish failed',res.status,(data&&data.message)||'');
+      return false;
+    }
+    return true;
+  }catch(err){
+    console.warn('Roster publish failed',err);
+    return false;
+  }
+}
 function parseProfileFromStudent(student){
   const explicitDepartment=(student.department||'').trim().toUpperCase();
   const explicitSection=(student.section||'').trim().toUpperCase();
@@ -556,9 +605,11 @@ function registerProfile(){
     return;
   }
   if(status) status.classList.remove('is-error');
-  // Profile lives only in this browser (works on any static host, e.g. Vercel).
+  // The profile lives in this browser; the roster row is published separately
+  // so the server side knows the student exists (see publishProfileToRoster).
   const profile={ nuid, name, section, batch, department: deptCodeToLabel(departmentRaw) };
   setProfileCookie(profile);
+  publishProfileToRoster(profile);
   seedProfileSchedulePrefs(profile,true);
   renderProfileCard(profile);
   showProfileActions(false,true);
@@ -572,6 +623,7 @@ window.openProfileModal=openProfileModal;
 window.closeProfileModal=closeProfileModal;
 window.syncProfile=syncProfile;
 window.registerProfile=registerProfile;
+window.publishProfileToRoster=publishProfileToRoster;
 window.saveProfileCookie=saveProfileCookie;
 window.deleteSavedProfile=deleteSavedProfile;
 // ── Web Push: system-tray seat alerts when the seating plan updates ──────
