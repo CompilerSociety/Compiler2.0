@@ -1225,11 +1225,6 @@
               "name": "PDC",
               "location": "D-411",
               "time": "02:30-03:50"
-            },
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
             }
           ],
           "Wednesday": [
@@ -1262,6 +1257,11 @@
             }
           ],
           "Friday": [
+            {
+              "name": "OOP Lab",
+              "location": "C-MARGALA 1",
+              "time": "02:30-05:15"
+            },
             {
               "name": "COAL Lab",
               "location": "C-RAWAL 1",
@@ -1389,13 +1389,6 @@
               "time": "01:00-02:20"
             }
           ],
-          "Wednesday": [
-            {
-              "name": "OOP Lab",
-              "location": "C-RAWAL 1",
-              "time": "02:30-05:15"
-            }
-          ],
           "Thursday": [
             {
               "name": "OOP",
@@ -1406,6 +1399,13 @@
               "name": "PDC",
               "location": "D-411",
               "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "OOP Lab",
+              "location": "C-RAWAL 4",
+              "time": "02:30-05:15"
             }
           ]
         },
@@ -3326,11 +3326,6 @@
               "name": "S/w Const Lab",
               "location": "C-MARGALA 3",
               "time": "08:30-11:15"
-            },
-            {
-              "name": "Comp Intelligence",
-              "location": "C-RAWAL 4",
-              "time": "02:30-05:15"
             }
           ]
         }
@@ -3571,7 +3566,7 @@
             },
             {
               "name": "COAL Lab",
-              "location": "CYBER (D-514)",
+              "location": "D-IT LAB 3",
               "time": "11:30-02:15"
             }
           ],
@@ -3821,14 +3816,14 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "OS Lab",
-              "location": "C-MARGALA 1",
-              "time": "02:30-05:15"
-            },
-            {
               "name": "DB Lab",
               "location": "CYBER (D-514)",
               "time": "10:00-12:45"
+            },
+            {
+              "name": "OS Lab",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
             }
           ]
         },
@@ -4046,6 +4041,11 @@
             {
               "name": "Project",
               "location": "CYBER (D-514)",
+              "time": "11:30-02:15"
+            },
+            {
+              "name": "Project",
+              "location": "CYBER (D-514)",
               "time": "02:30-05:15"
             }
           ],
@@ -4072,13 +4072,6 @@
               "location": "CYBER (D-514)",
               "time": "08:30-11:15"
             },
-            {
-              "name": "Project",
-              "location": "CYBER (D-514)",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Friday": [
             {
               "name": "Project",
               "location": "CYBER (D-514)",
@@ -4835,7 +4828,7 @@
             },
             {
               "name": "COAL Lab",
-              "location": "C-RAWAL 3",
+              "location": "C-MARGALA 1",
               "time": "08:30-11:15"
             }
           ],
@@ -4920,11 +4913,6 @@
               "name": "AP",
               "location": "C-406",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "OS",
-              "location": "D-305",
-              "time": "01:00-02:20"
             }
           ],
           "Wednesday": [
@@ -4938,11 +4926,6 @@
             {
               "name": "AP",
               "location": "D-303",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "OS",
-              "location": "D-305",
               "time": "01:00-02:20"
             }
           ],
@@ -5005,11 +4988,6 @@
             }
           ],
           "Friday": [
-            {
-              "name": "OS Lab",
-              "location": "C-MARGALA 4",
-              "time": "08:30-11:15"
-            },
             {
               "name": "COAL Lab",
               "location": "C-MARGALA 4",
@@ -5344,7 +5322,7 @@
             },
             {
               "name": "Project",
-              "location": "C-MARGALA 1",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             },
             {
@@ -6228,7 +6206,7 @@
             },
             {
               "name": "Project",
-              "location": "C-MARGALA 1",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             },
             {
@@ -6868,6 +6846,6 @@
       }
     }
   },
-  "count": 1136,
-  "generatedAt": "2026-08-13T04:29:42.585915+00:00"
+  "count": 1132,
+  "generatedAt": "2026-08-13T05:57:31.271899+00:00"
 }
