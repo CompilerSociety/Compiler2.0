@@ -160,6 +160,39 @@ function sanitizePrefs(raw) {
   return Object.keys(prefs).length ? prefs : null;
 }
 
+// ── Push endpoint allowlist ─────────────────────────────────────────────
+// Every stored subscription is later POSTed to by the GitHub Actions senders,
+// so a forged endpoint would make them send requests to an arbitrary host
+// (SSRF) and could redirect notification traffic to an attacker's server.
+// Only real web-push endpoints from the known browser push services are
+// accepted, and only over HTTPS. web-push's own HTTPS check no longer exists
+// in current versions, so this is the enforcement point.
+const ALLOWED_PUSH_HOSTS = [
+  'fcm.googleapis.com',             // Chrome / Edge / all FCM-backed browsers
+  'web.push.apple.com',             // Safari
+  'updates.push.services.mozilla.com', // Firefox (standard)
+  'push.services.mozilla.com',      // Firefox (legacy autopush host)
+];
+
+function isValidEndpoint(endpoint) {
+  try {
+    const url = new URL(String(endpoint));
+    if (url.protocol !== 'https:') return false;
+    return ALLOWED_PUSH_HOSTS.includes(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+// Minimal shape check: the fields web-push requires to encrypt a payload.
+function isValidSubscription(subscription) {
+  const sub = subscription && typeof subscription === 'object' ? subscription : null;
+  if (!sub || typeof sub.endpoint !== 'string') return false;
+  const keys = sub.keys || {};
+  return typeof keys.p256dh === 'string' && keys.p256dh.length > 0 &&
+    typeof keys.auth === 'string' && keys.auth.length > 0;
+}
+
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }
 
@@ -236,6 +269,16 @@ export default async function handler(req, res) {
     const prefs = sanitizePrefs(payload.prefs);
     if (!nuid || !subscription || !subscription.endpoint) {
       return res.status(400).json({ ok: false, error: 'nuid and a valid subscription are required' });
+    }
+
+    // 0) Endpoint + shape: only real web-push endpoints from known push
+    //    services may be stored (blocks SSRF + notification redirection).
+    if (!isValidEndpoint(subscription.endpoint) || !isValidSubscription(subscription)) {
+      return res.status(400).json({
+        ok: false,
+        error: 'invalid_subscription',
+        message: 'Subscription must be a valid HTTPS web-push subscription.',
+      });
     }
 
     // 1) Format + identity: only a real student on the published roster can
