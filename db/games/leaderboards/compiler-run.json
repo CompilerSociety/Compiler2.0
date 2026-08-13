@@ -80,6 +80,15 @@
       "batch": "25",
       "highScore": 705,
       "achievedAt": "2026-08-07T12:04:50.190Z"
+    },
+    "23I-2060": {
+      "nuid": "23I-2060",
+      "name": "Omar Malik",
+      "section": "A",
+      "department": "BS CY",
+      "batch": "23",
+      "highScore": 35,
+      "achievedAt": "2026-08-13T20:32:52.898Z"
     }
   },
   "leaderboard": [
@@ -163,6 +172,15 @@
       "batch": "24",
       "highScore": 111,
       "achievedAt": "2026-07-25T18:49:39.628Z"
+    },
+    {
+      "nuid": "23I-2060",
+      "name": "Omar Malik",
+      "section": "A",
+      "department": "BS CY",
+      "batch": "23",
+      "highScore": 35,
+      "achievedAt": "2026-08-13T20:32:52.898Z"
     }
   ]
 }
