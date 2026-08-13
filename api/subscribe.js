@@ -15,19 +15,23 @@ const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
    directory. Keep the two copies in step.
 
    - NUID_RE requires a well-formed NU ID, which also rules out junk keys.
-   - The identity check requires the NU ID to exist in the published roster for
-     its batch (db/students/<batch>.json), so nobody can attach another
-     student's identity to a device or flood the file with fake records. It
-     fails OPEN if the roster cannot be fetched so a GitHub blip can't take
-     notifications down.
+   - The identity step reads the published roster for the ID's batch
+     (db/students/<batch>.json). A roll no that is NOT on it is ENROLLED
+     rather than rejected: the roster only ever holds whoever the seating-plan
+     email happened to name, so it lags every new intake (26.json held 3
+     students while the whole 26 batch was trying to sign up) and a hard gate
+     locked out real students with no way in. See enrolInRoster for what that
+     write is and is not allowed to do.
    - Rate limiting is per-IP: an in-process burst guard rejects fast repeats
      without touching GitHub, and a small state file in the repo
-     (db/metadata/rate-limit.json) enforces the same window across instances. */
-// The leading 2 digits are CAPTURED: rosterLookup reads m[1] to pick the
-// db/students/<batch>.json roster. Without the group m[1] is undefined for
-// every well-formed ID, so every lookup fetched .../students/undefined.json,
-// 404'd, and rejected the user with "No roster found for batch undefined".
+     (db/metadata/rate-limit.json) enforces the same window across instances.
+     The identity step runs AFTER it, so the roster write is rate-limited too. */
+// The leading 2 digits are CAPTURED: they select db/students/<batch>.json.
+// Without the group m[1] is undefined for every well-formed ID, so every
+// lookup fetched .../students/undefined.json, 404'd, and rejected the user
+// with "No roster found for batch undefined".
 const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
+const rosterPath = (batch) => `db/students/${batch}.json`;
 const RATE_LIMIT_PATH = 'db/metadata/rate-limit.json';
 const RATE_WINDOW_MS = 60_000;
 const MAX_WRITES_PER_MIN = 5;
@@ -109,38 +113,108 @@ async function noteSuccessfulWrite(token, ip) {
 
 let _rosterCache = { batch: null, set: null, fetchedAt: 0 };
 
-// Identity check: the NU ID must match NUID_RE and exist in its batch roster.
-// Returns { status: null } when allowed; otherwise { status, error, message }.
-async function rosterLookup(nuid) {
-  const m = NUID_RE.exec(nuid);
-  if (!m) {
-    return { status: 400, error: 'invalid_nuid', message: 'NU ID must look like 22I-0507.' };
-  }
-  const batch = m[1];
-  if (!_rosterCache.batch || _rosterCache.batch !== batch || Date.now() - _rosterCache.fetchedAt > 600_000) {
-    const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/db/students/${batch}.json?t=${Date.now()}`;
+// Is this NU ID already on its batch roster?
+//
+// Returns true/false, or null when the roster could not be read at all. null
+// means "don't know", and the caller treats it as "already there" so a GitHub
+// blip neither blocks sign-up nor appends a duplicate on a half-read file.
+// A 404 is NOT unknown — it means this batch has no roster file yet (a brand
+// new intake), which is a definite "not on it" and the file gets created.
+async function rosterHas(batch, nuid) {
+  const fresh = _rosterCache.batch === batch && Date.now() - _rosterCache.fetchedAt <= 600_000;
+  if (!fresh) {
+    const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/${rosterPath(batch)}?t=${Date.now()}`;
     try {
       const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-identity' } });
       if (res.status === 404) {
-        return { status: 403, error: 'unknown_batch', message: `No roster found for batch ${batch}.` };
+        _rosterCache = { batch, set: new Set(), fetchedAt: Date.now() };
+        return false;
       }
       if (!res.ok) throw new Error(`roster fetch failed (${res.status})`);
       const data = await res.json();
       const set = new Set((data.students || []).map((s) => String(s.nuid).trim().toUpperCase()));
       _rosterCache = { batch, set, fetchedAt: Date.now() };
     } catch (err) {
-      console.error('roster lookup failed, failing open:', err?.message);
-      return { status: null, error: null, message: null }; // fail-open
+      console.error('roster read failed, treating as known:', err?.message);
+      return null;
     }
   }
-  if (!_rosterCache.set.has(nuid)) {
-    return {
-      status: 403,
-      error: 'nuid_not_registered',
-      message: `No student with NU ID ${nuid} was found in the published roster.`,
+  return _rosterCache.set.has(nuid);
+}
+
+// Append a self-registered student to db/students/<batch>.json.
+//
+// Deliberately append-only. An existing row is never edited or replaced, so a
+// caller cannot overwrite a real roster entry (name, section, or an assigned
+// seat) by re-POSTing someone else's roll no — the worst they can do is add a
+// row that was not there. Rows carry self_registered:true so a later
+// seating-plan import can tell them apart from mail-sourced ones and
+// reconcile or prune them.
+//
+// The caller has already rate-limited this IP, and isValidEndpoint means a
+// real browser push subscription had to be minted first, which is what keeps
+// this from being a trivially scriptable way to stuff the file.
+async function enrolInRoster(token, batch, student) {
+  const url = `https://api.github.com/repos/${repo()}/contents/${rosterPath(batch)}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'compiler2-roster-enrol',
+  };
+  // Retry: a concurrent enrolment moves the file sha out from under this PUT.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const read = await fetch(`${url}?ref=${branch()}`, { headers });
+    if (read.status === 401 || read.status === 403) throw authError(read.status);
+    let doc = {};
+    let sha = null;
+    if (read.status !== 404) {
+      if (!read.ok) throw new Error(`read roster failed (${read.status})`);
+      const meta = await read.json();
+      sha = meta.sha;
+      try {
+        const parsed = JSON.parse(Buffer.from(meta.content || '', 'base64').toString('utf-8'));
+        if (parsed && typeof parsed === 'object') doc = parsed;
+      } catch { doc = {}; }
+    }
+    const students = Array.isArray(doc.students) ? doc.students : [];
+    if (students.some((s) => String(s?.nuid || '').trim().toUpperCase() === student.nuid)) {
+      return false; // someone else added them between the read and now
+    }
+    students.push({
+      ...student,
+      // Same shape as a seating-plan row so every downstream reader
+      // (send-seating-push, the profile tabs) treats the two identically.
+      paper: '', time: '', class: '', seat: '',
+      self_registered: true,
+      added_at: new Date().toISOString(),
+    });
+    const next = {
+      ...doc,
+      updated_at: new Date().toISOString(),
+      source_subject: doc.source_subject || `Self-registered ${batch}`,
+      count: students.length,
+      students,
     };
+    const put = await fetch(url, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Enrol ${student.nuid} in the ${batch} roster`,
+        content: Buffer.from(JSON.stringify(next, null, 2) + '\n').toString('base64'),
+        branch: branch(),
+        ...(sha ? { sha } : {}),
+      }),
+    });
+    if (put.status === 401 || put.status === 403) throw authError(put.status);
+    if (put.ok) {
+      // Keep the warm cache in step so an immediate re-POST doesn't try again.
+      if (_rosterCache.batch === batch && _rosterCache.set) _rosterCache.set.add(student.nuid);
+      return true;
+    }
+    if (put.status !== 409 && attempt === 2) throw new Error(`write roster failed (${put.status})`);
+    await new Promise((r) => setTimeout(r, 500));
   }
-  return { status: null, error: null, message: null };
+  throw new Error('Could not write the roster');
 }
 
 // Per-category notification preferences. Kept in step with
@@ -285,14 +359,20 @@ export default async function handler(req, res) {
       });
     }
 
-    // 1) Format + identity: only a real student on the published roster can
-    //    attach a device, and only with a well-formed NU ID.
-    const identity = await rosterLookup(nuid);
-    if (identity.status) {
-      return res.status(identity.status).json({ ok: false, error: identity.error, message: identity.message });
+    // 1) Format: cheap and local, so a junk ID is rejected before this costs
+    //    a roster fetch or any rate-limit bookkeeping.
+    const idParts = NUID_RE.exec(nuid);
+    if (!idParts) {
+      return res.status(400).json({
+        ok: false,
+        error: 'invalid_nuid',
+        message: 'NU ID must look like 22I-0507.',
+      });
     }
+    const rosterBatch = idParts[1];
 
     // 2) Rate limit: reject spam fast (in-process) and across instances.
+    //    Ahead of the identity step, because that step can now WRITE.
     const ip = clientIp(req);
     if (!burstAllowed(ip)) {
       res.setHeader('Retry-After', '60');
@@ -334,6 +414,41 @@ export default async function handler(req, res) {
         message: "Notifications can't be enabled right now — this is on us, not you.",
         detail: 'GH_TOKEN is not set on the server.',
       });
+    }
+
+    // 4) Identity: on the roster already, or enrol them onto it now.
+    //    A roster miss is not a rejection any more — the seating-plan email is
+    //    the only thing that ever populates db/students/, so it lags every new
+    //    intake and used to lock those students out entirely.
+    const known = await rosterHas(rosterBatch, nuid);
+    if (known === false) {
+      // Only enrol a complete profile. The mobile and desktop registration
+      // screens both collect all three before they let the user through, so a
+      // request missing them is a stale client, not a student to write down as
+      // a nameless row that no downstream reader could use.
+      if (!record.name || !record.department || !record.section) {
+        return res.status(400).json({
+          ok: false,
+          error: 'incomplete_profile',
+          message: 'Add your name, department and section to your profile, then enable alerts.',
+        });
+      }
+      try {
+        const added = await enrolInRoster(token, rosterBatch, {
+          name: record.name,
+          nuid,
+          section: record.section,
+          department: record.department,
+          batch: rosterBatch,
+        });
+        if (added) console.log(`enrolled ${nuid} in ${rosterPath(rosterBatch)}`);
+      } catch (err) {
+        // The subscription is the thing the user asked for; the roster row is
+        // bookkeeping. Losing the row must not cost them their alerts, so this
+        // is logged and the subscribe continues.
+        if (err?.isAuthFailure) throw err;
+        console.error('roster enrolment failed, continuing to subscribe:', err?.message);
+      }
     }
 
     // Retry a couple of times: a concurrent subscribe changes the file sha.
