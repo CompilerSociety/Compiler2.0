@@ -98,13 +98,21 @@
     const get=t=>parseInt((p.find(x=>x.type===t)||{}).value,10)||0;
     return (get('hour')%24)*3600+get('minute')*60+get('second');
   }
-  // "1h 23m" / "23m 10s" / "10s" — coarse while far out, precise near the edge.
+  // "2d 4h" / "1h 23m" / "23m 10s" / "10s" — coarse while far out, precise
+  // near the edge, so an overnight wait is not a twitching seconds counter.
   function countdown(secs){
     if(secs<0) secs=0;
-    const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60;
+    const d=Math.floor(secs/86400),h=Math.floor((secs%86400)/3600),
+          m=Math.floor((secs%3600)/60),s=secs%60;
+    if(d>0) return `${d}d ${h}h`;
     if(h>0) return `${h}h ${m}m`;
     if(m>0) return `${m}m ${String(s).padStart(2,'0')}s`;
     return `${s}s`;
+  }
+  // Weekday name N calendar days from now, in Islamabad.
+  const _dayFmt=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',weekday:'long'});
+  function weekdayIn(offsetDays){
+    return _dayFmt.format(new Date(Date.now()+offsetDays*86400000));
   }
   function sortByTime(list){
     return [...list].sort((a,b)=>{
@@ -390,10 +398,10 @@
     // counting down to the start), and the idle card once the day is done.
     // data-until is seconds-since-midnight; tickBanner() re-reads it every
     // second so the countdown moves without re-rendering the whole pane.
-    const next=rows.find(r=>r.startMin!=null&&r.startMin*60>nowSeconds());
+    const next=findNextClass(keys);
     let html='';
     if(current){
-      html+=`<div class="m-now is-live" id="m-now-banner" data-until="${current.endMin*60}">
+      html+=`<div class="m-now is-live" id="m-now-banner" data-until="${Date.now()+(current.endMin*60-nowSeconds())*1000}">
         <div class="m-now-head"><span class="m-now-dot"></span><span>IN CLASS NOW · ${esc(toAmPm(current.start))} – ${esc(toAmPm(current.end))}</span></div>
         <div class="m-now-name">${esc(cleanName(current.name))}</div>
         <div class="m-now-stats">
@@ -402,8 +410,10 @@
         </div>
       </div>`;
     }else if(next){
-      html+=`<div class="m-now" id="m-now-banner" data-until="${next.startMin*60}">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>UP NEXT · ${esc(toAmPm(next.start))} – ${esc(toAmPm(next.end))}</span></div>
+      const when=next.dayOffset===0?'UP NEXT'
+        :next.dayOffset===1?'TOMORROW':next.day.toUpperCase();
+      html+=`<div class="m-now" id="m-now-banner" data-until="${Date.now()+next.startsIn*1000}">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(when)} · ${esc(toAmPm(next.start))} – ${esc(toAmPm(next.end))}</span></div>
         <div class="m-now-name">${esc(cleanName(next.name))}</div>
         <div class="m-now-stats">
           <div><div class="m-now-stat-label">Room</div><div class="m-now-stat-value">${esc(next.room)}</div></div>
@@ -482,9 +492,37 @@
     if(!el||!banner) return;
     const until=Number(banner.dataset.until);
     if(!Number.isFinite(until)) return;
-    const left=until-nowSeconds();
+    // Absolute epoch ms, not seconds-since-midnight: the target can be on a
+    // later day, and a midnight-relative figure would go negative overnight.
+    const left=Math.round((until-Date.now())/1000);
     if(left<=0){ if(route==='today'&&!weekMode) renderToday(); return; }
     el.textContent=countdown(left);
+  }
+
+  // The next class from this moment on, looking past the end of today. Once
+  // the last class of the day is over, "no classes found" is the wrong
+  // answer — a student still wants to know when they are next due in, so
+  // scan forward a week and only give up if nothing is published at all.
+  function findNextClass(keys){
+    const nowSec=nowSeconds();
+    for(let off=0;off<=7;off++){
+      const day=weekdayIn(off);
+      if(day==='Sunday') continue; // no classes are published for Sunday
+      const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+      for(const e of list){
+        const time=e.time||e.t||'';
+        const b=slotBounds(time);
+        if(!b) continue;
+        if(off===0&&b[0]*60<=nowSec) continue; // already started/finished today
+        return {
+          day, dayOffset:off, time,
+          start:time.split('-')[0]||'', end:(time.split('-')[1]||'').trim(),
+          room:e.location||e.l||'—', name:e.name||e.c||'',
+          startsIn:off*86400+b[0]*60-nowSec
+        };
+      }
+    }
+    return null;
   }
 
   function renderWeek(keys,pane){
