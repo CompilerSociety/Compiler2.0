@@ -13,6 +13,7 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import webpush from 'web-push';
+import { wants } from './prefs.mjs';
 
 const SEATING = 'db/seating/plan.json';
 const SUBS = 'db/metadata/notifications/push-subscriptions.json';
@@ -76,6 +77,12 @@ for (const entry of subs) {
   const nuid = String(entry?.nuid || '').trim().toUpperCase();
   const subscription = entry?.subscription;
   if (!nuid || !subscription?.endpoint) { continue; }
+
+  // This is the one sender that rewrites the subscription file from keptSubs,
+  // so an opted-out device MUST be pushed back onto keptSubs before skipping.
+  // Bare `continue` here would delete the subscription outright and the student
+  // would have to grant permission again to turn the category back on.
+  if (!wants(entry, 'seat')) { keptSubs.push(entry); skipped++; continue; }
 
   const student = byNuid.get(nuid);
   if (!student) { keptSubs.push(entry); skipped++; continue; } // NU ID not in this plan yet

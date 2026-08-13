@@ -1,0 +1,149 @@
+<!-- Phone-only shell. Rendered instead of .shell below the mobile breakpoint
+     (see css/mobile.css); the desktop DOM stays in the page, hidden, because
+     js/app.js drives it and expects every one of its IDs to exist.
+     Lists are filled by js/mobile.js — this is the skeleton only. -->
+<div class="m-app" id="m-app">
+
+  <!-- ── Sign in ─────────────────────────────────────────────────────── -->
+  <section class="m-screen m-signin on" id="m-signin">
+    <div class="m-signin-top">
+      <div class="m-wordmark">VTABLE</div>
+      <h1 class="m-hero">Stop<br>wandering<br>FAST.</h1>
+      <p class="m-hero-sub">Your timetable, free rooms, faculty and exams — in one place.</p>
+    </div>
+    <div class="m-signin-bottom">
+      <label class="m-field-label" for="m-nuid">YOUR NU ID</label>
+      <div class="m-input-wrap">
+        <input class="m-input" id="m-nuid" type="text" inputmode="text" autocomplete="username"
+               placeholder="22i-1234" maxlength="20" aria-describedby="m-signin-status">
+        <span class="m-input-suffix">@nu.edu.pk</span>
+      </div>
+      <div class="m-signin-status" id="m-signin-status" role="status" aria-live="polite"></div>
+      <button class="m-btn-primary" id="m-signin-btn" type="button">Continue</button>
+      <button class="m-btn-ghost" id="m-skip-btn" type="button">Skip login</button>
+      <div class="m-signin-foot">Built with love by Compiler Society</div>
+    </div>
+  </section>
+
+  <!-- ── Onboarding confirm ──────────────────────────────────────────── -->
+  <section class="m-screen m-onboard" id="m-onboard">
+    <div class="m-kicker" id="m-onboard-kicker">READ FROM YOUR ROLL NO</div>
+    <h2 class="m-title-lg" id="m-onboard-title">Got it — that's you.</h2>
+    <p class="m-onboard-copy">We pulled this straight off the student roster, so there's nothing to fill in.</p>
+    <div class="m-onboard-rows" id="m-onboard-rows"></div>
+    <button class="m-btn-primary" id="m-onboard-go" type="button">Open my timetable</button>
+    <button class="m-btn-ghost" id="m-onboard-back" type="button">Use a different NU ID</button>
+  </section>
+
+  <!-- ── Main app ────────────────────────────────────────────────────── -->
+  <div class="m-main" id="m-main">
+    <header class="m-header">
+      <div class="m-header-text">
+        <div class="m-kicker" id="m-head-kicker">FAST NUCES ISLAMABAD</div>
+        <div class="m-head-title" id="m-head-title">Today</div>
+      </div>
+      <div class="m-header-actions">
+        <!-- Bell is a placeholder until a notification feed exists — see too_do.md -->
+        <button class="m-icon-btn" id="m-bell-btn" type="button" aria-label="Notifications (coming soon)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <button class="m-avatar-btn" id="m-avatar-btn" type="button" aria-label="Profile"><span id="m-avatar-initials">—</span></button>
+      </div>
+    </header>
+
+    <div class="m-body" id="m-body">
+
+      <!-- Today / Week -->
+      <section class="m-screen on" id="m-today">
+        <div class="m-seg" role="tablist" aria-label="Today or week">
+          <button class="m-seg-btn is-active" id="m-seg-today" role="tab" aria-selected="true" type="button">Today</button>
+          <button class="m-seg-btn" id="m-seg-week" role="tab" aria-selected="false" type="button">Week</button>
+        </div>
+        <div id="m-today-pane" role="status" aria-live="polite"></div>
+        <div id="m-week-pane" hidden></div>
+      </section>
+
+      <!-- Lookup -->
+      <section class="m-screen" id="m-lookup">
+        <div id="m-lookup-fields"></div>
+        <div id="m-lookup-out" role="status" aria-live="polite"></div>
+      </section>
+
+      <!-- Free rooms -->
+      <section class="m-screen" id="m-rooms">
+        <div class="m-rooms-bar">
+          <div class="m-rooms-bar-left">
+            <span class="m-live-dot" aria-hidden="true"></span>
+            <span id="m-rooms-slot">SLOT —</span>
+          </div>
+          <span class="m-rooms-clock" id="m-rooms-clock">--:--</span>
+        </div>
+        <div class="m-step-label">STEP 01 — BLOCK</div>
+        <div class="m-block-grid" id="m-block-grid"></div>
+        <div id="m-floor-wrap" hidden>
+          <div class="m-step-label">STEP 02 — FLOOR</div>
+          <div class="m-chip-row" id="m-floor-row"></div>
+        </div>
+        <div id="m-rooms-out" role="status" aria-live="polite"></div>
+      </section>
+
+      <!-- Faculty -->
+      <section class="m-screen" id="m-faculty">
+        <div class="m-search-wrap">
+          <svg class="m-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input class="m-search" id="m-fac-search" type="search" placeholder="Name, office or department…" aria-label="Search faculty">
+        </div>
+        <div class="m-chip-row" id="m-fac-depts"></div>
+        <div id="m-fac-out" role="status" aria-live="polite"></div>
+      </section>
+
+      <!-- Faculty detail -->
+      <section class="m-screen" id="m-facdetail">
+        <button class="m-back" id="m-fac-back" type="button">&lsaquo; Directory</button>
+        <div id="m-facdetail-out"></div>
+      </section>
+
+      <!-- Exams -->
+      <section class="m-screen" id="m-exams">
+        <div class="m-seg m-seg-3" role="tablist" aria-label="Exam views">
+          <button class="m-seg-btn is-active" id="m-seg-schedule" role="tab" aria-selected="true" type="button">Schedule</button>
+          <button class="m-seg-btn" id="m-seg-seating" role="tab" aria-selected="false" type="button">Seating</button>
+          <button class="m-seg-btn" id="m-seg-showup" role="tab" aria-selected="false" type="button">Show-up</button>
+        </div>
+        <div id="m-exam-filters"></div>
+        <div id="m-exam-out" role="status" aria-live="polite"></div>
+      </section>
+
+      <!-- Profile -->
+      <section class="m-screen" id="m-profile">
+        <div id="m-profile-out"></div>
+      </section>
+
+    </div>
+
+    <nav class="m-tabs" id="m-tabs" aria-label="Primary">
+      <button class="m-tab is-active" data-route="today" type="button" aria-current="page">
+        <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <span class="m-tab-label">Today</span>
+      </button>
+      <button class="m-tab" data-route="lookup" type="button">
+        <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+        <span class="m-tab-label">Lookup</span>
+      </button>
+      <button class="m-tab" data-route="rooms" type="button">
+        <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+        <span class="m-tab-label">Rooms</span>
+      </button>
+      <button class="m-tab" data-route="faculty" type="button">
+        <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span class="m-tab-label">Faculty</span>
+      </button>
+      <button class="m-tab" data-route="exams" type="button">
+        <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></span>
+        <span class="m-tab-label">Exams</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="m-toast" id="m-toast" role="status" aria-live="polite" hidden></div>
+</div>

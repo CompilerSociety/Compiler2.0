@@ -328,6 +328,7 @@ function openProfileModal(){
   if(backdrop){ backdrop.hidden=false; }
   const savedProfile=getProfileCookie();
   const savedNuid=localStorage.getItem(PROFILE_STORAGE_KEY)||'';
+  renderNotificationPrefs();
   if(input){
     input.value=savedProfile?.nuid || savedNuid || '';
   }
@@ -576,6 +577,95 @@ window.deleteSavedProfile=deleteSavedProfile;
 // ── Web Push: system-tray seat alerts when the seating plan updates ──────
 const VAPID_PUBLIC_KEY='BGOmViIePhP9aBBqwrvit66eErJRLqqxStDMb4Hz5o4oqevUIngebRO5xCbJ8pBIAdzvrdDP6qqBq1sgGkO6teU';
 const PUSH_SUBSCRIBE_URL='/api/subscribe';
+/* ── Notification categories ─────────────────────────────────────────────
+   Which kinds of push a student wants. Held on this device AND mirrored onto
+   the server's subscription record, because the senders run in GitHub Actions
+   and only ever see what /api/subscribe wrote. scripts/notifications/prefs.mjs
+   is the source of truth for the key names and for what an absent preference
+   means; keep the two in step.
+
+   `room` is a DEAD SWITCH — no free-room digest sender exists yet, so the
+   toggle stores and transmits the choice but nothing acts on it. It is
+   rendered disabled rather than hidden so the plumbing stays exercised until
+   the sender lands. See too_do.md. */
+const NOTIF_PREFS_KEY='vtable_notif_prefs';
+const NOTIFICATION_CATEGORIES=[
+  {key:'cls',label:'Class changes',help:'Cancelled or rescheduled classes for your section.'},
+  {key:'exam',label:'Exam schedule',help:'When a new exam schedule is published.'},
+  {key:'show',label:'Show-up schedule',help:'When your show-up time or venue changes.'},
+  {key:'seat',label:'Seating plan',help:'When your exam seat is assigned or moved.'},
+  {key:'room',label:'Free-room digest',help:'Not built yet — this switch is reserved.',dead:true}
+];
+const NOTIF_PREFS_DEFAULT={cls:true,exam:true,show:true,seat:true,room:false};
+function readNotifPrefs(){
+  const stored=_readPref(NOTIF_PREFS_KEY)||{};
+  const prefs={};
+  NOTIFICATION_CATEGORIES.forEach(({key})=>{
+    prefs[key]=typeof stored[key]==='boolean'?stored[key]:NOTIF_PREFS_DEFAULT[key];
+  });
+  return prefs;
+}
+function writeNotifPrefs(prefs){ _writePref(NOTIF_PREFS_KEY,prefs); }
+function renderNotificationPrefs(){
+  const prefs=readNotifPrefs();
+  NOTIFICATION_CATEGORIES.forEach(({key,dead})=>{
+    const input=document.getElementById(`notif-pref-${key}`);
+    if(!input) return;
+    input.checked=prefs[key]===true;
+    input.disabled=Boolean(dead);
+  });
+}
+// One POST shape for both "enable notifications" and a later preference edit,
+// so the server record can never drift between the two paths.
+async function postPushSubscription(profile,sub,prefs){
+  const res=await fetch(PUSH_SUBSCRIBE_URL,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      nuid:profile.nuid,
+      name:profile.name||'',
+      department:profile.department||'',
+      batch:profile.batch||'',
+      section:profile.section||'',
+      prefs,
+      subscription:sub
+    })
+  });
+  if(!res.ok){
+    // Show the server's actual reason (a 503 from api/subscribe.js means it
+    // knows why — e.g. its GitHub credential is bad) instead of a bare
+    // "HTTP 500" that tells the student nothing and points no one at the cause.
+    let data=null;
+    try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
+    if(data&&data.detail) console.warn('Push subscribe unavailable:',data.detail);
+    throw new Error((data&&data.message)||('HTTP '+res.status));
+  }
+}
+// Push the current choices at the server's copy of this subscription. Silent
+// when notifications were never enabled: there is nothing to update, and
+// changing a toggle must never raise a permission prompt by itself.
+async function syncNotificationPrefs(){
+  const profile=getProfileCookie();
+  if(!profile||!profile.nuid) return;
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)) return;
+  if(typeof Notification==='undefined'||Notification.permission!=='granted') return;
+  try{
+    const reg=await navigator.serviceWorker.getRegistration();
+    const sub=reg?await reg.pushManager.getSubscription():null;
+    if(!sub) return;
+    await postPushSubscription(profile,sub,readNotifPrefs());
+    setPushStatus('✓ Notification choices saved.');
+  }catch(err){
+    console.warn('syncNotificationPrefs failed:',err);
+    setPushStatus('Saved on this device, but the server copy did not update. '+(err.message||err));
+  }
+}
+function onNotificationPrefChange(key,checked){
+  const prefs=readNotifPrefs();
+  prefs[key]=Boolean(checked);
+  writeNotifPrefs(prefs);
+  renderNotificationPrefs();
+  syncNotificationPrefs();
+}
 function _urlBase64ToUint8Array(base64String){
   const padding='='.repeat((4-base64String.length%4)%4);
   const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
@@ -610,26 +700,8 @@ async function enableSeatAlerts(){
     if(!sub){
       sub=await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:_urlBase64ToUint8Array(VAPID_PUBLIC_KEY) });
     }
-    const res=await fetch(PUSH_SUBSCRIBE_URL,{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        nuid:profile.nuid,
-        name:profile.name||'',
-        department:profile.department||'',
-        batch:profile.batch||'',
-        section:profile.section||'',
-        subscription:sub
-      })
-    });
-    if(!res.ok){
-      // Show the server's actual reason (a 503 from api/subscribe.js means it
-      // knows why — e.g. its GitHub credential is bad) instead of a bare
-      // "HTTP 500" that tells the student nothing and points no one at the cause.
-      let data=null;
-      try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
-      if(data&&data.detail) console.warn('Push subscribe unavailable:',data.detail);
-      throw new Error((data&&data.message)||('HTTP '+res.status));
-    }
+    await postPushSubscription(profile,sub,readNotifPrefs());
+    renderNotificationPrefs();
     setPushStatus('✓ Notifications are on for '+profile.nuid+'.');
   }catch(err){
     console.warn('enableSeatAlerts failed:',err);
@@ -741,6 +813,7 @@ function initTabKeyboardNavigation(){
 initInstallPrompt();
 initTabKeyboardNavigation();
 window.enableSeatAlerts=enableSeatAlerts;
+window.onNotificationPrefChange=onNotificationPrefChange;
 window.applyProfileToFacultyVault=applyProfileToFacultyVault;
 document.getElementById('profile-launcher')?.addEventListener('click',openProfileModal);
 document.getElementById('profile-modal-backdrop')?.addEventListener('click',event=>{ if(event.target.id==='profile-modal-backdrop') closeProfileModal(); });
@@ -1108,6 +1181,9 @@ function applyTimetablePayload(payload,sourceLabel){
   const p1=document.getElementById('p1');
   if(p1&&p1.classList.contains('on')) onDayChange();
   loadManualRepeat();
+  // The phone view (js/mobile.js) renders off the same TT and has no loader of
+  // its own, so it repaints on this.
+  document.dispatchEvent(new CustomEvent('vtable:data'));
 }
 
 // Load the hand-maintained repeat-courses list for the current school and
@@ -1898,6 +1974,7 @@ async function refreshRoomTimetables(){
   refreshRoomSelectorsAfterDataUpdate();
   const p1=document.getElementById('p1');
   if(p1&&p1.classList.contains('on')) onDayChange();
+  document.dispatchEvent(new CustomEvent('vtable:data'));
 }
 
 function initLiveSheetSync(){

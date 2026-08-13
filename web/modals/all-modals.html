@@ -215,6 +215,32 @@
           <button class="profile-delete-btn" id="profile-delete-btn" type="button" onclick="deleteSavedProfile()">Delete profile</button>
         </div>
         <div class="profile-status" id="profile-push-status" style="margin-top:6px;margin-bottom:0"></div>
+        <div class="profile-notif" id="profile-notif">
+          <div class="profile-notif-title">What to notify me about</div>
+          <label class="profile-notif-row" for="notif-pref-cls">
+            <span class="profile-notif-text"><span class="profile-notif-label">Class changes</span><span class="profile-notif-help">Cancelled or rescheduled classes for your section.</span></span>
+            <input class="profile-notif-switch" id="notif-pref-cls" type="checkbox" checked onchange="onNotificationPrefChange('cls',this.checked)">
+          </label>
+          <label class="profile-notif-row" for="notif-pref-exam">
+            <span class="profile-notif-text"><span class="profile-notif-label">Exam schedule</span><span class="profile-notif-help">When a new exam schedule is published.</span></span>
+            <input class="profile-notif-switch" id="notif-pref-exam" type="checkbox" checked onchange="onNotificationPrefChange('exam',this.checked)">
+          </label>
+          <label class="profile-notif-row" for="notif-pref-show">
+            <span class="profile-notif-text"><span class="profile-notif-label">Show-up schedule</span><span class="profile-notif-help">When your show-up time or venue changes.</span></span>
+            <input class="profile-notif-switch" id="notif-pref-show" type="checkbox" checked onchange="onNotificationPrefChange('show',this.checked)">
+          </label>
+          <label class="profile-notif-row" for="notif-pref-seat">
+            <span class="profile-notif-text"><span class="profile-notif-label">Seating plan</span><span class="profile-notif-help">When your exam seat is assigned or moved.</span></span>
+            <input class="profile-notif-switch" id="notif-pref-seat" type="checkbox" checked onchange="onNotificationPrefChange('seat',this.checked)">
+          </label>
+          <!-- Dead switch: no free-room digest sender exists yet, so this stays
+               disabled. The preference is still stored and honoured end to end,
+               so the day the sender lands nothing here has to change. -->
+          <label class="profile-notif-row is-pending" for="notif-pref-room">
+            <span class="profile-notif-text"><span class="profile-notif-label">Free-room digest <span class="profile-notif-soon">Soon</span></span><span class="profile-notif-help">Not built yet — this switch is reserved.</span></span>
+            <input class="profile-notif-switch" id="notif-pref-room" type="checkbox" disabled onchange="onNotificationPrefChange('room',this.checked)">
+          </label>
+        </div>
       </div>
     </div>
   </div>

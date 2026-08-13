@@ -8,9 +8,10 @@ const componentTargets = [
   ['/components/exam-schedule.html', 'content-container'],
   ['/components/seating-plan.html', 'content-container'],
   ['/components/faculty-vault.html', 'content-container'],
-  ['/components/footer.html', 'footer-container']
+  ['/components/footer.html', 'footer-container'],
+  ['/components/mobile-app.html', 'mobile-container']
 ];
-const requiredElementIds = ['app', 'batch', 'batch-label', 'bg3d', 'chess-mode-picker', 'chess-soon-msg', 'cr-canvas', 'cr-lb', 'cr-lb-body', 'cr-lb-status', 'cr-overlay', 'day', 'dept', 'dh-canvas', 'dh-lb', 'dh-lb-body', 'dh-lb-status', 'dh-overlay', 'ex-batch', 'ex-dept', 'exam-flat-out', 'exam-out', 'exam-source-badge', 'fb-canvas', 'fb-lb', 'fb-lb-body', 'fb-lb-status', 'fb-overlay', 'footer-last-sync', 'fv-dept', 'fv-hod-email', 'fv-hod-name', 'fv-hod-room', 'fv-hos-email', 'fv-hos-name', 'fv-hos-room', 'fv-results-count', 'fv-school', 'fv-search', 'fv-teacher-grid', 'game-picker', 'game-soon-msg', 'header-logo', 'liveDate', 'liveDay', 'liveTime', 'main-content', 'nc0', 'nc1', 'nc2', 'nc3', 'nc4', 'nc5', 'p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'profile-actions', 'profile-batch', 'profile-batch-input', 'profile-bell-btn', 'profile-card', 'profile-card-top', 'profile-delete-btn', 'profile-department', 'profile-department-input', 'profile-launcher', 'profile-modal-backdrop', 'profile-modal-title', 'profile-name', 'profile-nuid', 'profile-nuid-display', 'profile-push-status', 'profile-registration', 'profile-save-btn', 'profile-section', 'profile-section-input', 'profile-status', 'profile-success-text', 'profile-success-toast', 'profile-sync-help', 'profile-sync-row', 'pwa-install-bar', 'pwa-install-btn', 'pwa-install-close', 'pwa-ios-close', 'pwa-ios-sheet', 'r-block', 'r-day-div', 'r-day-sel', 'r-floor', 'r-free-count', 'r-slot', 'r-time', 'repeat-course', 'repeat-course-label', 'rooms-result', 'sb1', 'sb2', 'sb3', 'school', 'sec', 'sec-cell', 'showup-out', 'showup-source-badge', 'sp-query', 'sp-result', 'sp-search-btn', 'sp-status', 'su-batch', 'su-dept', 'su-sec', 'tt-out'];
+const requiredElementIds = ['app', 'batch', 'batch-label', 'bg3d', 'chess-mode-picker', 'chess-soon-msg', 'cr-canvas', 'cr-lb', 'cr-lb-body', 'cr-lb-status', 'cr-overlay', 'day', 'dept', 'dh-canvas', 'dh-lb', 'dh-lb-body', 'dh-lb-status', 'dh-overlay', 'ex-batch', 'ex-dept', 'exam-flat-out', 'exam-out', 'exam-source-badge', 'fb-canvas', 'fb-lb', 'fb-lb-body', 'fb-lb-status', 'fb-overlay', 'footer-last-sync', 'fv-dept', 'fv-hod-email', 'fv-hod-name', 'fv-hod-room', 'fv-hos-email', 'fv-hos-name', 'fv-hos-room', 'fv-results-count', 'fv-school', 'fv-search', 'fv-teacher-grid', 'game-picker', 'game-soon-msg', 'header-logo', 'liveDate', 'liveDay', 'liveTime', 'main-content', 'nc0', 'nc1', 'nc2', 'nc3', 'nc4', 'nc5', 'notif-pref-cls', 'notif-pref-exam', 'notif-pref-room', 'notif-pref-seat', 'notif-pref-show', 'p0', 'p1', 'p2', 'p3', 'p4', 'p5', 'profile-actions', 'profile-batch', 'profile-batch-input', 'profile-bell-btn', 'profile-card', 'profile-card-top', 'profile-delete-btn', 'profile-department', 'profile-department-input', 'profile-launcher', 'profile-modal-backdrop', 'profile-modal-title', 'profile-name', 'profile-nuid', 'profile-nuid-display', 'profile-push-status', 'profile-registration', 'profile-save-btn', 'profile-section', 'profile-section-input', 'profile-status', 'profile-success-text', 'profile-success-toast', 'profile-sync-help', 'profile-sync-row', 'pwa-install-bar', 'pwa-install-btn', 'pwa-install-close', 'pwa-ios-close', 'pwa-ios-sheet', 'r-block', 'r-day-div', 'r-day-sel', 'r-floor', 'r-free-count', 'r-slot', 'r-time', 'repeat-course', 'repeat-course-label', 'rooms-result', 'sb1', 'sb2', 'sb3', 'school', 'sec', 'sec-cell', 'showup-out', 'showup-source-badge', 'sp-query', 'sp-result', 'sp-search-btn', 'sp-status', 'su-batch', 'su-dept', 'su-sec', 'tt-out'];
 let globalErrorBanner = null;
 let globalErrorBannerHideTimer = null;
 let lastGlobalErrorSignature = '';
@@ -123,13 +124,21 @@ function verifyRequiredElements() {
   const missing = requiredElementIds.filter(id => !document.getElementById(id));
   if (missing.length) throw new Error(`Component validation failed; missing required IDs: ${missing.join(', ')}`);
 }
-function loadCompatibilityRuntime() {
+function loadScript(src) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = '/js/app.js'; script.onload = resolve;
-    script.onerror = () => reject(new Error('Failed to load compatibility runtime: js/app.js'));
+    script.src = src; script.onload = resolve;
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
     document.body.appendChild(script);
   });
+}
+function loadCompatibilityRuntime() {
+  return loadScript('/js/app.js');
+}
+// The phone view reads app.js's globals directly, so it must load after it and
+// as a classic script — a module would not share that global scope.
+function loadMobileRuntime() {
+  return loadScript('/js/mobile.js');
 }
 // Original initialization remains in app.js so its globals, listener order, and
 // inline-handler compatibility remain exactly as extracted. These boundaries
@@ -251,6 +260,7 @@ async function startApplication() {
   initializeSeating();
   initializeFaculty();
   await initializeCompilerRun();
+  await loadMobileRuntime();
 }
 startApplication().catch(error => {
   console.error('Application startup failed:', error);

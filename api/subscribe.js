@@ -9,6 +9,27 @@
 
 const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
 
+// Per-category notification preferences. Kept in step with
+// scripts/notifications/prefs.mjs, which is the source of truth and carries the
+// reasoning; it is duplicated rather than imported because that module ships to
+// GitHub Actions, not to this serverless bundle.
+//
+// Only these keys are stored, and only as booleans, so a client cannot grow the
+// record with arbitrary fields. An omitted key is left OUT of the stored object
+// entirely rather than written as a default — the senders treat "absent" as
+// "on" for the categories that already ship, which is what keeps subscriptions
+// made before preferences existed working unchanged.
+const PREF_KEYS = ['cls', 'exam', 'show', 'seat', 'room'];
+
+function sanitizePrefs(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const prefs = {};
+  for (const key of PREF_KEYS) {
+    if (typeof raw[key] === 'boolean') prefs[key] = raw[key];
+  }
+  return Object.keys(prefs).length ? prefs : null;
+}
+
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }
 
@@ -82,6 +103,7 @@ export default async function handler(req, res) {
     const batch = String(payload.batch || '').trim();
     const section = String(payload.section || '').trim();
     const subscription = payload.subscription;
+    const prefs = sanitizePrefs(payload.prefs);
     if (!nuid || !subscription || !subscription.endpoint) {
       return res.status(400).json({ ok: false, error: 'nuid and a valid subscription are required' });
     }
@@ -101,8 +123,15 @@ export default async function handler(req, res) {
     let lastErr;
     for (let attempt = 0; attempt < 3; attempt++) {
       const { subs, sha } = await ghGet(token);
+      const existing = subs.find((s) => s?.subscription?.endpoint === subscription.endpoint);
       const filtered = subs.filter((s) => s?.subscription?.endpoint !== subscription.endpoint);
-      filtered.push({ nuid, name, department, batch, section, subscription, updated_at: Date.now() });
+      const record = { nuid, name, department, batch, section, subscription, updated_at: Date.now() };
+      // A POST that names no preferences must not wipe the ones already stored:
+      // the profile re-subscribes on plain "enable notifications" too, and that
+      // path should leave an existing choice alone.
+      const merged = { ...(existing?.prefs || {}), ...(prefs || {}) };
+      if (Object.keys(merged).length) record.prefs = merged;
+      filtered.push(record);
       try {
         await ghPut(token, filtered, sha);
         return res.status(200).json({ ok: true, count: filtered.length });

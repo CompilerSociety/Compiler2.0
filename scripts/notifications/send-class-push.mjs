@@ -25,6 +25,7 @@
 
 import fs from 'node:fs';
 import webpush from 'web-push';
+import { wants } from './prefs.mjs';
 
 // These three paths and the file list below must track the actual db/ layout.
 // They previously pointed at a flat db/push-subscriptions.json and a
@@ -141,7 +142,13 @@ let sent = 0, skipped = 0, pruned = 0;
       const subscription = entry?.subscription;
       if (!subscription?.endpoint) continue;
       const endpoint = subscription.endpoint;
+      // Registered as live BEFORE the preference gate below, so that a device
+      // which has class alerts switched off keeps its state entry instead of
+      // being pruned as "no longer subscribed" — otherwise switching the
+      // category back on would re-announce every cancellation it was already
+      // told about.
       liveEndpoints.add(endpoint);
+      if (!wants(entry, 'cls')) { skipped++; continue; }
       const dep = deptKeyOf(entry.department);
       const batch = fullBatch(entry.batch);
       const secLetter = sectionLetter(entry.section);

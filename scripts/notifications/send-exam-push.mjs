@@ -10,6 +10,7 @@
 
 import fs from 'node:fs';
 import webpush from 'web-push';
+import { wants } from './prefs.mjs';
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists.
@@ -70,6 +71,7 @@ let sent = 0, skipped = 0;
 for (const entry of subs) {
   const subscription = entry?.subscription;
   if (!subscription?.endpoint) { continue; }
+  if (!wants(entry, 'exam')) { skipped++; continue; }
   const dep = deptCode(entry.department);
   const batch = fullBatch(entry.batch);
   const secLetter = sectionLetter(entry.section);
