@@ -200,5 +200,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0549",
+    "name": "Muhammad Ali",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/f2ozzqnidc0:APA91bHlu0YxoJWZEHB1qUHEf5FTY213i9A8uyP51Xb3VonHwC3Qn3l15fdMF0sBkBSTfD2NDkSbqdX2hjYjpi83FUFwGr_n_DKdpx60L5dPidt6FziMoIzMFthVOWbQE72MO6Ou7Snu",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBAz2uTDd3AKpmHbqLcgtSOql2shVpNqvNdUntDfOuRd5KWK-yllspOrR4iVd8S4axwKzasoqYzu4vK4F4QngLw",
+        "auth": "vI0fuieweNKdjjYmmHhEyg"
+      }
+    },
+    "updated_at": 1786704886434,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
