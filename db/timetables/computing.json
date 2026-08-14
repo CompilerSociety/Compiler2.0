@@ -2599,7 +2599,7 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Elective",
+              "name": "Arts & Humanities",
               "location": "C-409",
               "time": "01:00-02:45"
             }
@@ -2630,7 +2630,7 @@
         "B": {
           "Monday": [
             {
-              "name": "Ideology of Pak",
+              "name": "Arts & Humanities",
               "location": "C-601",
               "time": "01:00-02:45"
             },
@@ -2691,7 +2691,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Elective",
+              "name": "Ideology of Pak",
               "location": "C-409",
               "time": "02:30-04:15"
             },
@@ -2771,7 +2771,7 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Elective",
+              "name": "Arts & Humanities",
               "location": "C-601",
               "time": "01:00-02:45"
             }
@@ -2824,7 +2824,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Elective",
+              "name": "Arts & Humanities",
               "location": "C-602",
               "time": "02:30-04:15"
             },
@@ -2872,7 +2872,7 @@
           ],
           "Thursday": [
             {
-              "name": "Elective",
+              "name": "Arts & Humanities",
               "location": "C-603",
               "time": "08:30-10:15"
             },
@@ -6881,5 +6881,5 @@
     }
   },
   "count": 1138,
-  "generatedAt": "2026-08-14T13:37:43.667163+00:00"
+  "generatedAt": "2026-08-14T14:36:53.795622+00:00"
 }
