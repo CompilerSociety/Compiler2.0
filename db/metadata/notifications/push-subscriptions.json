@@ -177,5 +177,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-2108",
+    "name": "Ayesha Kiran",
+    "department": "BS SE",
+    "batch": "25",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cftt6KKs4lQ:APA91bEQd--LDg0UZzWsbq_3f0yMU8LNpjk1XResgJMaGLGjnoIKKtcmKYpgj-0DWWuufbaYmDZjOurDB9OHMY2RW3EuqhaO19wlrV0-F3gxt4Bpuz-bg4k_2Y_172F5u2weZ69UnKN9",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLmdLUVZnZulMDd4rBt3FXaxuSrVNppvI7SVqKna0o1IHlyNgDczylVbLLwOwhnaRCZvx_FSI0sLaf5MCyrFASw",
+        "auth": "6dzKBYaO0NRImpLQIaJHLw"
+      }
+    },
+    "updated_at": 1786704856761,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
