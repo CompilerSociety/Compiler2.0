@@ -133,29 +133,6 @@
     }
   },
   {
-    "nuid": "25I-0741",
-    "name": "Duaa Zulfiqar",
-    "department": "BS CS",
-    "batch": "25",
-    "section": "J",
-    "subscription": {
-      "endpoint": "https://fcm.googleapis.com/fcm/send/dfzc7OOHsME:APA91bEpjOPvkPG1KAazHuzoSc24h6AsEu0TBlgic9OVf8rUARCOHjeMtYttfGmEkp7oMaU1q___9JNCWrDmAnZ9x5IbyvpF1gqDy9aISfJTaQDsIIAvEAlyzMVfuJVDD8haoOkwGH-H",
-      "expirationTime": null,
-      "keys": {
-        "p256dh": "BDbDi-HF-8HnuZq19fUwIbX6RfrWCNnOyvQpKL9Vsv92g-3bAu0ZbDyhscsmmA9xsLFNeZ_xFzvqmLmyVmyAl8g",
-        "auth": "S7QwVku9t3ilcpKStiNdUQ"
-      }
-    },
-    "updated_at": 1786704699311,
-    "prefs": {
-      "cls": false,
-      "exam": false,
-      "show": true,
-      "seat": true,
-      "room": false
-    }
-  },
-  {
     "nuid": "25I-0547",
     "name": "Moosa Hussain",
     "department": "BS CS",
@@ -172,6 +149,29 @@
     "updated_at": 1786704702072,
     "prefs": {
       "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
+  },
+  {
+    "nuid": "25I-0741",
+    "name": "Duaa Zulfiqar",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "J",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dfzc7OOHsME:APA91bEpjOPvkPG1KAazHuzoSc24h6AsEu0TBlgic9OVf8rUARCOHjeMtYttfGmEkp7oMaU1q___9JNCWrDmAnZ9x5IbyvpF1gqDy9aISfJTaQDsIIAvEAlyzMVfuJVDD8haoOkwGH-H",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDbDi-HF-8HnuZq19fUwIbX6RfrWCNnOyvQpKL9Vsv92g-3bAu0ZbDyhscsmmA9xsLFNeZ_xFzvqmLmyVmyAl8g",
+        "auth": "S7QwVku9t3ilcpKStiNdUQ"
+      }
+    },
+    "updated_at": 1786704700562,
+    "prefs": {
+      "cls": false,
       "exam": true,
       "show": true,
       "seat": true,
