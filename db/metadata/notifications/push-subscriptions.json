@@ -154,5 +154,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0547",
+    "name": "Moosa Hussain",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dKSbzm-Igqc:APA91bFnlzK9JEn3lvzQGq7o9hOqtOKKh-NWH94-TVpzCUKO1c-yQJyli9Tn_rXdPBGzc6-VLwFR68GgB9n72IdNdkt6lEirCeajBSq6ZVDmrr-66rGoyUgm6atNJyOpSnOMHfC_FHI5",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BCSRuOzJSk6i6G3OFfVlhTcAe9lBmpmD1ph17QlgVIzz435p-IoC40ztusihXCvyZ_DSu3i9oZaEZu5Rnf4b8GU",
+        "auth": "1wPOgJqS6RHUAum1cGmHTw"
+      }
+    },
+    "updated_at": 1786704702072,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
