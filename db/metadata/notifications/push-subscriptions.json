@@ -246,5 +246,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0570",
+    "name": "Zayam Ruhab",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "J",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/emVKQ70M49U:APA91bEX74VNr6oH9XG4HFuChsZUnan8p9A58J4j14t6oKeQjIhR-LaDSxhYi9jA8hdYbVhInPqc-zoSloLpY1F3Z1FA6DwR6TtgyI7IZPkoHyv5K0CYmu7JPDJo_HL5FcLWkcKlLmt1",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BICsJme2UUFzQA6nZJrpcshMZXyPmYvWz9b1yjVMvzDQqHU_UzTqgGZwiT2DW3WzwzFYifjotxQ9qPoDcy-_pI0",
+        "auth": "_2hjZNp5-6ZNMIoSQpdSRw"
+      }
+    },
+    "updated_at": 1786713696807,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
