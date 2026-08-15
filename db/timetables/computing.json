@@ -4090,66 +4090,6 @@
           ]
         }
       },
-      "REPEAT": {
-        "B": {
-          "Tuesday": [
-            {
-              "name": "AP",
-              "location": "C-406",
-              "time": "02:30-03:50"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "AP",
-              "location": "C-406",
-              "time": "02:30-03:50"
-            }
-          ]
-        },
-        "A": {
-          "Tuesday": [
-            {
-              "name": "Sec Ops",
-              "location": "D-505",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Sec Ops",
-              "location": "CYBER (D-514)",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Sec Ops",
-              "location": "D-505",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Sec Ops",
-              "location": "CYBER (D-514)",
-              "time": "02:30-05:15"
-            }
-          ]
-        },
-        "ALL": {
-          "Tuesday": [
-            {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
-            }
-          ]
-        }
-      },
       "2026": {
         "A": {
           "Tuesday": [
@@ -4448,6 +4388,50 @@
               "name": "Func Eng Lab (D2)",
               "location": "C-CALL-2",
               "time": "08:30-11:15"
+            }
+          ]
+        }
+      },
+      "REPEAT": {
+        "A": {
+          "Tuesday": [
+            {
+              "name": "Sec Ops",
+              "location": "D-505",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Sec Ops",
+              "location": "D-505",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
+            }
+          ]
+        },
+        "ALL": {
+          "Tuesday": [
+            {
+              "name": "MG Elective",
+              "location": "D-506",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "MG Elective",
+              "location": "D-506",
+              "time": "01:00-02:20"
             }
           ]
         }
@@ -4928,25 +4912,11 @@
               "time": "10:00-11:20"
             }
           ],
-          "Tuesday": [
-            {
-              "name": "AP",
-              "location": "C-406",
-              "time": "01:00-02:20"
-            }
-          ],
           "Wednesday": [
             {
               "name": "Edge Comp",
               "location": "C-406",
               "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "AP",
-              "location": "D-303",
-              "time": "01:00-02:20"
             }
           ],
           "Friday": [
@@ -6880,6 +6850,6 @@
       }
     }
   },
-  "count": 1138,
-  "generatedAt": "2026-08-15T06:39:17.298049+00:00"
+  "count": 1134,
+  "generatedAt": "2026-08-15T07:14:54.152632+00:00"
 }
