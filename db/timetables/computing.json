@@ -598,12 +598,12 @@
             },
             {
               "name": "Func Eng Lab (A1)",
-              "location": "C-CALL-1",
+              "location": "KYBHER-3",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "C-CALL-2",
+              "location": "KYBHER-4",
               "time": "11:30-02:15"
             }
           ],
@@ -650,12 +650,12 @@
             },
             {
               "name": "Func Eng Lab (C1)",
-              "location": "C-RAWAL 3",
+              "location": "A-CALL-3",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "B-DIGITAL",
+              "location": "A-MEHRAN",
               "time": "11:30-02:15"
             }
           ],
@@ -676,12 +676,12 @@
             },
             {
               "name": "Func Eng Lab (D1)",
-              "location": "A-CALL-3",
+              "location": "C-CALL-1",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "MEHRAN-2",
+              "location": "C-CALL-2",
               "time": "11:30-02:15"
             }
           ],
@@ -770,7 +770,7 @@
           "Thursday": [
             {
               "name": "DLD Lab",
-              "location": "C-RAWAL 3",
+              "location": "B-DIGITAL",
               "time": "08:30-11:15"
             }
           ]
@@ -786,7 +786,7 @@
           "Thursday": [
             {
               "name": "DLD Lab",
-              "location": "C-RAWAL 3",
+              "location": "B-DIGITAL",
               "time": "02:30-05:15"
             }
           ]
@@ -1050,12 +1050,7 @@
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "MEHRAN-2",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Func Eng Lab (B2)",
-              "location": "C-RAWAL 3",
+              "location": "A-MEHRAN",
               "time": "08:30-11:15"
             }
           ],
@@ -1592,12 +1587,12 @@
           "Tuesday": [
             {
               "name": "Func Eng Lab (B1)",
-              "location": "C-RAWAL 3",
+              "location": "A-CALL-3",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "B-DIGITAL",
+              "location": "A-MEHRAN",
               "time": "02:30-05:15"
             }
           ],
@@ -2261,6 +2256,6 @@
       }
     }
   },
-  "count": 319,
-  "generatedAt": "2026-08-15T15:55:32.922221+00:00"
+  "count": 318,
+  "generatedAt": "2026-08-15T16:11:41.125182+00:00"
 }
