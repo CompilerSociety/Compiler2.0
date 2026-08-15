@@ -437,7 +437,7 @@
             },
             {
               "name": "Func Eng Lab (H2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "11:30-02:15"
             }
           ],
@@ -2796,7 +2796,7 @@
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "C-RAWAL 3",
+              "location": "B-COMPUTING-3",
               "time": "08:30-11:15"
             }
           ],
@@ -4528,7 +4528,7 @@
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "02:30-05:15"
             }
           ],
@@ -6853,5 +6853,5 @@
     }
   },
   "count": 1134,
-  "generatedAt": "2026-08-15T08:29:48.377599+00:00"
+  "generatedAt": "2026-08-15T08:55:48.713972+00:00"
 }
