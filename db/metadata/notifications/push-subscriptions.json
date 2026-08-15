@@ -269,5 +269,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0984",
+    "name": "Fahad Nasir",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QOyeZPDY6ufvudxF3sZKUzvJADFPlB4mglIdbVUfvKiteWI0Rumqt5Y1UZmp9mWMDDXuggzLd0zIFjc5KqbQ7nM5gSvXxRQ3elhhK8ng2P9lDAowUDxHN81ALm25rK22fbingpG2rYMI3Wg2c7i_NJlIpsDau5JH-VWnNpEmOd4",
+      "keys": {
+        "p256dh": "BPDRWd9gaNmutznSZB_4gsIxSpYLyiPJ2KS6afAhDdLRqV-6Nvb4sZLWTMT97RsSsRIrNDLLATL9wfXvdaFgukI",
+        "auth": "IWH6kA9kwPRg5AqbTtlgpA"
+      }
+    },
+    "updated_at": 1786776879108,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
