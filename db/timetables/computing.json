@@ -1290,19 +1290,19 @@
         "C": {
           "Monday": [
             {
-              "name": "COAL Lab",
-              "location": "D-IT LAB 3",
-              "time": "02:30-05:15"
-            },
-            {
               "name": "Data St Lab",
               "location": "D-IT LAB 4",
               "time": "08:30-11:15"
+            },
+            {
+              "name": "Prof for AI Lab",
+              "location": "D-IT LAB 4",
+              "time": "02:30-05:15"
             }
           ],
           "Wednesday": [
             {
-              "name": "Prof for AI Lab",
+              "name": "COAL Lab",
               "location": "D-IT LAB 3",
               "time": "02:30-05:15"
             }
@@ -1433,11 +1433,6 @@
       "2023": {
         "ALL": {
           "Monday": [
-            {
-              "name": "Project",
-              "location": "D-IT LAB 4",
-              "time": "02:30-05:15"
-            },
             {
               "name": "Project",
               "location": "C-RAWAL 3",
@@ -1726,11 +1721,6 @@
         },
         "ALL": {
           "Monday": [
-            {
-              "name": "Project",
-              "location": "D-IT LAB 4",
-              "time": "02:30-05:15"
-            },
             {
               "name": "Project",
               "location": "C-RAWAL 3",
@@ -2266,6 +2256,6 @@
       }
     }
   },
-  "count": 320,
-  "generatedAt": "2026-08-15T10:36:44.867868+00:00"
+  "count": 318,
+  "generatedAt": "2026-08-15T10:56:24.960146+00:00"
 }
