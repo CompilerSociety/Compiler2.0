@@ -291,5 +291,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-2556",
+    "name": "Ahmad Burhan",
+    "department": "BS DS",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fEXGE4KbeUs:APA91bFB3GMkbrbZucPGjfoc2M2ayZx5IgX4Md9JT5lg3lKrcsnE0AozRVq6jSBxezHdWmhKkCJXT-Anibwfgclhveov_ec0DzEHWRryb1jgdYwVu3GwBzbqnePTBqaFRUhh3-iPnYF_",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BEgKrYUBEX4bVzzkLWLdr6vJSeSMqoO-X4NgNlYN29ZsRoaCUnIXAjCxRkFyfb7lB-rF7-q28kq8oKOovPgBi8g",
+        "auth": "oyO6JOHgP-XWZe4XHsjzCQ"
+      }
+    },
+    "updated_at": 1786787602355,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
