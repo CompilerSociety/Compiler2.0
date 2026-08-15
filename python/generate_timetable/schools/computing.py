@@ -331,8 +331,18 @@ def _slot_labels(row):
     return labels
 
 
+# The header cell that opens a block of rooms. Matched as a prefix, not by
+# equality: on 15 Aug 2026 the sheet renamed the daytime header on all six day
+# tabs from "Room" to "Room/ Time". An equality test stopped seeing column 0 as
+# a Room column, detect_blocks built a single block on the evening Room column
+# instead, and the whole daytime timetable — 814 classes, every 08:30–05:15
+# slot — vanished from the JSON while labs and evening classes still came
+# through, so the run still looked like it had worked.
+ROOM_HEADER_RE = re.compile(r"^rooms?\b", re.IGNORECASE)
+
+
 def _room_cols(row):
-    return [c for c, v in enumerate(row) if one_line(v).lower() == "room"]
+    return [c for c, v in enumerate(row) if ROOM_HEADER_RE.match(one_line(v))]
 
 
 def detect_blocks(text_grid, header_row, lab_row):
@@ -391,6 +401,19 @@ def detect_blocks(text_grid, header_row, lab_row):
             # evening Room column on the other day tabs.
             block["blank_room_fallback"] = "TBA"
         blocks.append(block)
+
+    # Every time label in the header row has to belong to some block. A label
+    # left uncovered means a Room column the sheet moved or renamed, and the
+    # slot under it is read by nobody — which is how the "Room/ Time" rename
+    # above emptied the daytime timetable without failing the run.
+    header_labels = (_slot_labels(text_grid[header_row])
+                     if header_row < len(text_grid) else {})
+    uncovered = sorted(set(header_labels) - {c for b in blocks for c in b["slot_cols"]})
+    if uncovered:
+        dlog_warn(
+            "  header row has time columns that no Room column opens a block "
+            "for: " + ", ".join(f"col {c} ({header_labels[c]})" for c in uncovered)
+            + " — those slots will not be read. Check the Room header cells.")
 
     if not blocks:
         dlog_warn("  no Room columns found in the header row — using config geometry")

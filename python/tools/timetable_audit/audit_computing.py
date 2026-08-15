@@ -243,9 +243,15 @@ def header_slot_labels(text, row):
     return out
 
 
+# A Room header, matched as a prefix rather than by equality — the sheet
+# renamed the daytime header from "Room" to "Room/ Time" on all six day tabs
+# and an equality test stops seeing the daytime block at all.
+ROOM_HEADER_RE = re.compile(r"^rooms?\b", re.IGNORECASE)
+
+
 def room_cols(text, row):
     return [c for c in range(len(text[row]))
-            if one_line(text[row][c]).lower() == "room"]
+            if ROOM_HEADER_RE.match(one_line(text[row][c]))]
 
 
 def day_blocks(text, hr, lr, day, problems, variants):
