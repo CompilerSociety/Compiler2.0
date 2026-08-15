@@ -706,7 +706,7 @@
           "Wednesday": [
             {
               "name": "DLD Lab",
-              "location": "C-RAWAL 3",
+              "location": "B-DIGITAL",
               "time": "02:30-05:15"
             }
           ]
@@ -722,7 +722,7 @@
           "Wednesday": [
             {
               "name": "DLD Lab",
-              "location": "C-RAWAL 3",
+              "location": "B-DIGITAL",
               "time": "08:30-11:15"
             }
           ]
@@ -1045,12 +1045,17 @@
             },
             {
               "name": "Func Eng Lab (B1)",
-              "location": "C-RAWAL 3",
+              "location": "A-CALL-3",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "B-DIGITAL",
+              "location": "MEHRAN-2",
+              "time": "08:30-11:15"
+            },
+            {
+              "name": "Func Eng Lab (B2)",
+              "location": "C-RAWAL 3",
               "time": "08:30-11:15"
             }
           ],
@@ -2256,6 +2261,6 @@
       }
     }
   },
-  "count": 318,
-  "generatedAt": "2026-08-15T15:41:56.013638+00:00"
+  "count": 319,
+  "generatedAt": "2026-08-15T15:55:32.922221+00:00"
 }
