@@ -2826,7 +2826,7 @@
             {
               "name": "Arts & Humanities",
               "location": "C-602",
-              "time": "02:30-04:15"
+              "time": "03:00-04:45"
             },
             {
               "name": "PF Lab",
@@ -5691,14 +5691,14 @@
           ],
           "Friday": [
             {
-              "name": "Calculus",
-              "location": "C-304",
-              "time": "10:00-11:20"
-            },
-            {
               "name": "Islamic",
               "location": "C-304",
-              "time": "11:30-01:15"
+              "time": "09:30-11:15"
+            },
+            {
+              "name": "Calculus",
+              "location": "C-304",
+              "time": "11:30-12:50"
             },
             {
               "name": "PF Lab",
@@ -6851,5 +6851,5 @@
     }
   },
   "count": 1134,
-  "generatedAt": "2026-08-15T07:14:54.152632+00:00"
+  "generatedAt": "2026-08-15T07:44:31.520610+00:00"
 }
