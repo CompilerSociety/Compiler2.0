@@ -6316,6 +6316,13 @@
               "time": "06:45-08:05"
             }
           ],
+          "Thursday": [
+            {
+              "name": "UHQ-I & II",
+              "location": "D-315",
+              "time": "05:20-07:10"
+            }
+          ],
           "Friday": [
             {
               "name": "Research Methodology",
@@ -6436,11 +6443,6 @@
               "name": "Adv S/w Arch",
               "location": "D-314",
               "time": "06:45-08:05"
-            },
-            {
-              "name": "UHQ-I & II",
-              "location": "D-315",
-              "time": "05:20-07:10"
             }
           ],
           "Friday": [
@@ -6851,5 +6853,5 @@
     }
   },
   "count": 1134,
-  "generatedAt": "2026-08-15T07:59:45.793808+00:00"
+  "generatedAt": "2026-08-15T08:29:48.377599+00:00"
 }
