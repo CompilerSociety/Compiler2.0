@@ -69,11 +69,20 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 5,
-      "achievedAt": "2026-08-15T14:48:10.852Z"
+      "highScore": 14,
+      "achievedAt": "2026-08-15T14:48:43.019Z"
     }
   },
   "leaderboard": [
+    {
+      "nuid": "25I-0984",
+      "name": "Fahad Nasir",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 14,
+      "achievedAt": "2026-08-15T14:48:43.019Z"
+    },
     {
       "nuid": "25I-0706",
       "name": "Izaan Ahmad",
@@ -82,15 +91,6 @@
       "batch": "25",
       "highScore": 13,
       "achievedAt": "2026-08-14T11:49:37.266Z"
-    },
-    {
-      "nuid": "25I-0984",
-      "name": "Fahad Nasir",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 5,
-      "achievedAt": "2026-08-15T14:48:10.852Z"
     },
     {
       "nuid": "25I-0789",
