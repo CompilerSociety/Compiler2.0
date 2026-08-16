@@ -360,5 +360,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0553",
+    "name": "Muhammad Zaryaab",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dpNUxql9g9o:APA91bFrjnZsuzEvLgq-LhfXrb7JGSkMJ5Ipl3RM4o11XjXtVb1fvwNjDYws7EKUOfAmb_dbugr61UQXRyE90L16h6ZSNw0gTQUJzlk2p2HzRwPAGfvTxn05IsDzWz-QRQnjY4WyYvnp",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BA7AwY31_TXBR_fW4JOo5CWEEDc7UtLGwGr-bbbmb_CY1uLli_YYffHPdsYpycmUzAMxJtnutVCLzXVa6eHUBsw",
+        "auth": "dQRNiqRU8q3PNCAgVRBMrw"
+      }
+    },
+    "updated_at": 1786887699887,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
