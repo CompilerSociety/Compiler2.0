@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-16T13:04:58.306Z",
+  "updated_at": "2026-08-16T18:40:22.067Z",
   "source_subject": "Seating Plan 25",
-  "count": 955,
+  "count": 956,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6697,6 +6697,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-16T13:04:58.306Z"
+    },
+    {
+      "name": "Sudais Mahmood",
+      "nuid": "25I-2525",
+      "section": "A",
+      "department": "AI",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-16T18:40:22.067Z"
     }
   ]
 }
