@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-07-08T04:48:38.773288+00:00",
+  "updated_at": "2026-08-16T13:04:58.306Z",
   "source_subject": "Seating Plan 25",
-  "count": 954,
+  "count": 955,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -1955,7 +1955,6 @@
       "section": "G",
       "department": "CS",
       "batch": "25"
-    
     },
     {
       "name": "Ali Raza",
@@ -6685,6 +6684,19 @@
       "time": "",
       "class": "",
       "seat": ""
+    },
+    {
+      "name": "Sayed Sanaullah Shah",
+      "nuid": "25K-3092",
+      "section": "J",
+      "department": "CS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-16T13:04:58.306Z"
     }
   ]
 }
