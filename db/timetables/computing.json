@@ -5751,7 +5751,7 @@
             {
               "name": "Cloud Comp",
               "location": "D-504",
-              "time": "10:00-11:20"
+              "time": "11:30-12:50"
             },
             {
               "name": "Security Ops",
@@ -5785,7 +5785,7 @@
             {
               "name": "Cloud Comp",
               "location": "D-506",
-              "time": "10:00-11:20"
+              "time": "01:00-02:20"
             }
           ],
           "Thursday": [
@@ -5816,7 +5816,7 @@
             {
               "name": "Cloud Comp",
               "location": "D-504",
-              "time": "11:30-12:50"
+              "time": "10:00-11:20"
             }
           ],
           "Tuesday": [
@@ -5845,7 +5845,7 @@
             {
               "name": "Cloud Comp",
               "location": "D-506",
-              "time": "01:00-02:20"
+              "time": "10:00-11:20"
             },
             {
               "name": "Security Ops",
@@ -6843,5 +6843,5 @@
     }
   },
   "count": 1132,
-  "generatedAt": "2026-08-16T09:16:53.433550+00:00"
+  "generatedAt": "2026-08-16T09:48:06.649487+00:00"
 }
