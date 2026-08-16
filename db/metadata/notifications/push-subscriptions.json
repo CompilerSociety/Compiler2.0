@@ -383,5 +383,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0578",
+    "name": "Musa Sher",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "H",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QPq_EmftUToDA30HTQ57Yjkdu25uToCRpbPk-FmZ-hhURGdbQiCtc0jD-UyPolPs5T-9wSe7_42CN04y7xbJPoc7aXeCwV3jTgBUXVuPWg46CuTn1FCBIs2RQyNTfiNkZmv89KfcL0g2Jngf2LI2HUGpxXKOyE4DZc4fMev2dJY",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAZusIXR7m2W8XqgiCSPAJWzIZUBP2m6B1QY2ViaxfXhK7HsH8BbX1r5L2NPZNLg-spNBAXtaMcKADU8GxmALRY",
+        "auth": "NiNgQUHIgg3WU_QqXNNH1g"
+      }
+    },
+    "updated_at": 1786889072645,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
