@@ -6455,6 +6455,11 @@
               "time": "05:20-06:40"
             },
             {
+              "name": "Agentic AI",
+              "location": "D-305",
+              "time": "06:45-08:05"
+            },
+            {
               "name": "Math Foundations of AI",
               "location": "D-316",
               "time": "05:20-06:40"
@@ -6484,6 +6489,11 @@
               "time": "05:20-06:40"
             },
             {
+              "name": "Agentic AI",
+              "location": "D-305",
+              "time": "06:45-08:05"
+            },
+            {
               "name": "Math Foundations of AI",
               "location": "D-316",
               "time": "05:20-06:40"
@@ -6510,11 +6520,6 @@
         "B": {
           "Monday": [
             {
-              "name": "Agentic AI",
-              "location": "D-305",
-              "time": "06:45-08:05"
-            },
-            {
               "name": "Research Methodology",
               "location": "D-315",
               "time": "05:20-06:40"
@@ -6538,11 +6543,6 @@
             }
           ],
           "Wednesday": [
-            {
-              "name": "Agentic AI",
-              "location": "D-305",
-              "time": "06:45-08:05"
-            },
             {
               "name": "Research Methodology",
               "location": "D-315",
@@ -6843,5 +6843,5 @@
     }
   },
   "count": 1132,
-  "generatedAt": "2026-08-16T09:48:06.649487+00:00"
+  "generatedAt": "2026-08-16T10:12:21.619604+00:00"
 }
