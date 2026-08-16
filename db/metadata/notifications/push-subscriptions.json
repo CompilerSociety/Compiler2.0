@@ -429,5 +429,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-2594",
+    "name": "Ahmed Mustafa",
+    "department": "BS AI",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ct7qNoj2Leg:APA91bHaP5IpyW40bldzshHEkxdvXirw_fiuCn3X6r9W8joAIRMCi2oOp_vWyq946EcyUnE96G9sCqo98WvTmZ1rlAuXDanJUGdxcZ6FUlN1uK5ko6lzpo1pb3bXvkjf2FevXeJuX8ln",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BM3lP_cdqBvyETU3AZ_lsPdEmr4F024ZMlIyjdhgmnZBYRFJ9P52Q7ZU9mcQ79GMtYvfgjzAKygPPyyzCDpq4bE",
+        "auth": "wvhg8NUxPLAoU40GiUhHBA"
+      }
+    },
+    "updated_at": 1786905232828,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
