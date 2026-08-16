@@ -406,5 +406,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-3033",
+    "name": "Muhammad",
+    "department": "BS AI",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/exwKszZcv54:APA91bEePSKBHh6ni_htJxj3X10ojhOSXKHPH7ZFRjmZERe9AN_eh53rJ155Nj3KUQrUXR9z3XcbnNbKxbaKCS0kcQRbcGMlDD3A2H4zKxV9sHiqFG6SoO2YyH0VExZcWVAhvURYmTCO",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BFCJl2uqQK0YYdc-uzlo-G_NKaJKdgpE4VH-UmWZi2kgTTS-xKhj4CeY_tVylxmzvKUiueekdQSVK_l_q8FzBlE",
+        "auth": "7jWxFAaN20yjZm_icDA9wg"
+      }
+    },
+    "updated_at": 1786901989271,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
