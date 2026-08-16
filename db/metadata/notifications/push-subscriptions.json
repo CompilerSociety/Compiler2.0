@@ -337,5 +337,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0785",
+    "name": "Saad Furqan",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eRFlz-CAeQk:APA91bGtgoSVNtGAE3vDWKTcmHKVmrxtNiEhsPJtR1bFay8IGHLYiqH5xPCkDJbz0WCQS-GRjEesBc5Id-dBkZrKZ5Gk-NCgqi9SEI1wgEIE7HsWGrBrLx8FOjRB4sFgN7Xm-CsG8M3b",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BFXDXGp9RDAGjaIPHRxmduQ2uYJQ14IhDnC41qQuhn7k4eGnJu4UwL1T9W0uY749OFVezbMrS9I8XE5ZLScsmNc",
+        "auth": "OeFV3i6uEOpx8iR3Mczw0A"
+      }
+    },
+    "updated_at": 1786874407406,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
