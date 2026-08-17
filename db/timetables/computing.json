@@ -952,6 +952,11 @@
           ],
           "Wednesday": [
             {
+              "name": "SDA",
+              "location": "C-308",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Data St",
               "location": "C-310",
               "time": "10:00-11:20"
@@ -960,11 +965,6 @@
               "name": "DLD",
               "location": "C-310",
               "time": "02:30-03:50"
-            },
-            {
-              "name": "SDA",
-              "location": "C-311",
-              "time": "11:30-12:50"
             }
           ],
           "Thursday": [
@@ -4905,6 +4905,11 @@
               "time": "08:30-09:50"
             },
             {
+              "name": "OS",
+              "location": "D-503",
+              "time": "10:00-11:20"
+            },
+            {
               "name": "DB",
               "location": "D-503",
               "time": "11:30-12:50"
@@ -6773,6 +6778,126 @@
         }
       }
     },
+    "BS PCS": {
+      "2023": {
+        "A": {
+          "Monday": [
+            {
+              "name": "CY & Net Security",
+              "location": "D-402",
+              "time": "06:45-08:05"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "CY & Net Security",
+              "location": "D-404",
+              "time": "06:45-08:05"
+            }
+          ]
+        },
+        "B": {
+          "Tuesday": [
+            {
+              "name": "CY & Net Security",
+              "location": "C-402",
+              "time": "04:30-07:30"
+            },
+            {
+              "name": "CY & Net Security",
+              "location": "D-316",
+              "time": "04:30-07:30"
+            }
+          ]
+        },
+        "ALL": {
+          "Monday": [
+            {
+              "name": "Adv Topics in Empirical SE",
+              "location": "D-402",
+              "time": "05:20-06:40"
+            },
+            {
+              "name": "Vision Based AI Agent",
+              "location": "D-403",
+              "time": "06:45-08:05"
+            },
+            {
+              "name": "Recent Adv in Deep Learn",
+              "location": "D-404",
+              "time": "06:45-08:05"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Adv Parallel Processing",
+              "location": "C-403",
+              "time": "03:55-05:15"
+            },
+            {
+              "name": "Adv Parallel Processing",
+              "location": "D-401",
+              "time": "05:20-06:40"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Advanced Topics in NLP",
+              "location": "C-311",
+              "time": "10:00-12:45"
+            },
+            {
+              "name": "Adv Topics in Empirical SE",
+              "location": "D-404",
+              "time": "05:20-06:40"
+            },
+            {
+              "name": "Vision Based AI Agent",
+              "location": "D-405",
+              "time": "06:45-08:05"
+            },
+            {
+              "name": "Recent Adv in Deep Learn",
+              "location": "TBA",
+              "time": "06:45-08:05"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Research Topics in Cloud Comp",
+              "location": "C-303",
+              "time": "02:00-04:45"
+            },
+            {
+              "name": "Research Topics in Gen AI",
+              "location": "C-304",
+              "time": "02:00-04:45"
+            },
+            {
+              "name": "Adv Readings",
+              "location": "C-311",
+              "time": "09:00-11:45"
+            },
+            {
+              "name": "Software Process Mining and Intelligence",
+              "location": "C-402",
+              "time": "08:30-09:50"
+            }
+          ]
+        }
+      },
+      "2022": {
+        "ALL": {
+          "Friday": [
+            {
+              "name": "Adv Computer Vision",
+              "location": "C-401",
+              "time": "08:30-11:15"
+            }
+          ]
+        }
+      }
+    },
     "PhD": {
       "PhD": {
         "C": {
@@ -6864,6 +6989,6 @@
       }
     }
   },
-  "count": 1136,
-  "generatedAt": "2026-08-17T10:20:51.015466+00:00"
+  "count": 1155,
+  "generatedAt": "2026-08-17T10:53:46.088031+00:00"
 }
