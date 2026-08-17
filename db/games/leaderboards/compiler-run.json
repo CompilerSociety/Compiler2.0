@@ -107,6 +107,15 @@
       "batch": "25",
       "highScore": 81,
       "achievedAt": "2026-08-17T08:07:02.397Z"
+    },
+    "25I-0825": {
+      "nuid": "25I-0825",
+      "name": "Moin Zahid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-17T08:07:17.407Z"
     }
   },
   "leaderboard": [
