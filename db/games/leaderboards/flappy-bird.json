@@ -98,6 +98,15 @@
       "batch": "25",
       "highScore": 5,
       "achievedAt": "2026-08-17T08:09:42.681Z"
+    },
+    "25I-0849": {
+      "nuid": "25I-0849",
+      "name": "Ahmad Aziz",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-08-17T09:05:19.535Z"
     }
   },
   "leaderboard": [
