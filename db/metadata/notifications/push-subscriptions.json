@@ -567,5 +567,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0649",
+    "name": "Zaheen Masood",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cQ2chKNTLn0:APA91bFQ7rNoXbn5U7hAn4htNrQF--a144NmbK1RVa7WU66nt1v8LtgJDy0fkZX8R0phZxB2hbI3vya9g1zFHAnOwEN1n8B3MmD8AHOrtmA0IwZP4vtOIBqjDDBfVa4n2bsUDxUFY8JA",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDMLTX8POJge6yJ_ttFqzY6nH4W3SSX8n9M8JbKnu4KYfzZAdQyCWX5dvMpv4cN8X5ylKnCgPUP6WeKhL_iim-I",
+        "auth": "hUQ87TcU1UWZ5fRfb0sqUw"
+      }
+    },
+    "updated_at": 1786953745226,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
