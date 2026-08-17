@@ -167,6 +167,16 @@
               "name": "Pakistan Studies (SS1015)",
               "location": "A-311",
               "time": "02:25-04:15"
+            },
+            {
+              "name": "IT in Business-Lab (CL1001)",
+              "location": "KHYBER I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "IT in Business-Lab (CL1001)",
+              "location": "KHYBER I",
+              "time": "01:00-02:20"
             }
           ],
           "Friday": [
@@ -252,12 +262,12 @@
             },
             {
               "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "CAL-II LAB",
+              "location": "CAL-I LAB",
               "time": "11:30-12:50"
             },
             {
               "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "CAL-II LAB",
+              "location": "CAL-I LAB",
               "time": "01:00-02:20"
             },
             {
@@ -453,12 +463,12 @@
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER III",
+              "location": "KHYBER II",
               "time": "08:30-09:50"
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER III",
+              "location": "KHYBER II",
               "time": "10:00-11:20"
             }
           ],
@@ -545,12 +555,12 @@
             },
             {
               "name": "Data Structures and Business Application Lab (CL2003)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "08:30-09:50"
             },
             {
               "name": "Data Structures and Business Application Lab (CL2003)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "10:00-11:20"
             }
           ],
@@ -634,6 +644,16 @@
               "name": "Data Structures and Business Application (CS2003)",
               "location": "A-314",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KHYBER I",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KHYBER I",
+              "time": "10:00-11:20"
             }
           ],
           "Friday": [
@@ -968,12 +988,12 @@
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "11:30-12:50"
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "01:00-02:20"
             }
           ]
@@ -1139,22 +1159,22 @@
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "KHYBER III",
+              "location": "KHYBER II",
               "time": "02:25-03:45"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "KHYBER III",
+              "location": "KHYBER II",
               "time": "03:50-05:10"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "02:25-03:45"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "MEHRAN-I",
+              "location": "KHYBER III",
               "time": "03:50-05:10"
             }
           ],
@@ -1231,22 +1251,22 @@
           "Thursday": [
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "08:30-09:50"
             },
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "10:00-11:20"
             },
             {
               "name": "IT in Business-Lab (CL1001)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "02:25-03:45"
             },
             {
               "name": "IT in Business-Lab (CL1001)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "03:50-05:10"
             }
           ],
@@ -2224,12 +2244,12 @@
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "11:30-12:50"
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "01:00-02:20"
             }
           ],
@@ -2467,22 +2487,22 @@
           "Thursday": [
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "08:30-09:50"
             },
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "10:00-11:20"
             },
             {
               "name": "IT in Business-Lab (CL1001)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "02:25-03:45"
             },
             {
               "name": "IT in Business-Lab (CL1001)",
-              "location": "KHYBER I",
+              "location": "KK-III",
               "time": "03:50-05:10"
             }
           ],
@@ -2992,6 +3012,16 @@
               "name": "Business Finance (AF2004)",
               "location": "A-210",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Introduction to Object Oriented Programming-Lab (CL2012)",
+              "location": "KHYBER I",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Introduction to Object Oriented Programming-Lab (CL2012)",
+              "location": "KHYBER I",
+              "time": "03:50-05:10"
             }
           ]
         }
@@ -3196,12 +3226,12 @@
             },
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-III",
+              "location": "KK-II",
               "time": "08:30-09:50"
             },
             {
               "name": "Introduction to Financial Accounting- Lab (FL1003)",
-              "location": "KK-III",
+              "location": "KK-II",
               "time": "10:00-11:20"
             }
           ]
@@ -3271,22 +3301,22 @@
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "11:30-12:50"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "01:00-02:20"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "CAL-I LAB",
+              "location": "MEHRAN-II",
               "time": "11:30-12:50"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "CAL-I LAB",
+              "location": "MEHRAN-II",
               "time": "01:00-02:20"
             }
           ]
@@ -3363,12 +3393,12 @@
             },
             {
               "name": "Financial Management Lab (FL3001)",
-              "location": "KK-III",
+              "location": "KK-II",
               "time": "11:30-12:50"
             },
             {
               "name": "Financial Management Lab (FL3001)",
-              "location": "KK-III",
+              "location": "KK-II",
               "time": "01:00-02:20"
             }
           ],
@@ -3455,12 +3485,12 @@
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "11:30-12:50"
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-II",
+              "location": "KK-I",
               "time": "01:00-02:20"
             }
           ],
@@ -3724,6 +3754,6 @@
       }
     }
   },
-  "count": 632,
-  "generatedAt": "2026-08-17T09:54:53.759388+00:00"
+  "count": 638,
+  "generatedAt": "2026-08-17T10:20:51.774980+00:00"
 }
