@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T14:17:11.291Z",
+  "updated_at": "2026-08-17T15:22:57.602Z",
   "source_subject": "Seating Plan 26",
-  "count": 18,
+  "count": 19,
   "students": [
     {
       "name": "Hammad rehan",
@@ -228,6 +228,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T14:17:11.291Z"
+    },
+    {
+      "name": "Muhamad Ibraheem Abdullah",
+      "nuid": "26I-0591",
+      "section": "B",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T15:22:57.602Z"
     }
   ]
 }
