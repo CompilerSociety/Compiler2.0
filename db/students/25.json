@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-16T18:40:22.067Z",
+  "updated_at": "2026-08-17T07:14:30.047Z",
   "source_subject": "Seating Plan 25",
-  "count": 956,
+  "count": 957,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6710,6 +6710,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-16T18:40:22.067Z"
+    },
+    {
+      "name": "Abdullah Asif",
+      "nuid": "25L-2014",
+      "section": "A",
+      "department": "CY",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T07:14:30.047Z"
     }
   ]
 }
