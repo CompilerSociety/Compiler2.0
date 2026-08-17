@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T15:22:57.602Z",
+  "updated_at": "2026-08-17T15:40:19.715Z",
   "source_subject": "Seating Plan 26",
-  "count": 19,
+  "count": 20,
   "students": [
     {
       "name": "Hammad rehan",
@@ -241,6 +241,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T15:22:57.602Z"
+    },
+    {
+      "name": "Jaweria",
+      "nuid": "26I-3206",
+      "section": "D",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T15:40:19.715Z"
     }
   ]
 }
