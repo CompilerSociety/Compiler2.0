@@ -6279,14 +6279,16 @@
               "time": "05:20-06:40"
             },
             {
-              "name": "Adv Algo",
-              "location": "D-302",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Adv OS",
               "location": "D-302",
               "time": "06:45-08:05"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Adv Algo",
+              "location": "D-305",
+              "time": "05:20-06:40"
             }
           ],
           "Wednesday": [
@@ -6296,17 +6298,17 @@
               "time": "05:20-06:40"
             },
             {
-              "name": "Adv Algo",
-              "location": "D-302",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Adv OS",
               "location": "D-302",
               "time": "06:45-08:05"
             }
           ],
           "Thursday": [
+            {
+              "name": "Adv Algo",
+              "location": "D-305",
+              "time": "05:20-06:40"
+            },
             {
               "name": "UHQ-I & II",
               "location": "D-315",
@@ -6843,5 +6845,5 @@
     }
   },
   "count": 1132,
-  "generatedAt": "2026-08-17T05:57:05.630838+00:00"
+  "generatedAt": "2026-08-17T06:40:23.366220+00:00"
 }

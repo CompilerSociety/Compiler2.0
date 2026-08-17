@@ -489,12 +489,12 @@
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "MEHRAN-II",
+              "location": "KHYBER II",
               "time": "08:30-09:50"
             },
             {
               "name": "Basic Econometrics Lab (LG3003)",
-              "location": "MEHRAN-II",
+              "location": "KHYBER II",
               "time": "10:00-11:20"
             }
           ],
@@ -545,12 +545,12 @@
             },
             {
               "name": "Data Structures and Business Application Lab (CL2003)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "08:30-09:50"
             },
             {
               "name": "Data Structures and Business Application Lab (CL2003)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "10:00-11:20"
             }
           ],
@@ -881,12 +881,12 @@
             },
             {
               "name": "Programming for Business -Lab (CL2016)",
-              "location": "MEHRAN-II",
+              "location": "KHYBER II",
               "time": "08:30-09:50"
             },
             {
               "name": "Programming for Business -Lab (CL2016)",
-              "location": "MEHRAN-II",
+              "location": "KHYBER II",
               "time": "10:00-11:20"
             }
           ],
@@ -968,12 +968,12 @@
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "11:30-12:50"
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "MEHRAN-II",
+              "location": "MEHRAN-I",
               "time": "01:00-02:20"
             }
           ]
@@ -995,23 +995,23 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KHYBER II",
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "KHYBER III",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KHYBER II",
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "KHYBER III",
               "time": "10:00-11:20"
             },
             {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KHYBER III",
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "MEHRAN-II",
               "time": "08:30-09:50"
             },
             {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KHYBER III",
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "MEHRAN-II",
               "time": "10:00-11:20"
             }
           ],
@@ -3271,22 +3271,22 @@
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "KHYBER III",
+              "location": "MEHRAN-II",
               "time": "11:30-12:50"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B1)",
-              "location": "KHYBER III",
+              "location": "MEHRAN-II",
               "time": "01:00-02:20"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "MEHRAN-I",
+              "location": "CAL-I LAB",
               "time": "11:30-12:50"
             },
             {
               "name": "English - I- Lab (SL1016) (Group B2)",
-              "location": "MEHRAN-I",
+              "location": "CAL-I LAB",
               "time": "01:00-02:20"
             }
           ]
@@ -3559,12 +3559,12 @@
           "Friday": [
             {
               "name": "Financial Management Lab (FL3001)",
-              "location": "MEHRAN-II",
+              "location": "KK-III",
               "time": "08:30-09:50"
             },
             {
               "name": "Financial Management Lab (FL3001)",
-              "location": "MEHRAN-II",
+              "location": "KK-III",
               "time": "10:00-11:20"
             }
           ]
@@ -3725,5 +3725,5 @@
     }
   },
   "count": 632,
-  "generatedAt": "2026-08-17T05:57:06.335242+00:00"
+  "generatedAt": "2026-08-17T06:40:24.380076+00:00"
 }
