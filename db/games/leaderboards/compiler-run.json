@@ -89,6 +89,15 @@
       "batch": "23",
       "highScore": 35,
       "achievedAt": "2026-08-13T20:32:52.898Z"
+    },
+    "25I-2526": {
+      "nuid": "25I-2526",
+      "name": "Affan Ahmad",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-17T08:01:40.246Z"
     }
   },
   "leaderboard": [
