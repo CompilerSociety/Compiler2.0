@@ -107,6 +107,15 @@
       "batch": "25",
       "highScore": 4,
       "achievedAt": "2026-08-17T09:05:47.331Z"
+    },
+    "25I-0739": {
+      "nuid": "25I-0739",
+      "name": "Faizan Rashid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-17T09:06:40.850Z"
     }
   },
   "leaderboard": [
