@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T17:23:06.626Z",
+  "updated_at": "2026-08-17T17:25:37.642Z",
   "source_subject": "Seating Plan 26",
-  "count": 23,
+  "count": 24,
   "students": [
     {
       "name": "Hammad rehan",
@@ -293,6 +293,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T17:23:06.626Z"
+    },
+    {
+      "name": "Ali Raza",
+      "nuid": "26I-0679",
+      "section": "D",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T17:25:37.642Z"
     }
   ]
 }
