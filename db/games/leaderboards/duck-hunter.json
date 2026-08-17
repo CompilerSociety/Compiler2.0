@@ -78,8 +78,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 19,
-      "achievedAt": "2026-08-17T09:10:34.506Z"
+      "highScore": 71,
+      "achievedAt": "2026-08-17T09:12:00.441Z"
     }
   },
   "leaderboard": [
@@ -100,6 +100,15 @@
       "batch": "25",
       "highScore": 128,
       "achievedAt": "2026-07-09T07:32:40.777Z"
+    },
+    {
+      "nuid": "25I-0739",
+      "name": "Faizan Rashid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 71,
+      "achievedAt": "2026-08-17T09:12:00.441Z"
     },
     {
       "nuid": "25I-0816",
@@ -136,15 +145,6 @@
       "batch": "25",
       "highScore": 28,
       "achievedAt": "2026-08-17T08:10:40.010Z"
-    },
-    {
-      "nuid": "25I-0739",
-      "name": "Faizan Rashid",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 19,
-      "achievedAt": "2026-08-17T09:10:34.506Z"
     },
     {
       "nuid": "24I-6516",
