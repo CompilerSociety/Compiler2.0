@@ -680,5 +680,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-3029",
+    "name": "Nazakat Ali",
+    "department": "BS SE",
+    "batch": "25",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/d8_4zZENo-4:APA91bFTFs_CePMlQlA0S1j9ju5FQtPV893gIcFtkl6ZBh-EW6nzxtziv2XrqNW175CvUNkPRnJ4LCJnLNxujeW7oFBuRDrNZI9bRGW9CV0vo9bpi1RQyJnJy3paomyfN932X6GL31oU",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BC6Som6dFka-Z_cfC8fG9GpTsaQfRBaSEOBRRze-NPpkT26HCBtST0d-nOwxxXXP7z97JDSJJ4DaleIQ4qLbbVQ",
+        "auth": "8UZqeJq2rcs77faATWyUDg"
+      }
+    },
+    "updated_at": 1786976242867,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
