@@ -521,5 +521,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0500",
+    "name": "Muhammad Owais",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cWv3YlcteWQ:APA91bHdeZnL4JwQ9htry7eXYxvVxkOV8zPqRWmhp-P4QKkv_LekoJxI7bLIjzVLCzwHcEFsJquMKT6miojig_U1lEDm-ZoKVCuOU-pZNk_1CbfjpSnyLVQo5txS7lPK8T5ySxdRWnAp",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BMaYnk0ErdHVD0Z25uOtmPfS_nlLWUI0EDkdzWD7Atz_JzQ0FfVbIwlBHUz7o-PZDc3uavy5j4fvNJ-xput1008",
+        "auth": "FvCHakSFBCY_DD7zUvIsMA"
+      }
+    },
+    "updated_at": 1786948463163,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
