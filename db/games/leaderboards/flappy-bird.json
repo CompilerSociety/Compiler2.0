@@ -71,6 +71,15 @@
       "batch": "25",
       "highScore": 16,
       "achievedAt": "2026-08-15T14:50:13.997Z"
+    },
+    "25I-0977": {
+      "nuid": "25I-0977",
+      "name": "Talha Khusro",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 4,
+      "achievedAt": "2026-08-17T07:27:39.070Z"
     }
   },
   "leaderboard": [
@@ -100,6 +109,15 @@
       "batch": "25",
       "highScore": 4,
       "achievedAt": "2026-07-09T07:29:33.731Z"
+    },
+    {
+      "nuid": "25I-0977",
+      "name": "Talha Khusro",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 4,
+      "achievedAt": "2026-08-17T07:27:39.070Z"
     },
     {
       "nuid": "25I-0816",
