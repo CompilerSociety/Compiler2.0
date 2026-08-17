@@ -87,11 +87,20 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 12,
-      "achievedAt": "2026-08-17T08:06:07.466Z"
+      "highScore": 17,
+      "achievedAt": "2026-08-17T08:07:36.701Z"
     }
   },
   "leaderboard": [
+    {
+      "nuid": "25I-2526",
+      "name": "Affan Ahmad",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 17,
+      "achievedAt": "2026-08-17T08:07:36.701Z"
+    },
     {
       "nuid": "25I-0984",
       "name": "Fahad Nasir",
@@ -109,15 +118,6 @@
       "batch": "25",
       "highScore": 13,
       "achievedAt": "2026-08-14T11:49:37.266Z"
-    },
-    {
-      "nuid": "25I-2526",
-      "name": "Affan Ahmad",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 12,
-      "achievedAt": "2026-08-17T08:06:07.466Z"
     },
     {
       "nuid": "25I-0789",
