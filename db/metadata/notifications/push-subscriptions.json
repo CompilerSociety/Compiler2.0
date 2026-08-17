@@ -795,5 +795,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-3148",
+    "name": "Maheen Zahra",
+    "department": "BS SE",
+    "batch": "25",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ebKv8QrA5a8:APA91bH8HDF80-RWtFQtn-UhPtwwc-lCDadnueHedqrHsuQiqBTIEFax_OjFvqOpT1fU1STTpQvt_E8QnGjHFqaQc8hCoyYFkPJwrLNweo5DK8ESdKn_quWKbWztjsmpvFf4bG3fRz8u",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BFQ0jeV7z7-L1z8LTHrsGBLee_sGb7TuFhVECrX-QaN2FP3GIKKjlFxk1ztWoSPY5rGnvc_h2pjBlamMhXAehfE",
+        "auth": "naawJypwNjLy8aulfg4HFA"
+      }
+    },
+    "updated_at": 1787002527920,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
