@@ -498,5 +498,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0635",
+    "name": "MUHAMMAD ZOHAIB",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cUTVBsgO700:APA91bG_XgoByFO_J1irymN_ZtFCWiIemkn2OHZbMXduV4MD4HG5D2LQlwm9_8cTiGmWj3TTAVTRvb9ndHvzIRzf3PuQ9dmEnTWH2iXHrllaRiLVa-i0epRsJubRQAyNZ_mmu53H9pDQ",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBB0Wdnq1FqCo23MIqrvl-t5lLEKNLWrAqK6czJQqQQkojCVI9rZk54L17_r1wWNVMD99k5VrpOi8B8xydewSqk",
+        "auth": "F2O5XbPVTJLHHkkzb6fbyw"
+      }
+    },
+    "updated_at": 1786947097537,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
