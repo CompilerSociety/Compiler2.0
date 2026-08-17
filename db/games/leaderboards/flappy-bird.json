@@ -125,6 +125,15 @@
       "batch": "25",
       "highScore": 35,
       "achievedAt": "2026-08-17T10:48:58.357Z"
+    },
+    "25I-0844": {
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 3,
+      "achievedAt": "2026-08-17T11:30:56.995Z"
     }
   },
   "leaderboard": [
