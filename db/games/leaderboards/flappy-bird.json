@@ -132,8 +132,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 3,
-      "achievedAt": "2026-08-17T11:30:56.995Z"
+      "highScore": 11,
+      "achievedAt": "2026-08-17T11:31:25.892Z"
     }
   },
   "leaderboard": [
@@ -201,6 +201,15 @@
       "achievedAt": "2026-08-17T09:07:31.189Z"
     },
     {
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 11,
+      "achievedAt": "2026-08-17T11:31:25.892Z"
+    },
+    {
       "nuid": "25I-0977",
       "name": "Talha Khusro",
       "section": "G",
@@ -217,15 +226,6 @@
       "batch": "25",
       "highScore": 6,
       "achievedAt": "2026-08-17T10:55:05.362Z"
-    },
-    {
-      "nuid": "25I-0789",
-      "name": "Aazan Mustafa",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 4,
-      "achievedAt": "2026-07-09T07:29:33.731Z"
     }
   ]
 }
