@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T11:35:38.716Z",
+  "updated_at": "2026-08-17T11:35:57.893Z",
   "source_subject": "Seating Plan 26",
-  "count": 14,
+  "count": 15,
   "students": [
     {
       "name": "Hammad rehan",
@@ -176,6 +176,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T11:35:38.716Z"
+    },
+    {
+      "name": "Muhammad Ahmad",
+      "nuid": "26I-2069",
+      "section": "B",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T11:35:57.893Z"
     }
   ]
 }
