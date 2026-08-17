@@ -89,6 +89,15 @@
       "batch": "25",
       "highScore": 17,
       "achievedAt": "2026-08-17T08:07:36.701Z"
+    },
+    "25I-0937": {
+      "nuid": "25I-0937",
+      "name": "Abdul Wasay",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 5,
+      "achievedAt": "2026-08-17T08:09:42.681Z"
     }
   },
   "leaderboard": [
@@ -118,6 +127,15 @@
       "batch": "25",
       "highScore": 13,
       "achievedAt": "2026-08-14T11:49:37.266Z"
+    },
+    {
+      "nuid": "25I-0937",
+      "name": "Abdul Wasay",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 5,
+      "achievedAt": "2026-08-17T08:09:42.681Z"
     },
     {
       "nuid": "25I-0789",
@@ -172,15 +190,6 @@
       "batch": "25",
       "highScore": 1,
       "achievedAt": "2026-07-09T11:44:53.576Z"
-    },
-    {
-      "nuid": "23I-2060",
-      "name": "Omar Malik",
-      "section": "A",
-      "department": "BS CY",
-      "batch": "23",
-      "highScore": 0,
-      "achievedAt": "2026-08-13T20:33:06.959Z"
     }
   ]
 }
