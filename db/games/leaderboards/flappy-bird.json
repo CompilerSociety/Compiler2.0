@@ -105,8 +105,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 11,
-      "achievedAt": "2026-08-17T10:56:21.922Z"
+      "highScore": 16,
+      "achievedAt": "2026-08-17T10:57:06.955Z"
     },
     "25I-0739": {
       "nuid": "25I-0739",
@@ -156,6 +156,15 @@
       "achievedAt": "2026-08-15T14:50:13.997Z"
     },
     {
+      "nuid": "25I-0849",
+      "name": "Ahmad Aziz",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 16,
+      "achievedAt": "2026-08-17T10:57:06.955Z"
+    },
+    {
       "nuid": "25I-0706",
       "name": "Izaan Ahmad",
       "section": "E",
@@ -172,15 +181,6 @@
       "batch": "25",
       "highScore": 13,
       "achievedAt": "2026-08-17T09:07:31.189Z"
-    },
-    {
-      "nuid": "25I-0849",
-      "name": "Ahmad Aziz",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 11,
-      "achievedAt": "2026-08-17T10:56:21.922Z"
     },
     {
       "nuid": "25I-0977",
