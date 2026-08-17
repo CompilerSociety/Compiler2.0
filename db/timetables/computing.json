@@ -3888,7 +3888,7 @@
             {
               "name": "Pak Studies",
               "location": "D-402",
-              "time": "09:30-11:15"
+              "time": "08:30-10:15"
             },
             {
               "name": "LA",
@@ -6347,6 +6347,22 @@
               "time": "05:20-06:40"
             }
           ]
+        },
+        "ALL": {
+          "Monday": [
+            {
+              "name": "Data Visualization",
+              "location": "D-302",
+              "time": "05:20-06:40"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Data Visualization",
+              "location": "D-302",
+              "time": "05:20-06:40"
+            }
+          ]
         }
       }
     },
@@ -6496,7 +6512,7 @@
             {
               "name": "App Prog",
               "location": "D-303",
-              "time": "05:20-06:40"
+              "time": "06:45-08:05"
             },
             {
               "name": "Adv AI",
@@ -6530,7 +6546,7 @@
             {
               "name": "App Prog",
               "location": "D-303",
-              "time": "05:20-06:40"
+              "time": "06:45-08:05"
             },
             {
               "name": "Adv AI",
@@ -6561,7 +6577,7 @@
             {
               "name": "App Prog",
               "location": "D-303",
-              "time": "06:45-08:05"
+              "time": "05:20-06:40"
             },
             {
               "name": "Adv AI",
@@ -6585,7 +6601,7 @@
             {
               "name": "App Prog",
               "location": "D-303",
-              "time": "06:45-08:05"
+              "time": "05:20-06:40"
             },
             {
               "name": "Adv AI",
@@ -6876,7 +6892,7 @@
             {
               "name": "Adv Readings",
               "location": "C-311",
-              "time": "09:00-11:45"
+              "time": "09:00-12:00"
             },
             {
               "name": "Software Process Mining and Intelligence",
@@ -6893,24 +6909,6 @@
               "name": "Adv Computer Vision",
               "location": "C-401",
               "time": "08:30-11:15"
-            }
-          ]
-        }
-      },
-      "MS": {
-        "ALL": {
-          "Monday": [
-            {
-              "name": "CS Elect",
-              "location": "D-401",
-              "time": "05:20-06:40"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "CS Elect",
-              "location": "D-401",
-              "time": "05:20-06:40"
             }
           ]
         }
@@ -6998,5 +6996,5 @@
     }
   },
   "count": 1155,
-  "generatedAt": "2026-08-17T12:20:00.101046+00:00"
+  "generatedAt": "2026-08-17T13:13:20.066766+00:00"
 }
