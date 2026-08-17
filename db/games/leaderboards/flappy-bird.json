@@ -116,6 +116,15 @@
       "batch": "25",
       "highScore": 13,
       "achievedAt": "2026-08-17T09:07:31.189Z"
+    },
+    "25I-0553": {
+      "nuid": "25I-0553",
+      "name": "Muhammad Zaryaab",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 3,
+      "achievedAt": "2026-08-17T10:46:58.894Z"
     }
   },
   "leaderboard": [
@@ -201,13 +210,13 @@
       "achievedAt": "2026-07-24T19:35:14.031Z"
     },
     {
-      "nuid": "24I-0767",
-      "name": "Rayyan Ahmad",
-      "section": "C",
+      "nuid": "25I-0553",
+      "name": "Muhammad Zaryaab",
+      "section": "G",
       "department": "BS CS",
-      "batch": "24",
-      "highScore": 2,
-      "achievedAt": "2026-07-25T18:50:06.282Z"
+      "batch": "25",
+      "highScore": 3,
+      "achievedAt": "2026-08-17T10:46:58.894Z"
     }
   ]
 }
