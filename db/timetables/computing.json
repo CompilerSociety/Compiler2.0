@@ -1099,7 +1099,7 @@
             {
               "name": "Seerah",
               "location": "C-311",
-              "time": "02:30-03:25"
+              "time": "02:50-03:45"
             },
             {
               "name": "Data St Lab",
@@ -2210,8 +2210,8 @@
           "Tuesday": [
             {
               "name": "App HCI",
-              "location": "D-413",
-              "time": "08:30-09:50"
+              "location": "D-412",
+              "time": "01:00-02:20"
             }
           ],
           "Wednesday": [
@@ -2229,8 +2229,8 @@
           "Thursday": [
             {
               "name": "App HCI",
-              "location": "D-413",
-              "time": "08:30-09:50"
+              "location": "D-412",
+              "time": "01:00-02:20"
             }
           ]
         },
@@ -6855,5 +6855,5 @@
     }
   },
   "count": 1134,
-  "generatedAt": "2026-08-17T08:22:37.706618+00:00"
+  "generatedAt": "2026-08-17T09:05:57.251433+00:00"
 }
