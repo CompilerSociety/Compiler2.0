@@ -96,8 +96,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 36,
-      "achievedAt": "2026-08-17T08:01:46.338Z"
+      "highScore": 143,
+      "achievedAt": "2026-08-17T08:02:01.515Z"
     }
   },
   "leaderboard": [
@@ -174,6 +174,15 @@
       "achievedAt": "2026-08-07T12:04:50.190Z"
     },
     {
+      "nuid": "25I-2526",
+      "name": "Affan Ahmad",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 143,
+      "achievedAt": "2026-08-17T08:02:01.515Z"
+    },
+    {
       "nuid": "24I-0767",
       "name": "Rayyan Ahmad",
       "section": "C",
@@ -181,15 +190,6 @@
       "batch": "24",
       "highScore": 111,
       "achievedAt": "2026-07-25T18:49:39.628Z"
-    },
-    {
-      "nuid": "25I-2526",
-      "name": "Affan Ahmad",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 36,
-      "achievedAt": "2026-08-17T08:01:46.338Z"
     }
   ]
 }
