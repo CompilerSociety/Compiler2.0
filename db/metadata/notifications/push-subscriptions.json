@@ -452,5 +452,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0992",
+    "name": "Muhammad Fasih",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dnTY5-Dp2FA:APA91bGUcZtqmP3DTUl5BO6yjnMd92hJ_dDy5SpVDdebr-MPc_flbXVEnWrgyHy2DKUvavac9_7QDfx7Tw-SwU4r5uWUQ57_Ts0nV-Kyth8r9FZT4V79HBPZZbxx3cG4MAtml0iMGbaU",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BIBZEk-BOuSnoj00XsxSVARiAStLorVokWAb1LQQCpTb_2jsLOdD6VoDV9yurFBH4Z7V6kRDmulUiXBxbQs1qKE",
+        "auth": "p5qLy6-b-RbRODIfudU6Gw"
+      }
+    },
+    "updated_at": 1786935252313,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
