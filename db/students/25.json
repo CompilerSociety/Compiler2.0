@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T15:12:31.105Z",
+  "updated_at": "2026-08-17T17:05:19.047Z",
   "source_subject": "Seating Plan 25",
-  "count": 958,
+  "count": 959,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6736,6 +6736,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T15:12:31.105Z"
+    },
+    {
+      "name": "Manaal Mehtab",
+      "nuid": "25K-0960",
+      "section": "A",
+      "department": "CS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T17:05:19.047Z"
     }
   ]
 }
