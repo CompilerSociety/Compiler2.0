@@ -475,5 +475,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0985",
+    "name": "Usama Bhutta",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "F",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fo5qHk4jBKQ:APA91bGI93mEJJFgF09oY89yWV-Atfcsm1iqOcbndf6HYalyAawmesGREn-PphzP3BYGbzOHyYKqnentdVDaO7cKV1acApv1mmtuPllfEXpaPKqQSoc6-58oMI7YJKm2XyXBxQBaFlJV",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BGzj3tlWq5WjHmscQxrb1jB9R2saN4UvkX5kztlHFB7vEXRyUbec1pnaqUbAswdjHk5gcPbY6oI-AkcbfeVS_O8",
+        "auth": "n3yP0zh7SXPuqjYCiYI3dg"
+      }
+    },
+    "updated_at": 1786944982089,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
