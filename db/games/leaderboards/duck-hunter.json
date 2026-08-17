@@ -62,6 +62,15 @@
       "batch": "25",
       "highScore": 120,
       "achievedAt": "2026-08-17T08:09:30.922Z"
+    },
+    "25I-0937": {
+      "nuid": "25I-0937",
+      "name": "Abdul Wasay",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 28,
+      "achievedAt": "2026-08-17T08:10:40.010Z"
     }
   },
   "leaderboard": [
@@ -109,6 +118,15 @@
       "batch": "25",
       "highScore": 54,
       "achievedAt": "2026-08-15T14:46:56.552Z"
+    },
+    {
+      "nuid": "25I-0937",
+      "name": "Abdul Wasay",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 28,
+      "achievedAt": "2026-08-17T08:10:40.010Z"
     },
     {
       "nuid": "24I-6516",
