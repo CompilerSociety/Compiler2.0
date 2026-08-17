@@ -634,5 +634,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0042",
+    "name": "Hammad Tariq Joiya",
+    "department": "BS AI",
+    "batch": "26",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/e2me5etoWd4:APA91bH5Uak5o3WAMMRirmnLavtOgLkr38uPL8HY8x91GsFowSOuflYLR8XVtK84r76eT5mzs2JzDLVqXB8FjNk-syOk2LxLUW9MuuglYgCxGGk5hfkE5Jl8HuOnruyl2STYE0m4UzHa",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BER8cvwjsFkcRGAST1O9rMyFCcqroKU3Lq1Fd8SWtROvFAbwo_sqI2-tyY2pmErDt_qPnOPCvH_mq2hFxE-U1UA",
+        "auth": "--sBe5jbAYt2Dljeq61Zow"
+      }
+    },
+    "updated_at": 1786967564206,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
