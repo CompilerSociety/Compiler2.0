@@ -1,7 +1,7 @@
 {
-  "updated_at": "",
+  "updated_at": "2026-08-17T15:05:16.355Z",
   "source_subject": "Seating Plan 24",
-  "count": 752,
+  "count": 749,
   "students": [
     {
       "name": "Muhammad Aun",
@@ -5238,6 +5238,19 @@
       "section": "C",
       "department": "SE",
       "batch": "24"
+    },
+    {
+      "name": "Hassan Mehdi",
+      "nuid": "24I-0649",
+      "section": "C",
+      "department": "CS",
+      "batch": "24",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T15:05:16.355Z"
     }
   ]
 }
