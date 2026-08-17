@@ -123,11 +123,20 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 3,
-      "achievedAt": "2026-08-17T10:46:58.894Z"
+      "highScore": 35,
+      "achievedAt": "2026-08-17T10:48:58.357Z"
     }
   },
   "leaderboard": [
+    {
+      "nuid": "25I-0553",
+      "name": "Muhammad Zaryaab",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 35,
+      "achievedAt": "2026-08-17T10:48:58.357Z"
+    },
     {
       "nuid": "25I-2526",
       "name": "Affan Ahmad",
@@ -208,15 +217,6 @@
       "batch": "25",
       "highScore": 3,
       "achievedAt": "2026-07-24T19:35:14.031Z"
-    },
-    {
-      "nuid": "25I-0553",
-      "name": "Muhammad Zaryaab",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 3,
-      "achievedAt": "2026-08-17T10:46:58.894Z"
     }
   ]
 }
