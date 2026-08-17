@@ -590,5 +590,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0849",
+    "name": "Ahmad Aziz",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QN_FpZnKPcL5BwodO1tRj0DWGU_nseg1GiHhZSTi4lHAkaOPIdvgMGxe6HUZ_LJrLwHmaUUmbyD0T6oXeoF6p0OZf8Vgal5TZRZJ_awDUeT1qC58NoB4NN5x07gqNZ-O9lg2to8VrnYJYIiIxWQ4xfDxtgkiAh8AJ32dnaztvIk",
+      "keys": {
+        "p256dh": "BJUJ3fGyel8TSMIRHkWiIHTD9qEU3n8hagwinz81TJWrfSUEo0anpLtvU3QRfCNIyfV5RoM3EcodYjUg8E1V5K4",
+        "auth": "3U_SvTpLqhYZK5w7HXgIvA"
+      }
+    },
+    "updated_at": 1786959516525,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
