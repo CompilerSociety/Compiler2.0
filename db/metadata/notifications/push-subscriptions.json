@@ -612,5 +612,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "23I-2017",
+    "name": "Huzaifa Malik",
+    "department": "BS CY",
+    "batch": "23",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QO0DUG8jsGEr1Iekv-d188vAIRjXmfb3TYe08mKD6OZA5_1Id66jx1jZjGYN0KJofex_0RP_KskbcsLDrIX_2fKIwfPrExyYa5oraiDlos3hXYY_YOH_CJzK7v8NCLE6BUOvj0fzt_VOAYpknM4CrKwBsGdmc6w5F5_G6SMJ2lo",
+      "keys": {
+        "p256dh": "BHkwfq70ewMXnT71FlGs61Dd9X2KWTOBOLHe-lQ_PcrC4n1Cq59HvCEVVahdUiq-n7ivyClTfWBRe7fEnX7fpVs",
+        "auth": "79OdJc7jLP6SjclQwZLLIA"
+      }
+    },
+    "updated_at": 1786966573277,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
