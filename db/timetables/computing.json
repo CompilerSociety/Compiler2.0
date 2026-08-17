@@ -297,7 +297,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             }
           ],
@@ -367,7 +367,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "11:30-02:15"
             }
           ],
@@ -427,7 +427,7 @@
           "Monday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "08:30-11:15"
             },
             {
@@ -497,7 +497,7 @@
           "Monday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "11:30-02:15"
             },
             {
@@ -2711,12 +2711,12 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             },
             {
               "name": "IICT",
-              "location": "C-MARGALA 3",
+              "location": "C-MARGALA 1",
               "time": "08:30-11:15"
             }
           ],
@@ -2786,7 +2786,7 @@
             },
             {
               "name": "IICT",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             },
             {
@@ -3544,7 +3544,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             },
             {
@@ -3761,12 +3761,12 @@
             },
             {
               "name": "Data St Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Prof for AI Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             }
           ],
@@ -4614,7 +4614,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "C-MARGALA 1",
+              "location": "C-MARGALA 3",
               "time": "08:30-11:15"
             }
           ],
@@ -4756,7 +4756,7 @@
             },
             {
               "name": "COAL Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "11:30-02:15"
             },
             {
@@ -4831,7 +4831,7 @@
             },
             {
               "name": "Intro to DS Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             }
           ],
@@ -6843,5 +6843,5 @@
     }
   },
   "count": 1132,
-  "generatedAt": "2026-08-17T03:11:09.083697+00:00"
+  "generatedAt": "2026-08-17T03:59:40.597856+00:00"
 }
