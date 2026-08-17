@@ -772,5 +772,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0844",
+    "name": "Abdullah Khalid",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ewNWhnMM53E:APA91bE_frRPLTrkIzANi9hZ8qjkqcTGBYbvDk04FaSTA95iznaVu3f9-h3TG6GRmoqlfKF8Kq1oJq-umpXfrt9R-8XKUWsZ36kPjea5WW8YLVgm1gYt2d4r6rbXkzlbF7p4pyHmTZjI",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BKw-cNzVXGHqeKhJRtpSAp1IXe_y4Ojm3AU16KXtIz010hza0migM6pA4cAwhAkw0JCs3nbTxXcbx3Q4AO1ob-c",
+        "auth": "Yrzjhd3gx-MrI9heOBpOhw"
+      }
+    },
+    "updated_at": 1787001237947,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
