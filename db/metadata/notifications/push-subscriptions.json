@@ -612,5 +612,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0982",
+    "name": "Abdulmateen",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "F",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ddO71oLb2o4:APA91bHFaso7XxhePc3v0Vp0AqDTz5qG1z-wMxwUCTshgBOd1jWtoe-yFSiHS1jNEtpA54CCVjWTRLRCfVbQXxn8yGQ_-iMM2Dfm30KroX8sadp_QjmIkfeLTofKgCB3BqQ1IBYp-vCT",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBG2ADSOH3-jpiDDVOiP9giuxsrOO_npvKRogOFgFoTAYwr55YGCwMpllHOGDRIEXrS5JKNq0GVC3a1IXXPiChA",
+        "auth": "O1Rw2zKjC-SwxP5qPw43VA"
+      }
+    },
+    "updated_at": 1786965657181,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
