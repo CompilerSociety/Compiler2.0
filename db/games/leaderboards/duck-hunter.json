@@ -105,11 +105,20 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 161,
-      "achievedAt": "2026-08-17T11:40:37.158Z"
+      "highScore": 183,
+      "achievedAt": "2026-08-17T12:50:24.309Z"
     }
   },
   "leaderboard": [
+    {
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 183,
+      "achievedAt": "2026-08-17T12:50:24.309Z"
+    },
     {
       "nuid": "25I-0849",
       "name": "Ahmad Aziz",
@@ -118,15 +127,6 @@
       "batch": "25",
       "highScore": 162,
       "achievedAt": "2026-08-17T10:53:39.299Z"
-    },
-    {
-      "nuid": "25I-0844",
-      "name": "Abdullah Khalid",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 161,
-      "achievedAt": "2026-08-17T11:40:37.158Z"
     },
     {
       "nuid": "25I-2526",
