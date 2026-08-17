@@ -703,5 +703,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3206",
+    "name": "Jaweria",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dYSvpwaQcYc:APA91bFS7AIqhwj7s5kUXeoxTi-qFZGNqTHXe5lC7pmlk1fbpy0HPDnMSDiSjL6-_tC7xn1M1D4HRLx0CH4sCXU8koCw4bBUcEvbqsc6bvzwbAHPl6DQ7jBjROQ_FE-QCgYTfYwdDO32",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BEZUDkovsVnQXqUfo8Ww1X99sy0Q_g0HgoU_RRzgxPCXsSrOeBoE5b_cfsCz5ZAejnX17Hb342Q3WCyUb1iO8nc",
+        "auth": "4JmzJ_C4fFbbBmioikq9pw"
+      }
+    },
+    "updated_at": 1786981225651,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
