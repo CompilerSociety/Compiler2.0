@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T07:14:30.047Z",
+  "updated_at": "2026-08-17T15:12:31.105Z",
   "source_subject": "Seating Plan 25",
-  "count": 957,
+  "count": 958,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6723,6 +6723,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T07:14:30.047Z"
+    },
+    {
+      "name": "Qazi Farhan Naheem",
+      "nuid": "25I-0847",
+      "section": "J",
+      "department": "CS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T15:12:31.105Z"
     }
   ]
 }
