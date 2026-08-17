@@ -80,6 +80,15 @@
       "batch": "25",
       "highScore": 71,
       "achievedAt": "2026-08-17T09:12:00.441Z"
+    },
+    "25I-0553": {
+      "nuid": "25I-0553",
+      "name": "Muhammad Zaryaab",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 99,
+      "achievedAt": "2026-08-17T10:51:01.652Z"
     }
   },
   "leaderboard": [
@@ -100,6 +109,15 @@
       "batch": "25",
       "highScore": 128,
       "achievedAt": "2026-07-09T07:32:40.777Z"
+    },
+    {
+      "nuid": "25I-0553",
+      "name": "Muhammad Zaryaab",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 99,
+      "achievedAt": "2026-08-17T10:51:01.652Z"
     },
     {
       "nuid": "25I-0739",
