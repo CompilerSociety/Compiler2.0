@@ -2029,6 +2029,296 @@
           ]
         }
       },
+      "2024": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-04",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-303",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-302",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-310",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER II",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER II",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-210",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-305",
+              "time": "02:25-03:45"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-305",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-310",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-302",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-302",
+              "time": "03:50-05:10"
+            }
+          ]
+        },
+        "B": {
+          "Monday": [
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-04",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-305",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-302",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-310",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-211",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-305",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-305",
+              "time": "01:00-02:20"
+            },
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-310",
+              "time": "08:30-09:50"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-302",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-302",
+              "time": "11:30-12:50"
+            }
+          ]
+        },
+        "C": {
+          "Monday": [
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-310",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-310",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-311",
+              "time": "02:25-03:45"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-211",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-211",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-301",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-303",
+              "time": "02:25-03:45"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-01",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KHYBER I",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-02",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-02",
+              "time": "11:30-12:50"
+            }
+          ]
+        },
+        "D": {
+          "Monday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-311",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-311",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-311",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KK-III",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Basic Econometrics Lab (LG3003)",
+              "location": "KK-III",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Entrepreneurship (MG4011)",
+              "location": "A-302",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Enterprise Systems & Applications (CS3017)",
+              "location": "A-302",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Blockchain Technology for Business (MG3012)",
+              "location": "A-303",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-01",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-311",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Macroeconomics (SS2006)",
+              "location": "A-02",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Basic Econometrics (MG3003)",
+              "location": "A-03",
+              "time": "10:00-11:20"
+            }
+          ]
+        }
+      },
       "2026": {
         "A": {
           "Monday": [
@@ -2702,296 +2992,6 @@
               "name": "Business Finance (AF2004)",
               "location": "A-210",
               "time": "01:00-02:20"
-            }
-          ]
-        }
-      },
-      "2024": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-303",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-303",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-302",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-310",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER II",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER II",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-210",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-210",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-305",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-310",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
-              "time": "03:50-05:10"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-305",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-305",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-302",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-310",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-211",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-211",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-305",
-              "time": "01:00-02:20"
-            },
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-310",
-              "time": "08:30-09:50"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
-              "time": "11:30-12:50"
-            }
-          ]
-        },
-        "C": {
-          "Monday": [
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-310",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-310",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-311",
-              "time": "02:25-03:45"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-211",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-211",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-301",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-303",
-              "time": "02:25-03:45"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-01",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KHYBER I",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-02",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-02",
-              "time": "11:30-12:50"
-            }
-          ]
-        },
-        "D": {
-          "Monday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-311",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-311",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-311",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-III",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Basic Econometrics Lab (LG3003)",
-              "location": "KK-III",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Entrepreneurship (MG4011)",
-              "location": "A-302",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Blockchain Technology for Business (MG3012)",
-              "location": "A-303",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-01",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-311",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Macroeconomics (SS2006)",
-              "location": "A-02",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Basic Econometrics (MG3003)",
-              "location": "A-03",
-              "time": "10:00-11:20"
             }
           ]
         }
@@ -3725,5 +3725,5 @@
     }
   },
   "count": 632,
-  "generatedAt": "2026-08-17T05:20:29.496494+00:00"
+  "generatedAt": "2026-08-17T05:57:06.335242+00:00"
 }
