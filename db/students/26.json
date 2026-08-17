@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T11:39:28.655Z",
+  "updated_at": "2026-08-17T11:52:26.864Z",
   "source_subject": "Seating Plan 26",
-  "count": 16,
+  "count": 17,
   "students": [
     {
       "name": "Hammad rehan",
@@ -202,6 +202,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T11:39:28.655Z"
+    },
+    {
+      "name": "Hammad Tariq Joiya",
+      "nuid": "26I-0042",
+      "section": "A",
+      "department": "AI",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T11:52:26.864Z"
     }
   ]
 }
