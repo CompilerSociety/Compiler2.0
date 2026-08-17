@@ -301,7 +301,7 @@
             },
             {
               "name": "Programming Fundamentals",
-              "location": "B-129",
+              "location": "B-119",
               "time": "11:25-12:45"
             },
             {
@@ -1297,5 +1297,5 @@
     }
   },
   "count": 210,
-  "generatedAt": "2026-08-17T10:53:48.597045+00:00"
+  "generatedAt": "2026-08-17T11:15:36.831582+00:00"
 }
