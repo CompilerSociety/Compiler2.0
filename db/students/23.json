@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-13T18:16:57.479129+00:00",
+  "updated_at": "2026-08-17T11:34:58.549Z",
   "source_subject": "Seating Plan of Final Exam, Dec 15-16 2025 (Fall-2025) + Unique 23 Batch Students roster",
-  "count": 687,
+  "count": 688,
   "students": [
     {
       "name": "Zaid Muslim",
@@ -5498,6 +5498,19 @@
       "department": "CS",
       "batch": "23",
       "source": "seating-fa25"
+    },
+    {
+      "name": "Huzaifa Malik",
+      "nuid": "23I-9999",
+      "section": "B",
+      "department": "CY",
+      "batch": "23",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T11:34:58.548Z"
     }
   ]
 }
