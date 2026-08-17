@@ -133,12 +133,12 @@
             },
             {
               "name": "Func Eng Lab (B1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "08:30-11:15"
             }
           ]
@@ -239,12 +239,12 @@
             },
             {
               "name": "Func Eng Lab (D1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "11:30-02:15"
             }
           ],
@@ -331,7 +331,7 @@
             },
             {
               "name": "Func Eng Lab (F2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "11:30-02:15"
             }
           ],
@@ -396,12 +396,12 @@
             },
             {
               "name": "Func Eng Lab (G1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (G2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "08:30-11:15"
             }
           ],
@@ -502,12 +502,12 @@
             },
             {
               "name": "Func Eng Lab (E1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (E2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "02:30-05:15"
             }
           ],
@@ -2622,7 +2622,7 @@
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "02:30-05:15"
             }
           ]
@@ -2755,7 +2755,7 @@
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "02:30-05:15"
             }
           ],
@@ -2917,12 +2917,12 @@
             },
             {
               "name": "Func Eng Lab (E1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (E2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "11:30-02:15"
             }
           ]
@@ -3007,14 +3007,14 @@
               "time": "10:00-11:20"
             },
             {
+              "name": "COAL",
+              "location": "C-603",
+              "time": "02:30-03:50"
+            },
+            {
               "name": "Intro to SE",
               "location": "C-604",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "COAL",
-              "location": "C-604",
-              "time": "02:30-03:50"
             }
           ],
           "Tuesday": [
@@ -3530,7 +3530,7 @@
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "08:30-11:15"
             }
           ]
@@ -4661,7 +4661,7 @@
             {
               "name": "UHQ-II",
               "location": "D-501",
-              "time": "09:00-09:55"
+              "time": "09:30-10:25"
             },
             {
               "name": "LA",
@@ -4731,7 +4731,7 @@
             {
               "name": "UHQ-II",
               "location": "D-501",
-              "time": "10:00-10:55"
+              "time": "10:30-11:25"
             },
             {
               "name": "LA",
@@ -5109,12 +5109,12 @@
             },
             {
               "name": "Func Eng Lab (A1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "02:30-05:15"
             }
           ]
@@ -5189,7 +5189,7 @@
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "MEHRAN-2",
+              "location": "A-MEHRAN",
               "time": "02:30-05:15"
             }
           ]
@@ -5242,12 +5242,12 @@
             },
             {
               "name": "Func Eng Lab (C1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "02:30-05:15"
             }
           ],
@@ -5334,12 +5334,12 @@
             },
             {
               "name": "Func Eng Lab (D1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "08:30-11:15"
             }
           ]
@@ -5552,12 +5552,12 @@
             },
             {
               "name": "Func Eng Lab (A1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "02:30-05:15"
             }
           ],
@@ -5709,12 +5709,12 @@
             },
             {
               "name": "Func Eng Lab (C1)",
-              "location": "C-CALL-1",
+              "location": "A-CALL-1",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "C-CALL-2",
+              "location": "A-CALL-2",
               "time": "02:30-05:15"
             }
           ]
@@ -6008,6 +6008,11 @@
         "C": {
           "Monday": [
             {
+              "name": "Multiagent Sys",
+              "location": "D-316",
+              "time": "02:30-03:50"
+            },
+            {
               "name": "Comp Net",
               "location": "D-402",
               "time": "01:00-02:20"
@@ -6030,6 +6035,11 @@
               "name": "Comp Net",
               "location": "D-315",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Multiagent Sys",
+              "location": "D-402",
+              "time": "02:30-03:50"
             }
           ],
           "Thursday": [
@@ -6844,6 +6854,6 @@
       }
     }
   },
-  "count": 1132,
-  "generatedAt": "2026-08-17T07:37:43.561377+00:00"
+  "count": 1134,
+  "generatedAt": "2026-08-17T08:22:37.706618+00:00"
 }
