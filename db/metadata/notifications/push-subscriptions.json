@@ -703,28 +703,5 @@
       "seat": true,
       "room": false
     }
-  },
-  {
-    "nuid": "25I-0654",
-    "name": "Abuzar",
-    "department": "BS CS",
-    "batch": "25",
-    "section": "J",
-    "subscription": {
-      "endpoint": "https://fcm.googleapis.com/fcm/send/ecXgwIfDJmY:APA91bHEEwZjWQ7zzbMs0JdsNRDWVP-foHO2_z8QK030BF0uaaXvQpTlvGJ2FSlQ7v13wgHmUNv7E7nrD2vVrdWeUxuCSk8bRUM0ydcLiMpT-i_UIxvVT33gE2DI5GzYWMDAh5ht_wi6",
-      "expirationTime": null,
-      "keys": {
-        "p256dh": "BK8FLpRYp5wpofGH7fQlDoVCvgc34wEN6zscFAp-5DyvDn9taBgYVCU3JRzHOuNTFJ1o3ykL1AkA2A0CCZv1h3E",
-        "auth": "XmjjkjqMOZ-_kqcG6ERydQ"
-      }
-    },
-    "updated_at": 1786980950534,
-    "prefs": {
-      "cls": true,
-      "exam": true,
-      "show": true,
-      "seat": true,
-      "room": false
-    }
   }
 ]
