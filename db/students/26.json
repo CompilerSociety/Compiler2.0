@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T11:33:32.190Z",
+  "updated_at": "2026-08-17T11:35:38.716Z",
   "source_subject": "Seating Plan 26",
-  "count": 13,
+  "count": 14,
   "students": [
     {
       "name": "Hammad rehan",
@@ -163,6 +163,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T11:33:32.190Z"
+    },
+    {
+      "name": "Dilkash Kumar",
+      "nuid": "26I-5102",
+      "section": "C",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T11:35:38.716Z"
     }
   ]
 }
