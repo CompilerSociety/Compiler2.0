@@ -778,11 +778,6 @@
         "B": {
           "Monday": [
             {
-              "name": "LA",
-              "location": "C-308",
-              "time": "08:30-09:50"
-            },
-            {
               "name": "Data St",
               "location": "C-308",
               "time": "10:00-11:20"
@@ -791,6 +786,11 @@
               "name": "SDA",
               "location": "C-308",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "LA",
+              "location": "C-311",
+              "time": "11:30-12:50"
             }
           ],
           "Tuesday": [
@@ -813,8 +813,8 @@
           "Wednesday": [
             {
               "name": "LA",
-              "location": "C-308",
-              "time": "08:30-09:50"
+              "location": "C-307",
+              "time": "11:30-12:50"
             },
             {
               "name": "Data St",
@@ -3026,7 +3026,7 @@
             {
               "name": "UHQ-II",
               "location": "C-602",
-              "time": "10:00-10:55"
+              "time": "10:20-11:15"
             },
             {
               "name": "COAL Lab",
@@ -6813,19 +6813,19 @@
         "ALL": {
           "Monday": [
             {
-              "name": "Adv Topics in Empirical SE",
-              "location": "D-402",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Vision Based AI Agent",
-              "location": "D-403",
+              "location": "D-301",
               "time": "06:45-08:05"
             },
             {
               "name": "Recent Adv in Deep Learn",
-              "location": "D-404",
+              "location": "D-401",
               "time": "06:45-08:05"
+            },
+            {
+              "name": "Adv Topics in Empirical SE",
+              "location": "D-402",
+              "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
@@ -6847,19 +6847,19 @@
               "time": "10:00-12:45"
             },
             {
-              "name": "Adv Topics in Empirical SE",
-              "location": "D-404",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Vision Based AI Agent",
-              "location": "D-405",
+              "location": "D-301",
               "time": "06:45-08:05"
             },
             {
               "name": "Recent Adv in Deep Learn",
-              "location": "TBA",
+              "location": "D-401",
               "time": "06:45-08:05"
+            },
+            {
+              "name": "Adv Topics in Empirical SE",
+              "location": "D-404",
+              "time": "05:20-06:40"
             }
           ],
           "Friday": [
@@ -6893,6 +6893,24 @@
               "name": "Adv Computer Vision",
               "location": "C-401",
               "time": "08:30-11:15"
+            }
+          ]
+        }
+      },
+      "MS": {
+        "ALL": {
+          "Monday": [
+            {
+              "name": "CS Elect",
+              "location": "D-401",
+              "time": "05:20-06:40"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "CS Elect",
+              "location": "D-401",
+              "time": "05:20-06:40"
             }
           ]
         }
@@ -6947,11 +6965,6 @@
               "name": "Engg AI",
               "location": "D-314",
               "time": "06:45-08:05"
-            },
-            {
-              "name": "CS Elect",
-              "location": "D-401",
-              "time": "05:20-06:40"
             }
           ],
           "Tuesday": [
@@ -6971,11 +6984,6 @@
               "name": "Engg AI",
               "location": "D-314",
               "time": "06:45-08:05"
-            },
-            {
-              "name": "CS Elect",
-              "location": "D-401",
-              "time": "05:20-06:40"
             }
           ],
           "Thursday": [
@@ -6990,5 +6998,5 @@
     }
   },
   "count": 1155,
-  "generatedAt": "2026-08-17T11:46:54.065322+00:00"
+  "generatedAt": "2026-08-17T12:20:00.101046+00:00"
 }
