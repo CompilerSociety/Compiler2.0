@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T16:21:52.254Z",
+  "updated_at": "2026-08-17T16:36:50.204Z",
   "source_subject": "Seating Plan 26",
-  "count": 21,
+  "count": 22,
   "students": [
     {
       "name": "Hammad rehan",
@@ -267,6 +267,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T16:21:52.254Z"
+    },
+    {
+      "name": "Ahmar Ali",
+      "nuid": "26I-0106",
+      "section": "C",
+      "department": "AI",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-17T16:36:50.204Z"
     }
   ]
 }
