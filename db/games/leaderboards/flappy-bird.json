@@ -78,8 +78,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 4,
-      "achievedAt": "2026-08-17T07:27:39.070Z"
+      "highScore": 5,
+      "achievedAt": "2026-08-17T10:50:39.791Z"
     },
     "25I-2526": {
       "nuid": "25I-2526",
@@ -183,6 +183,15 @@
       "achievedAt": "2026-08-17T08:09:42.681Z"
     },
     {
+      "nuid": "25I-0977",
+      "name": "Talha Khusro",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 5,
+      "achievedAt": "2026-08-17T10:50:39.791Z"
+    },
+    {
       "nuid": "25I-0789",
       "name": "Aazan Mustafa",
       "section": "G",
@@ -190,15 +199,6 @@
       "batch": "25",
       "highScore": 4,
       "achievedAt": "2026-07-09T07:29:33.731Z"
-    },
-    {
-      "nuid": "25I-0977",
-      "name": "Talha Khusro",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 4,
-      "achievedAt": "2026-08-17T07:27:39.070Z"
     },
     {
       "nuid": "25I-0849",
