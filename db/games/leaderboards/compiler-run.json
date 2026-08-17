@@ -98,6 +98,15 @@
       "batch": "25",
       "highScore": 143,
       "achievedAt": "2026-08-17T08:02:01.515Z"
+    },
+    "25I-0937": {
+      "nuid": "25I-0937",
+      "name": "Abdul Wasay",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 36,
+      "achievedAt": "2026-08-17T08:06:51.286Z"
     }
   },
   "leaderboard": [
