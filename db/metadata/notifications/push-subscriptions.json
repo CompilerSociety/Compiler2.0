@@ -726,5 +726,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0800",
+    "name": "Ayeshahassan",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "F",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/faI5MgRNX_k:APA91bFQVg726pWg_GekMX9bEl0H0_UUEkA92paj7WvhIuSfbbhpNN3c4y9Q1m0N26aI338BXMLLpxBcjwGm1RjRCC8AVSJIuvk3mh7z1TNsNTGhLJ7D9ZjtFh7SSW0h0DoUa-nHA2gr",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLODLc5G4QJRwbeE5MmdWhWt3Kk2NrAjqjnlaF9gMZBYqTunbXyLQkQ7Rf_D0pHyxup11JCUPkU4x8eoW-TqC9E",
+        "auth": "66MCC7-GfQ7c35hSYfHljg"
+      }
+    },
+    "updated_at": 1786982821751,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
