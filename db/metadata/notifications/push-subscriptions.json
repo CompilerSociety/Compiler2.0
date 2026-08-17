@@ -749,5 +749,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-3129",
+    "name": "M Touseef",
+    "department": "BS SE",
+    "batch": "25",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cSPyEP-L4MQ:APA91bHYU8vnCk9DCPERwm6VRtl6cbgSiWHMDY3zcxTTCbUyar3mPDZMaZcXZEnD7-jhiW1BJHu3aDluS5I7pUmbFoE2ypYnnCII8zmgsw4ir4Y9WllWqIeESSHWzNfIJDZ72iiGrcMY",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BEg7qIBjcVDZc1t8JCuZO4_LyU3tJDGK9z76eKY_BDuZIT0B4jdnsMb_wKXR7NtPDmrC2LVy9hGyWP5WyjuQ-CM",
+        "auth": "W2Tk8A63wc9Up7G-FlJcrg"
+      }
+    },
+    "updated_at": 1786983454740,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
