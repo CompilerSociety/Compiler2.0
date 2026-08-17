@@ -98,6 +98,15 @@
       "batch": "25",
       "highScore": 162,
       "achievedAt": "2026-08-17T10:53:39.299Z"
+    },
+    "25I-0844": {
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 114,
+      "achievedAt": "2026-08-17T11:30:34.053Z"
     }
   },
   "leaderboard": [
@@ -127,6 +136,15 @@
       "batch": "25",
       "highScore": 128,
       "achievedAt": "2026-07-09T07:32:40.777Z"
+    },
+    {
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 114,
+      "achievedAt": "2026-08-17T11:30:34.053Z"
     },
     {
       "nuid": "25I-0553",
@@ -181,15 +199,6 @@
       "batch": "25",
       "highScore": 28,
       "achievedAt": "2026-08-17T08:10:40.010Z"
-    },
-    {
-      "nuid": "24I-6516",
-      "name": "Afaq Ahsan",
-      "section": "C",
-      "department": "AI",
-      "batch": "24",
-      "highScore": 7,
-      "achievedAt": "2026-07-25T18:51:45.928Z"
     }
   ]
 }
