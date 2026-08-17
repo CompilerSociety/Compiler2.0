@@ -96,8 +96,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 34,
-      "achievedAt": "2026-08-17T08:01:40.246Z"
+      "highScore": 36,
+      "achievedAt": "2026-08-17T08:01:46.338Z"
     }
   },
   "leaderboard": [
@@ -183,13 +183,13 @@
       "achievedAt": "2026-07-25T18:49:39.628Z"
     },
     {
-      "nuid": "23I-2060",
-      "name": "Omar Malik",
-      "section": "A",
-      "department": "BS CY",
-      "batch": "23",
-      "highScore": 35,
-      "achievedAt": "2026-08-13T20:32:52.898Z"
+      "nuid": "25I-2526",
+      "name": "Affan Ahmad",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 36,
+      "achievedAt": "2026-08-17T08:01:46.338Z"
     }
   ]
 }
