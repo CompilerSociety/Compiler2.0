@@ -841,5 +841,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0557",
+    "name": "Sufiyan Ahmed",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QDm4NpLw8Y52yXfUKh1JzeNOcrYjXAYHGrqryhxIQQ-IGuHYNMXnzwJrtDSc42dDM0WOKSRPOdqaRT_En6NAKWmoulJ2rqqYn6-ENwTS8Vhiv4uIoaJoD-YnQ6o47OJM8tLO5F9nM_D7xPzi-3KiMrOYBIMJSh_W3waMX6ZStfY",
+      "keys": {
+        "p256dh": "BLgc6lVY38Ggl6phMTY4ci8WdSGQ1FcMmRRG1XogWYFgTg52TiJ4MPKM7wtD1Ijg0qohXeT8t_SZXuvTtc4YQ4E",
+        "auth": "MSboLvoXUkNVyHA-ZzNEXg"
+      }
+    },
+    "updated_at": 1787029032891,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
