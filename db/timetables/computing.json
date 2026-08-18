@@ -5089,6 +5089,11 @@
           ],
           "Tuesday": [
             {
+              "name": "Digital Sustain",
+              "location": "D-404",
+              "time": "01:00-02:20"
+            },
+            {
               "name": "Sec Ops",
               "location": "D-505",
               "time": "02:30-03:50"
@@ -5100,6 +5105,11 @@
             }
           ],
           "Thursday": [
+            {
+              "name": "Digital Sustain",
+              "location": "D-404",
+              "time": "01:00-02:20"
+            },
             {
               "name": "Sec Ops",
               "location": "D-505",
@@ -5112,19 +5122,19 @@
             }
           ]
         },
-        "ALL": {
+        "B": {
           "Tuesday": [
             {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
+              "name": "Digital Sustain",
+              "location": "D-404",
+              "time": "03:55-05:15"
             }
           ],
           "Thursday": [
             {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
+              "name": "Digital Sustain",
+              "location": "D-404",
+              "time": "03:55-05:15"
             }
           ]
         }
@@ -6537,6 +6547,11 @@
           ],
           "Tuesday": [
             {
+              "name": "Adv AI",
+              "location": "D-303",
+              "time": "05:20-06:40"
+            },
+            {
               "name": "App Prog",
               "location": "D-303",
               "time": "06:45-08:05"
@@ -7017,6 +7032,6 @@
       }
     }
   },
-  "count": 1159,
-  "generatedAt": "2026-08-18T11:14:58.196179+00:00"
+  "count": 1162,
+  "generatedAt": "2026-08-18T11:41:37.074731+00:00"
 }
