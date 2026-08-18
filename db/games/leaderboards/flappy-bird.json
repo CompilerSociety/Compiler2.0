@@ -134,6 +134,15 @@
       "batch": "25",
       "highScore": 12,
       "achievedAt": "2026-08-17T11:42:38.318Z"
+    },
+    "25I-0655": {
+      "nuid": "25I-0655",
+      "name": "Ismail Hassan",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 4,
+      "achievedAt": "2026-08-18T16:09:35.251Z"
     }
   },
   "leaderboard": [
