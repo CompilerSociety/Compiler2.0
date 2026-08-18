@@ -143,6 +143,15 @@
       "batch": "25",
       "highScore": 51,
       "achievedAt": "2026-08-17T12:54:35.152Z"
+    },
+    "25I-2513": {
+      "nuid": "25I-2513",
+      "name": "Shah Razeen",
+      "section": "A",
+      "department": "BS DS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-18T07:01:31.397Z"
     }
   },
   "leaderboard": [
