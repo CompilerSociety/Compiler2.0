@@ -116,6 +116,15 @@
       "batch": "25",
       "highScore": 138,
       "achievedAt": "2026-08-18T16:13:56.317Z"
+    },
+    "25I-0990": {
+      "nuid": "25I-0990",
+      "name": "Bhavish Jan",
+      "section": "E",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 13,
+      "achievedAt": "2026-08-18T19:41:27.279Z"
     }
   },
   "leaderboard": [
