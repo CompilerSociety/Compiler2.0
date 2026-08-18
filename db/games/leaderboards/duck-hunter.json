@@ -6,8 +6,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 6,
-      "achievedAt": "2026-07-08T22:51:23.466Z"
+      "highScore": 139,
+      "achievedAt": "2026-08-18T04:34:20.674Z"
     },
     "25I-0656": {
       "nuid": "25I-0656",
@@ -129,6 +129,15 @@
       "achievedAt": "2026-08-17T10:53:39.299Z"
     },
     {
+      "nuid": "25I-0632",
+      "name": "Wajeeh Imran",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 139,
+      "achievedAt": "2026-08-18T04:34:20.674Z"
+    },
+    {
       "nuid": "25I-2526",
       "name": "Affan Ahmad",
       "section": "G",
@@ -190,15 +199,6 @@
       "batch": "25",
       "highScore": 54,
       "achievedAt": "2026-08-15T14:46:56.552Z"
-    },
-    {
-      "nuid": "25I-0937",
-      "name": "Abdul Wasay",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 28,
-      "achievedAt": "2026-08-17T08:10:40.010Z"
     }
   ]
 }
