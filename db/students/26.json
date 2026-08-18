@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T02:09:35.358Z",
+  "updated_at": "2026-08-18T02:10:15.391Z",
   "source_subject": "Seating Plan 26",
-  "count": 28,
+  "count": 29,
   "students": [
     {
       "name": "Hammad rehan",
@@ -358,6 +358,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T02:09:35.358Z"
+    },
+    {
+      "name": "Ghayour Abbas",
+      "nuid": "26I-3042",
+      "section": "A",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T02:10:15.391Z"
     }
   ]
 }
