@@ -3614,17 +3614,17 @@
           "Wednesday": [
             {
               "name": "Ideology of Pak",
-              "location": "D-302",
+              "location": "D-311",
               "time": "08:30-10:15"
             },
             {
               "name": "PF",
-              "location": "D-302",
+              "location": "D-311",
               "time": "11:30-12:50"
             },
             {
               "name": "Calculus",
-              "location": "D-302",
+              "location": "D-311",
               "time": "01:00-02:20"
             }
           ],
@@ -4055,19 +4055,19 @@
           ],
           "Wednesday": [
             {
-              "name": "Knowl Rep",
-              "location": "D-311",
-              "time": "08:30-09:50"
-            },
-            {
               "name": "Algo",
-              "location": "D-311",
+              "location": "D-314",
               "time": "11:30-12:50"
             },
             {
               "name": "Comp Net",
-              "location": "D-311",
+              "location": "D-314",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Knowl Rep",
+              "location": "D-315",
+              "time": "08:30-09:50"
             }
           ],
           "Thursday": [
@@ -4461,6 +4461,11 @@
           "Wednesday": [
             {
               "name": "Blockchain",
+              "location": "D-302",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Blockchain",
               "location": "D-504",
               "time": "08:30-09:50"
             },
@@ -4519,6 +4524,11 @@
             }
           ],
           "Wednesday": [
+            {
+              "name": "Blockchain",
+              "location": "D-302",
+              "time": "01:00-02:20"
+            },
             {
               "name": "Blockchain",
               "location": "D-504",
@@ -7005,6 +7015,6 @@
       }
     }
   },
-  "count": 1157,
-  "generatedAt": "2026-08-18T06:24:23.412647+00:00"
+  "count": 1159,
+  "generatedAt": "2026-08-18T07:12:39.162916+00:00"
 }
