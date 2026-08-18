@@ -107,6 +107,15 @@
       "batch": "25",
       "highScore": 183,
       "achievedAt": "2026-08-17T12:50:24.309Z"
+    },
+    "25I-0655": {
+      "nuid": "25I-0655",
+      "name": "Ismail Hassan",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 138,
+      "achievedAt": "2026-08-18T16:13:56.317Z"
     }
   },
   "leaderboard": [
@@ -136,6 +145,15 @@
       "batch": "25",
       "highScore": 139,
       "achievedAt": "2026-08-18T04:34:20.674Z"
+    },
+    {
+      "nuid": "25I-0655",
+      "name": "Ismail Hassan",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 138,
+      "achievedAt": "2026-08-18T16:13:56.317Z"
     },
     {
       "nuid": "25I-2526",
@@ -190,15 +208,6 @@
       "batch": "25",
       "highScore": 56,
       "achievedAt": "2026-07-26T14:16:51.981Z"
-    },
-    {
-      "nuid": "25I-0984",
-      "name": "Fahad Nasir",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 54,
-      "achievedAt": "2026-08-15T14:46:56.552Z"
     }
   ]
 }
