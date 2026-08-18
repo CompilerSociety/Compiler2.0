@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T03:06:25.164Z",
+  "updated_at": "2026-08-18T03:10:44.827Z",
   "source_subject": "Seating Plan 26",
-  "count": 33,
+  "count": 34,
   "students": [
     {
       "name": "Hammad rehan",
@@ -423,6 +423,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T03:06:25.164Z"
+    },
+    {
+      "name": "ALI HASEEB HAIDER",
+      "nuid": "26I-3039",
+      "section": "A",
+      "department": "BS SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T03:10:44.827Z"
     }
   ]
 }
