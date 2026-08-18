@@ -886,5 +886,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0627",
+    "name": "Yahya Nisar",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eVgPunwHICk:APA91bHr5WLnji_QVNqh1_jnt43lNg_p-VVoKPXtWXJwjc2AhbjPNo5lrSbaZLOUgGf57PxKTB0THE69oLc_yG8O5o4IX15zxBtcSIspCpIor27aFCT68C9ddflass6svYmhiKqsynAd",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAn0mtr0hjsdZNdcI1sNMjONK2X0J39HG_gg95F-WFbNDWg6zLfdtUQFBOCWKZHnX7y4zqMPaJAMSTKYE_dLKMA",
+        "auth": "NAL0zEMNB9E-t_ujcsHMLw"
+      }
+    },
+    "updated_at": 1787046841706,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
