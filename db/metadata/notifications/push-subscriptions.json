@@ -932,5 +932,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0831",
+    "name": "Muhammad AbuBakar",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cWi-vFLPWGk:APA91bGcVIXmn86kdv9D5YBHrOySHnbPehJ3FPUhc_1Q3yzlJT7mBARettw7PXHdIjYTAhBYJPFpxoqKB0yiHA3TITm1Nf7MU8bvU8m2pcz_JVyrnchKY557H_NX9hW6Jwo0CqZuh2Ty",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BHtepkMWxaFWcUoCh1_MyloTENFIRqKm4OEI59iXx6Y2p9CisU3VJoOiF--tha48_w_Wltvwb4hRlxSlSD-dl3M",
+        "auth": "PJ6yqzSucnGPZ_Ew7C52eQ"
+      }
+    },
+    "updated_at": 1787053870882,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
