@@ -1039,11 +1039,11 @@
         "auth": "BewiHcJBS5Q7tL6fzYMaLg"
       }
     },
-    "updated_at": 1787079542450,
+    "updated_at": 1787080391272,
     "prefs": {
       "cls": true,
       "exam": true,
-      "show": true,
+      "show": false,
       "seat": true,
       "room": false
     }
