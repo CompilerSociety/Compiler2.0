@@ -1024,5 +1024,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0990",
+    "name": "Bhavish Jan",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/e4ktS0nhauE:APA91bEJPM8ZYahNjBkfH3bD3jOumLJxUjufhB_XbxogjVLtxHOGNhJ_wEGOC-1o4lr_B4TbluCQkqHA0R9w-CtGIcDmJX1nQF4OvWHeKPIOR2V-7C6Mxb1fgcaM5Qy9tQmYxrzSx-Aw",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPIFEl6umtPtfn1M1W-N6pDlb3wrWLcg2A4j94g34p_RnwJGf3Sq9btAIdP-pQXK4JRfqEl5JzHtYqIiOVMKhq4",
+        "auth": "BewiHcJBS5Q7tL6fzYMaLg"
+      }
+    },
+    "updated_at": 1787079542450,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
