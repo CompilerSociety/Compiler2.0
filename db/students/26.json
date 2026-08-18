@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T02:38:42.639Z",
+  "updated_at": "2026-08-18T02:56:46.507Z",
   "source_subject": "Seating Plan 26",
-  "count": 31,
+  "count": 32,
   "students": [
     {
       "name": "Hammad rehan",
@@ -397,6 +397,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T02:38:42.639Z"
+    },
+    {
+      "name": "Sara ihtesham",
+      "nuid": "26I-3038",
+      "section": "A",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T02:56:46.507Z"
     }
   ]
 }
