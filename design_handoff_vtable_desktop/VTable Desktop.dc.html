@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#f2f6f0;--bg-top:#ffffff;--nav-bg:rgba(255,255,255,.9);--surface:#ffffff;--surface2:#fbfdfa;--panel:#16210f;--tint:#edf5eb;--chip:#eef1ec;--t1:#16210f;--t2:rgba(22,33,15,.62);--t3:rgba(22,33,15,.46);--line:rgba(22,33,15,.09);--line2:rgba(22,33,15,.14);--green:#2f6b31;--green-text:#2f6b31;--green-ink:#1f4a22;--green-line:rgba(47,107,49,.45);--green-line-soft:rgba(47,107,49,.22);--slot-on:#7fb87d;--slot-off:#dfe3dc;--seat-mine:#cfe6cb;--av2:#dcebd9}
+:root[data-theme="dark"]{--bg:#0f1a0d;--bg-top:#182714;--nav-bg:rgba(15,26,13,.9);--surface:#1b2818;--surface2:#182415;--panel:#0a1206;--tint:#223a1f;--chip:#25331f;--t1:#e9f2e5;--t2:rgba(233,242,229,.64);--t3:rgba(233,242,229,.46);--line:rgba(233,242,229,.1);--line2:rgba(233,242,229,.18);--green:#3f8c41;--green-text:#8fc78d;--green-ink:#a9d8a5;--green-line:rgba(143,199,141,.42);--green-line-soft:rgba(143,199,141,.26);--slot-on:#6fae6d;--slot-off:#2c3a27;--seat-mine:#34532f;--av2:#2a3f26}
+body{margin:0;background:var(--bg);font-family:"Figtree",system-ui,sans-serif;color:var(--t1);-webkit-font-smoothing:antialiased;transition:background .25s ease,color .25s ease}
+a{color:var(--green-text);text-underline-offset:3px}a:hover{color:var(--green-ink)}
+*,*::before,*::after{box-sizing:border-box}
+:focus-visible{outline:2px solid var(--green-text);outline-offset:2px}
+@keyframes vtFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes vtPulse{0%,100%{box-shadow:0 0 0 0 rgba(47,107,49,.45)}70%{box-shadow:0 0 0 9px rgba(47,107,49,0)}}
+@keyframes vtToast{0%{opacity:0;transform:translateY(14px)}10%{opacity:1;transform:none}86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%2316210f' stroke-width='2' stroke-linecap='round'><path d='M1 1.5l5 5 5-5'/></svg>");background-repeat:no-repeat;background-position:right 18px center}
+:root[data-theme="dark"] select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23e9f2e5' stroke-width='2' stroke-linecap='round'><path d='M1 1.5l5 5 5-5'/></svg>")}
+input::placeholder{color:var(--t3)}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:radial-gradient(90% 60% at 50% 0%,var(--bg-top) 0%,var(--bg) 70%);padding-bottom:64px">
+
+  <div style="position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)">
+    <div style="max-width:1280px;margin:0 auto;padding:13px 30px;display:flex;align-items:center;gap:22px">
+      <button onClick="{{ goHome }}" onDoubleClick="{{ openArcade }}" title="Double-click for something else" style="display:flex;align-items:center;gap:11px;border:0;background:transparent;padding:0;cursor:pointer;user-select:none;flex:none">
+        <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:13px;background:var(--green);color:#ffffff;font:500 13.5px/1 'DM Mono',ui-monospace,monospace;letter-spacing:.14em">VTABLE</span>
+        <span style="font:500 10.5px/1.35 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);text-align:left">FAST NUCES<br>Islamabad</span>
+      </button>
+
+      <div style="flex:1;display:flex;gap:2px;justify-content:center;flex-wrap:wrap">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+          <button onClick="{{ n.go }}" style="padding:9px 14px;border:0;border-radius:999px;background:{{ n.bg }};color:{{ n.fg }};font:{{ n.font }};cursor:pointer;white-space:nowrap;transition:background .16s,color .16s" style-hover="background:var(--tint)">{{ n.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:none">
+        <span style="font:500 12.5px/1 'DM Mono',monospace;color:var(--t3)">{{ clockLine }}</span>
+        <button onClick="{{ toggleTheme }}" title="Toggle dark mode" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line2);background:var(--surface2);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .16s" style-hover="background:var(--tint)">
+          <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+          </sc-if>
+          <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+          </sc-if>
+        </button>
+        <sc-if value="{{ authed }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goProfile }}" style="display:flex;align-items:center;gap:9px;padding:5px 14px 5px 5px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);cursor:pointer" style-hover="border-color:var(--green-line)">
+            <span style="width:30px;height:30px;border-radius:999px;background:var(--green);color:#ffffff;display:flex;align-items:center;justify-content:center;font:500 11px/1 'DM Mono',monospace">{{ me.initials }}</span>
+            <span style="font:500 12px/1 'DM Mono',monospace;color:var(--t2)">{{ me.nuid }}</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ goSignIn }}" style="padding:0 18px;height:38px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 13px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:var(--green-ink)">Sign in</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1280px;margin:0 auto;padding:0 30px">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="animation:vtFade .3s cubic-bezier(.22,1,.36,1);display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:78px 0 70px">
+        <div>
+          <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)">Fall 2026 · every school on campus</div>
+          <h1 style="margin:22px 0 0;font:500 68px/1.02 'DM Mono',ui-monospace,monospace;letter-spacing:-.035em">Stop wandering<br>FAST.</h1>
+          <p style="margin:24px 0 0;max-width:530px;font-size:17.5px;line-height:1.55;color:var(--t2);text-wrap:pretty">Timetables, free rooms, faculty offices, exam seating and show-up days — pulled from the live sheets. Everything is open without an account; signing in just remembers your section.</p>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:32px">
+            <button onClick="{{ goTT }}" style="padding:0 28px;height:56px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 15px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;box-shadow:0 10px 24px var(--green-line-soft);transition:transform .18s cubic-bezier(.22,1,.36,1),background .18s" style-hover="background:var(--green-ink);transform:translateY(-2px)">Open the timetable</button>
+            <button onClick="{{ homeCta }}" style="padding:0 26px;height:56px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--t1);font:600 15px/1 'Figtree',sans-serif;cursor:pointer;transition:border-color .16s" style-hover="border-color:var(--green-line)">{{ homeCtaLabel }}</button>
+          </div>
+          <p style="margin:16px 2px 0;font-size:13px;color:var(--t3)">{{ homeNote }}</p>
+        </div>
+
+        <div style="border-radius:34px;background:var(--green);color:#ffffff;padding:30px;position:relative;overflow:hidden;box-shadow:0 18px 44px var(--green-line-soft)">
+          <div style="position:absolute;right:-48px;top:-56px;width:190px;height:190px;border-radius:999px;background:rgba(255,255,255,.1)"></div>
+          <div style="position:relative">
+            <div style="display:flex;align-items:center;gap:9px;font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.92">
+              <span style="width:8px;height:8px;border-radius:999px;background:#ffffff;animation:vtPulse 2s infinite"></span>Right now on campus
+            </div>
+            <div style="font:500 27px/1.15 'DM Mono',monospace;margin-top:18px;letter-spacing:-.02em">Slot 4 · 13:00–14:20</div>
+            <div style="display:flex;gap:26px;margin-top:22px">
+              <div><div style="opacity:.72;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Free rooms</div><div style="font:500 20px/1 'DM Mono',monospace;margin-top:7px">23</div></div>
+              <div><div style="opacity:.72;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Blocks</div><div style="font:500 20px/1 'DM Mono',monospace;margin-top:7px">A – D</div></div>
+              <div><div style="opacity:.72;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Synced</div><div style="font:500 20px/1 'DM Mono',monospace;margin-top:7px">22m</div></div>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.2);margin:26px 0 20px"></div>
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <sc-for list="{{ homeLinks }}" as="l" hint-placeholder-count="3">
+                <button onClick="{{ l.go }}" style="display:flex;align-items:center;gap:14px;padding:0;border:0;background:transparent;color:#ffffff;cursor:pointer;text-align:left;font-size:14.5px">
+                  <span style="flex:1;font-weight:600">{{ l.label }}</span>
+                  <span style="font:500 12px/1 'DM Mono',monospace;opacity:.8">{{ l.meta }} ›</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1);max-width:560px;margin:0 auto;padding:78px 0 40px">
+        <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)">Step 1 of 1 · takes ten seconds</div>
+        <h1 style="margin:16px 0 0;font:500 42px/1.05 'DM Mono',ui-monospace,monospace;letter-spacing:-.03em">What's your roll number?</h1>
+        <p style="margin:16px 0 0;font-size:16px;line-height:1.55;color:var(--t2)">It decodes your school, program, batch and section, so nothing else needs filling in. Everything on VTable works without this — signing in only remembers where you belong.</p>
+
+        <div style="margin-top:30px;padding:26px;border-radius:28px;background:var(--surface);border:1px solid var(--line)">
+          <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">NU roll number</div>
+          <div style="display:flex;align-items:center;gap:9px;margin-top:11px;padding:0 20px;height:58px;border-radius:999px;background:var(--surface2);border:1px solid {{ nuidBorder }}">
+            <input value="{{ nuid }}" onChange="{{ setNuid }}" onKeyDown="{{ nuidKey }}" placeholder="22i-1234" style="flex:1;min-width:0;border:0;outline:none;background:transparent;font:500 18px/1 'DM Mono',ui-monospace,monospace;letter-spacing:.05em;color:var(--t1)">
+            <span style="font:400 12.5px/1 'DM Mono',monospace;color:var(--t3)">@nu.edu.pk</span>
+          </div>
+          <sc-if value="{{ nuidError }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:12px;font:500 13px/1.45 'Figtree',sans-serif;color:#b3261e">{{ nuidError }}</div>
+          </sc-if>
+          <button onClick="{{ submitNuid }}" style="margin-top:18px;width:100%;height:56px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 15px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:var(--green-ink)">Continue</button>
+          <div style="display:flex;justify-content:center;margin-top:14px">
+            <button onClick="{{ goManual }}" style="padding:9px 16px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--t2);font:600 12.5px/1 'Figtree',sans-serif;cursor:pointer;transition:background .16s" style-hover="background:var(--tint)">Not a Computing (FSC) student? Enter details instead</button>
+          </div>
+        </div>
+
+        <button onClick="{{ goHome }}" style="margin:22px auto 0;display:block;border:0;background:transparent;color:var(--t3);font:600 13.5px/1 'Figtree',sans-serif;cursor:pointer">Skip — browse without signing in</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isManual }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1);max-width:620px;margin:0 auto;padding:70px 0 40px">
+        <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)">{{ manualKicker }}</div>
+        <h1 style="margin:16px 0 0;font:500 38px/1.08 'DM Mono',ui-monospace,monospace;letter-spacing:-.03em">{{ manualTitle }}</h1>
+        <p style="margin:16px 0 0;font-size:15.5px;line-height:1.55;color:var(--t2)">{{ manualNote }}</p>
+
+        <div style="margin-top:28px;padding:26px;border-radius:28px;background:var(--surface);border:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <sc-for list="{{ manualFields }}" as="f" hint-placeholder-count="4">
+            <label style="display:flex;flex-direction:column;gap:9px;grid-column:{{ f.span }}">
+              <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);padding-left:4px">{{ f.label }}</span>
+              <input value="{{ f.value }}" onChange="{{ f.set }}" placeholder="{{ f.ph }}" style="height:52px;padding:0 20px;border-radius:999px;border:1px solid var(--line2);background:var(--surface2);font:500 15px/1 'Figtree',sans-serif;color:var(--t1);outline:none">
+            </label>
+          </sc-for>
+          <button onClick="{{ submitManual }}" style="grid-column:1/-1;height:56px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 15px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:var(--green-ink)">Save and continue</button>
+        </div>
+
+        <div style="display:flex;justify-content:center;gap:20px;margin-top:20px">
+          <button onClick="{{ goSignIn }}" style="border:0;background:transparent;color:var(--t3);font:600 13.5px/1 'Figtree',sans-serif;cursor:pointer">Back to roll number</button>
+          <button onClick="{{ goHome }}" style="border:0;background:transparent;color:var(--t3);font:600 13.5px/1 'Figtree',sans-serif;cursor:pointer">Skip for now</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:44px 0 24px">
+          <div>
+            <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)">{{ me.line }}</div>
+            <h1 style="margin:14px 0 0;font:500 40px/1.05 'DM Mono',ui-monospace,monospace;letter-spacing:-.03em">{{ dashGreeting }}</h1>
+          </div>
+          <span style="font:500 12.5px/1 'DM Mono',monospace;color:var(--t3)">{{ dashDate }}</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 4px">
+              <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">Today · {{ me.section }}</span>
+              <button onClick="{{ goTT }}" style="border:0;background:transparent;color:var(--green-text);font:500 12.5px/1 'DM Mono',monospace;cursor:pointer">Full timetable ›</button>
+            </div>
+            <sc-for list="{{ ttRows }}" as="r" hint-placeholder-count="5">
+              <div>
+                <sc-if value="{{ r.isGap }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ r.act }}" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 24px;border-radius:22px;border:1px dashed var(--green-line);background:var(--tint);cursor:pointer;text-align:left;transition:transform .16s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateX(4px)">
+                    <span style="font:500 14px/1 'DM Mono',monospace;color:var(--green-ink);width:118px;flex:none">{{ r.window }}</span>
+                    <span style="flex:1;font:600 14.5px/1.4 'Figtree',sans-serif;color:var(--green-ink)">{{ r.title }}</span>
+                    <span style="font:500 12.5px/1 'DM Mono',monospace;color:var(--green-text)">{{ r.cta }} ›</span>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ r.isClass }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;align-items:center;gap:22px;padding:20px 24px;border-radius:26px;background:{{ r.bg }};border:1px solid {{ r.border }};opacity:{{ r.op }};transition:transform .16s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateY(-2px)">
+                    <div style="flex:none;width:104px">
+                      <div style="font:500 18px/1 'DM Mono',monospace">{{ r.start }}</div>
+                      <div style="font:400 13px/1 'DM Mono',monospace;color:var(--t3);margin-top:7px">{{ r.end }}</div>
+                    </div>
+                    <div style="flex:1;min-width:0;border-left:1px solid var(--line2);padding-left:22px">
+                      <div style="font:700 19px/1.25 'Figtree',sans-serif;letter-spacing:-.01em">{{ r.name }}</div>
+                      <div style="font:500 13px/1 'DM Mono',monospace;color:var(--t2);margin-top:6px">{{ r.code }}</div>
+                    </div>
+                    <span style="flex:none;padding:9px 18px;border-radius:999px;background:{{ r.pillBg }};color:{{ r.pillFg }};font:500 15px/1 'DM Mono',monospace">{{ r.room }}</span>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="border-radius:28px;background:var(--panel);color:#ffffff;padding:26px">
+              <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.6">Next paper in</div>
+              <div style="font:500 38px/1 'DM Mono',monospace;margin-top:14px;letter-spacing:-.03em">2 days</div>
+              <div style="font-size:14.5px;margin-top:14px;opacity:.85;line-height:1.5">Computer Networks<br>Mon 17 Aug · 09:00 · C-301</div>
+              <button onClick="{{ goSeating }}" style="margin-top:22px;width:100%;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.24);background:transparent;color:#ffffff;font:500 13.5px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:rgba(255,255,255,.12)">Seat R3 · C4 ›</button>
+            </div>
+            <sc-for list="{{ dashCards }}" as="c" hint-placeholder-count="3">
+              <button onClick="{{ c.go }}" style="text-align:left;padding:20px 22px;border-radius:24px;background:var(--surface2);border:1px solid var(--line);cursor:pointer;transition:transform .16s cubic-bezier(.22,1,.36,1),border-color .16s" style-hover="transform:translateY(-2px);border-color:var(--green-line)">
+                <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">{{ c.k }}</div>
+                <div style="font:600 15.5px/1.35 'Figtree',sans-serif;margin-top:10px">{{ c.v }}</div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ hasHead }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding:44px 0 24px">
+        <div>
+          <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)">{{ pageKicker }}</div>
+          <h1 style="margin:14px 0 0;font:500 40px/1.05 'DM Mono',ui-monospace,monospace;letter-spacing:-.03em">{{ pageTitle }}</h1>
+        </div>
+        <p style="margin:0;max-width:430px;font-size:14.5px;line-height:1.55;color:var(--t2);text-align:right">{{ pageNote }}</p>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTT }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:18px 22px;border-radius:26px;background:var(--surface);border:1px solid var(--line)">
+          <sc-for list="{{ ttSelects }}" as="s" hint-placeholder-count="5">
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);padding-left:4px">{{ s.label }}</span>
+              <select value="{{ s.value }}" onChange="{{ s.set }}" ref="{{ s.ref }}" style="height:46px;min-width:168px;padding:0 44px 0 18px;border-radius:999px;border:1px solid var(--line2);background-color:var(--surface2);font:600 14px/1 'Figtree',sans-serif;color:var(--t1);cursor:pointer">
+                <sc-for list="{{ s.options }}" as="o" hint-placeholder-count="4">
+                  <option value="{{ o.v }}">{{ o.t }}</option>
+                </sc-for>
+              </select>
+            </label>
+          </sc-for>
+          <div style="flex:1"></div>
+          <div style="display:flex;padding:4px;border-radius:999px;background:var(--tint)">
+            <button onClick="{{ ttDayView }}" style="padding:0 22px;height:40px;border-radius:999px;border:0;cursor:pointer;font:{{ ttDayFont }};background:{{ ttDayBg }};color:{{ ttDayFg }};box-shadow:{{ ttDaySh }}">Day</button>
+            <button onClick="{{ ttWeekView }}" style="padding:0 22px;height:40px;border-radius:999px;border:0;cursor:pointer;font:{{ ttWeekFont }};background:{{ ttWeekBg }};color:{{ ttWeekFg }};box-shadow:{{ ttWeekSh }}">Week</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ ttIsDay }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:20px;display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ ttRows }}" as="r" hint-placeholder-count="5">
+                <div>
+                  <sc-if value="{{ r.isGap }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ r.act }}" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 24px;border-radius:22px;border:1px dashed var(--green-line);background:var(--tint);cursor:pointer;text-align:left;transition:transform .16s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateX(4px)">
+                      <span style="font:500 14px/1 'DM Mono',monospace;color:var(--green-ink);width:118px;flex:none">{{ r.window }}</span>
+                      <span style="flex:1;font:600 14.5px/1.4 'Figtree',sans-serif;color:var(--green-ink)">{{ r.title }}</span>
+                      <span style="font:500 12.5px/1 'DM Mono',monospace;color:var(--green-text)">{{ r.cta }} ›</span>
+                    </button>
+                  </sc-if>
+                  <sc-if value="{{ r.isClass }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:22px;padding:20px 24px;border-radius:26px;background:{{ r.bg }};border:1px solid {{ r.border }};opacity:{{ r.op }};transition:transform .16s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateY(-2px)">
+                      <div style="flex:none;width:104px">
+                        <div style="font:500 18px/1 'DM Mono',monospace">{{ r.start }}</div>
+                        <div style="font:400 13px/1 'DM Mono',monospace;color:var(--t3);margin-top:7px">{{ r.end }}</div>
+                      </div>
+                      <div style="flex:1;min-width:0;border-left:1px solid var(--line2);padding-left:22px">
+                        <div style="font:700 19px/1.25 'Figtree',sans-serif;letter-spacing:-.01em">{{ r.name }}</div>
+                        <div style="font:500 13px/1 'DM Mono',monospace;color:var(--t2);margin-top:6px">{{ r.code }}</div>
+                      </div>
+                      <span style="flex:none;padding:9px 18px;border-radius:999px;background:{{ r.pillBg }};color:{{ r.pillFg }};font:500 15px/1 'DM Mono',monospace">{{ r.room }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="border-radius:28px;background:var(--surface2);border:1px solid var(--line);padding:24px">
+              <div style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">This selection</div>
+              <div style="font:500 22px/1.2 'DM Mono',monospace;margin-top:12px;letter-spacing:-.02em">{{ ttSectionLabel }}</div>
+              <div style="display:flex;flex-direction:column;gap:14px;margin-top:22px">
+                <sc-for list="{{ ttFacts }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                    <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)">{{ f.k }}</span>
+                    <span style="font:600 14.5px/1.3 'Figtree',sans-serif;text-align:right">{{ f.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ pinSection }}" style="margin-top:24px;width:100%;height:50px;border-radius:999px;border:1px solid var(--green-line);background:var(--tint);color:var(--green-ink);font:600 14px/1 'Figtree',sans-serif;cursor:pointer;transition:background .16s" style-hover="background:var(--chip)">Remember this section</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ ttIsWeek }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px;border-radius:30px;background:var(--surface);border:1px solid var(--line);padding:22px;animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+            <div style="display:grid;grid-template-columns:88px repeat(5,1fr);gap:10px">
+              <div></div>
+              <sc-for list="{{ weekHead }}" as="h" hint-placeholder-count="5">
+                <div style="padding:10px 14px;border-radius:16px;background:{{ h.bg }};color:{{ h.fg }};font:500 13.5px/1 'DM Mono',monospace;display:flex;align-items:center;justify-content:space-between">
+                  <span>{{ h.day }}</span><span style="font-size:11px;opacity:.65">{{ h.n }}</span>
+                </div>
+              </sc-for>
+              <sc-for list="{{ weekGrid }}" as="row" hint-placeholder-count="5">
+                <div style="display:contents">
+                  <div style="display:flex;align-items:flex-start;padding-top:6px;font:400 12.5px/1.4 'DM Mono',monospace;color:var(--t3)">{{ row.slot }}</div>
+                  <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="5">
+                    <div style="min-height:84px;border-radius:18px;background:{{ c.bg }};border:1px solid {{ c.border }};padding:12px 14px;display:flex;flex-direction:column;gap:7px;justify-content:center">
+                      <span style="font:700 13.5px/1.3 'Figtree',sans-serif;color:{{ c.fg }}">{{ c.name }}</span>
+                      <span style="font:500 12px/1 'DM Mono',monospace;color:{{ c.metaFg }}">{{ c.room }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isRooms }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;align-items:center;gap:26px;padding:20px 26px;border-radius:26px;background:var(--panel);color:#ffffff;flex-wrap:wrap">
+          <span style="width:9px;height:9px;border-radius:999px;background:#8fc78d;animation:vtPulse 2s infinite"></span>
+          <span style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.7">Slot 4 · 13:00–14:20</span>
+          <span style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.7">{{ roomDayLabel }}</span>
+          <span style="margin-left:auto;font:500 17px/1 'DM Mono',monospace">{{ clock }}</span>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:flex-end;margin-top:20px;flex-wrap:wrap">
+          <div>
+            <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);margin:0 0 9px 4px">Block</div>
+            <div style="display:flex;gap:9px">
+              <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="4">
+                <button onClick="{{ b.pick }}" style="width:88px;height:62px;border-radius:22px;border:1px solid {{ b.border }};background:{{ b.bg }};color:{{ b.fg }};cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:transform .18s cubic-bezier(.22,1,.36,1)" style-hover="transform:translateY(-3px)">
+                  <span style="font:500 19px/1 'DM Mono',monospace">{{ b.name }}</span>
+                  <span style="font:400 10px/1 'DM Mono',monospace;opacity:.8">{{ b.free }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);margin:0 0 9px 4px">Floor</div>
+            <div style="display:flex;gap:9px">
+              <sc-for list="{{ floors }}" as="f" hint-placeholder-count="3">
+                <button onClick="{{ f.pick }}" style="padding:0 20px;height:46px;border-radius:999px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font:600 13.5px/1 'Figtree',sans-serif;cursor:pointer;transition:transform .16s" style-hover="transform:translateY(-2px)">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:9px">
+            <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);padding-left:4px">Day</span>
+            <select value="{{ roomDay }}" onChange="{{ setRoomDay }}" ref="{{ roomDayRef }}" style="height:46px;min-width:160px;padding:0 44px 0 18px;border-radius:999px;border:1px solid var(--line2);background-color:var(--surface2);font:600 14px/1 'Figtree',sans-serif;color:var(--t1);cursor:pointer">
+              <sc-for list="{{ roomDays }}" as="o" hint-placeholder-count="6">
+                <option value="{{ o.v }}">{{ o.t }}</option>
+              </sc-for>
+            </select>
+          </label>
+          <div style="flex:1;text-align:right;font:500 13px/1 'DM Mono',monospace;color:var(--green-text)">{{ freeCount }}</div>
+        </div>
+
+        <div style="margin-top:20px;border-radius:30px;background:var(--surface);border:1px solid var(--line);padding:8px 24px 22px">
+          <div style="display:grid;grid-template-columns:120px 1fr 110px;gap:20px;padding:16px 0 12px;border-bottom:1px solid var(--line)">
+            <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">Room</span>
+            <div style="display:flex;gap:4px">
+              <sc-for list="{{ slotHead }}" as="s" hint-placeholder-count="8">
+                <span style="flex:1;font:400 10.5px/1 'DM Mono',monospace;color:var(--t3);text-align:center">{{ s.t }}</span>
+              </sc-for>
+            </div>
+            <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);text-align:right">Now</span>
+          </div>
+          <sc-for list="{{ rooms }}" as="r" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:120px 1fr 110px;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+              <span style="font:500 16px/1 'DM Mono',monospace">{{ r.name }}</span>
+              <div style="display:flex;gap:4px">
+                <sc-for list="{{ r.slots }}" as="s" hint-placeholder-count="8">
+                  <span style="flex:1;height:26px;border-radius:9px;background:{{ s.c }}"></span>
+                </sc-for>
+              </div>
+              <span style="font:500 11.5px/1 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:{{ r.fg }};text-align:right">{{ r.status }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:20px;margin-top:18px;font-size:12.5px;color:var(--t2)">
+            <span style="display:flex;align-items:center;gap:7px"><span style="width:14px;height:14px;border-radius:5px;background:var(--slot-on)"></span>Free</span>
+            <span style="display:flex;align-items:center;gap:7px"><span style="width:14px;height:14px;border-radius:5px;background:var(--slot-off)"></span>Booked</span>
+            <span style="margin-left:auto">Eight teaching slots, 08:30 to 17:20.</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isFaculty }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1);display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start">
+        <div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <div style="flex:1;min-width:260px;display:flex;align-items:center;gap:11px;height:50px;padding:0 20px;border-radius:999px;background:var(--surface);border:1px solid var(--line2)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" style="color:var(--t3);flex:none"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+              <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Name, department or office…" style="flex:1;min-width:0;border:0;outline:none;background:transparent;font:500 15px/1 'Figtree',sans-serif;color:var(--t1)">
+            </div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <sc-for list="{{ depts }}" as="d" hint-placeholder-count="7">
+                <button onClick="{{ d.pick }}" style="padding:0 15px;height:44px;border-radius:999px;border:1px solid {{ d.border }};background:{{ d.bg }};color:{{ d.fg }};font:600 13px/1 'Figtree',sans-serif;cursor:pointer">{{ d.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <sc-for list="{{ leaders }}" as="l" hint-placeholder-count="2">
+              <div style="flex:1;padding:16px 20px;border-radius:22px;background:var(--tint);border:1px solid var(--green-line-soft)">
+                <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--green-ink)">{{ l.role }}</div>
+                <div style="font:700 15px/1.3 'Figtree',sans-serif;margin-top:9px">{{ l.name }}</div>
+                <div style="font:500 12.5px/1 'DM Mono',monospace;color:var(--t2);margin-top:7px">{{ l.room }} · {{ l.email }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin:18px 4px 12px">
+            <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">Faculty directory</span>
+            <span style="font:500 12.5px/1 'DM Mono',monospace;color:var(--t3)">{{ facCount }}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+            <sc-for list="{{ facultyList }}" as="f" hint-placeholder-count="6">
+              <button onClick="{{ f.open }}" style="display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:24px;background:{{ f.cardBg }};border:1px solid {{ f.cardBorder }};cursor:pointer;text-align:left;transition:transform .16s cubic-bezier(.22,1,.36,1),border-color .16s" style-hover="transform:translateY(-2px);border-color:var(--green-line)">
+                <span style="flex:none;width:46px;height:46px;border-radius:999px;background:{{ f.avBg }};color:{{ f.avFg }};display:flex;align-items:center;justify-content:center;font:500 14px/1 'DM Mono',monospace">{{ f.initials }}</span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font:700 15px/1.25 'Figtree',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span>
+                  <span style="display:block;font-size:12.5px;color:var(--t2);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.title }}</span>
+                </span>
+                <span style="flex:none;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--green-ink);font:500 11.5px/1 'DM Mono',monospace">{{ f.room }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ noFaculty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:52px 20px;text-align:center;color:var(--t3);font-size:14.5px">No one by that name — try a surname or an office number.</div>
+          </sc-if>
+        </div>
+
+        <div style="border-radius:30px;background:var(--surface2);border:1px solid var(--line);overflow:hidden;position:sticky;top:92px">
+          <div style="padding:30px 26px 26px;background:var(--tint);border-bottom:1px solid var(--green-line-soft);text-align:center">
+            <div style="width:76px;height:76px;border-radius:999px;margin:0 auto;background:{{ fac.avBg }};color:{{ fac.avFg }};display:flex;align-items:center;justify-content:center;font:500 24px/1 'DM Mono',monospace">{{ fac.initials }}</div>
+            <div style="font:500 20px/1.2 'DM Mono',monospace;margin-top:16px;letter-spacing:-.02em">{{ fac.name }}</div>
+            <div style="font-size:13.5px;color:var(--t2);margin-top:8px">{{ fac.title }}</div>
+          </div>
+          <div style="padding:22px 26px 26px">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ facRows }}" as="r" hint-placeholder-count="4">
+                <div>
+                  <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)">{{ r.k }}</div>
+                  <div style="font:600 14.5px/1.35 'Figtree',sans-serif;margin-top:6px;overflow-wrap:anywhere">{{ r.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ copyEmail }}" style="margin-top:26px;width:100%;height:52px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 14.5px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:var(--green-ink)">Copy email</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isExams }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:18px 22px;border-radius:26px;background:var(--surface);border:1px solid var(--line)">
+          <sc-for list="{{ exSelects }}" as="s" hint-placeholder-count="2">
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);padding-left:4px">{{ s.label }}</span>
+              <select value="{{ s.value }}" onChange="{{ s.set }}" ref="{{ s.ref }}" style="height:46px;min-width:180px;padding:0 44px 0 18px;border-radius:999px;border:1px solid var(--line2);background-color:var(--surface2);font:600 14px/1 'Figtree',sans-serif;color:var(--t1);cursor:pointer">
+                <sc-for list="{{ s.options }}" as="o" hint-placeholder-count="4">
+                  <option value="{{ o.v }}">{{ o.t }}</option>
+                </sc-for>
+              </select>
+            </label>
+          </sc-for>
+          <div style="flex:1"></div>
+          <div style="display:flex;padding:4px;border-radius:999px;background:var(--tint)">
+            <sc-for list="{{ examTabs }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.pick }}" style="padding:0 20px;height:40px;border-radius:999px;border:0;cursor:pointer;font:{{ t.font }};background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.sh }};white-space:nowrap">{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start;margin-top:20px">
+          <div style="border-radius:30px;background:var(--panel);color:#ffffff;padding:28px;position:relative;overflow:hidden">
+            <div style="position:absolute;right:-40px;bottom:-58px;width:170px;height:170px;border-radius:999px;background:var(--green-line-soft)"></div>
+            <div style="position:relative">
+              <div style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.6">Next paper in</div>
+              <div style="font:500 46px/1 'DM Mono',monospace;margin-top:16px;letter-spacing:-.03em">2 days</div>
+              <div style="font-size:15px;margin-top:16px;opacity:.85;line-height:1.5">Computer Networks<br>Mon 17 Aug · 09:00</div>
+              <div style="height:1px;background:rgba(255,255,255,.18);margin:24px 0 18px"></div>
+              <div style="display:flex;gap:26px">
+                <div><div style="opacity:.6;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Room</div><div style="font:500 20px/1 'DM Mono',monospace;margin-top:8px">C-301</div></div>
+                <div><div style="opacity:.6;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Seat</div><div style="font:500 20px/1 'DM Mono',monospace;margin-top:8px;color:#8fc78d">R3 · C4</div></div>
+              </div>
+              <button onClick="{{ goSeating }}" style="margin-top:24px;width:100%;height:50px;border-radius:999px;border:1px solid rgba(255,255,255,.24);background:transparent;color:#ffffff;font:500 14px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s" style-hover="background:rgba(255,255,255,.12)">Open seating plan</button>
+            </div>
+          </div>
+
+          <div style="border-radius:30px;background:var(--surface);border:1px solid var(--line);padding:6px 26px 20px">
+            <div style="display:grid;grid-template-columns:76px 1fr 120px 110px 110px;gap:18px;padding:16px 0 12px;border-bottom:1px solid var(--line);font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">
+              <span>Date</span><span>Paper</span><span>Time</span><span>Room</span><span>Seat</span>
+            </div>
+            <sc-for list="{{ exams }}" as="e" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:76px 1fr 120px 110px 110px;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)">
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <span style="font:500 19px/1 'DM Mono',monospace;color:{{ e.dFg }}">{{ e.dd }}</span>
+                  <span style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)">{{ e.mon }}</span>
+                </div>
+                <div>
+                  <div style="font:700 16px/1.3 'Figtree',sans-serif">{{ e.name }}</div>
+                  <div style="font-size:12.5px;color:var(--t3);margin-top:4px">{{ e.code }}</div>
+                </div>
+                <span style="font:500 14px/1 'DM Mono',monospace">{{ e.time }}</span>
+                <span style="font:500 14px/1 'DM Mono',monospace">{{ e.room }}</span>
+                <span style="justify-self:start;padding:6px 13px;border-radius:999px;background:{{ e.seatBg }};color:{{ e.seatFg }};font:500 12.5px/1 'DM Mono',monospace">{{ e.seat }}</span>
+              </div>
+            </sc-for>
+            <div style="padding-top:14px;font:500 12.5px/1 'DM Mono',monospace;color:var(--t3)">{{ examCount }}</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSeating }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;gap:12px;max-width:640px">
+          <div style="flex:1;display:flex;align-items:center;gap:11px;height:56px;padding:0 22px;border-radius:999px;background:var(--surface);border:1px solid var(--line2)">
+            <input value="{{ spq }}" onChange="{{ setSpq }}" placeholder="Full name or roll number — e.g. 22i-1847" style="flex:1;min-width:0;border:0;outline:none;background:transparent;font:500 15.5px/1 'Figtree',sans-serif;color:var(--t1)">
+          </div>
+          <button onClick="{{ findSeat }}" style="flex:none;padding:0 30px;height:56px;border-radius:999px;border:0;background:var(--green);color:#ffffff;font:500 15px/1 'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;transition:background .16s,transform .18s" style-hover="background:var(--green-ink);transform:translateY(-2px)">Find my seat</button>
+        </div>
+
+        <div style="margin-top:22px;display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start">
+          <div style="border-radius:30px;background:var(--surface);border:1px solid var(--line);padding:28px 34px 30px">
+            <div style="text-align:center;font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);padding-bottom:18px;border-bottom:2px solid var(--line2);margin-bottom:26px">Front · invigilator</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ seatRows }}" as="row" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:14px">
+                  <span style="flex:none;width:22px;font:500 12px/1 'DM Mono',monospace;color:var(--t3)">{{ row.label }}</span>
+                  <div style="flex:1;display:flex;gap:12px">
+                    <sc-for list="{{ row.seats }}" as="s" hint-placeholder-count="8">
+                      <span style="flex:1;height:56px;border-radius:16px;background:{{ s.bg }};border:1px solid {{ s.border }};display:flex;align-items:center;justify-content:center;font:500 11.5px/1 'DM Mono',monospace;color:{{ s.fg }}">{{ s.t }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:22px;justify-content:center;margin-top:28px;font-size:12.5px;color:var(--t2)">
+              <span style="display:flex;align-items:center;gap:7px"><span style="width:14px;height:14px;border-radius:5px;background:var(--green)"></span>You</span>
+              <span style="display:flex;align-items:center;gap:7px"><span style="width:14px;height:14px;border-radius:5px;background:var(--seat-mine)"></span>Your section</span>
+              <span style="display:flex;align-items:center;gap:7px"><span style="width:14px;height:14px;border-radius:5px;background:var(--chip)"></span>Other sections</span>
+            </div>
+          </div>
+
+          <div style="border-radius:30px;background:var(--tint);border:1px solid var(--green-line-soft);padding:28px">
+            <div style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">Your assignment</div>
+            <div style="font:500 24px/1.2 'DM Mono',monospace;margin-top:14px;letter-spacing:-.02em">Computer Networks</div>
+            <div style="display:flex;flex-direction:column;gap:18px;margin-top:26px">
+              <sc-for list="{{ spRows }}" as="r" hint-placeholder-count="5">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
+                  <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)">{{ r.k }}</span>
+                  <span style="font:500 17px/1 'DM Mono',monospace;color:{{ r.fg }}">{{ r.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:26px 0 0;font-size:12.5px;line-height:1.5;color:var(--t3)">Seating is published two days before each paper and matched against the exam sheet.</p>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isShowup }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1)">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:18px 22px;border-radius:26px;background:var(--surface);border:1px solid var(--line)">
+          <sc-for list="{{ suSelects }}" as="s" hint-placeholder-count="3">
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3);padding-left:4px">{{ s.label }}</span>
+              <select value="{{ s.value }}" onChange="{{ s.set }}" ref="{{ s.ref }}" style="height:46px;min-width:186px;padding:0 44px 0 18px;border-radius:999px;border:1px solid var(--line2);background-color:var(--surface2);font:600 14px/1 'Figtree',sans-serif;color:var(--t1);cursor:pointer">
+                <sc-for list="{{ s.options }}" as="o" hint-placeholder-count="4">
+                  <option value="{{ o.v }}">{{ o.t }}</option>
+                </sc-for>
+              </select>
+            </label>
+          </sc-for>
+          <div style="flex:1;display:flex;align-items:flex-end;justify-content:flex-end;font:500 13px/1 'DM Mono',monospace;color:var(--green-text)">{{ suSummary }}</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:20px">
+          <sc-for list="{{ showup }}" as="d" hint-placeholder-count="6">
+            <div style="border-radius:26px;background:{{ d.bg }};border:1px solid {{ d.border }};padding:22px 20px;min-height:246px;display:flex;flex-direction:column">
+              <div style="font:500 15px/1 'DM Mono',monospace;color:{{ d.dayFg }}">{{ d.day }}</div>
+              <div style="font:500 10px/1 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:{{ d.tagFg }};margin-top:10px">{{ d.tag }}</div>
+              <div style="height:1px;background:{{ d.rule }};margin:18px 0"></div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <sc-for list="{{ d.items }}" as="c" hint-placeholder-count="3">
+                  <div>
+                    <div style="font:500 12px/1 'DM Mono',monospace;color:{{ d.metaFg }}">{{ c.time }}</div>
+                    <div style="font:600 13.5px/1.35 'Figtree',sans-serif;color:{{ d.itemFg }};margin-top:4px">{{ c.name }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="flex:1"></div>
+              <div style="font:500 11px/1 'DM Mono',monospace;color:{{ d.metaFg }};margin-top:16px">{{ d.count }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:18px 4px 0;font-size:13px;color:var(--t3)">Green days are the ones your section is due on campus — everything else runs online.</p>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:vtFade .28s cubic-bezier(.22,1,.36,1);display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;max-width:960px">
+        <div style="border-radius:30px;background:var(--surface);border:1px solid var(--line);overflow:hidden">
+          <div style="padding:28px 26px;background:var(--tint);border-bottom:1px solid var(--green-line-soft);display:flex;align-items:center;gap:16px">
+            <span style="width:60px;height:60px;border-radius:999px;background:var(--green);color:#ffffff;display:flex;align-items:center;justify-content:center;font:500 18px/1 'DM Mono',monospace">{{ me.initials }}</span>
+            <div>
+              <div style="font:500 19px/1.2 'DM Mono',monospace;letter-spacing:-.02em">{{ me.name }}</div>
+              <div style="font-size:13px;color:var(--t2);margin-top:7px">{{ me.line }}</div>
+            </div>
+          </div>
+          <div style="padding:24px 26px 26px;display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ profileRows }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
+                <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--t3)">{{ r.k }}</span>
+                <span style="font:600 15px/1 'Figtree',sans-serif">{{ r.v }}</span>
+              </div>
+            </sc-for>
+            <button onClick="{{ signOut }}" style="margin-top:8px;height:50px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--t2);font:600 14px/1 'Figtree',sans-serif;cursor:pointer;transition:background .16s" style-hover="background:var(--chip)">Delete profile from this device</button>
+          </div>
+        </div>
+
+        <div style="border-radius:30px;background:var(--surface2);border:1px solid var(--line);padding:26px">
+          <div style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)">What to notify me about</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px">
+            <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="5">
+              <button onClick="{{ n.toggle }}" style="display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:22px;border:1px solid var(--line);background:var(--surface);cursor:{{ n.cursor }};text-align:left;opacity:{{ n.op }}">
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font:700 14.5px/1.3 'Figtree',sans-serif">{{ n.label }}</span>
+                  <span style="display:block;font-size:12.5px;line-height:1.45;color:var(--t2);margin-top:4px">{{ n.help }}</span>
+                </span>
+                <span style="flex:none;width:44px;height:26px;border-radius:999px;background:{{ n.trackBg }};position:relative;transition:background .18s">
+                  <span style="position:absolute;top:3px;left:{{ n.knobX }};width:20px;height:20px;border-radius:999px;background:#ffffff;transition:left .18s cubic-bezier(.22,1,.36,1)"></span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+          <p style="margin:20px 2px 0;font-size:12.5px;line-height:1.5;color:var(--t3)">Your profile is saved only on this device. Nothing here gates access — every tool works signed out.</p>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:32px;margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--t3);flex-wrap:wrap">
+      <span>Live timetable, exam seat, room availability and faculty directory for FAST NUCES Islamabad.</span>
+      <span style="display:flex;gap:14px;align-items:center"><a href="https://docs.google.com/spreadsheets/d/1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q" target="_blank" rel="noopener noreferrer">Timetable data source</a><span>·</span><span>Synced 22 min ago</span></span>
+    </div>
+  </div>
+
+  <sc-if value="{{ arcadeOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(6,12,4,.86);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:32px;animation:vtFade .22s cubic-bezier(.22,1,.36,1)">
+      <div style="width:100%;max-width:820px;border-radius:34px;background:var(--panel);color:#ffffff;border:1px solid rgba(255,255,255,.12);overflow:hidden">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:26px 30px 20px">
+          <div>
+            <div style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#8fc78d">{{ arKicker }}</div>
+            <div style="font:500 26px/1.15 'DM Mono',monospace;margin-top:12px;letter-spacing:-.02em">{{ arTitle }}</div>
+          </div>
+          <button onClick="{{ closeArcade }}" style="width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#ffffff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none" style-hover="background:rgba(255,255,255,.12)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+          </button>
+        </div>
+
+        <sc-if value="{{ arPicking }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:0 30px 30px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <sc-for list="{{ games }}" as="g" hint-placeholder-count="4">
+                <button onClick="{{ g.pick }}" style="display:flex;align-items:center;gap:16px;padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#ffffff;cursor:pointer;text-align:left;transition:transform .16s cubic-bezier(.22,1,.36,1),background .16s" style-hover="transform:translateY(-3px);background:rgba(255,255,255,.1)">
+                  <span style="flex:none;width:52px;height:52px;border-radius:18px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:26px">{{ g.emoji }}</span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font:500 15px/1 'DM Mono',monospace;letter-spacing:.08em;color:#8fc78d">{{ g.name }}</span>
+                    <span style="display:block;font-size:12.5px;line-height:1.4;opacity:.75;margin-top:7px">{{ g.desc }}</span>
+                  </span>
+                  <span style="flex:none;font:500 10px/1 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;opacity:.55">{{ g.best }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ soonMsg }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;padding:14px 18px;border-radius:18px;background:rgba(255,180,80,.12);border:1px solid rgba(255,180,80,.35);color:#ffd8a3;font:500 13px/1.45 'DM Mono',monospace">{{ soonMsg }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ arChess }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 30px 30px;display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ chessModes }}" as="m" hint-placeholder-count="3">
+              <button onClick="{{ m.pick }}" style="display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#ffffff;cursor:pointer;text-align:left" style-hover="background:rgba(255,255,255,.1)">
+                <span style="flex:none;font-size:24px">{{ m.emoji }}</span>
+                <span style="flex:1">
+                  <span style="display:block;font:500 14px/1 'DM Mono',monospace;letter-spacing:.08em;color:#8fc78d">{{ m.name }}</span>
+                  <span style="display:block;font-size:12.5px;opacity:.75;margin-top:6px">{{ m.desc }}</span>
+                </span>
+              </button>
+            </sc-for>
+            <sc-if value="{{ soonMsg }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:14px 18px;border-radius:18px;background:rgba(255,180,80,.12);border:1px solid rgba(255,180,80,.35);color:#ffd8a3;font:500 13px/1.45 'DM Mono',monospace">{{ soonMsg }}</div>
+            </sc-if>
+            <button onClick="{{ backToPick }}" style="align-self:flex-start;margin-top:6px;border:0;background:transparent;color:rgba(255,255,255,.6);font:600 13px/1 'Figtree',sans-serif;cursor:pointer">‹ All games</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ arPlaying }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 30px 30px">
+            <div style="position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:#0c1508">
+              <canvas ref="{{ canvasRef }}" onMouseDown="{{ canvasDown }}" width="720" height="220" style="display:block;width:100%;height:auto;cursor:{{ canvasCursor }}"></canvas>
+              <sc-if value="{{ arOverlay }}" hint-placeholder-val="{{ true }}">
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(6,12,4,.72)">
+                  <div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#8fc78d">{{ arOverlayKicker }}</div>
+                  <div style="font:500 22px/1.2 'DM Mono',monospace;color:#ffffff">{{ arOverlay }}</div>
+                  <button onClick="{{ startGame }}" style="margin-top:6px;padding:0 26px;height:48px;border-radius:999px;border:0;background:#8fc78d;color:#0c1508;font:500 14px/1 'DM Mono',monospace;letter-spacing:.06em;cursor:pointer">{{ arStartLabel }}</button>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
+              <span style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.6">{{ arHint }}</span>
+              <span style="margin-left:auto;font:500 15px/1 'DM Mono',monospace;color:#8fc78d">Score {{ arScore }}</span>
+              <span style="font:500 11px/1 'DM Mono',monospace;opacity:.6">Best {{ arBest }}</span>
+            </div>
+
+            <div style="margin-top:18px;border-radius:22px;border:1px solid rgba(255,255,255,.12);overflow:hidden">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px;background:rgba(255,255,255,.04)">
+                <span style="font:500 10.5px/1 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:#8fc78d">Leaderboard</span>
+                <span style="font:400 11px/1 'DM Mono',monospace;opacity:.55">{{ arTitle }} · top 5</span>
+              </div>
+              <sc-for list="{{ leaderboard }}" as="l" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:44px 1fr 90px 80px;gap:10px;align-items:center;padding:12px 18px;border-top:1px solid rgba(255,255,255,.07);background:{{ l.bg }}">
+                  <span style="font:500 13px/1 'DM Mono',monospace;opacity:.55">{{ l.rank }}</span>
+                  <span style="font:600 13.5px/1 'Figtree',sans-serif">{{ l.name }}</span>
+                  <span style="font:500 12px/1 'DM Mono',monospace;opacity:.6">{{ l.section }}</span>
+                  <span style="font:500 13.5px/1 'DM Mono',monospace;text-align:right;color:{{ l.scoreFg }}">{{ l.score }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ backToPick }}" style="margin-top:16px;border:0;background:transparent;color:rgba(255,255,255,.6);font:600 13px/1 'Figtree',sans-serif;cursor:pointer">‹ All games</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:34px;padding:16px 26px;border-radius:22px;background:var(--panel);color:#ffffff;font:500 13.5px/1.4 'DM Mono',monospace;box-shadow:0 14px 36px rgba(22,45,18,.35);animation:vtToast 2.4s cubic-bezier(.22,1,.36,1) forwards;z-index:70">{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000}}">
+const GRN='var(--green)',GRNT='var(--green-text)',GRN9='var(--green-ink)',
+ INK='var(--panel)',INKT='var(--t1)',T2='var(--t2)',T3='var(--t3)',
+ TINT='var(--tint)',SURF='var(--surface2)',SURFC='var(--surface)',CHIP='var(--chip)',
+ LINE='var(--line)',LINE2='var(--line2)',GLINE='var(--green-line)',W='#ffffff';
+
+const DAY=[
+ {t:'class',start:'08:30',end:'09:50',name:'Computer Networks',room:'C-301',code:'CS3001',past:true},
+ {t:'class',start:'10:00',end:'11:20',name:'Artificial Intelligence',room:'B-210',code:'AI2002',now:true},
+ {t:'gap',window:'11:20 – 13:00',title:'Free window — 6 rooms open on C-2',cta:'Find a room'},
+ {t:'class',start:'13:00',end:'14:20',name:'Operating Systems Lab',room:'Lab-9',code:'CS3005'},
+ {t:'class',start:'14:30',end:'15:50',name:'Software Design & Analysis',room:'A-112',code:'SE3003'}];
+
+const SLOTS=['08:30\u201309:50','10:00\u201311:20','11:30\u201312:50','13:00\u201314:20','14:30\u201315:50'];
+const WEEK={
+ Monday:['Computer Networks|C-301','Theory of Automata|C-208','','Software Design & Analysis|A-112','Networks Lab|Lab-4'],
+ Tuesday:['Computer Networks|C-301','Artificial Intelligence|B-210','','Operating Systems Lab|Lab-9','Software Design & Analysis|A-112'],
+ Wednesday:['','Artificial Intelligence|B-204','Theory of Automata|C-208','','Technical & Business Writing|D-105'],
+ Thursday:['Operating Systems|C-105','AI Lab|Lab-7','','',''],
+ Friday:['Software Design & Analysis|A-112','Computer Networks|C-301','','Theory of Automata|C-208','']};
+
+const ROOMS={
+ A:{0:['A-101','A-104','A-107','A-110','A-112'],1:['A-201','A-205','A-208','A-211'],2:['A-301','A-304','A-309']},
+ B:{0:['B-101','B-103','B-106'],1:['B-201','B-204','B-207','B-210'],2:['B-301','B-305','B-308','B-311']},
+ C:{0:['C-101','C-105','C-108','C-110'],1:['C-201','C-204','C-208','C-212'],2:['C-301','C-305','C-307','C-310','C-314']},
+ D:{0:['D-101','D-105','D-109'],1:['D-201','D-203','D-206'],2:['D-301','D-304']}};
+
+const SCHOOLS={'Computing (FSC)':['BS(CS)','BS(SE)','BS(AI)','BS(DS)','BS(CY)'],'Engineering (FSE)':['BS(EE)','BS(CE)'],'Business (FSM)':['BBA','BS(A&F)'],'Sciences & Humanities':['BS(Math)','BS(SS)']};
+const REPEAT_COURSES=['Programming Fundamentals','Data Structures','Discrete Structures','Operating Systems','Linear Algebra'];
+
+const LEADERS=[
+ {role:'Head of school (HOS)',name:'Dr. Ayesha Siddiqa',room:'C-220',email:'hos.computing@nu.edu.pk'},
+ {role:'Head of department (HOD)',name:'Dr. Hammad Majeed',room:'C-214',email:'hod.cs@nu.edu.pk'}];
+
+const FACULTY=[
+ {name:'Dr. Hammad Majeed',title:'Professor · Computer Science',room:'C-214',email:'hammad.majeed@nu.edu.pk',dept:'CS',hours:'Mon, Wed · 11:00–13:00'},
+ {name:'Ms. Ayesha Nadeem',title:'Lecturer · Artificial Intelligence',room:'B-118',email:'ayesha.nadeem@nu.edu.pk',dept:'AI',hours:'Tue, Thu · 14:00–16:00'},
+ {name:'Dr. Sara Iqbal',title:'Associate Professor · Software Engineering',room:'A-207',email:'sara.iqbal@nu.edu.pk',dept:'SE',hours:'Mon–Thu · 10:00–11:00'},
+ {name:'Mr. Usman Tariq',title:'Lab Engineer · Computer Science',room:'Lab-9',email:'usman.tariq@nu.edu.pk',dept:'CS',hours:'Daily · 09:00–17:00'},
+ {name:'Dr. Nida Sheikh',title:'Assistant Professor · Data Science',room:'B-305',email:'nida.sheikh@nu.edu.pk',dept:'DS',hours:'Wed, Fri · 12:00–14:00'},
+ {name:'Mr. Bilal Ahmed',title:'Lecturer · Cyber Security',room:'D-118',email:'bilal.ahmed@nu.edu.pk',dept:'CY',hours:'Tue · 11:00–14:00'},
+ {name:'Dr. Faisal Yousaf',title:'Professor · Sciences & Humanities',room:'D-204',email:'faisal.yousaf@nu.edu.pk',dept:'SH',hours:'Thu · 10:00–12:00'},
+ {name:'Dr. Maria Khan',title:'Assistant Professor · Software Engineering',room:'A-215',email:'maria.khan@nu.edu.pk',dept:'SE',hours:'Mon, Fri · 13:00–15:00'}];
+
+const EXAM_SETS={
+ s1:[{dd:'07',mon:'Jul',name:'Computer Networks',code:'CS3001',time:'09:00',room:'C-301',seat:'R2 · C1'},
+     {dd:'09',mon:'Jul',name:'Artificial Intelligence',code:'AI2002',time:'12:00',room:'B-204',seat:'R4 · C3'},
+     {dd:'11',mon:'Jul',name:'Theory of Automata',code:'CS2005',time:'09:00',room:'C-208',seat:'R1 · C5'}],
+ s2:[{dd:'17',mon:'Aug',name:'Computer Networks',code:'CS3001',time:'09:00',room:'C-301',seat:'R3 · C4',hot:true},
+     {dd:'19',mon:'Aug',name:'Artificial Intelligence',code:'AI2002',time:'12:00',room:'B-204',seat:'R1 · C2'},
+     {dd:'21',mon:'Aug',name:'Theory of Automata',code:'CS2005',time:'09:00',room:'C-208',seat:'R5 · C1'},
+     {dd:'24',mon:'Aug',name:'Software Design & Analysis',code:'SE3003',time:'14:00',room:'A-112',seat:'TBA'},
+     {dd:'26',mon:'Aug',name:'Operating Systems Lab',code:'CS3005',time:'11:00',room:'Lab-9',seat:'TBA'}],
+ final:[{dd:'02',mon:'Sep',name:'Operating Systems',code:'CS3004',time:'09:00',room:'TBA',seat:'TBA'},
+     {dd:'05',mon:'Sep',name:'Computer Networks',code:'CS3001',time:'09:00',room:'TBA',seat:'TBA'},
+     {dd:'08',mon:'Sep',name:'Artificial Intelligence',code:'AI2002',time:'14:00',room:'TBA',seat:'TBA'},
+     {dd:'11',mon:'Sep',name:'Theory of Automata',code:'CS2005',time:'09:00',room:'TBA',seat:'TBA'}]};
+const EXAM_META={s1:'3 papers · 7–11 Jul',s2:'5 papers · 17–26 Aug',final:'4 papers · 2–11 Sep'};
+
+const SHOWUP=[
+ {day:'Mon',on:true,items:[{time:'08:30',name:'Computer Networks'},{time:'10:00',name:'Theory of Automata'},{time:'13:00',name:'SDA'}]},
+ {day:'Tue',on:true,items:[{time:'08:30',name:'Computer Networks'},{time:'10:00',name:'Artificial Intelligence'},{time:'13:00',name:'OS Lab'}]},
+ {day:'Wed',on:false,items:[{time:'10:00',name:'Artificial Intelligence'},{time:'11:30',name:'Theory of Automata'}]},
+ {day:'Thu',on:false,items:[{time:'08:30',name:'Operating Systems'},{time:'10:00',name:'AI Lab'}]},
+ {day:'Fri',on:true,items:[{time:'08:30',name:'SDA'},{time:'10:00',name:'Computer Networks'}]},
+ {day:'Sat',on:false,items:[],quiet:true}];
+
+const GAMES=[
+ {id:'run',emoji:'🖥️',name:'COMPILER RUN',desc:'Jump the virus, duck the AI',hint:'Space or click to jump'},
+ {id:'duck',emoji:'🦆',name:'DUCK HUNTER',desc:"Shoot the ducks, don't miss",hint:'Click the ducks · 3 escapes ends it'},
+ {id:'flappy',emoji:'🐦',name:'FLAPPY BYTE',desc:'Tap to fly through the pipes',hint:'Space or click to flap'},
+ {id:'chess',emoji:'♛',name:'COMPILER CHESS',desc:'Choose how to play',hint:''}];
+const LB={run:[['Zohaib R.','6A',412],['Minahil K.','5C',388],['Areeba S.','6B',351],['Hamza T.','4A',309],['Usman D.','6A',287]],
+ duck:[['Areeba S.','6B',96],['Zohaib R.','6A',88],['Fatima N.','5A',74],['Hamza T.','4A',61],['Sana W.','6C',55]],
+ flappy:[['Minahil K.','5C',63],['Hamza T.','4A',54],['Zohaib R.','6A',47],['Bilal A.','6D',39],['Areeba S.','6B',31]]};
+const NOTIF_DEFS=[['cls','Class changes','Cancelled or rescheduled classes for your section.'],
+ ['exam','Exam schedule','When a new exam schedule is published.'],
+ ['show','Show-up schedule','When your show-up time or venue changes.'],
+ ['seat','Seating plan','When your exam seat is assigned or moved.'],
+ ['room','Free-room digest','Not built yet — this switch is reserved.',true]];
+
+class Component extends DCLogic {
+  state={screen:'home',ttView:'day',theme:'light',auth:null,
+    nuid:'',nuidError:'',manualMode:'other',
+    manual:{nuid:'',name:'',section:'',program:''},
+    tt:{school:'Computing (FSC)',program:'BS(CS)',batch:'2022',section:'6A',day:'Tuesday'},
+    block:'C',floor:2,roomDay:'Tuesday',q:'',dept:'All',fac:0,
+    ex:{dept:'BS(CS)',batch:'2022'},examTab:'s2',spq:'22i-1847',
+    su:{program:'BS(CS)',batch:'2022',section:'6A'},
+    notifs:{cls:true,exam:true,show:true,seat:true,room:false},
+    arcade:null,arView:'pick',arGame:null,arScore:0,arBest:0,arLive:false,arOver:false,soon:'',
+    toast:'',clock:'10:42'};
+
+  componentDidMount(){
+    const tick=()=>{const d=new Date();this.setState({clock:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')});};
+    tick();this.t=setInterval(tick,20000);
+    try{
+      const th=localStorage.getItem('vtable-desktop-theme');
+      if(th){document.documentElement.setAttribute('data-theme',th);this.setState({theme:th});}
+      const au=localStorage.getItem('vtable-desktop-profile');
+      if(au)this.setState({auth:JSON.parse(au),screen:this.state.screen==='home'?'dashboard':this.state.screen});
+    }catch(e){}
+    this.onKey=e=>{
+      if(e.key==='Escape'&&this.state.arcade)this.closeArcade();
+      if((e.key===' '||e.key==='ArrowUp')&&this.state.arLive)  {e.preventDefault();this.flap();}
+    };
+    document.addEventListener('keydown',this.onKey);
+  }
+  componentWillUnmount(){clearInterval(this.t);clearTimeout(this.tt);cancelAnimationFrame(this.raf);document.removeEventListener('keydown',this.onKey);}
+
+  go(s){this.setState({screen:s});try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}}
+  say(m){this.setState({toast:m});clearTimeout(this.tt);this.tt=setTimeout(()=>this.setState({toast:''}),2300);}
+  setTheme(next){try{localStorage.setItem('vtable-desktop-theme',next);}catch(e){}
+    document.documentElement.setAttribute('data-theme',next);this.setState({theme:next});}
+  saveAuth(a){try{localStorage.setItem('vtable-desktop-profile',JSON.stringify(a));}catch(e){}
+    this.setState({auth:a,nuidError:''});this.go('dashboard');this.say('Signed in as '+a.nuid);}
+  sel(label,value,options,set){return{label,value,set:e=>set(e.target.value),
+    ref:el=>{if(el&&el.value!==value)el.value=value;},options:options.map(o=>({v:o,t:o}))};}
+  slotsFor(n){let h=0;for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))>>>0;
+    return Array.from({length:8},(_,i)=>((h>>(i*2))&3)===0);}
+
+  submitNuid(){
+    const raw=(this.state.nuid||'').trim();
+    const m=/^(\d{2})\s*[iIlL]\s*-?\s*(\d{4})$/.exec(raw);
+    if(!m){this.setState({nuidError:'That does not look like a roll number — try the 22i-1234 shape.'});return;}
+    const batch='20'+m[1],id=m[1]+'i-'+m[2];
+    if(m[1]==='26'){
+      this.setState({manualMode:'batch26',manual:{nuid:id,name:'',section:'',program:'BS(CS)'},nuidError:''});
+      this.go('manual');return;
+    }
+    this.saveAuth({nuid:id,name:'Ayesha Raza',program:'BS(CS)',batch:batch,section:'6A',school:'Computing (FSC)',source:'roll'});
+  }
+  submitManual(){
+    const m=this.state.manual;
+    if(!m.nuid.trim()||!m.name.trim()||!m.section.trim()){this.say('Roll number, name and section are all needed');return;}
+    this.saveAuth({nuid:m.nuid.trim(),name:m.name.trim(),program:m.program.trim()||'—',
+      batch:'20'+(m.nuid.trim().slice(0,2)||'--'),section:m.section.trim(),school:'—',source:'manual'});
+  }
+
+  openArcade(){this.setState({arcade:true,arView:'pick',soon:''});}
+  closeArcade(){this.stopGame();this.setState({arcade:null,arView:'pick',arGame:null,soon:''});}
+  pickGame(id){
+    if(id==='chess'){this.setState({arView:'chess',soon:''});return;}
+    let best=0;try{best=Number(localStorage.getItem('vtable-arcade-'+id)||0);}catch(e){}
+    this.setState({arView:'play',arGame:id,arScore:0,arBest:best,arLive:false,arOver:false,soon:''});
+  }
+  stopGame(){cancelAnimationFrame(this.raf);this.raf=null;this.setState({arLive:false});}
+
+  canvasDown(e){
+    if(!this.state.arLive){return;}
+    if(this.state.arGame==='duck'){
+      const g=this.g,cv=this.cv;if(!g||!cv)return;
+      const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*720/r.width,y=(e.clientY-r.top)*220/r.height;
+      for(const d of g.ducks){
+        if(!d.dead&&Math.abs(d.x+11-x)<20&&Math.abs(d.y-11-y)<20){d.dead=1;g.score+=5;break;}
+      }
+      return;
+    }
+    this.flap();
+  }
+  flap(){const g=this.g;if(!g)return;
+    if(this.state.arGame==='run'&&g.y>=g.ground-1)g.vy=-11;
+    if(this.state.arGame==='flappy')g.vy=-6.2;}
+
+  startGame(){
+    const id=this.state.arGame,cv=this.cv;if(!cv)return;
+    const ctx=cv.getContext('2d'),W=720,H=220;
+    const g={t:0,score:0,y:H-46,vy:0,ground:H-46,obs:[],ducks:[],pipes:[],misses:0,bx:150,by:H/2};
+    this.g=g;this.setState({arLive:true,arOver:false,arScore:0});
+    const over=()=>{
+      cancelAnimationFrame(this.raf);this.raf=null;
+      const sc=Math.floor(g.score),best=Math.max(sc,this.state.arBest);
+      try{localStorage.setItem('vtable-arcade-'+id,String(best));}catch(e){}
+      this.setState({arLive:false,arOver:true,arScore:sc,arBest:best});
+    };
+    const bg=()=>{ctx.fillStyle='#0c1508';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(143,199,141,.25)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(0,H-24);ctx.lineTo(W,H-24);ctx.stroke();};
+    const label=()=>{ctx.fillStyle='#8fc78d';ctx.font='500 14px "DM Mono",monospace';
+      ctx.fillText(String(Math.floor(g.score)).padStart(4,'0'),W-64,28);};
+
+    const step=()=>{
+      g.t++;bg();
+      if(id==='run'){
+        g.vy+=0.62;g.y+=g.vy;if(g.y>g.ground){g.y=g.ground;g.vy=0;}
+        if(g.t%Math.max(38,90-Math.floor(g.score/6))===0)g.obs.push({x:W,h:g.t%3===0?34:22,w:16});
+        const sp=6+g.score/90;
+        ctx.fillStyle='#8fc78d';ctx.fillRect(60,g.y-30,28,30);
+        ctx.fillStyle='#0c1508';ctx.fillRect(66,g.y-24,16,9);
+        for(const o of g.obs){o.x-=sp;ctx.fillStyle='#c9603f';ctx.fillRect(o.x,H-24-o.h,o.w,o.h);
+          if(o.x<88&&o.x+o.w>60&&g.y>H-24-o.h)return over();}
+        g.obs=g.obs.filter(o=>o.x>-30);g.score+=0.22;
+      } else if(id==='duck'){
+        if(g.t%54===0)g.ducks.push({x:-30,y:40+Math.random()*110,vx:2.4+Math.random()*2.2,dead:0});
+        for(const d of g.ducks){
+          if(d.dead){d.y+=6;continue;}
+          d.x+=d.vx;d.y+=Math.sin((g.t+d.x)/22)*1.1;
+          if(d.x>W+30){d.gone=1;g.misses++;}
+        }
+        for(const d of g.ducks){ctx.font='24px serif';ctx.fillText(d.dead?'💥':'🦆',d.x,d.y);}
+        g.ducks=g.ducks.filter(d=>!d.gone&&d.y<H+40);
+        ctx.fillStyle='rgba(255,255,255,.55)';ctx.font='500 12px "DM Mono",monospace';
+        ctx.fillText('ESCAPED '+g.misses+'/3',16,28);
+        if(g.misses>=3)return over();
+      } else {
+        g.vy+=0.34;g.by+=g.vy;
+        if(g.t%88===0){const gap=74,top=30+Math.random()*(H-140);g.pipes.push({x:W,top:top,gap:gap});}
+        for(const p of g.pipes){p.x-=3.1;
+          ctx.fillStyle='#3f8c41';ctx.fillRect(p.x,0,42,p.top);ctx.fillRect(p.x,p.top+p.gap,42,H-p.top-p.gap-24);
+          if(p.x<g.bx+11&&p.x+42>g.bx-11&&(g.by-11<p.top||g.by+11>p.top+p.gap))return over();
+          if(!p.done&&p.x+42<g.bx-11){p.done=1;g.score++;}}
+        g.pipes=g.pipes.filter(p=>p.x>-50);
+        ctx.fillStyle='#f2d16b';ctx.beginPath();ctx.arc(g.bx,g.by,11,0,6.3);ctx.fill();
+        if(g.by>H-32||g.by<8)return over();
+      }
+      label();
+      if(g.t%6===0)this.setState({arScore:Math.floor(g.score)});
+      this.raf=requestAnimationFrame(step);
+    };
+    this.raf=requestAnimationFrame(step);
+  }
+
+  renderVals(){
+    const s=this.state,S=s.screen,auth=s.auth,dark=s.theme==='dark';
+    const pages={timetable:['Fall 2026 · live from the sheet','Class timetable','Any school, program, batch and section — the day you need or the whole week at once.'],
+      rooms:['Right now on campus','Free rooms','Every room on a floor, slot by slot, so you can see the gap before you walk to it.'],
+      faculty:['All schools · 214 people','Faculty directory','Search by name, department or office. Offices and consultation hours come from the faculty sheet.'],
+      exams:['Sessionals & finals · Fall 2026','Exam schedule','Your date sheet with room and seat attached, so nothing needs cross-checking.'],
+      seating:['Published two days before each paper','Seating plan','Find yourself by name or roll number and see where you sit in the room.'],
+      showup:['Computing · week of 11 August','Show-up schedule','Which days your section is due on campus, and what runs when you get there.'],
+      profile:['Saved on this device only','Your profile','Nothing here gates access — every tool on VTable works signed out.']};
+    const page=pages[S]||['','',''];
+
+    const navItems=[['timetable','Timetable'],['rooms','Free rooms'],['faculty','Faculty'],['exams','Exams'],['seating','Seating'],['showup','Show-up']];
+    if(auth)navItems.unshift(['dashboard','Dashboard']);
+    const nav=navItems.map(([k,label])=>{const on=S===k;
+      return{label,go:()=>this.go(k),bg:on?TINT:'transparent',fg:on?GRN9:T2,
+        font:(on?'700':'600')+" 13.5px/1 'Figtree',sans-serif"};});
+
+    const homeLinks=[{label:'Free rooms near you',meta:'23 open',go:()=>this.go('rooms')},
+      {label:'Exam date sheet & seat',meta:'Next in 2 days',go:()=>this.go('exams')},
+      {label:'Faculty offices & hours',meta:'214 people',go:()=>this.go('faculty')}];
+
+    const me=auth?{nuid:auth.nuid,name:auth.name,section:auth.section,
+      initials:(auth.name||'NU').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase(),
+      line:auth.program+' · '+auth.batch+' · Section '+auth.section}:{nuid:'',name:'',section:'',initials:'',line:''};
+
+    const manualB26=s.manualMode==='batch26';
+    const setMan=(k,v)=>this.setState({manual:Object.assign({},s.manual,{[k]:v})});
+    const manualFields=[
+      {label:'Roll number',value:s.manual.nuid,ph:'26i-1234',span:'1/2',set:e=>setMan('nuid',e.target.value)},
+      {label:'Full name',value:s.manual.name,ph:'As on your student card',span:'2/3',set:e=>setMan('name',e.target.value)},
+      {label:'Section',value:s.manual.section,ph:'e.g. 1A',span:'1/2',set:e=>setMan('section',e.target.value)},
+      {label:'Program / department',value:s.manual.program,ph:'e.g. BS(EE)',span:'2/3',set:e=>setMan('program',e.target.value)}];
+
+    // timetable
+    const tt=s.tt,setTt=(k,v)=>{const n=Object.assign({},tt,{[k]:v});if(k==='school')n.program=(SCHOOLS[v]||[])[0]||'';this.setState({tt:n});};
+    const repeat=tt.batch==='Repeat courses';
+    const ttSelects=[
+      this.sel('School',tt.school,Object.keys(SCHOOLS),v=>setTt('school',v)),
+      this.sel('Program',tt.program,SCHOOLS[tt.school]||[],v=>setTt('program',v)),
+      this.sel('Batch',tt.batch,['2022','2023','2024','2025','2026','Repeat courses'],v=>setTt('batch',v)),
+      repeat?this.sel('Repeat course',tt.section,REPEAT_COURSES,v=>setTt('section',v))
+            :this.sel('Section',tt.section,['6A','6B','6C','6D'],v=>setTt('section',v)),
+      this.sel('Day',tt.day,['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],v=>setTt('day',v))];
+    const dayOn=s.ttView==='day';
+    const ttRows=DAY.map(r=>r.t==='gap'
+      ?{isGap:true,isClass:false,window:r.window,title:r.title,cta:r.cta,act:()=>{this.setState({block:'C',floor:2});this.go('rooms');}}
+      :{isGap:false,isClass:true,start:r.start,end:r.end,name:r.name,room:r.room,code:r.code,
+        bg:r.now?TINT:SURFC,border:r.now?GLINE:LINE,op:r.past?.55:1,
+        pillBg:r.now?GRN:CHIP,pillFg:r.now?W:INKT});
+    const ttFacts=[{k:'Program',v:tt.program+' · '+tt.batch},{k:repeat?'Course':'Section',v:tt.section},
+      {k:'Classes',v:'5 · 4 rooms'},{k:'First / last',v:'08:30 – 15:50'},{k:'Source',v:'Computing sheet'}];
+    const days=Object.keys(WEEK);
+    const weekHead=days.map(d=>{const on=d===tt.day;
+      return{day:d.slice(0,3),n:WEEK[d].filter(Boolean).length+' cls',bg:on?INK:TINT,fg:on?W:INKT};});
+    const weekGrid=SLOTS.map((slot,i)=>({slot,cells:days.map(d=>{
+      const cell=WEEK[d][i];
+      if(!cell)return{name:'',room:'',bg:SURF,border:LINE,fg:'transparent',metaFg:'transparent'};
+      const parts=cell.split('|'),mine=d===tt.day;
+      return{name:parts[0],room:parts[1],bg:mine?TINT:SURFC,border:mine?GLINE:LINE,fg:INKT,metaFg:mine?GRN9:T3};})}));
+
+    // rooms
+    const freeCounts={A:7,B:5,C:9,D:4};
+    const blocks=['A','B','C','D'].map(b=>({name:b,free:freeCounts[b]+' free',
+      bg:s.block===b?INK:SURFC,fg:s.block===b?W:INKT,border:s.block===b?INK:LINE2,
+      pick:()=>this.setState({block:b,floor:0})}));
+    const floors=[0,1,2].map(f=>({label:['Ground','1st floor','2nd floor'][f],
+      bg:s.floor===f?GRN:SURFC,fg:s.floor===f?W:INKT,border:s.floor===f?GRN:LINE2,
+      pick:()=>this.setState({floor:f})}));
+    const roomList=((ROOMS[s.block]||{})[s.floor]||[]);
+    const rooms=roomList.map(n=>{const sl=this.slotsFor(n+s.roomDay),free=sl[3];
+      return{name:n,status:free?'Free':'In class',fg:free?GRN9:T3,slots:sl.map(v=>({c:v?'var(--slot-on)':'var(--slot-off)'}))};});
+    const freeCount=rooms.filter(r=>r.status==='Free').length+' of '+rooms.length+' free in slot 4';
+
+    // faculty
+    const qq=s.q.trim().toLowerCase();
+    const depts=['All','CS','AI','SE','DS','CY','SH'].map(d=>({label:d,
+      bg:s.dept===d?INK:SURFC,fg:s.dept===d?W:INKT,border:s.dept===d?INK:LINE2,
+      pick:()=>this.setState({dept:d})}));
+    const filtered=FACULTY.filter(f=>(s.dept==='All'||f.dept===s.dept)&&
+      (!qq||f.name.toLowerCase().includes(qq)||f.title.toLowerCase().includes(qq)||f.room.toLowerCase().includes(qq)));
+    const initials=n=>n.replace(/^(Dr\.|Mr\.|Ms\.)\s*/,'').split(' ').slice(0,2).map(w=>w[0]).join('');
+    const av=i=>i%2?{avBg:'var(--av2)',avFg:GRN9}:{avBg:CHIP,avFg:INKT};
+    const facultyList=filtered.map(f=>{const i=FACULTY.indexOf(f),on=i===s.fac;
+      return Object.assign({name:f.name,title:f.title,room:f.room,initials:initials(f.name),
+        cardBg:on?TINT:SURF,cardBorder:on?GLINE:LINE,open:()=>this.setState({fac:i})},av(i));});
+    const fsel=FACULTY[s.fac]||FACULTY[0];
+    const fac=Object.assign({name:fsel.name,title:fsel.title,initials:initials(fsel.name)},av(s.fac));
+    const facRows=[{k:'Email',v:fsel.email},{k:'Office',v:fsel.room},{k:'Consultation hours',v:fsel.hours},{k:'Department',v:fsel.dept}];
+
+    // exams
+    const setEx=(k,v)=>this.setState({ex:Object.assign({},s.ex,{[k]:v})});
+    const exSelects=[this.sel('Department',s.ex.dept,['BS(CS)','BS(AI)','BS(DS)','BS(SE)','BS(CY)'],v=>setEx('dept',v)),
+      this.sel('Batch',s.ex.batch,['2022','2023','2024','2025'],v=>setEx('batch',v))];
+    const examTabs=[['s1','Sessional I'],['s2','Sessional II'],['final','Finals']].map(([k,label])=>{const on=s.examTab===k;
+      return{label,pick:()=>this.setState({examTab:k}),bg:on?SURFC:'transparent',fg:on?INKT:T2,
+        font:(on?'700':'600')+" 13.5px/1 'Figtree',sans-serif",sh:on?'0 1px 2px rgba(22,45,18,.14)':'none'};});
+    const src=EXAM_SETS[s.examTab]||[];
+    const exams=src.map(e=>({dd:e.dd,mon:e.mon,name:e.name,code:e.code,time:e.time,room:e.room,seat:e.seat,
+      dFg:e.hot?GRNT:INKT,seatBg:e.seat==='TBA'?CHIP:TINT,seatFg:e.seat==='TBA'?T3:GRN9}));
+
+    // seating
+    const seatRows=['A','B','C','D','E'].map((label,ri)=>({label,
+      seats:Array.from({length:8},(_,ci)=>{const meSeat=ri===2&&ci===3,mine=(ri+ci)%3===0;
+        return{t:meSeat?'YOU':'',bg:meSeat?GRN:(mine?'var(--seat-mine)':CHIP),fg:meSeat?W:'transparent',border:meSeat?GRN:LINE};})}));
+    const spRows=[{k:'Paper',v:'Mon 17 Aug'},{k:'Reporting',v:'08:45'},{k:'Room',v:'C-301'},
+      {k:'Seat',v:'R3 · C4',fg:GRNT},{k:'Roll no',v:auth?auth.nuid:'22i-1847'}].map(r=>({k:r.k,v:r.v,fg:r.fg||INKT}));
+
+    // show-up
+    const su=s.su,setSu=(k,v)=>this.setState({su:Object.assign({},su,{[k]:v})});
+    const suSelects=[this.sel('Program',su.program,['BS(CS)','BS(SE)','BS(AI)','BS(DS)','BS(CY)'],v=>setSu('program',v)),
+      this.sel('Batch',su.batch,['2022','2023','2024','2025'],v=>setSu('batch',v)),
+      this.sel('Section',su.section,['6A','6B','6C','6D'],v=>setSu('section',v))];
+    const showup=SHOWUP.map(d=>({day:d.day,tag:d.on?'On campus':(d.quiet?'No classes':'Online'),
+      items:d.items,count:d.items.length?d.items.length+' classes':'—',
+      bg:d.on?GRN:SURFC,border:d.on?GRN:LINE,dayFg:d.on?W:INKT,
+      tagFg:d.on?'rgba(255,255,255,.75)':T3,itemFg:d.on?W:INKT,
+      metaFg:d.on?'rgba(255,255,255,.7)':T3,rule:d.on?'rgba(255,255,255,.22)':LINE}));
+
+    // profile
+    const notifs=NOTIF_DEFS.map(([k,label,help,dead])=>{const on=s.notifs[k];
+      return{label,help,cursor:dead?'default':'pointer',op:dead?.5:1,
+        trackBg:on?GRN:'var(--slot-off)',knobX:on?'21px':'3px',
+        toggle:()=>{if(dead){this.say('Free-room digest is not built yet');return;}
+          this.setState({notifs:Object.assign({},s.notifs,{[k]:!on})});}};});
+    const profileRows=auth?[{k:'NU ID',v:auth.nuid},{k:'Section',v:auth.section},
+      {k:'Batch',v:auth.batch},{k:'Program',v:auth.program},
+      {k:'Source',v:auth.source==='roll'?'Decoded from roll number':'Entered manually'}]:[];
+
+    // arcade
+    const games=GAMES.map(g=>{let best=0;try{best=Number(localStorage.getItem('vtable-arcade-'+g.id)||0);}catch(e){}
+      return{emoji:g.emoji,name:g.name,desc:g.desc,best:g.id==='chess'?'Soon':(best?'Best '+best:'New'),
+        pick:()=>this.pickGame(g.id)};});
+    const chessModes=[['♟️','1V1','Two players, one device'],['🤝','PLAY WITH FRIEND','Invite a friend to a match'],
+      ['🤖','VS COMPILER ENGINE','Play against the computer']]
+      .map(([emoji,name,desc])=>({emoji,name,desc,pick:()=>this.setState({soon:'🚧 Compiler Chess — '+desc.toLowerCase()+' is coming soon.'})}));
+    const gm=GAMES.find(g=>g.id===s.arGame)||GAMES[0];
+    const lbRows=(LB[s.arGame]||[]).concat(s.arOver?[[me.name||'You',auth?auth.section:'—',s.arScore,1]]:[])
+      .sort((a,b)=>b[2]-a[2]).slice(0,5)
+      .map((r,i)=>({rank:i+1,name:r[0],section:r[1],score:r[2],
+        bg:r[3]?'rgba(143,199,141,.16)':'transparent',scoreFg:r[3]?'#8fc78d':'#ffffff'}));
+
+    return{
+      clock:s.clock,clockLine:s.clock+' · Tue 12 Aug',toast:s.toast,nav,homeLinks,me,
+      isDark:dark,isLight:!dark,toggleTheme:()=>this.setTheme(dark?'light':'dark'),
+      authed:!!auth,guest:!auth,
+      isHome:S==='home',isSignIn:S==='signin',isManual:S==='manual',isDash:S==='dashboard',
+      hasHead:['timetable','rooms','faculty','exams','seating','showup','profile'].indexOf(S)>=0,
+      pageKicker:page[0],pageTitle:page[1],pageNote:page[2],
+      homeCta:()=>this.go(auth?'dashboard':'signin'),
+      homeCtaLabel:auth?'Go to my dashboard':'Sign in',
+      homeNote:auth?'Signed in as '+(auth?auth.nuid:'')+' — your profile stays on this device.':'No account needed for any tool. Your profile stays on this device.',
+      goHome:()=>this.go(auth?'dashboard':'home'),goSignIn:()=>this.setState({nuidError:''},()=>this.go('signin')),
+      goManual:()=>{this.setState({manualMode:'other',manual:{nuid:s.nuid||'',name:'',section:'',program:''}});this.go('manual');},
+      goTT:()=>this.go('timetable'),goSeating:()=>this.go('seating'),goProfile:()=>this.go('profile'),
+      nuid:s.nuid,setNuid:e=>this.setState({nuid:e.target.value,nuidError:''}),
+      nuidKey:e=>{if(e.key==='Enter')this.submitNuid();},
+      nuidError:s.nuidError,nuidBorder:s.nuidError?'#b3261e':LINE2,
+      submitNuid:()=>this.submitNuid(),
+      manualKicker:manualB26?'Batch 2026 · not in our sheets yet':'Outside Computing (FSC)',
+      manualTitle:manualB26?"We don't have your batch yet":'Tell us where you sit',
+      manualNote:manualB26
+        ?"The 2026 timetables have not reached us from the registrar. Leave your details and VTable will remember your section — every tool still works in the meantime."
+        :"Only Computing roll numbers decode automatically. Give us the same three things we hold for FSC students and your section is remembered.",
+      manualFields,submitManual:()=>this.submitManual(),
+      dashGreeting:'Good morning, '+(auth?auth.name.split(' ')[0]:'there'),
+      dashDate:'Tuesday 12 August · week 6',
+      dashCards:[{k:'Free rooms',v:'23 open right now across A–D',go:()=>this.go('rooms')},
+        {k:'Show-up',v:'3 days on campus this week',go:()=>this.go('showup')},
+        {k:'Faculty',v:'Offices and consultation hours',go:()=>this.go('faculty')}],
+      isTT:S==='timetable',ttSelects,ttIsDay:dayOn,ttIsWeek:!dayOn,
+      ttDayView:()=>this.setState({ttView:'day'}),ttWeekView:()=>this.setState({ttView:'week'}),
+      ttDayBg:dayOn?SURFC:'transparent',ttDayFg:dayOn?INKT:T2,
+      ttDayFont:(dayOn?'700':'600')+" 14px/1 'Figtree',sans-serif",ttDaySh:dayOn?'0 1px 2px rgba(22,45,18,.14)':'none',
+      ttWeekBg:dayOn?'transparent':SURFC,ttWeekFg:dayOn?T2:INKT,
+      ttWeekFont:(dayOn?'600':'700')+" 14px/1 'Figtree',sans-serif",ttWeekSh:dayOn?'none':'0 1px 2px rgba(22,45,18,.14)',
+      ttRows,ttFacts,ttSectionLabel:tt.program+' · '+tt.section,weekHead,weekGrid,
+      pinSection:()=>this.say('Remembered '+tt.program+' · '+tt.section),
+      isRooms:S==='rooms',blocks,floors,rooms,freeCount,
+      roomDay:s.roomDay,roomDayLabel:s.roomDay+' 12 August',
+      roomDayRef:el=>{if(el&&el.value!==s.roomDay)el.value=s.roomDay;},
+      setRoomDay:e=>this.setState({roomDay:e.target.value}),
+      roomDays:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(d=>({v:d,t:d})),
+      slotHead:['08:30','10:00','11:30','13:00','14:30','16:00','16:30','17:20'].map(t=>({t})),
+      isFaculty:S==='faculty',q:s.q,setQ:e=>this.setState({q:e.target.value}),depts,leaders:LEADERS,
+      facultyList,facCount:filtered.length+' of '+FACULTY.length+' shown',
+      noFaculty:filtered.length===0,fac,facRows,copyEmail:()=>this.say('Copied '+fsel.email),
+      isExams:S==='exams',exSelects,examTabs,exams,examCount:EXAM_META[s.examTab],
+      isSeating:S==='seating',spq:s.spq,setSpq:e=>this.setState({spq:e.target.value}),
+      findSeat:()=>this.say('Found '+(s.spq||'22i-1847')+' — C-301, row 3, column 4'),seatRows,spRows,
+      isShowup:S==='showup',suSelects,showup,
+      suSummary:SHOWUP.filter(d=>d.on).length+' days on campus · '+su.program+' '+su.section,
+      isProfile:S==='profile',notifs,profileRows,
+      signOut:()=>{try{localStorage.removeItem('vtable-desktop-profile');}catch(e){}
+        this.setState({auth:null});this.go('home');this.say('Profile removed from this device');},
+      arcadeOpen:!!s.arcade,openArcade:()=>this.openArcade(),closeArcade:()=>this.closeArcade(),
+      arPicking:s.arView==='pick',arChess:s.arView==='chess',arPlaying:s.arView==='play',
+      arKicker:s.arView==='play'?'Arcade · secret':'Compiler society',
+      arTitle:s.arView==='pick'?'Arcade':(s.arView==='chess'?'Compiler Chess':gm.name),
+      games,chessModes,soonMsg:s.soon,backToPick:()=>{this.stopGame();this.setState({arView:'pick',soon:''});},
+      canvasRef:el=>{this.cv=el;},
+      canvasDown:e=>this.canvasDown(e),
+      canvasCursor:s.arGame==='duck'?'crosshair':'pointer',
+      startGame:()=>this.startGame(),
+      arScore:s.arScore,arBest:s.arBest,arHint:gm.hint,
+      arOverlay:s.arLive?'':(s.arOver?'Game over · '+s.arScore:'Ready?'),
+      arOverlayKicker:s.arOver?'Your run':'Press start',
+      arStartLabel:s.arOver?'Play again':'Start',
+      leaderboard:lbRows
+    };
+  }
+}
+</script>
+</body>
+</html>
