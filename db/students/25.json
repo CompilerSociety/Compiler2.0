@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T17:05:19.047Z",
+  "updated_at": "2026-08-18T07:03:23.263Z",
   "source_subject": "Seating Plan 25",
-  "count": 959,
+  "count": 960,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6749,6 +6749,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T17:05:19.047Z"
+    },
+    {
+      "name": "Ahmed rayyan",
+      "nuid": "25I-3636",
+      "section": "A",
+      "department": "DS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T07:03:23.263Z"
     }
   ]
 }
