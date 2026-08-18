@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T05:04:09.370Z",
+  "updated_at": "2026-08-18T06:22:49.038Z",
   "source_subject": "Seating Plan 26",
-  "count": 35,
+  "count": 36,
   "students": [
     {
       "name": "Hammad rehan",
@@ -449,6 +449,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T05:04:09.370Z"
+    },
+    {
+      "name": "Syed Kashan Shah",
+      "nuid": "26I-3027",
+      "section": "A",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T06:22:49.038Z"
     }
   ]
 }
