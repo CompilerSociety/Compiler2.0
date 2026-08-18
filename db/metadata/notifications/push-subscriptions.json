@@ -863,5 +863,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2570",
+    "name": "Muhammad Saad Rasheed",
+    "department": "BS DS",
+    "batch": "26",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ehRLut0DgOc:APA91bGRQH4_onJ0Xc6irxDCModu5iWAQN_52C6LUBHZgasO3_tegLPJE_bJ7M8bhOkNXQ0jrW031aqqE_JNTrGLwF7-vUxbGiVg2OyFSWWir2ZwHsBcXJ8SvMLf7WizA3i4CmFUqkIi",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDcvfZDDqqLNnx-_MiOx50T-nw2_m0rca-oeLGrsnHscSwyM_KVp3HWSYpA5F0mUENaoeYXV9HTqOjjbpc1ydjM",
+        "auth": "oHTZhMftgPmv6ruBJbsZ_g"
+      }
+    },
+    "updated_at": 1787043982583,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
