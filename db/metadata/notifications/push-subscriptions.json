@@ -818,5 +818,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3039",
+    "name": "ALI HASEEB HAIDER",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dsxPXkLrdZA:APA91bEEBBVeS-IJ4a0tgnRCEjgVxFyD8RPYdXBDtRZAziMcVukz4N0DcTEeGOaTaFqlLgN7CpvVxGcfnDkXiMVUBFF3SPdHLoZLV5qryzRykJXxfhB0mBxdEMSRiDYU89bgYiXbqcto",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BFfVUYoNMDXt6iIXkVuHvkiC6Nm3OWdpTvxLdTWLaocUsLbSpGVh2EyMXw-C8vkKYQxyXTqbDN0wyXvfqHP9Vjg",
+        "auth": "VnSJTrB74QaUxaYn1Rd6vA"
+      }
+    },
+    "updated_at": 1787022644605,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
