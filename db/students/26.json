@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T03:10:44.827Z",
+  "updated_at": "2026-08-18T05:04:09.370Z",
   "source_subject": "Seating Plan 26",
-  "count": 34,
+  "count": 35,
   "students": [
     {
       "name": "Hammad rehan",
@@ -436,6 +436,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T03:10:44.827Z"
+    },
+    {
+      "name": "Musaib Haider",
+      "nuid": "26I-0939",
+      "section": "H",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T05:04:09.370Z"
     }
   ]
 }
