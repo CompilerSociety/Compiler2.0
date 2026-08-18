@@ -29,12 +29,12 @@
             },
             {
               "name": "Func Eng Lab (A1)",
-              "location": "KYBHER-3",
+              "location": "KYBHER-2",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (A2)",
-              "location": "KYBHER-4",
+              "location": "KYBHER-3",
               "time": "11:30-02:15"
             }
           ],
@@ -1217,7 +1217,7 @@
           ],
           "Tuesday": [
             {
-              "name": "MG Elective",
+              "name": "Digital Sustain",
               "location": "D-404",
               "time": "01:00-02:20"
             },
@@ -1246,7 +1246,7 @@
           ],
           "Thursday": [
             {
-              "name": "MG Elective",
+              "name": "Digital Sustain",
               "location": "D-404",
               "time": "01:00-02:20"
             },
@@ -1294,7 +1294,7 @@
               "time": "03:55-05:15"
             },
             {
-              "name": "MG Elective",
+              "name": "Digital Sustain",
               "location": "D-404",
               "time": "03:55-05:15"
             }
@@ -1323,7 +1323,7 @@
               "time": "03:55-05:15"
             },
             {
-              "name": "MG Elective",
+              "name": "Digital Sustain",
               "location": "D-404",
               "time": "03:55-05:15"
             },
@@ -5078,6 +5078,57 @@
           ]
         }
       },
+      "REPEAT": {
+        "A": {
+          "Monday": [
+            {
+              "name": "Web Comp",
+              "location": "IT LAB 3 (D-213)",
+              "time": "02:30-05:15"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Sec Ops",
+              "location": "D-505",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Sec Ops",
+              "location": "D-505",
+              "time": "02:30-03:50"
+            },
+            {
+              "name": "Sec Ops",
+              "location": "CYBER (D-514)",
+              "time": "02:30-05:15"
+            }
+          ]
+        },
+        "ALL": {
+          "Tuesday": [
+            {
+              "name": "MG Elective",
+              "location": "D-506",
+              "time": "01:00-02:20"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "MG Elective",
+              "location": "D-506",
+              "time": "01:00-02:20"
+            }
+          ]
+        }
+      },
       "2026": {
         "A": {
           "Tuesday": [
@@ -5376,50 +5427,6 @@
               "name": "Func Eng Lab (D2)",
               "location": "CALL-2 (A-214)",
               "time": "08:30-11:15"
-            }
-          ]
-        }
-      },
-      "REPEAT": {
-        "A": {
-          "Tuesday": [
-            {
-              "name": "Sec Ops",
-              "location": "D-505",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Sec Ops",
-              "location": "CYBER (D-514)",
-              "time": "02:30-05:15"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Sec Ops",
-              "location": "D-505",
-              "time": "02:30-03:50"
-            },
-            {
-              "name": "Sec Ops",
-              "location": "CYBER (D-514)",
-              "time": "02:30-05:15"
-            }
-          ]
-        },
-        "ALL": {
-          "Tuesday": [
-            {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "MG Elective",
-              "location": "D-506",
-              "time": "01:00-02:20"
             }
           ]
         }
@@ -7015,6 +7022,6 @@
       }
     }
   },
-  "count": 1159,
-  "generatedAt": "2026-08-18T07:12:39.162916+00:00"
+  "count": 1160,
+  "generatedAt": "2026-08-18T07:52:59.726765+00:00"
 }
