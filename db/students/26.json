@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T07:33:40.658Z",
+  "updated_at": "2026-08-18T07:46:07.670Z",
   "source_subject": "Seating Plan 26",
-  "count": 38,
+  "count": 39,
   "students": [
     {
       "name": "Hammad rehan",
@@ -488,6 +488,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T07:33:40.658Z"
+    },
+    {
+      "name": "Mutayyab Zulfiqar",
+      "nuid": "26I-3146",
+      "section": "C",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T07:46:07.670Z"
     }
   ]
 }
