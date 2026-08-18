@@ -340,12 +340,12 @@
             {
               "name": "Engineering Management",
               "location": "B-028",
-              "time": "11:20-12:40"
+              "time": "11:25-12:45"
             },
             {
               "name": "Tech. & Business Writing",
               "location": "B-028",
-              "time": "12:45-02:05"
+              "time": "12:50-02:10"
             },
             {
               "name": "Applied Machine Learning Lab",
@@ -430,12 +430,12 @@
             {
               "name": "Tech. & Business Writing",
               "location": "B-030",
-              "time": "11:20-12:40"
+              "time": "11:25-12:45"
             },
             {
               "name": "Engineering Management",
               "location": "B-030",
-              "time": "12:45-02:05"
+              "time": "12:50-02:10"
             }
           ],
           "Tuesday": [
@@ -659,12 +659,12 @@
             {
               "name": "Digital Logic Design",
               "location": "B-019",
-              "time": "11:20-12:40"
+              "time": "11:25-12:45"
             },
             {
               "name": "Comp. Variables & Trans.",
               "location": "B-019",
-              "time": "12:45-02:05"
+              "time": "12:50-02:10"
             },
             {
               "name": "Understanding of Holy Quran I/Ethics I & II",
@@ -729,12 +729,12 @@
             {
               "name": "Comp. Variables & Trans.",
               "location": "B-020",
-              "time": "11:20-12:40"
+              "time": "11:25-12:45"
             },
             {
               "name": "Digital Logic Design",
               "location": "B-020",
-              "time": "12:45-02:05"
+              "time": "12:50-02:10"
             },
             {
               "name": "Understanding of Holy Quran I/Ethics I & II",
@@ -939,7 +939,7 @@
             {
               "name": "Comp. Variables & Trans.",
               "location": "B-020",
-              "time": "11:20-12:40"
+              "time": "11:25-12:45"
             },
             {
               "name": "Civics and Comminity Engagement",
@@ -1039,12 +1039,12 @@
             {
               "name": "Applications of ICT",
               "location": "B-119",
-              "time": "8:30-09:50"
+              "time": "08:30-10:20"
             },
             {
               "name": "Pakistan Studies",
               "location": "B-119",
-              "time": "11:20-12:40"
+              "time": "09:55-11:15"
             },
             {
               "name": "Applied Calculus",
@@ -1132,7 +1132,7 @@
             {
               "name": "Digital Signal Processing",
               "location": "B-230",
-              "time": "12:45-02:05"
+              "time": "12:50-02:10"
             },
             {
               "name": "Data Com. & Netwks.",
@@ -1287,5 +1287,5 @@
     }
   },
   "count": 208,
-  "generatedAt": "2026-08-18T05:29:47.634725+00:00"
+  "generatedAt": "2026-08-18T05:55:42.146100+00:00"
 }

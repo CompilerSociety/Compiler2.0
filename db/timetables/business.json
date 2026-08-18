@@ -1389,7 +1389,7 @@
         }
       },
       "2024": {
-        "A": {
+        "B": {
           "Monday": [
             {
               "name": "Consumer Behaviour (MG2003)",
@@ -1399,6 +1399,76 @@
             {
               "name": "Financial Management (AF3001)",
               "location": "A-04",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Tuesday": [
+            {
+              "name": "Advanced Business Communication (MG3014)",
+              "location": "A-101",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Human Resource Management (MG3004)",
+              "location": "A-102",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Operations Management (MG3006)",
+              "location": "A-102",
+              "time": "10:00-11:20"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Consumer Behaviour (MG2003)",
+              "location": "A-03",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-03",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-II",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Financial Management Lab (FL3001)",
+              "location": "KK-II",
+              "time": "03:50-05:10"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Advanced Business Communication (MG3014)",
+              "location": "A-101",
+              "time": "11:30-12:50"
+            },
+            {
+              "name": "Human Resource Management (MG3004)",
+              "location": "A-102",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Operations Management (MG3006)",
+              "location": "A-103",
+              "time": "10:00-11:20"
+            }
+          ]
+        },
+        "A": {
+          "Monday": [
+            {
+              "name": "Financial Management (AF3001)",
+              "location": "A-101",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "Consumer Behaviour (MG2003)",
+              "location": "A-101",
               "time": "10:00-11:20"
             },
             {
@@ -1436,13 +1506,13 @@
           ],
           "Wednesday": [
             {
-              "name": "Consumer Behaviour (MG2003)",
-              "location": "A-03",
+              "name": "Financial Management (AF3001)",
+              "location": "A-04",
               "time": "08:30-09:50"
             },
             {
-              "name": "Financial Management (AF3001)",
-              "location": "A-316",
+              "name": "Consumer Behaviour (MG2003)",
+              "location": "A-04",
               "time": "10:00-11:20"
             }
           ],
@@ -1466,76 +1536,6 @@
               "name": "Operations Management (MG3006)",
               "location": "A-103",
               "time": "11:30-12:50"
-            }
-          ]
-        },
-        "B": {
-          "Monday": [
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-101",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Consumer Behaviour (MG2003)",
-              "location": "A-101",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Advanced Business Communication (MG3014)",
-              "location": "A-101",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Human Resource Management (MG3004)",
-              "location": "A-102",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Operations Management (MG3006)",
-              "location": "A-102",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Consumer Behaviour (MG2003)",
-              "location": "A-03",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "Financial Management (AF3001)",
-              "location": "A-04",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-II",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "Financial Management Lab (FL3001)",
-              "location": "KK-II",
-              "time": "03:50-05:10"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Advanced Business Communication (MG3014)",
-              "location": "A-101",
-              "time": "11:30-12:50"
-            },
-            {
-              "name": "Human Resource Management (MG3004)",
-              "location": "A-102",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Operations Management (MG3006)",
-              "location": "A-103",
-              "time": "10:00-11:20"
             }
           ]
         },
@@ -1581,14 +1581,14 @@
           ],
           "Wednesday": [
             {
-              "name": "Operations Management (MG3006)",
-              "location": "A-04",
-              "time": "10:00-11:20"
-            },
-            {
               "name": "Human Resource Management (MG3004)",
               "location": "A-103",
               "time": "03:50-05:10"
+            },
+            {
+              "name": "Operations Management (MG3006)",
+              "location": "A-210",
+              "time": "10:00-11:20"
             },
             {
               "name": "Financial Management (AF3001)",
@@ -2837,12 +2837,12 @@
           "Friday": [
             {
               "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
+              "location": "A-02",
               "time": "02:25-03:45"
             },
             {
               "name": "Enterprise Systems & Applications (CS3017)",
-              "location": "A-302",
+              "location": "A-02",
               "time": "03:50-05:10"
             }
           ]
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-18T05:29:46.082552+00:00"
+  "generatedAt": "2026-08-18T05:55:40.206957+00:00"
 }

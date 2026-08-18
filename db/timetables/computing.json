@@ -24,7 +24,7 @@
           "Tuesday": [
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             },
             {
@@ -68,7 +68,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "08:30-11:15"
             }
           ]
@@ -104,7 +104,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "11:30-02:15"
             }
           ],
@@ -128,7 +128,7 @@
           "Thursday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "11:30-02:15"
             },
             {
@@ -164,7 +164,7 @@
           "Tuesday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "08:30-11:15"
             },
             {
@@ -208,7 +208,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             }
           ]
@@ -278,7 +278,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "11:30-02:15"
             }
           ]
@@ -321,7 +321,7 @@
           "Wednesday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "08:30-11:15"
             },
             {
@@ -391,7 +391,7 @@
           "Wednesday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "11:30-02:15"
             },
             {
@@ -471,7 +471,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             }
           ],
@@ -541,7 +541,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "11:30-02:15"
             }
           ],
@@ -980,7 +980,7 @@
             },
             {
               "name": "Data St Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             }
           ]
@@ -1033,7 +1033,7 @@
             },
             {
               "name": "Data St Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             }
           ],
@@ -2583,7 +2583,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             },
             {
@@ -2658,7 +2658,7 @@
             },
             {
               "name": "IICT",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "02:30-05:15"
             },
             {
@@ -2917,7 +2917,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             },
             {
@@ -3496,12 +3496,12 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             }
           ],
@@ -3588,7 +3588,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "11:30-02:15"
             }
           ],
@@ -3641,7 +3641,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "11:30-02:15"
             }
           ],
@@ -3665,7 +3665,7 @@
           "Saturday": [
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "08:30-11:15"
             },
             {
@@ -3708,7 +3708,7 @@
             },
             {
               "name": "Prof for AI Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
@@ -3805,7 +3805,7 @@
             },
             {
               "name": "COAL Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "02:30-05:15"
             }
           ],
@@ -3858,7 +3858,7 @@
             },
             {
               "name": "Prof for AI Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -3902,7 +3902,7 @@
             },
             {
               "name": "Data St Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "02:30-05:15"
             }
           ]
@@ -3925,7 +3925,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             }
           ]
@@ -3958,7 +3958,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "10:00-12:45"
             }
           ]
@@ -4333,7 +4333,7 @@
           "Tuesday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             },
             {
@@ -4350,12 +4350,12 @@
           "Wednesday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -4367,17 +4367,17 @@
           "Thursday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -4399,12 +4399,12 @@
           "Friday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -4711,7 +4711,7 @@
             },
             {
               "name": "COAL Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "11:30-02:15"
             }
           ],
@@ -5129,7 +5129,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             },
             {
@@ -5204,7 +5204,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "10:00-12:45"
             },
             {
@@ -5262,7 +5262,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             },
             {
@@ -5342,7 +5342,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "02:30-05:15"
             }
           ],
@@ -5354,7 +5354,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             },
             {
@@ -5433,7 +5433,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "02:30-05:15"
             }
           ]
@@ -5459,7 +5459,7 @@
             },
             {
               "name": "Web Comp",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "11:30-02:15"
             }
           ],
@@ -5485,7 +5485,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "D-IT LAB 2",
+              "location": "IT LAB 2 (D-211)",
               "time": "10:00-12:45"
             }
           ]
@@ -5572,7 +5572,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             },
             {
@@ -5652,7 +5652,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             }
           ],
@@ -5722,14 +5722,14 @@
             },
             {
               "name": "PF Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
             }
           ],
           "Saturday": [
             {
               "name": "IICT Lab",
-              "location": "D-IT LAB 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             },
             {
@@ -5794,7 +5794,7 @@
             },
             {
               "name": "Intro to DS Lab",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             }
           ],
@@ -6216,7 +6216,7 @@
           "Tuesday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             },
             {
@@ -6233,12 +6233,12 @@
           "Wednesday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -6250,17 +6250,17 @@
           "Thursday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -6282,12 +6282,12 @@
           "Friday": [
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             },
             {
               "name": "Project",
-              "location": "D-IT LAB 4",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
             },
             {
@@ -7006,5 +7006,5 @@
     }
   },
   "count": 1157,
-  "generatedAt": "2026-08-18T05:29:45.303020+00:00"
+  "generatedAt": "2026-08-18T05:55:38.588277+00:00"
 }
