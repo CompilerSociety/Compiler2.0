@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T11:50:52.050Z",
+  "updated_at": "2026-08-18T13:38:46.991Z",
   "source_subject": "Seating Plan 26",
-  "count": 44,
+  "count": 45,
   "students": [
     {
       "name": "Hammad rehan",
@@ -566,6 +566,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T11:50:52.050Z"
+    },
+    {
+      "name": "Syed Mehruban Ali shah Bukhari",
+      "nuid": "26I-3151",
+      "section": "A",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T13:38:46.991Z"
     }
   ]
 }
