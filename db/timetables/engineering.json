@@ -1086,14 +1086,14 @@
               "time": "8:30-09:50"
             },
             {
-              "name": "English Language Skills",
-              "location": "B-119",
-              "time": "09:55-11:15"
-            },
-            {
               "name": "Applied Calculus",
               "location": "B-119",
               "time": "12:50-02:10"
+            },
+            {
+              "name": "English Language Skills",
+              "location": "B-119",
+              "time": "02:20-03:40"
             }
           ],
           "Thursday": [
@@ -1297,5 +1297,5 @@
     }
   },
   "count": 210,
-  "generatedAt": "2026-08-18T03:07:00.222949+00:00"
+  "generatedAt": "2026-08-18T03:55:13.540981+00:00"
 }

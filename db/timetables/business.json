@@ -1074,11 +1074,6 @@
               "name": "IT in Business (CS1001)",
               "location": "A-310",
               "time": "03:00-04:50"
-            },
-            {
-              "name": "Sociology (SS2018)",
-              "location": "A-315",
-              "time": "08:30-10:20"
             }
           ],
           "Friday": [
@@ -2719,7 +2714,7 @@
             {
               "name": "English - I (SS1016)",
               "location": "A-101",
-              "time": "02:25-04:15"
+              "time": "03:00-04:50"
             },
             {
               "name": "IT in Business (CS1001)",
@@ -3754,6 +3749,6 @@
       }
     }
   },
-  "count": 638,
-  "generatedAt": "2026-08-18T03:06:58.550197+00:00"
+  "count": 637,
+  "generatedAt": "2026-08-18T03:55:12.260359+00:00"
 }
