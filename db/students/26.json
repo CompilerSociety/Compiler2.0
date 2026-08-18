@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T09:48:18.762Z",
+  "updated_at": "2026-08-18T09:53:52.304Z",
   "source_subject": "Seating Plan 26",
-  "count": 41,
+  "count": 42,
   "students": [
     {
       "name": "Hammad rehan",
@@ -527,6 +527,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T09:48:18.762Z"
+    },
+    {
+      "name": "Yahya Nisar",
+      "nuid": "26I-0627",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T09:53:52.304Z"
     }
   ]
 }
