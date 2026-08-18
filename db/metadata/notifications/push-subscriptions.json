@@ -909,5 +909,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "24I-0839",
+    "name": "Sabia Munir",
+    "department": "BS CS",
+    "batch": "24",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/d20DFVmPDAM:APA91bEBd7m_5sdVY7-rP-OYrVAChCHrWzr-m_x5bxU_hKpfoqEidQtpPBHh6cuSwxvknpYoGKMFwjQ4HffdYeqx9A75o9hJ42HcC2XnYIRxHHCN1ZQSjESqaK106G_cNLt64jh_vdMn",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BIZpVwL6yQlfFFrZ3f-sx_jNKiffKYT14yVGPeOa9-Di1l7Bgqg4X-a9rqYOgXX5vNZBWUb_gEs2TF8-F1eHOWo",
+        "auth": "7IOCAPqjM9N-KLPbPKYflw"
+      }
+    },
+    "updated_at": 1787053394833,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
