@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T02:56:46.507Z",
+  "updated_at": "2026-08-18T03:06:25.164Z",
   "source_subject": "Seating Plan 26",
-  "count": 32,
+  "count": 33,
   "students": [
     {
       "name": "Hammad rehan",
@@ -410,6 +410,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T02:56:46.507Z"
+    },
+    {
+      "name": "usman Shabbir",
+      "nuid": "26I-0737",
+      "section": "E",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T03:06:25.164Z"
     }
   ]
 }
