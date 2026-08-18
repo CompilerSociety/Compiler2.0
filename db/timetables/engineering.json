@@ -820,11 +820,6 @@
           ],
           "Wednesday": [
             {
-              "name": "Comp. Variables & Trans.",
-              "location": "B-030",
-              "time": "11:25-12:45"
-            },
-            {
               "name": "Digital Logic Design",
               "location": "B-020",
               "time": "03:45-05:05"
@@ -836,11 +831,6 @@
             }
           ],
           "Thursday": [
-            {
-              "name": "Comp. Variables & Trans.",
-              "location": "B-028",
-              "time": "03:45-05:05"
-            },
             {
               "name": "Digital Logic Design",
               "location": "B-020",
@@ -1296,6 +1286,6 @@
       }
     }
   },
-  "count": 210,
-  "generatedAt": "2026-08-18T03:55:13.540981+00:00"
+  "count": 208,
+  "generatedAt": "2026-08-18T04:24:16.923442+00:00"
 }
