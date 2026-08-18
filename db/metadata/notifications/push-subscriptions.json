@@ -955,5 +955,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0688",
+    "name": "Muhammad Ahmad",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fHKUrdNxD_w:APA91bHO4B6cLOkDRnjrahsBxIfaATIIGa3dAn8kfnnSaz4We_mF2eIDjkNoCNK2Iy_h-FLQYFGFMM_MYuacCzDJve3dZf_EY6ojctKS8piR6Css6uGbnilUh1U1seMvgdTBocTklh3s",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BJz-YXzBX1XrhcWLQ4fCoTDSUtzWkJOTxt2TyRTIl85pKhCBFpa2Rh85bh4rI2Urgk4MHElsB7fE7OYBU7B1HGo",
+        "auth": "yccqUvijV_AaLrrWaZCmRA"
+      }
+    },
+    "updated_at": 1787073637834,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
