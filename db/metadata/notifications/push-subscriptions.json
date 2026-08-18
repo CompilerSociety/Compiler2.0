@@ -978,5 +978,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-1026",
+    "name": "Ghania Arshad",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ciPDSgnJsOU:APA91bHf1vKfl0VBwNSHq46AndmNboG1spR7vyxTbQM-FMI-q3N_R4dLWBqz454EkwD6yDBqG2SeHBkmTOhFzmymAhkxBpIbnyIJ_TnVLSAAUAJS0OTJwDd9NplqPGh6kHQqdyoZy-RW",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BI3vBNjpHMaH1M61q42RNqMtYuUX6Djj91IBESLyR586YuGfCzJeNPJTTnHXlbnBYpmVEXrJ1AohKoPbVXBkjTQ",
+        "auth": "A3AlUP48PKxcEZiAGUiNyg"
+      }
+    },
+    "updated_at": 1787078201178,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
