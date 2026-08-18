@@ -6542,11 +6542,6 @@
               "time": "06:45-08:05"
             },
             {
-              "name": "Adv AI",
-              "location": "D-304",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Research Methodology",
               "location": "D-313",
               "time": "06:45-08:05"
@@ -6603,7 +6598,7 @@
           "Tuesday": [
             {
               "name": "App Prog",
-              "location": "D-303",
+              "location": "D-304",
               "time": "05:20-06:40"
             },
             {
@@ -7022,6 +7017,6 @@
       }
     }
   },
-  "count": 1160,
-  "generatedAt": "2026-08-18T10:52:11.773932+00:00"
+  "count": 1159,
+  "generatedAt": "2026-08-18T11:14:58.196179+00:00"
 }
