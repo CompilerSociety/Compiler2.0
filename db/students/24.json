@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-17T15:05:16.355Z",
+  "updated_at": "2026-08-18T08:36:17.559Z",
   "source_subject": "Seating Plan 24",
-  "count": 749,
+  "count": 750,
   "students": [
     {
       "name": "Muhammad Aun",
@@ -5251,6 +5251,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-17T15:05:16.355Z"
+    },
+    {
+      "name": "Saad Baig",
+      "nuid": "24I-0040",
+      "section": "C",
+      "department": "AI",
+      "batch": "24",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T08:36:17.559Z"
     }
   ]
 }
