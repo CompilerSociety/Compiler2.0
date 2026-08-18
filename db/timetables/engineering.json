@@ -260,80 +260,6 @@
           ]
         }
       },
-      "REPEAT": {
-        "A": {
-          "Monday": [
-            {
-              "name": "Prog Fundamentals & Eng.",
-              "location": "B-027",
-              "time": "02:20-03:40"
-            }
-          ],
-          "Tuesday": [
-            {
-              "name": "Applied Physics",
-              "location": "B-027",
-              "time": "02:20-03:40"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-119",
-              "time": "11:25-12:45"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Applied Thermodynamics",
-              "location": "B-027",
-              "time": "03:45-05:05"
-            },
-            {
-              "name": "Linear Algebra",
-              "location": "B-028",
-              "time": "11:25-12:45"
-            }
-          ],
-          "Thursday": [
-            {
-              "name": "Linear Algebra",
-              "location": "B-027",
-              "time": "03:45-05:05"
-            },
-            {
-              "name": "Programming Fundamentals",
-              "location": "B-119",
-              "time": "11:25-12:45"
-            },
-            {
-              "name": "Linear Circuit Analysis",
-              "location": "B-129",
-              "time": "12:50-02:10"
-            },
-            {
-              "name": "Applied Physics Lab",
-              "location": "PHY",
-              "time": "02:20-03:40"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "Applied Thermodynamics",
-              "location": "B-019",
-              "time": "02:00-03:20"
-            },
-            {
-              "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
-              "time": "02:00-03:20"
-            },
-            {
-              "name": "Programming Fundamentals Lab",
-              "location": "POTH",
-              "time": "8:30-09:50"
-            }
-          ]
-        }
-      },
       "2023": {
         "A": {
           "Monday": [
@@ -843,6 +769,78 @@
             }
           ]
         }
+      },
+      "REPEAT": {
+        "A": {
+          "Tuesday": [
+            {
+              "name": "Applied Physics",
+              "location": "B-027",
+              "time": "02:20-03:40"
+            },
+            {
+              "name": "Linear Circuit Analysis",
+              "location": "B-119",
+              "time": "11:25-12:45"
+            }
+          ],
+          "Wednesday": [
+            {
+              "name": "Applied Thermodynamics",
+              "location": "B-027",
+              "time": "03:45-05:05"
+            },
+            {
+              "name": "Linear Algebra",
+              "location": "B-028",
+              "time": "11:25-12:45"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Linear Algebra",
+              "location": "B-027",
+              "time": "03:45-05:05"
+            },
+            {
+              "name": "Programming Fundamentals",
+              "location": "B-119",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Linear Circuit Analysis",
+              "location": "B-129",
+              "time": "12:50-02:10"
+            },
+            {
+              "name": "Applied Physics Lab",
+              "location": "PHY",
+              "time": "02:20-03:40"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "Applied Thermodynamics",
+              "location": "B-019",
+              "time": "02:00-03:20"
+            },
+            {
+              "name": "Prog Fundamentals & Eng.",
+              "location": "B-027",
+              "time": "11:25-12:45"
+            },
+            {
+              "name": "Linear Circuit Analysis Lab",
+              "location": "CKT",
+              "time": "02:00-03:20"
+            },
+            {
+              "name": "Programming Fundamentals Lab",
+              "location": "POTH",
+              "time": "8:30-09:50"
+            }
+          ]
+        }
       }
     },
     "BS CE": {
@@ -1287,5 +1285,5 @@
     }
   },
   "count": 208,
-  "generatedAt": "2026-08-18T05:55:42.146100+00:00"
+  "generatedAt": "2026-08-18T06:24:25.677589+00:00"
 }
