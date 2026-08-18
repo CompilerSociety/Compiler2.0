@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T07:03:23.263Z",
+  "updated_at": "2026-08-18T07:45:48.742Z",
   "source_subject": "Seating Plan 25",
-  "count": 960,
+  "count": 961,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6762,6 +6762,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T07:03:23.263Z"
+    },
+    {
+      "name": "Ali Hassan Malik",
+      "nuid": "25I-0740",
+      "section": "A",
+      "department": "CS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-18T07:45:48.742Z"
     }
   ]
 }
