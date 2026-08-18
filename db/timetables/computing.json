@@ -2314,6 +2314,11 @@
               "time": "11:30-12:50"
             },
             {
+              "name": "SMD",
+              "location": "C-110",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Fund of SPM",
               "location": "D-404",
               "time": "11:30-12:50"
@@ -3742,7 +3747,7 @@
             },
             {
               "name": "LA",
-              "location": "D-402",
+              "location": "D-311",
               "time": "01:00-02:20"
             },
             {
@@ -3886,14 +3891,14 @@
           ],
           "Thursday": [
             {
+              "name": "LA",
+              "location": "D-311",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Pak Studies",
               "location": "D-402",
               "time": "08:30-10:15"
-            },
-            {
-              "name": "LA",
-              "location": "D-402",
-              "time": "11:30-12:50"
             },
             {
               "name": "Data St Lab",
@@ -4939,11 +4944,6 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "DB",
-              "location": "D-301",
-              "time": "11:30-12:50"
-            },
-            {
               "name": "Info Sec",
               "location": "D-503",
               "time": "08:30-09:50"
@@ -4985,6 +4985,11 @@
         "B": {
           "Tuesday": [
             {
+              "name": "DB",
+              "location": "D-302",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Info Sec",
               "location": "D-504",
               "time": "10:00-11:20"
@@ -5018,6 +5023,11 @@
             }
           ],
           "Thursday": [
+            {
+              "name": "DB",
+              "location": "D-302",
+              "time": "11:30-12:50"
+            },
             {
               "name": "Info Sec",
               "location": "D-504",
@@ -5684,19 +5694,19 @@
           ],
           "Thursday": [
             {
-              "name": "Ideology of Pak",
-              "location": "D-302",
-              "time": "10:30-12:15"
-            },
-            {
               "name": "Seerah",
               "location": "D-306",
               "time": "01:00-01:55"
             },
             {
               "name": "PF",
-              "location": "D-311",
+              "location": "D-306",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Ideology of Pak",
+              "location": "D-402",
+              "time": "10:30-12:15"
             }
           ],
           "Friday": [
@@ -6995,6 +7005,6 @@
       }
     }
   },
-  "count": 1155,
-  "generatedAt": "2026-08-18T04:59:33.731143+00:00"
+  "count": 1157,
+  "generatedAt": "2026-08-18T05:29:45.303020+00:00"
 }

@@ -131,8 +131,8 @@
           "Tuesday": [
             {
               "name": "Intro to Financial Accounting (AF1003)",
-              "location": "A-210",
-              "time": "02:25-03:45"
+              "location": "A-211",
+              "time": "01:00-02:20"
             },
             {
               "name": "IT in Business (CS1001)",
@@ -3045,9 +3045,9 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "Basic Econometrics (MG3003)",
+              "name": "Fundamentals of Accounting (AF1001)",
               "location": "A-311",
-              "time": "10:00-11:20"
+              "time": "08:30-09:50"
             }
           ],
           "Friday": [
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-18T04:59:35.955145+00:00"
+  "generatedAt": "2026-08-18T05:29:46.082552+00:00"
 }
