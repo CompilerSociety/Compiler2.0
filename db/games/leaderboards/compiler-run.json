@@ -231,8 +231,8 @@
       "section": "C",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 81,
-      "achievedAt": "2026-08-19T06:47:10.404Z"
+      "highScore": 2030,
+      "achievedAt": "2026-08-19T06:50:33.963Z"
     }
   },
   "leaderboard": [
@@ -271,6 +271,15 @@
       "batch": "25",
       "highScore": 2332,
       "achievedAt": "2026-08-19T05:55:52.142Z"
+    },
+    {
+      "nuid": "25I-0777",
+      "name": "Mahmood Azam",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 2030,
+      "achievedAt": "2026-08-19T06:50:33.963Z"
     },
     {
       "nuid": "25I-0816",
@@ -316,15 +325,6 @@
       "batch": "25",
       "highScore": 1086,
       "achievedAt": "2026-07-08T22:39:37.687Z"
-    },
-    {
-      "nuid": "24I-6516",
-      "name": "Afaq Ahsan",
-      "section": "C",
-      "department": "AI",
-      "batch": "24",
-      "highScore": 798,
-      "achievedAt": "2026-07-25T18:52:30.493Z"
     }
   ]
 }
