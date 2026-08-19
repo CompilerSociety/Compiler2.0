@@ -206,6 +206,15 @@
       "batch": "25",
       "highScore": 2332,
       "achievedAt": "2026-08-19T05:55:52.142Z"
+    },
+    "25I-0929": {
+      "nuid": "25I-0929",
+      "name": "Sajjad Ali",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 35,
+      "achievedAt": "2026-08-19T06:00:09.900Z"
     }
   },
   "leaderboard": [
