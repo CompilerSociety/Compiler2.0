@@ -195,8 +195,8 @@
       "section": "C",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 215,
-      "achievedAt": "2026-08-19T06:54:09.968Z"
+      "highScore": 222,
+      "achievedAt": "2026-08-19T06:59:44.479Z"
     },
     "26I-0939": {
       "nuid": "26I-0939",
@@ -237,6 +237,15 @@
       "achievedAt": "2026-08-19T05:45:59.502Z"
     },
     {
+      "nuid": "25I-0628",
+      "name": "Muhammad Khattak",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 222,
+      "achievedAt": "2026-08-19T06:59:44.479Z"
+    },
+    {
       "nuid": "25I-1006",
       "name": "Moiz Javed",
       "section": "B",
@@ -244,15 +253,6 @@
       "batch": "25",
       "highScore": 215,
       "achievedAt": "2026-08-19T06:08:04.160Z"
-    },
-    {
-      "nuid": "25I-0628",
-      "name": "Muhammad Khattak",
-      "section": "C",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 215,
-      "achievedAt": "2026-08-19T06:54:09.968Z"
     },
     {
       "nuid": "25I-0844",
