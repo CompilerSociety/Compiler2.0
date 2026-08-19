@@ -278,6 +278,15 @@
       "batch": "25",
       "highScore": 34,
       "achievedAt": "2026-08-19T16:07:01.819Z"
+    },
+    "25I-0798": {
+      "nuid": "25I-0798",
+      "name": "Saadat Shah",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 62,
+      "achievedAt": "2026-08-19T17:15:58.680Z"
     }
   },
   "leaderboard": [
