@@ -372,7 +372,7 @@
             },
             {
               "name": "Applied Machine Learning Lab",
-              "location": "COMP-I",
+              "location": "POTH",
               "time": "8:30-09:50"
             }
           ],
@@ -752,8 +752,8 @@
           "Tuesday": [
             {
               "name": "Obj. Oriented Data Struct. Lab",
-              "location": "POTH",
-              "time": "8:30-09:50"
+              "location": "COMP-III",
+              "time": "02:20-03:40"
             }
           ],
           "Wednesday": [
@@ -981,7 +981,7 @@
             {
               "name": "Object Oriented Programming Lab",
               "location": "COMP-III",
-              "time": "12:50-02:10"
+              "time": "11:25-12:45"
             }
           ],
           "Wednesday": [
@@ -1271,7 +1271,7 @@
               "time": "05:15-08:00"
             },
             {
-              "name": "Holy Quran I/Ethics I & II",
+              "name": "Holy Quran I,II /Ethics I & II",
               "location": "B-020",
               "time": "05:20-07:10"
             }
@@ -1302,5 +1302,5 @@
     }
   },
   "count": 211,
-  "generatedAt": "2026-08-19T03:56:22.007482+00:00"
+  "generatedAt": "2026-08-19T04:29:03.412982+00:00"
 }
