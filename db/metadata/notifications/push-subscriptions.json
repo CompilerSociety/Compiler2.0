@@ -1183,5 +1183,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-1013",
+    "name": "Talalahmed",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "H",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/e7qYIGonVPg:APA91bGg3TyqnmrY2U_E-SyVzGUE_nTq2xOXO1uTZRajHEYEsfTC0wja0-F-iFp4NpjaDk5LXoRMIOoPUdjLTTaDKVa4wI1rHzKxZ2ysISy2pDRgsY4kym3oaw_J0jJH5gXUyRRX1IJr",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BIUh7iPk9SEZZw0iW6eELesrQehTPAbI2CHT8-EI5-sHKgHWpinw47ZkdDt0bYO_-BAjAuPrKOpT1CyUvQl0reE",
+        "auth": "KXxgGDzVnToMijX2hq1h5A"
+      }
+    },
+    "updated_at": 1787156460257,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
