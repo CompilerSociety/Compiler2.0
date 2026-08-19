@@ -188,6 +188,15 @@
       "batch": "25",
       "highScore": 35,
       "achievedAt": "2026-08-19T05:10:00.659Z"
+    },
+    "25I-0744": {
+      "nuid": "25I-0744",
+      "name": "Ayaan Ahmed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-19T05:14:18.031Z"
     }
   },
   "leaderboard": [
