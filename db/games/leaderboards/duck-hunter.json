@@ -260,6 +260,15 @@
       "batch": "25",
       "highScore": 191,
       "achievedAt": "2026-08-19T16:06:18.366Z"
+    },
+    "25I-0780": {
+      "nuid": "25I-0780",
+      "name": "Hammad Ali",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T16:52:58.610Z"
     }
   },
   "leaderboard": [
