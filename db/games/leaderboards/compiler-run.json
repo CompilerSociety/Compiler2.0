@@ -204,8 +204,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 65,
-      "achievedAt": "2026-08-19T05:29:27.073Z"
+      "highScore": 2332,
+      "achievedAt": "2026-08-19T05:55:52.142Z"
     }
   },
   "leaderboard": [
@@ -226,6 +226,15 @@
       "batch": "25",
       "highScore": 4450,
       "achievedAt": "2026-07-08T22:53:18.986Z"
+    },
+    {
+      "nuid": "25I-0571",
+      "name": "Abdullah Munir",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 2332,
+      "achievedAt": "2026-08-19T05:55:52.142Z"
     },
     {
       "nuid": "25I-0816",
@@ -289,15 +298,6 @@
       "batch": "25",
       "highScore": 705,
       "achievedAt": "2026-08-07T12:04:50.190Z"
-    },
-    {
-      "nuid": "25I-2526",
-      "name": "Affan Ahmad",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 476,
-      "achievedAt": "2026-08-17T08:17:47.334Z"
     }
   ]
 }
