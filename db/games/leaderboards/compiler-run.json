@@ -215,6 +215,15 @@
       "batch": "25",
       "highScore": 48,
       "achievedAt": "2026-08-19T06:00:15.892Z"
+    },
+    "25I-1006": {
+      "nuid": "25I-1006",
+      "name": "Moiz Javed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 36,
+      "achievedAt": "2026-08-19T06:03:12.779Z"
     }
   },
   "leaderboard": [
