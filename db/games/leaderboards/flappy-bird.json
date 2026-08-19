@@ -269,6 +269,15 @@
       "batch": "25",
       "highScore": 9,
       "achievedAt": "2026-08-19T06:47:07.366Z"
+    },
+    "25I-0777": {
+      "nuid": "25I-0777",
+      "name": "Mahmood Azam",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-08-19T06:57:53.639Z"
     }
   },
   "leaderboard": [
