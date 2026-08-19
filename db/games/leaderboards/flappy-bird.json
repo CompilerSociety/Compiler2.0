@@ -294,8 +294,8 @@
       "section": "C",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 2,
-      "achievedAt": "2026-08-19T15:52:20.239Z"
+      "highScore": 436,
+      "achievedAt": "2026-08-19T17:45:41.049Z"
     },
     "25I-0780": {
       "nuid": "25I-0780",
@@ -325,6 +325,15 @@
       "batch": "25",
       "highScore": 493,
       "achievedAt": "2026-08-19T17:24:06.718Z"
+    },
+    {
+      "nuid": "25I-0889",
+      "name": "Ali Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 436,
+      "achievedAt": "2026-08-19T17:45:41.049Z"
     },
     {
       "nuid": "25I-0628",
@@ -397,15 +406,6 @@
       "batch": "25",
       "highScore": 47,
       "achievedAt": "2026-08-19T06:15:32.219Z"
-    },
-    {
-      "nuid": "25I-2526",
-      "name": "Affan Ahmad",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 45,
-      "achievedAt": "2026-08-19T09:42:03.451Z"
     }
   ]
 }
