@@ -249,8 +249,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 18,
-      "achievedAt": "2026-08-19T06:10:29.118Z"
+      "highScore": 23,
+      "achievedAt": "2026-08-19T06:11:26.676Z"
     }
   },
   "leaderboard": [
@@ -327,6 +327,15 @@
       "achievedAt": "2026-08-19T05:13:07.281Z"
     },
     {
+      "nuid": "25I-0647",
+      "name": "Aitzaz Khan",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 23,
+      "achievedAt": "2026-08-19T06:11:26.676Z"
+    },
+    {
       "nuid": "25I-0564",
       "name": "Hassaan Atif",
       "section": "B",
@@ -334,15 +343,6 @@
       "batch": "25",
       "highScore": 20,
       "achievedAt": "2026-08-19T05:05:04.070Z"
-    },
-    {
-      "nuid": "25I-0647",
-      "name": "Aitzaz Khan",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 18,
-      "achievedAt": "2026-08-19T06:10:29.118Z"
     }
   ]
 }
