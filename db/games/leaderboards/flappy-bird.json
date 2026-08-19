@@ -213,8 +213,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 16,
-      "achievedAt": "2026-08-19T05:05:05.197Z"
+      "highScore": 46,
+      "achievedAt": "2026-08-19T05:07:40.702Z"
     }
   },
   "leaderboard": [
@@ -226,6 +226,15 @@
       "batch": "25",
       "highScore": 52,
       "achievedAt": "2026-08-17T10:59:12.263Z"
+    },
+    {
+      "nuid": "25I-0798",
+      "name": "Saadat Shah",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 46,
+      "achievedAt": "2026-08-19T05:07:40.702Z"
     },
     {
       "nuid": "25I-0849",
@@ -280,15 +289,6 @@
       "batch": "25",
       "highScore": 16,
       "achievedAt": "2026-08-15T14:50:13.997Z"
-    },
-    {
-      "nuid": "25I-0798",
-      "name": "Saadat Shah",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 16,
-      "achievedAt": "2026-08-19T05:05:05.197Z"
     },
     {
       "nuid": "25I-0957",
