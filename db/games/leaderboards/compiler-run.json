@@ -251,6 +251,15 @@
       "batch": "25",
       "highScore": 48,
       "achievedAt": "2026-08-19T07:23:46.493Z"
+    },
+    "23I-2558": {
+      "nuid": "23I-2558",
+      "name": "Haider Abbas",
+      "section": "A",
+      "department": "BS AI",
+      "batch": "23",
+      "highScore": 34,
+      "achievedAt": "2026-08-19T09:05:42.771Z"
     }
   },
   "leaderboard": [
