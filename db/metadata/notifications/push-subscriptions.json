@@ -1161,5 +1161,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2037",
+    "name": "Syed Muhammad Jazil Raza",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QBS7c1cbOBn7vf3dI2zMs_RpLTpQlWTdoGenzpWnakMUqEoyt_McVTI6dDD5NlYkGVnyU_xfmt5Ze61uHtU6vvPP4NDjaiq0gKKGXigqGt5EtrCwknaD9gnHVOtmFcgIhdj5gC8DQDLdthmauYN8hvgBMio91XAZlNno33NQJpo",
+      "keys": {
+        "p256dh": "BC6VxbgL0ZhTHVpj-R7NuksaC1RKfHJ3REQnwENxP3rKQQMly0NZPTfjhBWuiEJV8jUgVlrSe7i8O3tKivYt0nI",
+        "auth": "5bcknpgLn-Z3gPc6LpJb8w"
+      }
+    },
+    "updated_at": 1787149520208,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
