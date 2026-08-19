@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-19T08:54:26.985Z",
+  "updated_at": "2026-08-19T09:19:26.426Z",
   "source_subject": "Seating Plan 26",
-  "count": 48,
+  "count": 49,
   "students": [
     {
       "name": "Hammad rehan",
@@ -618,6 +618,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-19T08:54:26.985Z"
+    },
+    {
+      "name": "Mishael Pervaiz",
+      "nuid": "26I-0900",
+      "section": "H",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-19T09:19:26.426Z"
     }
   ]
 }
