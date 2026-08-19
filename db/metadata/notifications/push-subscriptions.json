@@ -1138,5 +1138,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0852",
+    "name": "Hammad Sadiq",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dAKFQyV8VyI:APA91bGsT3vYCqvVFntcfpDL2NA4k2CfNYBDG0A84vdA6IPHOt2Zwvcq6yyyy4D9HQ8Rb0OyR0TTybkDm9-OoQImBwMykXRkucPh9wcXwlF2ghuQ_i2XY9AGhm8FHotPzerNUwi9gGol",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BIxnx_YhrkzNlYjYrnJy8nCsXsexlmDxfuQ4tG4_iurZ7d9DDPX1HNWyYkRuk9qQCK1gE2aVjAMogAYt8zjoi60",
+        "auth": "5ZMGCo91fdqHi8tUNIpBpA"
+      }
+    },
+    "updated_at": 1787147714972,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
