@@ -1093,5 +1093,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0900",
+    "name": "Mishael Pervaiz",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "H",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QNMn-F7G1FZFuzpzyKbIMftpv2R8p4vl8g9VR2mvvamILkN1c1pF1XHnYNNDPOkpsKLT91CkXki15pm_la1nK6LlL4NcRo08pVwFStbAeelcD2wkdmQ_OSCEdny7dvkZMeDAOcXGVVRz2AEoDYOkNev5GnCki6A9PVeKm5gegeY",
+      "keys": {
+        "p256dh": "BPAbbYD9L0CmB5C67X7Cg3OUzXafpWQj7J8Wk5HDOrgL6h5HDlpdIOYy0jLUrMhd51IMTKfJUfoPbQLBkYO-01E",
+        "auth": "FR1Ke_sgtlw89SqGutcsOA"
+      }
+    },
+    "updated_at": 1787131170807,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
