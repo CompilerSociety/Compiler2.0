@@ -278,6 +278,15 @@
       "batch": "25",
       "highScore": 1,
       "achievedAt": "2026-08-19T06:57:53.639Z"
+    },
+    "25I-1033": {
+      "nuid": "25I-1033",
+      "name": "Shaheer Zia",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T07:30:34.397Z"
     }
   },
   "leaderboard": [
