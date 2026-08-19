@@ -242,6 +242,15 @@
       "batch": "25",
       "highScore": 1239,
       "achievedAt": "2026-08-19T15:52:29.292Z"
+    },
+    "25I-0585": {
+      "nuid": "25I-0585",
+      "name": "Ahmed Ayan",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1210,
+      "achievedAt": "2026-08-19T15:54:36.419Z"
     }
   },
   "leaderboard": [
@@ -262,6 +271,15 @@
       "batch": "25",
       "highScore": 1239,
       "achievedAt": "2026-08-19T15:52:29.292Z"
+    },
+    {
+      "nuid": "25I-0585",
+      "name": "Ahmed Ayan",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1210,
+      "achievedAt": "2026-08-19T15:54:36.419Z"
     },
     {
       "nuid": "25I-0957",
@@ -325,15 +343,6 @@
       "batch": "25",
       "highScore": 184,
       "achievedAt": "2026-08-19T07:33:19.053Z"
-    },
-    {
-      "nuid": "25I-0844",
-      "name": "Abdullah Khalid",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 183,
-      "achievedAt": "2026-08-17T12:50:24.309Z"
     }
   ]
 }
