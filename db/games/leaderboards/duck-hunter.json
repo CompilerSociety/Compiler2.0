@@ -197,6 +197,15 @@
       "batch": "25",
       "highScore": 215,
       "achievedAt": "2026-08-19T06:54:09.968Z"
+    },
+    "26I-0939": {
+      "nuid": "26I-0939",
+      "name": "Musaib Haider",
+      "section": "H",
+      "department": "BS CS",
+      "batch": "26",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T06:59:02.692Z"
     }
   },
   "leaderboard": [
