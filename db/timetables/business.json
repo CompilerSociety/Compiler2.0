@@ -1499,7 +1499,7 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Microeconomics",
+              "name": "Microeconomics (SS2002)",
               "location": "A-210",
               "time": "03:50-05:10"
             }
@@ -1523,7 +1523,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Microeconomics",
+              "name": "Microeconomics (SS2002)",
               "location": "A-101",
               "time": "03:50-05:10"
             },
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-19T08:22:51.350231+00:00"
+  "generatedAt": "2026-08-19T09:01:33.729535+00:00"
 }
