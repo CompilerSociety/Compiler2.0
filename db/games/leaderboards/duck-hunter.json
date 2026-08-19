@@ -152,6 +152,15 @@
       "batch": "25",
       "highScore": 281,
       "achievedAt": "2026-08-19T06:00:07.294Z"
+    },
+    "25I-1006": {
+      "nuid": "25I-1006",
+      "name": "Moiz Javed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 199,
+      "achievedAt": "2026-08-19T06:02:14.048Z"
     }
   },
   "leaderboard": [
@@ -172,6 +181,15 @@
       "batch": "25",
       "highScore": 281,
       "achievedAt": "2026-08-19T06:00:07.294Z"
+    },
+    {
+      "nuid": "25I-1006",
+      "name": "Moiz Javed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 199,
+      "achievedAt": "2026-08-19T06:02:14.048Z"
     },
     {
       "nuid": "25I-0844",
@@ -235,15 +253,6 @@
       "batch": "25",
       "highScore": 121,
       "achievedAt": "2026-08-19T05:05:18.611Z"
-    },
-    {
-      "nuid": "25I-0553",
-      "name": "Muhammad Zaryaab",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 99,
-      "achievedAt": "2026-08-17T10:51:01.652Z"
     }
   ]
 }
