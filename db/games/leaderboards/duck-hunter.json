@@ -188,6 +188,15 @@
       "batch": "25",
       "highScore": 151,
       "achievedAt": "2026-08-19T06:28:49.392Z"
+    },
+    "25I-0628": {
+      "nuid": "25I-0628",
+      "name": "Muhammad Khattak",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 170,
+      "achievedAt": "2026-08-19T06:31:18.565Z"
     }
   },
   "leaderboard": [
@@ -226,6 +235,15 @@
       "batch": "25",
       "highScore": 183,
       "achievedAt": "2026-08-17T12:50:24.309Z"
+    },
+    {
+      "nuid": "25I-0628",
+      "name": "Muhammad Khattak",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 170,
+      "achievedAt": "2026-08-19T06:31:18.565Z"
     },
     {
       "nuid": "25I-0849",
@@ -271,15 +289,6 @@
       "batch": "25",
       "highScore": 136,
       "achievedAt": "2026-08-17T08:14:32.112Z"
-    },
-    {
-      "nuid": "25I-0789",
-      "name": "Aazan Mustafa",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 128,
-      "achievedAt": "2026-07-09T07:32:40.777Z"
     }
   ]
 }
