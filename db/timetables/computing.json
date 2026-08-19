@@ -1660,7 +1660,7 @@
           "Wednesday": [
             {
               "name": "App HCI",
-              "location": "C-405",
+              "location": "C-401",
               "time": "11:30-12:50"
             },
             {
@@ -2865,14 +2865,14 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "AP",
-              "location": "C-603",
-              "time": "08:30-09:50"
-            },
-            {
               "name": "Ideology of Pak",
               "location": "C-603",
               "time": "01:00-02:45"
+            },
+            {
+              "name": "AP",
+              "location": "C-604",
+              "time": "08:30-09:50"
             }
           ],
           "Thursday": [
@@ -2972,7 +2972,7 @@
           "Wednesday": [
             {
               "name": "Data St",
-              "location": "C-604",
+              "location": "C-603",
               "time": "08:30-09:50"
             },
             {
@@ -7033,5 +7033,5 @@
     }
   },
   "count": 1162,
-  "generatedAt": "2026-08-19T06:02:46.457868+00:00"
+  "generatedAt": "2026-08-19T07:02:58.138649+00:00"
 }
