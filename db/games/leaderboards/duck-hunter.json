@@ -141,8 +141,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 218,
-      "achievedAt": "2026-08-19T05:42:29.767Z"
+      "highScore": 311,
+      "achievedAt": "2026-08-19T05:45:59.502Z"
     },
     "25I-0744": {
       "nuid": "25I-0744",
@@ -156,6 +156,15 @@
   },
   "leaderboard": [
     {
+      "nuid": "25I-0571",
+      "name": "Abdullah Munir",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 311,
+      "achievedAt": "2026-08-19T05:45:59.502Z"
+    },
+    {
       "nuid": "25I-0744",
       "name": "Ayaan Ahmed",
       "section": "B",
@@ -163,15 +172,6 @@
       "batch": "25",
       "highScore": 233,
       "achievedAt": "2026-08-19T05:12:50.265Z"
-    },
-    {
-      "nuid": "25I-0571",
-      "name": "Abdullah Munir",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 218,
-      "achievedAt": "2026-08-19T05:42:29.767Z"
     },
     {
       "nuid": "25I-0844",
