@@ -197,6 +197,15 @@
       "batch": "25",
       "highScore": 10,
       "achievedAt": "2026-08-19T05:03:28.730Z"
+    },
+    "25I-0933": {
+      "nuid": "25I-0933",
+      "name": "Talha Ali",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T05:03:57.849Z"
     }
   },
   "leaderboard": [
