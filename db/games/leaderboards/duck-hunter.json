@@ -161,6 +161,15 @@
       "batch": "25",
       "highScore": 215,
       "achievedAt": "2026-08-19T06:08:04.160Z"
+    },
+    "25I-0526": {
+      "nuid": "25I-0526",
+      "name": "Maaz Ahmed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T06:10:30.002Z"
     }
   },
   "leaderboard": [
