@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-19T09:19:26.426Z",
+  "updated_at": "2026-08-19T09:24:19.970Z",
   "source_subject": "Seating Plan 26",
-  "count": 49,
+  "count": 50,
   "students": [
     {
       "name": "Hammad rehan",
@@ -631,6 +631,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-19T09:19:26.426Z"
+    },
+    {
+      "name": "Hasna Diyar",
+      "nuid": "26I-3133",
+      "section": "C",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-19T09:24:19.970Z"
     }
   ]
 }
