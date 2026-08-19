@@ -152,6 +152,15 @@
       "batch": "25",
       "highScore": 6,
       "achievedAt": "2026-08-18T19:41:58.118Z"
+    },
+    "25I-0957": {
+      "nuid": "25I-0957",
+      "name": "Rayan Khalid",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-08-19T05:00:34.627Z"
     }
   },
   "leaderboard": [
