@@ -222,8 +222,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 0,
-      "achievedAt": "2026-08-19T07:29:46.022Z"
+      "highScore": 184,
+      "achievedAt": "2026-08-19T07:33:19.053Z"
     }
   },
   "leaderboard": [
@@ -273,6 +273,15 @@
       "achievedAt": "2026-08-19T06:08:04.160Z"
     },
     {
+      "nuid": "25I-1033",
+      "name": "Shaheer Zia",
+      "section": "G",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 184,
+      "achievedAt": "2026-08-19T07:33:19.053Z"
+    },
+    {
       "nuid": "25I-0844",
       "name": "Abdullah Khalid",
       "section": "G",
@@ -307,15 +316,6 @@
       "batch": "25",
       "highScore": 139,
       "achievedAt": "2026-08-18T04:34:20.674Z"
-    },
-    {
-      "nuid": "25I-0655",
-      "name": "Ismail Hassan",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 138,
-      "achievedAt": "2026-08-18T16:13:56.317Z"
     }
   ]
 }
