@@ -251,6 +251,15 @@
       "batch": "25",
       "highScore": 36,
       "achievedAt": "2026-08-19T06:13:13.421Z"
+    },
+    "25I-0628": {
+      "nuid": "25I-0628",
+      "name": "Muhammad Khattak",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-19T06:28:20.750Z"
     }
   },
   "leaderboard": [
