@@ -170,6 +170,15 @@
       "batch": "25",
       "highScore": 0,
       "achievedAt": "2026-08-19T06:10:30.002Z"
+    },
+    "25I-0564": {
+      "nuid": "25I-0564",
+      "name": "Hassaan Atif",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 69,
+      "achievedAt": "2026-08-19T06:22:32.953Z"
     }
   },
   "leaderboard": [
