@@ -305,6 +305,15 @@
       "batch": "25",
       "highScore": 0,
       "achievedAt": "2026-08-19T16:56:59.276Z"
+    },
+    "25I-0707": {
+      "nuid": "25I-0707",
+      "name": "Usman Saeed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 28,
+      "achievedAt": "2026-08-19T17:19:30.192Z"
     }
   },
   "leaderboard": [
