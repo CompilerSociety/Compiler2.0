@@ -177,8 +177,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 8,
-      "achievedAt": "2026-08-19T05:01:34.019Z"
+      "highScore": 14,
+      "achievedAt": "2026-08-19T05:02:33.466Z"
     }
   },
   "leaderboard": [
@@ -237,6 +237,15 @@
       "achievedAt": "2026-08-19T05:01:16.244Z"
     },
     {
+      "nuid": "25I-0571",
+      "name": "Abdullah Munir",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 14,
+      "achievedAt": "2026-08-19T05:02:33.466Z"
+    },
+    {
       "nuid": "25I-0706",
       "name": "Izaan Ahmad",
       "section": "E",
@@ -262,15 +271,6 @@
       "batch": "25",
       "highScore": 12,
       "achievedAt": "2026-08-17T11:42:38.318Z"
-    },
-    {
-      "nuid": "25I-0526",
-      "name": "Maaz Ahmed",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 12,
-      "achievedAt": "2026-08-19T05:01:36.820Z"
     }
   ]
 }
