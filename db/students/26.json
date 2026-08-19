@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-19T11:17:24.071Z",
+  "updated_at": "2026-08-19T11:43:21.600Z",
   "source_subject": "Seating Plan 26",
-  "count": 52,
+  "count": 53,
   "students": [
     {
       "name": "Hammad rehan",
@@ -670,6 +670,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-19T11:17:24.071Z"
+    },
+    {
+      "name": "Syed Owais Hassan",
+      "nuid": "26I-2554",
+      "section": "B",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-19T11:43:21.600Z"
     }
   ]
 }
