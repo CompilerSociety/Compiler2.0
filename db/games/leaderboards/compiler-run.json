@@ -260,6 +260,15 @@
       "batch": "23",
       "highScore": 34,
       "achievedAt": "2026-08-19T09:05:42.771Z"
+    },
+    "25I-0892": {
+      "nuid": "25I-0892",
+      "name": "Ahmad",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-19T10:06:34.400Z"
     }
   },
   "leaderboard": [
