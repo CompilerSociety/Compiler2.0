@@ -285,11 +285,20 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 62,
-      "achievedAt": "2026-08-19T17:15:58.680Z"
+      "highScore": 6370,
+      "achievedAt": "2026-08-19T17:26:36.410Z"
     }
   },
   "leaderboard": [
+    {
+      "nuid": "25I-0798",
+      "name": "Saadat Shah",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 6370,
+      "achievedAt": "2026-08-19T17:26:36.410Z"
+    },
     {
       "nuid": "25I-0789",
       "name": "Aazan Mustafa",
@@ -370,15 +379,6 @@
       "batch": "25",
       "highScore": 1265,
       "achievedAt": "2026-07-08T22:41:07.739Z"
-    },
-    {
-      "nuid": "25I-0937",
-      "name": "Abdul Wasay",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 1241,
-      "achievedAt": "2026-08-17T08:09:19.803Z"
     }
   ]
 }
