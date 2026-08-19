@@ -287,6 +287,15 @@
       "batch": "25",
       "highScore": 1,
       "achievedAt": "2026-08-19T07:30:58.526Z"
+    },
+    "25I-0889": {
+      "nuid": "25I-0889",
+      "name": "Ali Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 2,
+      "achievedAt": "2026-08-19T15:52:20.239Z"
     }
   },
   "leaderboard": [
