@@ -1070,5 +1070,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "23I-2558",
+    "name": "Haider Abbas",
+    "department": "BS AI",
+    "batch": "23",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dWnmDGtZKL8:APA91bGKINthSMIs1X0P43XTS37kAfrXhqEVxVlR2TAvvOuUtnEsZhAZ6x61Xne9wggSVg87EIITYU3WZnmBteZ-_TbgZ7BTwDTKs6ThXSD3Gq9AU8K_u3vPVu9Ct2MepOK2CmvkYro7",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDroWx2gOAIxdhW3bqFz6IAsK-IiskGTGuPAluh8dFI0uj89OK7SMaQgzhOMB1PhO5Soqvkz7ARJiU3983-Uq-c",
+        "auth": "dtYXySk2HVAIq4MkShit4A"
+      }
+    },
+    "updated_at": 1787129842608,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
