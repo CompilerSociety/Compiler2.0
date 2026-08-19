@@ -1115,5 +1115,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0595",
+    "name": "Muhammad Umar",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/f_wnbOvhSFo:APA91bGfTNgn_PVY9BBgREdDzGeW9hWKAvumWhadyILBPnMQuJOvhZHL9SoKwvCaFCSWyAdmeSNvjn_Mior-dc5pYlwo3NJD7w4YXyf9jmFTb16HCVLREAVXqaNpQfbF0WbVLgsnJZ9b",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPun9esFpeHlCukMKk7vxhj6PyBbZECzVHmgD0vbsXiGdgVlXwDbhFi8Y_nIN3J3bLf5KKCysmXj1bOAnibZ7KQ",
+        "auth": "ipE1sa-WrVBJFyvDq0Md0A"
+      }
+    },
+    "updated_at": 1787132145577,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
