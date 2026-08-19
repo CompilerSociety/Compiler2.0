@@ -1047,5 +1047,28 @@
       "seat": false,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0628",
+    "name": "Muhammad Khattak",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fNxlUs-YoyQ:APA91bFarW_1zMjr6uVwvTBqvqX2LhukSxwpBWDFJOqksit0-E2wv5YjQgZ91a4-32ubYVSJfnKAW_gJnPSphwNMoqqWcbb-HORIuOg-wvbllzN9AnANXHNIzBv_QpfjBPsifqey6KVJ",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAjlNO6LPZqVzojeuEqTz2RQV0VXYwrtlJyrw1Jg4jnG2kh38gZY1hq4c5EsqbAfU5eq9AfdUeZXh3K6TBOs6r4",
+        "auth": "-qLHabmFAWDPKIi7O2AUOw"
+      }
+    },
+    "updated_at": 1787123570650,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
