@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-19T07:30:35.674Z",
+  "updated_at": "2026-08-19T08:54:26.985Z",
   "source_subject": "Seating Plan 26",
-  "count": 47,
+  "count": 48,
   "students": [
     {
       "name": "Hammad rehan",
@@ -605,6 +605,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-19T07:30:35.674Z"
+    },
+    {
+      "name": "Aneesa Fatima",
+      "nuid": "26I-2185",
+      "section": "A",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-19T08:54:26.985Z"
     }
   ]
 }
