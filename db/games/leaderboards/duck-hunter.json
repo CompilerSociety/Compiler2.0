@@ -105,8 +105,8 @@
       "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 183,
-      "achievedAt": "2026-08-17T12:50:24.309Z"
+      "highScore": 218,
+      "achievedAt": "2026-08-19T22:09:19.361Z"
     },
     "25I-0655": {
       "nuid": "25I-0655",
@@ -363,13 +363,13 @@
       "achievedAt": "2026-08-19T07:32:33.545Z"
     },
     {
-      "nuid": "25I-1006",
-      "name": "Moiz Javed",
-      "section": "B",
+      "nuid": "25I-0844",
+      "name": "Abdullah Khalid",
+      "section": "G",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 215,
-      "achievedAt": "2026-08-19T06:08:04.160Z"
+      "highScore": 218,
+      "achievedAt": "2026-08-19T22:09:19.361Z"
     }
   ]
 }
