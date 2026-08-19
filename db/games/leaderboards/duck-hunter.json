@@ -224,6 +224,15 @@
       "batch": "25",
       "highScore": 184,
       "achievedAt": "2026-08-19T07:33:19.053Z"
+    },
+    "25I-0617": {
+      "nuid": "25I-0617",
+      "name": "Shajee Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 160,
+      "achievedAt": "2026-08-19T10:04:19.570Z"
     }
   },
   "leaderboard": [
@@ -300,6 +309,15 @@
       "achievedAt": "2026-08-17T10:53:39.299Z"
     },
     {
+      "nuid": "25I-0617",
+      "name": "Shajee Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 160,
+      "achievedAt": "2026-08-19T10:04:19.570Z"
+    },
+    {
       "nuid": "25I-0798",
       "name": "Saadat Shah",
       "section": "B",
@@ -307,15 +325,6 @@
       "batch": "25",
       "highScore": 151,
       "achievedAt": "2026-08-19T06:28:49.392Z"
-    },
-    {
-      "nuid": "25I-0632",
-      "name": "Wajeeh Imran",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 139,
-      "achievedAt": "2026-08-18T04:34:20.674Z"
     }
   ]
 }
