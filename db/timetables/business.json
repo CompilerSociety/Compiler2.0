@@ -1314,12 +1314,12 @@
           ],
           "Thursday": [
             {
-              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "name": "Strategic Diversity, Equity, and Inclusion (MG4067)",
               "location": "A-303",
               "time": "08:30-09:50"
             },
             {
-              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "name": "Strategic Diversity, Equity, and Inclusion (MG4067)",
               "location": "A-303",
               "time": "10:00-11:20"
             }
@@ -1376,12 +1376,12 @@
           ],
           "Thursday": [
             {
-              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "name": "Strategic Diversity, Equity, and Inclusion (MG4067)",
               "location": "A-303",
               "time": "08:30-09:50"
             },
             {
-              "name": "Diversity, Equity, and Inclusion (MG5056)",
+              "name": "Strategic Diversity, Equity, and Inclusion (MG4067)",
               "location": "A-303",
               "time": "10:00-11:20"
             }
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-19T13:35:59.094537+00:00"
+  "generatedAt": "2026-08-19T14:16:26.605714+00:00"
 }
