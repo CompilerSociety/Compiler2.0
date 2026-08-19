@@ -240,8 +240,8 @@
       "section": "C",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 0,
-      "achievedAt": "2026-08-19T15:41:40.831Z"
+      "highScore": 1239,
+      "achievedAt": "2026-08-19T15:52:29.292Z"
     }
   },
   "leaderboard": [
@@ -253,6 +253,15 @@
       "batch": "25",
       "highScore": 1851,
       "achievedAt": "2026-08-19T14:58:55.259Z"
+    },
+    {
+      "nuid": "25I-0889",
+      "name": "Ali Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1239,
+      "achievedAt": "2026-08-19T15:52:29.292Z"
     },
     {
       "nuid": "25I-0957",
@@ -325,15 +334,6 @@
       "batch": "25",
       "highScore": 183,
       "achievedAt": "2026-08-17T12:50:24.309Z"
-    },
-    {
-      "nuid": "25I-0849",
-      "name": "Ahmad Aziz",
-      "section": "G",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 162,
-      "achievedAt": "2026-08-17T10:53:39.299Z"
     }
   ]
 }
