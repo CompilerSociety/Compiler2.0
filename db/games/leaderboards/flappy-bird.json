@@ -168,8 +168,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 8,
-      "achievedAt": "2026-08-19T05:01:07.489Z"
+      "highScore": 12,
+      "achievedAt": "2026-08-19T05:01:36.820Z"
     },
     "25I-0571": {
       "nuid": "25I-0571",
@@ -264,13 +264,13 @@
       "achievedAt": "2026-08-17T11:42:38.318Z"
     },
     {
-      "nuid": "25I-0655",
-      "name": "Ismail Hassan",
+      "nuid": "25I-0526",
+      "name": "Maaz Ahmed",
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 9,
-      "achievedAt": "2026-08-19T02:30:29.730Z"
+      "highScore": 12,
+      "achievedAt": "2026-08-19T05:01:36.820Z"
     }
   ]
 }
