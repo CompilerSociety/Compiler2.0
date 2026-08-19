@@ -168,8 +168,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "25",
-      "highScore": 181,
-      "achievedAt": "2026-08-19T11:59:12.970Z"
+      "highScore": 290,
+      "achievedAt": "2026-08-19T12:35:23.781Z"
     },
     "25I-0564": {
       "nuid": "25I-0564",
@@ -255,6 +255,15 @@
       "achievedAt": "2026-08-19T05:45:59.502Z"
     },
     {
+      "nuid": "25I-0526",
+      "name": "Maaz Ahmed",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 290,
+      "achievedAt": "2026-08-19T12:35:23.781Z"
+    },
+    {
       "nuid": "25I-0628",
       "name": "Muhammad Khattak",
       "section": "C",
@@ -298,15 +307,6 @@
       "batch": "25",
       "highScore": 183,
       "achievedAt": "2026-08-17T12:50:24.309Z"
-    },
-    {
-      "nuid": "25I-0526",
-      "name": "Maaz Ahmed",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "25",
-      "highScore": 181,
-      "achievedAt": "2026-08-19T11:59:12.970Z"
     },
     {
       "nuid": "25I-0849",
