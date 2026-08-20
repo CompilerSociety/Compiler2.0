@@ -5825,6 +5825,11 @@
               "name": "COAL",
               "location": "D-313",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Seerah",
+              "location": "D-313",
+              "time": "03:00-03:55"
             }
           ],
           "Wednesday": [
@@ -5929,6 +5934,11 @@
               "name": "Data St",
               "location": "D-314",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Seerah",
+              "location": "D-314",
+              "time": "03:00-03:55"
             }
           ]
         }
@@ -7046,6 +7056,6 @@
       }
     }
   },
-  "count": 1164,
-  "generatedAt": "2026-08-20T05:07:53.858587+00:00"
+  "count": 1166,
+  "generatedAt": "2026-08-20T05:44:15.795208+00:00"
 }
