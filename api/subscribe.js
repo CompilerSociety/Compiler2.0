@@ -1,38 +1,44 @@
 // Vercel Node serverless function.
-// Stores a push subscription (+ NU ID) in db/metadata/notifications/push-subscriptions.json in the repo
-// via the GitHub Contents API, because Vercel's own filesystem is read-only.
+// Stores a push subscription (+ NU ID) in MongoDB, one document per push
+// endpoint, through lib/db/repos.mjs.
+//
+// This used to write db/metadata/notifications/push-subscriptions.json back
+// into the repo through the GitHub Contents API. Every subscribe cost four
+// authenticated API calls and two commits (the list plus rate-limit
+// bookkeeping), rewrote an 88-entry array to change one row, and needed a
+// sha-retry loop because two devices subscribing at once raced each other.
+// Reads still fall back to that committed file when the database is
+// unreachable, so an outage degrades this to read-only rather than breaking it.
 //
 // Required environment variables (set in Vercel project settings):
-//   GH_TOKEN  - GitHub token with "contents: write" on the repo
-//   GH_REPO   - "owner/name" (optional, defaults below)
-//   GH_BRANCH - branch to write to (optional, default "main")
+//   MONGODB_URI - Atlas connection string (required to CHANGE a subscription)
+//   MONGODB_DB  - database name (optional, default "compiler2")
+//   GH_REPO     - "owner/name" (optional) - only for the read-only fallback
+//   GH_BRANCH   - branch to read the fallback from (optional, default "main")
 
-const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
+import { isEnabled } from '../lib/db/mongo.mjs';
+import {
+  rosterHas as dbRosterHas, enrolStudent, getSubscription, upsertSubscription,
+  removeSubscription, countSubscriptions, rateLimitCheck, rateLimitNote,
+} from '../lib/db/repos.mjs';
 
 /* ── Security: input validation, identity check, rate limiting ──────────
-   These helpers are duplicated here and in api/leaderboard.js rather than
-   shared in a lib/ module because Vercel only bundles each function's own
-   directory. Keep the two copies in step.
-
    - NUID_RE requires a well-formed NU ID, which also rules out junk keys.
    - The identity step reads the published roster for the ID's batch
      (db/students/<batch>.json). A roll no that is NOT on it is ENROLLED
      rather than rejected: the roster only ever holds whoever the seating-plan
      email happened to name, so it lags every new intake (26.json held 3
      students while the whole 26 batch was trying to sign up) and a hard gate
-     locked out real students with no way in. See enrolInRoster for what that
+     locked out real students with no way in. See enrolStudent for what that
      write is and is not allowed to do.
    - Rate limiting is per-IP: an in-process burst guard rejects fast repeats
-     without touching GitHub, and a small state file in the repo
-     (db/metadata/rate-limit.json) enforces the same window across instances.
-     The identity step runs AFTER it, so the roster write is rate-limited too. */
-// The leading 2 digits are CAPTURED: they select db/students/<batch>.json.
-// Without the group m[1] is undefined for every well-formed ID, so every
-// lookup fetched .../students/undefined.json, 404'd, and rejected the user
-// with "No roster found for batch undefined".
+     without touching the database, and the `rate_limit` collection enforces
+     the same window across instances. The identity step runs AFTER it, so the
+     roster write is rate-limited too. */
+// The leading 2 digits are CAPTURED: they select the batch roster. Without the
+// group m[1] is undefined for every well-formed ID, which used to reject the
+// user with "No roster found for batch undefined".
 const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
-const rosterPath = (batch) => `db/students/${batch}.json`;
-const RATE_LIMIT_PATH = 'db/metadata/rate-limit.json';
 const RATE_WINDOW_MS = 60_000;
 const MAX_WRITES_PER_MIN = 5;
 
@@ -56,166 +62,14 @@ function burstAllowed(ip) {
   return true;
 }
 
-async function readRateLimitState() {
-  const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/${RATE_LIMIT_PATH}?t=${Date.now()}`;
-  try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-rate-limit' } });
-    if (res.status === 404) return {};
-    if (!res.ok) return {};
-    const parsed = JSON.parse(await res.text());
-    return parsed && typeof parsed === 'object' ? parsed : {};
-  } catch { return {}; }
-}
+/* Rate limiting and roster/subscription storage now live in
+   lib/db/repos.mjs, backed by MongoDB. What used to be here was a
+   read-modify-write of db/metadata/rate-limit.json and
+   db/metadata/notifications/push-subscriptions.json through the GitHub
+   Contents API: four authenticated API calls and two commits for every
+   subscribe, with a sha-retry loop because two devices subscribing at once
+   raced each other. Each of those is now a single atomic upsert. */
 
-// Persistent per-IP window check. Returns seconds to wait, or null if clear.
-async function persistentBlocked(ip) {
-  const state = await readRateLimitState();
-  const now = Date.now();
-  const ts = (state[ip] || []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (ts.length >= MAX_WRITES_PER_MIN) {
-    const oldest = Math.min(...ts);
-    return Math.ceil((oldest + RATE_WINDOW_MS - now) / 1000);
-  }
-  return null;
-}
-
-// Record a successful write (best effort — bookkeeping must never fail the
-// request that already saved the subscription).
-async function noteSuccessfulWrite(token, ip) {
-  try {
-    const state = await readRateLimitState();
-    const now = Date.now();
-    const list = (state[ip] || []).filter((t) => now - t < RATE_WINDOW_MS);
-    list.push(now);
-    state[ip] = list;
-    const url = `https://api.github.com/repos/${repo()}/contents/${RATE_LIMIT_PATH}`;
-    const body = {
-      message: 'Update rate-limit state',
-      content: Buffer.from(JSON.stringify(state, null, 2) + '\n').toString('base64'),
-      branch: branch(),
-    };
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'compiler2-rate-limit',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    if (res.status === 401 || res.status === 403) throw authError(res.status);
-    if (!res.ok) throw new Error(`write rate-limit state failed (${res.status})`);
-  } catch (err) {
-    console.error('rate-limit bookkeeping:', err?.message);
-  }
-}
-
-let _rosterCache = { batch: null, set: null, fetchedAt: 0 };
-
-// Is this NU ID already on its batch roster?
-//
-// Returns true/false, or null when the roster could not be read at all. null
-// means "don't know", and the caller treats it as "already there" so a GitHub
-// blip neither blocks sign-up nor appends a duplicate on a half-read file.
-// A 404 is NOT unknown — it means this batch has no roster file yet (a brand
-// new intake), which is a definite "not on it" and the file gets created.
-async function rosterHas(batch, nuid) {
-  const fresh = _rosterCache.batch === batch && Date.now() - _rosterCache.fetchedAt <= 600_000;
-  if (!fresh) {
-    const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/${rosterPath(batch)}?t=${Date.now()}`;
-    try {
-      const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-identity' } });
-      if (res.status === 404) {
-        _rosterCache = { batch, set: new Set(), fetchedAt: Date.now() };
-        return false;
-      }
-      if (!res.ok) throw new Error(`roster fetch failed (${res.status})`);
-      const data = await res.json();
-      const set = new Set((data.students || []).map((s) => String(s.nuid).trim().toUpperCase()));
-      _rosterCache = { batch, set, fetchedAt: Date.now() };
-    } catch (err) {
-      console.error('roster read failed, treating as known:', err?.message);
-      return null;
-    }
-  }
-  return _rosterCache.set.has(nuid);
-}
-
-// Append a self-registered student to db/students/<batch>.json.
-//
-// Deliberately append-only. An existing row is never edited or replaced, so a
-// caller cannot overwrite a real roster entry (name, section, or an assigned
-// seat) by re-POSTing someone else's roll no — the worst they can do is add a
-// row that was not there. Rows carry self_registered:true so a later
-// seating-plan import can tell them apart from mail-sourced ones and
-// reconcile or prune them.
-//
-// The caller has already rate-limited this IP, and isValidEndpoint means a
-// real browser push subscription had to be minted first, which is what keeps
-// this from being a trivially scriptable way to stuff the file.
-async function enrolInRoster(token, batch, student) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${rosterPath(batch)}`;
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'compiler2-roster-enrol',
-  };
-  // Retry: a concurrent enrolment moves the file sha out from under this PUT.
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const read = await fetch(`${url}?ref=${branch()}`, { headers });
-    if (read.status === 401 || read.status === 403) throw authError(read.status);
-    let doc = {};
-    let sha = null;
-    if (read.status !== 404) {
-      if (!read.ok) throw new Error(`read roster failed (${read.status})`);
-      const meta = await read.json();
-      sha = meta.sha;
-      try {
-        const parsed = JSON.parse(Buffer.from(meta.content || '', 'base64').toString('utf-8'));
-        if (parsed && typeof parsed === 'object') doc = parsed;
-      } catch { doc = {}; }
-    }
-    const students = Array.isArray(doc.students) ? doc.students : [];
-    if (students.some((s) => String(s?.nuid || '').trim().toUpperCase() === student.nuid)) {
-      return false; // someone else added them between the read and now
-    }
-    students.push({
-      ...student,
-      // Same shape as a seating-plan row so every downstream reader
-      // (send-seating-push, the profile tabs) treats the two identically.
-      paper: '', time: '', class: '', seat: '',
-      self_registered: true,
-      added_at: new Date().toISOString(),
-    });
-    const next = {
-      ...doc,
-      updated_at: new Date().toISOString(),
-      source_subject: doc.source_subject || `Self-registered ${batch}`,
-      count: students.length,
-      students,
-    };
-    const put = await fetch(url, {
-      method: 'PUT',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `Enrol ${student.nuid} in the ${batch} roster`,
-        content: Buffer.from(JSON.stringify(next, null, 2) + '\n').toString('base64'),
-        branch: branch(),
-        ...(sha ? { sha } : {}),
-      }),
-    });
-    if (put.status === 401 || put.status === 403) throw authError(put.status);
-    if (put.ok) {
-      // Keep the warm cache in step so an immediate re-POST doesn't try again.
-      if (_rosterCache.batch === batch && _rosterCache.set) _rosterCache.set.add(student.nuid);
-      return true;
-    }
-    if (put.status !== 409 && attempt === 2) throw new Error(`write roster failed (${put.status})`);
-    await new Promise((r) => setTimeout(r, 500));
-  }
-  throw new Error('Could not write the roster');
-}
 
 // Per-category notification preferences. Kept in step with
 // scripts/notifications/prefs.mjs, which is the source of truth and carries the
@@ -274,60 +128,6 @@ function isValidSubscription(subscription) {
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }
 
-// GitHub rejecting the credential is a server misconfiguration, not a blip —
-// tagged so the handler can say so plainly instead of a bare "HTTP 500" (see
-// api/leaderboard.js, which hit the same failure mode against the same token).
-function authError(status) {
-  const err = new Error(
-    `GitHub rejected GH_TOKEN (${status}). The token is missing, expired, ` +
-    `revoked, or lacks contents:write on the repo.`
-  );
-  err.isAuthFailure = true;
-  return err;
-}
-
-async function ghGet(token) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${SUBS_PATH}?ref=${branch()}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'compiler2-push-subscribe',
-    },
-  });
-  if (res.status === 404) return { subs: [], sha: null };
-  if (res.status === 401 || res.status === 403) throw authError(res.status);
-  if (!res.ok) throw new Error(`read subscriptions failed (${res.status})`);
-  const data = await res.json();
-  let subs = [];
-  try {
-    subs = JSON.parse(Buffer.from(data.content || '', 'base64').toString('utf-8'));
-    if (!Array.isArray(subs)) subs = [];
-  } catch { subs = []; }
-  return { subs, sha: data.sha };
-}
-
-async function ghPut(token, subs, sha) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${SUBS_PATH}`;
-  const body = {
-    message: 'Update push subscriptions',
-    content: Buffer.from(JSON.stringify(subs, null, 2)).toString('base64'),
-    branch: branch(),
-  };
-  if (sha) body.sha = sha;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'compiler2-push-subscribe',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  if (res.status === 401 || res.status === 403) throw authError(res.status);
-  if (!res.ok) throw new Error(`write subscriptions failed (${res.status})`);
-}
 
 function parseBody(req) {
   return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
@@ -364,7 +164,7 @@ async function handleUnsubscribe(req, res) {
       message: "You're sending requests too quickly. Wait a minute and try again.",
     });
   }
-  const retryAfter = await persistentBlocked(ip);
+  const retryAfter = await rateLimitCheck(ip);
   if (retryAfter !== null) {
     res.setHeader('Retry-After', String(retryAfter));
     return res.status(429).json({
@@ -374,35 +174,22 @@ async function handleUnsubscribe(req, res) {
     });
   }
 
-  const token = process.env.GH_TOKEN;
-  if (!token) {
+  if (!isEnabled()) {
     return res.status(503).json({
       ok: false,
       error: 'unsubscribe_unavailable',
       message: "Notifications can't be changed right now — this is on us, not you.",
-      detail: 'GH_TOKEN is not set on the server.',
+      detail: 'MONGODB_URI is not set on the server.',
     });
   }
 
-  // Same retry as the POST: a concurrent write moves the file sha.
-  let lastErr;
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const { subs, sha } = await ghGet(token);
-    const kept = subs.filter((s) => s?.subscription?.endpoint !== endpoint);
-    const removed = subs.length - kept.length;
-    // Already gone — report success rather than 404. Turning something off
-    // twice is not an error, and the caller only cares that it is off now.
-    if (!removed) return res.status(200).json({ ok: true, removed: 0, count: subs.length });
-    try {
-      await ghPut(token, kept, sha);
-      await noteSuccessfulWrite(token, ip);
-      return res.status(200).json({ ok: true, removed, count: kept.length });
-    } catch (e) {
-      lastErr = e;
-      await new Promise((r) => setTimeout(r, 800));
-    }
-  }
-  throw lastErr || new Error('Could not remove subscription');
+  // One targeted delete, keyed by the endpoint. No read-modify-write of the
+  // whole subscription list, so there is no sha to race and nothing to retry.
+  // Already gone — report success rather than 404. Turning something off twice
+  // is not an error, and the caller only cares that it is off now.
+  const removed = await removeSubscription(endpoint);
+  if (removed) await rateLimitNote(ip);
+  return res.status(200).json({ ok: true, removed, count: await countSubscriptions() });
 }
 
 export default async function handler(req, res) {
@@ -462,7 +249,7 @@ export default async function handler(req, res) {
         message: "You're sending requests too quickly. Wait a minute and try again.",
       });
     }
-    const retryAfter = await persistentBlocked(ip);
+    const retryAfter = await rateLimitCheck(ip);
     if (retryAfter !== null) {
       res.setHeader('Retry-After', String(retryAfter));
       return res.status(429).json({
@@ -484,15 +271,14 @@ export default async function handler(req, res) {
       updated_at: Date.now(),
     };
 
-    const token = process.env.GH_TOKEN;
-    if (!token) {
+    if (!isEnabled()) {
       // `message` is shown to the user, so it stays plain and blameless.
       // `detail` carries the operator-facing cause.
       return res.status(503).json({
         ok: false,
         error: 'subscribe_unavailable',
         message: "Notifications can't be enabled right now — this is on us, not you.",
-        detail: 'GH_TOKEN is not set on the server.',
+        detail: 'MONGODB_URI is not set on the server.',
       });
     }
 
@@ -500,8 +286,13 @@ export default async function handler(req, res) {
     //    A roster miss is not a rejection any more — the seating-plan email is
     //    the only thing that ever populates db/students/, so it lags every new
     //    intake and used to lock those students out entirely.
-    const known = await rosterHas(rosterBatch, nuid);
-    if (known === false) {
+    // 'unknown_batch' means no roster exists for this intake yet, which is a
+    // definite "not on it" and enrols them — the same call the 404 branch made
+    // before. null means the roster was unreadable, and is deliberately treated
+    // as "already there" so a storage blip neither blocks sign-up nor appends a
+    // duplicate.
+    const known = await dbRosterHas(rosterBatch, nuid);
+    if (known === false || known === 'unknown_batch') {
       // Only enrol a complete profile. The mobile and desktop registration
       // screens both collect all three before they let the user through, so a
       // request missing them is a stale client, not a student to write down as
@@ -514,59 +305,44 @@ export default async function handler(req, res) {
         });
       }
       try {
-        const added = await enrolInRoster(token, rosterBatch, {
+        const added = await enrolStudent(rosterBatch, {
           name: record.name,
           nuid,
           section: record.section,
           department: record.department,
-          batch: rosterBatch,
         });
-        if (added) console.log(`enrolled ${nuid} in ${rosterPath(rosterBatch)}`);
+        if (added) console.log(`enrolled ${nuid} in the ${rosterBatch} roster`);
       } catch (err) {
         // The subscription is the thing the user asked for; the roster row is
         // bookkeeping. Losing the row must not cost them their alerts, so this
         // is logged and the subscribe continues.
-        if (err?.isAuthFailure) throw err;
         console.error('roster enrolment failed, continuing to subscribe:', err?.message);
       }
     }
 
-    // Retry a couple of times: a concurrent subscribe changes the file sha.
-    let lastErr;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      const { subs, sha } = await ghGet(token);
-      const existing = subs.find((s) => s?.subscription?.endpoint === subscription.endpoint);
-      const filtered = subs.filter((s) => s?.subscription?.endpoint !== subscription.endpoint);
-      // A POST that names no preferences must not wipe the ones already stored:
-      // the profile re-subscribes on plain "enable notifications" too, and that
-      // path should leave an existing choice alone.
-      const merged = { ...(existing?.prefs || {}), ...(prefs || {}) };
-      if (Object.keys(merged).length) record.prefs = merged;
-      filtered.push(record);
-      try {
-        await ghPut(token, filtered, sha);
-        await noteSuccessfulWrite(token, ip);
-        return res.status(200).json({ ok: true, count: filtered.length });
-      } catch (e) {
-        lastErr = e;
-        await new Promise((r) => setTimeout(r, 800));
-      }
-    }
-    throw lastErr || new Error('Could not save subscription');
+    // A POST that names no preferences must not wipe the ones already stored:
+    // the profile re-subscribes on plain "enable notifications" too, and that
+    // path should leave an existing choice alone.
+    const existing = await getSubscription(subscription.endpoint);
+    const merged = { ...(existing?.prefs || {}), ...(prefs || {}) };
+    if (Object.keys(merged).length) record.prefs = merged;
+
+    // Keyed by endpoint, so re-subscribing the same device replaces its record
+    // rather than appending a duplicate — which is also why the old
+    // read-filter-append-write cycle, and its sha retry loop, are gone.
+    await upsertSubscription(record);
+    await rateLimitNote(ip);
+    return res.status(200).json({ ok: true, count: await countSubscriptions() });
   } catch (err) {
     console.error('subscribe API error:', err);
-    if (err?.isAuthFailure) {
-      return res.status(503).json({
-        ok: false,
-        error: 'subscribe_unavailable',
-        message: "Notifications can't be enabled right now — this is on us, not you.",
-        detail: err.message,
-      });
-    }
-    return res.status(500).json({
+    // A database that is configured but unreachable is a service problem, not
+    // the user's. 503 keeps the client's existing handling working and tells
+    // the operator what actually happened.
+    return res.status(503).json({
       ok: false,
-      error: 'Internal error',
-      message: err?.message || String(err),
+      error: 'subscribe_unavailable',
+      message: "Notifications can't be enabled right now — this is on us, not you.",
+      detail: err?.message || String(err),
     });
   }
 }

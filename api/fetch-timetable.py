@@ -44,6 +44,7 @@ import re
 import shutil
 import ssl
 import io
+import sys
 import subprocess
 import tempfile
 import pypdf
@@ -54,6 +55,19 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote
 from urllib.request import Request, urlopen
+
+# MongoDB is the source of truth for db/ since the migration; the JSON files
+# this module writes are the committed mirror the frontend serves statically and
+# the API falls back to. Importing by path keeps working whether this runs as a
+# Vercel function (cwd = repo root) or as `python api/fetch-timetable.py` in the
+# sync workflow. It is optional on purpose: with no MONGODB_URI, or no pymongo,
+# every save below silently stays file-only and this job behaves exactly as it
+# did before Mongo existed.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "python"))
+try:
+    from db import store as _store
+except Exception:  # noqa: BLE001 - never let storage wiring break the sync
+    _store = None
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
@@ -1246,7 +1260,17 @@ def resolve_repo() -> tuple[str, str]:
 
 
 def commit_json_to_github(document: dict[str, Any], repo_path: str) -> dict[str, Any]:
-    """Overwrite `repo_path` completely with `document` via the GitHub contents API."""
+    """Overwrite `repo_path` completely with `document` via the GitHub contents API.
+
+    Also writes the document to Mongo first. This is the path taken when the
+    sync runs as a Vercel function rather than inside the workflow, and it has
+    to keep the database current too - otherwise a sync triggered from the web
+    would update the committed mirror while leaving Mongo, the source of truth,
+    behind.
+    """
+    if _store is not None:
+        _store.save_document(repo_path, document)
+
     token = os.environ.get("GH_TOKEN", "").strip()
     if not token:
         raise RuntimeError("GH_TOKEN environment variable is required")
@@ -1283,11 +1307,20 @@ def commit_json_to_github(document: dict[str, Any], repo_path: str) -> dict[str,
 
 
 def _write_json_file(path: str, document: dict[str, Any]) -> None:
+    """Writes one synced document to Mongo AND to its committed JSON file.
+
+    Both, not either: Mongo is the source of truth, while the file remains the
+    mirror that the frontend fetches statically and that the API reads when the
+    database is unreachable. The workflow already commits whatever this writes,
+    so the mirror stays fresh with no extra job.
+    """
     directory = os.path.dirname(path)
     if directory:
         os.makedirs(directory, exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(document, fh, indent=2, ensure_ascii=False)
+    if _store is not None:
+        _store.save_document(path, document)
 
 
 # ── Vercel handler ───────────────────────────────────────────────────────────

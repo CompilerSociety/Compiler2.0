@@ -1,43 +1,44 @@
 // api/leaderboard.js
-// Vercel serverless function backing the Compiler Run shared leaderboard.
+// Vercel serverless function backing the shared arcade leaderboards.
 //
-// Persistence: db/games/leaderboards/compiler-run.json in the GitHub repo, read/written via the
-// GitHub Contents API (same pattern as api/subscribe.js) — Vercel's own
-// filesystem is read-only and /tmp is wiped on cold starts/redeploys, so the
-// repo file is the durable store. Keeps each player's best score; serves the
-// top 10.
+// Persistence: MongoDB, one document per player per game (collection
+// `leaderboard_scores`), through lib/db/repos.mjs.
 //
-// Env (already configured for subscriptions): GH_TOKEN, optional GH_REPO /
-// GH_BRANCH.
+// This used to write db/games/leaderboards/*.json back into the repo through
+// the GitHub Contents API. That worked, but every single personal best was a
+// git commit and a Vercel deployment, it burned two authenticated GitHub API
+// calls per submission plus two more for rate-limit bookkeeping, and saving a
+// score was a read-whole-file / edit / write-against-a-sha cycle that raced
+// whenever two people finished a run at the same moment - hence the retry loop
+// that used to live here. A conditional upsert replaces all of it.
+//
+// Reads still fall back to the committed JSON (see lib/db/repos.mjs) when the
+// database is unreachable, so an Atlas outage degrades the board to read-only
+// rather than taking it down - the same failure shape a revoked GH_TOKEN used
+// to produce.
+//
+// Env:
+//   MONGODB_URI - Atlas connection string (required to SAVE a score)
+//   MONGODB_DB  - database name (optional, default "compiler2")
 
-const MAX_ENTRIES = 10;
-// Each game has its OWN leaderboard JSON file in the repo.
-const LB_FILES = {
-  compiler_run: 'db/games/leaderboards/compiler-run.json',
-  duck_hunter: 'db/games/leaderboards/duck-hunter.json',
-  flappy_bird: 'db/games/leaderboards/flappy-bird.json',
-};
+import { isEnabled } from '../lib/db/mongo.mjs';
+import { topScores, submitScore, rateLimitCheck, rateLimitNote, rosterHas } from '../lib/db/repos.mjs';
+
+const GAMES = ['compiler_run', 'duck_hunter', 'flappy_bird'];
 
 /* ── Security: input validation, identity check, rate limiting ──────────
-   These helpers are duplicated here and in api/subscribe.js rather than shared
-   in a lib/ module because Vercel only bundles each function's own directory.
-   Keep the two copies in step.
-
-   - NUID_RE is the ONLY thing that decides what keys enter db.players, so it
-     also blocks prototype-pollution keys like "__proto__" / "constructor".
+   - NUID_RE is the ONLY thing that decides what NU IDs reach the database, so
+     it also blocks prototype-pollution keys like "__proto__" / "constructor"
+     that mattered when scores lived in a plain object.
    - The identity check requires the NU ID to exist in the published roster for
-     its batch (db/students/<batch>.json), which stops anonymous spoofing of
-     fake names/NU IDs. It fails OPEN if the roster cannot be fetched so a
-     GitHub blip can't take the feature down.
+     its batch, which stops anonymous spoofing of fake names/NU IDs. It fails
+     OPEN if the roster cannot be read so a storage blip cannot take the
+     feature down.
    - Rate limiting is per-IP: an in-process burst guard rejects fast repeats
-     without touching GitHub, and a small state file in the repo
-     (db/metadata/rate-limit.json) enforces the same window across instances. */
-// The leading 2 digits are CAPTURED: rosterLookup reads m[1] to pick the
-// db/students/<batch>.json roster. Without the group m[1] is undefined for
-// every well-formed ID, so every lookup fetched .../students/undefined.json,
-// 404'd, and rejected the user with "No roster found for batch undefined".
+     without touching the database, and the `rate_limit` collection enforces
+     the same window across instances. */
+// The leading 2 digits are CAPTURED: they select the batch roster.
 const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
-const RATE_LIMIT_PATH = 'db/metadata/rate-limit.json';
 const RATE_WINDOW_MS = 60_000;
 const MAX_WRITES_PER_MIN = 10;
 
@@ -61,88 +62,20 @@ function burstAllowed(ip) {
   return true;
 }
 
-async function readRateLimitState() {
-  const url = `https://raw.githubusercontent.com/${repo()}/${dataBranch()}/${RATE_LIMIT_PATH}?t=${Date.now()}`;
-  try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-rate-limit' } });
-    if (res.status === 404) return {};
-    if (!res.ok) return {};
-    const parsed = JSON.parse(await res.text());
-    return parsed && typeof parsed === 'object' ? parsed : {};
-  } catch { return {}; }
-}
-
-// Persistent per-IP window check. Returns seconds to wait, or null if clear.
-async function persistentBlocked(ip) {
-  const state = await readRateLimitState();
-  const now = Date.now();
-  const ts = (state[ip] || []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (ts.length >= MAX_WRITES_PER_MIN) {
-    const oldest = Math.min(...ts);
-    return Math.ceil((oldest + RATE_WINDOW_MS - now) / 1000);
-  }
-  return null;
-}
-
-// Record a successful write (best effort — bookkeeping must never fail the
-// request that already wrote the score).
-async function noteSuccessfulWrite(token, ip) {
-  try {
-    const state = await readRateLimitState();
-    const now = Date.now();
-    const list = (state[ip] || []).filter((t) => now - t < RATE_WINDOW_MS);
-    list.push(now);
-    state[ip] = list;
-    const url = `https://api.github.com/repos/${repo()}/contents/${RATE_LIMIT_PATH}`;
-    const body = {
-      message: 'Update rate-limit state',
-      content: Buffer.from(JSON.stringify(state, null, 2) + '\n').toString('base64'),
-      branch: dataBranch(),
-    };
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'compiler2-rate-limit',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    if (res.status === 401 || res.status === 403) throw authError(res.status);
-    if (!res.ok) throw new Error(`write rate-limit state failed (${res.status})`);
-  } catch (err) {
-    console.error('rate-limit bookkeeping:', err?.message);
-  }
-}
-
-let _rosterCache = { batch: null, set: null, fetchedAt: 0 };
-
 // Identity check: the NU ID must match NUID_RE and exist in its batch roster.
 // Returns { status: null } when allowed; otherwise { status, error, message }.
-async function rosterLookup(nuid) {
+async function checkIdentity(nuid) {
   const m = NUID_RE.exec(nuid);
   if (!m) {
     return { status: 400, error: 'invalid_nuid', message: 'NU ID must look like 22I-0507.' };
   }
   const batch = m[1];
-  if (!_rosterCache.batch || _rosterCache.batch !== batch || Date.now() - _rosterCache.fetchedAt > 600_000) {
-    const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/db/students/${batch}.json?t=${Date.now()}`;
-    try {
-      const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-identity' } });
-      if (res.status === 404) {
-        return { status: 403, error: 'unknown_batch', message: `No roster found for batch ${batch}.` };
-      }
-      if (!res.ok) throw new Error(`roster fetch failed (${res.status})`);
-      const data = await res.json();
-      const set = new Set((data.students || []).map((s) => String(s.nuid).trim().toUpperCase()));
-      _rosterCache = { batch, set, fetchedAt: Date.now() };
-    } catch (err) {
-      console.error('roster lookup failed, failing open:', err?.message);
-      return { status: null, error: null, message: null }; // fail-open
-    }
+  const found = await rosterHas(batch, nuid);
+  if (found === 'unknown_batch') {
+    return { status: 403, error: 'unknown_batch', message: `No roster found for batch ${batch}.` };
   }
-  if (!_rosterCache.set.has(nuid)) {
+  // null means the roster was unreadable - fail open, as before.
+  if (found === false) {
     return {
       status: 403,
       error: 'nuid_not_registered',
@@ -154,153 +87,7 @@ async function rosterLookup(nuid) {
 
 function gameOf(req, body) {
   const raw = String((body && body.game) || (req.query && req.query.game) || 'compiler_run').toLowerCase();
-  return LB_FILES[raw] ? raw : 'compiler_run';
-}
-
-function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
-function branch() { return process.env.GH_BRANCH || 'main'; }
-
-/* -- Where scores are stored ------------------------------------------
-   Scores are NOT written to main. Every submitted score is a commit, and every
-   commit on main triggers a Vercel deployment - a busy evening of arcade play
-   spends the daily deploy quota and buries the real history under hundreds of
-   "Update leaderboard" commits. Writes land on a data branch instead, and
-   .github/workflows/merge-leaderboard-data.yml folds a day's worth of them
-   into main once every 24 hours.
-
-   Reads come from the SAME branch, so a player still sees their own score the
-   moment it lands rather than waiting for the daily merge. Only rosterLookup
-   below still reads branch() (main): the data branch is resynced to main after
-   each merge, but between merges its copy of db/students is up to a day stale,
-   and a student who registered this morning must not be turned away. */
-function dataBranch() { return process.env.GH_LB_BRANCH || 'leaderboard-data'; }
-
-// Created on first write if it does not exist yet, so a fresh clone or fork
-// needs no manual branch setup. Cached per instance: the ref only has to be
-// checked once per warm function.
-let _branchReady = false;
-async function ensureDataBranch(token) {
-  if (_branchReady) return;
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'compiler2-leaderboard',
-  };
-  const base = `https://api.github.com/repos/${repo()}`;
-  const existing = await fetch(`${base}/git/ref/heads/${dataBranch()}`, { headers });
-  if (existing.ok) { _branchReady = true; return; }
-  if (existing.status === 401 || existing.status === 403) throw authError(existing.status);
-  const head = await fetch(`${base}/git/ref/heads/${branch()}`, { headers });
-  if (!head.ok) throw new Error(`could not read ${branch()} head (${head.status})`);
-  const sha = (await head.json())?.object?.sha;
-  const created = await fetch(`${base}/git/refs`, {
-    method: 'POST',
-    headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ref: `refs/heads/${dataBranch()}`, sha }),
-  });
-  // 422 means a concurrent request created it first - equally fine.
-  if (!created.ok && created.status !== 422) {
-    if (created.status === 401 || created.status === 403) throw authError(created.status);
-    throw new Error(`could not create branch ${dataBranch()} (${created.status})`);
-  }
-  _branchReady = true;
-}
-
-// Reading needs no credentials: the repo is public and these files are
-// committed, so raw.githubusercontent serves them directly. Reads used to go
-// through the authenticated Contents API, which meant a stale or revoked
-// GH_TOKEN took every leaderboard down with a 500 even though the scores were
-// sitting in a public file. Only writing a new score needs the token now.
-async function readPublic(file) {
-  // The data branch is the fresher copy, but it is not guaranteed to exist:
-  // before the first score of all time, and on a fork that has never run the
-  // merge workflow, only main has the file. Falling back to main there keeps a
-  // populated board on screen instead of a blank one.
-  for (const ref of [dataBranch(), branch()]) {
-    const url = `https://raw.githubusercontent.com/${repo()}/${ref}/${file}?t=${Date.now()}`;
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'compiler2-leaderboard', 'Cache-Control': 'no-cache' },
-    });
-    if (res.status === 404) continue;
-    if (!res.ok) throw new Error(`public read failed (${res.status})`);
-    return normalizeDB(JSON.parse(await res.text()));
-  }
-  return emptyDB();
-}
-
-// GitHub rejecting the credential is a server misconfiguration, not a blip.
-// Tagging it lets the handler say so plainly instead of returning a generic
-// 500 that the UI can only report as "could not submit score".
-function authError(status) {
-  const err = new Error(
-    `GitHub rejected GH_TOKEN (${status}). The token is missing, expired, ` +
-    `revoked, or lacks contents:write on the repo.`
-  );
-  err.isAuthFailure = true;
-  return err;
-}
-
-async function ghGet(token, file) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${file}?ref=${dataBranch()}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'compiler2-leaderboard',
-    },
-  });
-  if (res.status === 404) return { db: emptyDB(), sha: null };
-  if (res.status === 401 || res.status === 403) throw authError(res.status);
-  if (!res.ok) throw new Error(`read leaderboard failed (${res.status})`);
-  const data = await res.json();
-  let db = emptyDB();
-  try {
-    db = normalizeDB(JSON.parse(Buffer.from(data.content || '', 'base64').toString('utf-8')));
-  } catch { db = emptyDB(); }
-  return { db, sha: data.sha };
-}
-
-async function ghPut(token, file, db, sha) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${file}`;
-  const body = {
-    message: 'Update Compiler Run leaderboard',
-    content: Buffer.from(JSON.stringify(db, null, 2) + '\n').toString('base64'),
-    branch: dataBranch(),
-  };
-  if (sha) body.sha = sha;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'compiler2-leaderboard',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  if (res.status === 401 || res.status === 403) throw authError(res.status);
-  if (!res.ok) throw new Error(`write leaderboard failed (${res.status})`);
-}
-
-function emptyDB() {
-  return { players: {}, leaderboard: [] };
-}
-
-function normalizeDB(parsed) {
-  return {
-    players: (parsed && parsed.players) || {},
-    leaderboard: Array.isArray(parsed && parsed.leaderboard) ? parsed.leaderboard : [],
-  };
-}
-
-function rebuildLeaderboard(players) {
-  return Object.values(players)
-    .sort((a, b) => {
-      if (b.highScore !== a.highScore) return b.highScore - a.highScore;
-      // Tied scores: earlier achievedAt ranks higher.
-      return new Date(a.achievedAt).getTime() - new Date(b.achievedAt).getTime();
-    })
-    .slice(0, MAX_ENTRIES);
+  return GAMES.includes(raw) ? raw : 'compiler_run';
 }
 
 export default async function handler(req, res) {
@@ -311,38 +98,29 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
 
   try {
-    const token = process.env.GH_TOKEN;
-
     if (req.method === 'GET') {
-      const file = LB_FILES[gameOf(req, null)];
-      try {
-        const db = await readPublic(file);
-        return res.status(200).json({ leaderboard: db.leaderboard });
-      } catch (publicErr) {
-        // Only worth trying the authenticated path if a token exists at all.
-        if (!token) throw publicErr;
-        const { db } = await ghGet(token, file);
-        return res.status(200).json({ leaderboard: db.leaderboard });
-      }
-    }
-
-    // Writing a score does need the token: it commits back to the repo.
-    if (!token) {
-      // `message` is shown to the player, so it stays plain and blameless.
-      // `detail` carries the operator-facing cause.
-      return res.status(503).json({
-        error: 'leaderboard_read_only',
-        message: "Scores can't be saved right now — this is on us, not you.",
-        detail: 'GH_TOKEN is not set on the server.',
-      });
+      // Never needs the database to be up: repos.topScores falls back to the
+      // committed JSON mirror on its own.
+      return res.status(200).json({ leaderboard: await topScores(gameOf(req, null)) });
     }
 
     if (req.method === 'POST') {
+      // Saving a score does need the database.
+      if (!isEnabled()) {
+        // `message` is shown to the player, so it stays plain and blameless.
+        // `detail` carries the operator-facing cause.
+        return res.status(503).json({
+          error: 'leaderboard_read_only',
+          message: "Scores can't be saved right now — this is on us, not you.",
+          detail: 'MONGODB_URI is not set on the server.',
+        });
+      }
+
       let body = req.body;
       if (typeof body === 'string') {
         try { body = JSON.parse(body); } catch { body = {}; }
       }
-      const file = LB_FILES[gameOf(req, body)];
+      const game = gameOf(req, body);
       const { nuid, name, section, department, batch, score } = body || {};
 
       if (!nuid || typeof nuid !== 'string') {
@@ -357,7 +135,7 @@ export default async function handler(req, res) {
 
       // 1) Format + identity: only a real student on the published roster can
       //    write a score, and only with a well-formed NU ID.
-      const identity = await rosterLookup(key);
+      const identity = await checkIdentity(key);
       if (identity.status) {
         return res.status(identity.status).json({ error: identity.error, message: identity.message });
       }
@@ -371,7 +149,7 @@ export default async function handler(req, res) {
           message: "You're sending requests too quickly. Wait a minute and try again.",
         });
       }
-      const retryAfter = await persistentBlocked(ip);
+      const retryAfter = await rateLimitCheck(ip);
       if (retryAfter !== null) {
         res.setHeader('Retry-After', String(retryAfter));
         return res.status(429).json({
@@ -380,62 +158,34 @@ export default async function handler(req, res) {
         });
       }
 
-      // The scores branch may not exist yet (first score ever, or a fresh
-      // fork). Create it before the write rather than letting every attempt
-      // fail with a confusing 404 on a branch nobody made.
-      await ensureDataBranch(token);
+      // 3) Save. One atomic conditional upsert - no read-modify-write, so
+      //    concurrent submissions cannot clobber each other and there is
+      //    nothing left to retry.
+      const { improved, leaderboard } = await submitScore(game, {
+        nuid: key,
+        name: (name && String(name).slice(0, 60)) || 'Unknown',
+        section: (section && String(section).slice(0, 10)) || '-',
+        department: (department && String(department).slice(0, 20)) || '-',
+        batch: (batch && String(batch).slice(0, 8)) || '-',
+        score: numericScore,
+      });
 
-      // Retry a few times: concurrent submissions change the file sha.
-      let lastErr;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        const { db, sha } = await ghGet(token, file);
-        const existing = db.players[key];
-
-        if (existing && numericScore <= existing.highScore) {
-          // Not a new personal best — nothing to write, return current board.
-          return res.status(200).json({ leaderboard: db.leaderboard, improved: false });
-        }
-
-        db.players[key] = {
-          nuid: key,
-          name: (name && String(name).slice(0, 60)) || existing?.name || 'Unknown',
-          section: (section && String(section).slice(0, 10)) || existing?.section || '-',
-          department: (department && String(department).slice(0, 20)) || existing?.department || '-',
-          batch: (batch && String(batch).slice(0, 8)) || existing?.batch || '-',
-          highScore: numericScore,
-          achievedAt: new Date().toISOString(),
-        };
-        db.leaderboard = rebuildLeaderboard(db.players);
-
-        try {
-          await ghPut(token, file, db, sha);
-          await noteSuccessfulWrite(token, ip);
-          return res.status(200).json({ leaderboard: db.leaderboard, improved: true });
-        } catch (e) {
-          lastErr = e;
-          await new Promise((r) => setTimeout(r, 700));
-        }
-      }
-      throw lastErr || new Error('Could not save score');
+      // Only a write that actually changed something counts against the window.
+      if (improved) await rateLimitNote(ip);
+      return res.status(200).json({ leaderboard, improved });
     }
 
     res.setHeader('Allow', ['GET', 'POST']);
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   } catch (err) {
     console.error('leaderboard API error:', err);
-    if (err?.isAuthFailure) {
-      // 503, not 500: the service is fine, its credential is not. The client
-      // shows this message verbatim so the cause is visible rather than hiding
-      // behind a generic failure.
-      return res.status(503).json({
-        error: 'leaderboard_read_only',
-        message: "Scores can't be saved right now — this is on us, not you.",
-        detail: err.message,
-      });
-    }
-    return res.status(500).json({
-      error: 'Internal error',
-      message: err?.message || String(err),
+    // A database that is configured but unreachable is a service problem, not
+    // the player's. 503 keeps the client's existing "could not save" handling
+    // working and tells the operator what actually happened.
+    return res.status(503).json({
+      error: 'leaderboard_read_only',
+      message: "Scores can't be saved right now — this is on us, not you.",
+      detail: err?.message || String(err),
     });
   }
 }
