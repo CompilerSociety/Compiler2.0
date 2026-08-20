@@ -62,7 +62,7 @@ function burstAllowed(ip) {
 }
 
 async function readRateLimitState() {
-  const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/${RATE_LIMIT_PATH}?t=${Date.now()}`;
+  const url = `https://raw.githubusercontent.com/${repo()}/${dataBranch()}/${RATE_LIMIT_PATH}?t=${Date.now()}`;
   try {
     const res = await fetch(url, { headers: { 'User-Agent': 'compiler2-rate-limit' } });
     if (res.status === 404) return {};
@@ -97,7 +97,7 @@ async function noteSuccessfulWrite(token, ip) {
     const body = {
       message: 'Update rate-limit state',
       content: Buffer.from(JSON.stringify(state, null, 2) + '\n').toString('base64'),
-      branch: branch(),
+      branch: dataBranch(),
     };
     const res = await fetch(url, {
       method: 'PUT',
@@ -160,19 +160,72 @@ function gameOf(req, body) {
 function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
 function branch() { return process.env.GH_BRANCH || 'main'; }
 
+/* -- Where scores are stored ------------------------------------------
+   Scores are NOT written to main. Every submitted score is a commit, and every
+   commit on main triggers a Vercel deployment - a busy evening of arcade play
+   spends the daily deploy quota and buries the real history under hundreds of
+   "Update leaderboard" commits. Writes land on a data branch instead, and
+   .github/workflows/merge-leaderboard-data.yml folds a day's worth of them
+   into main once every 24 hours.
+
+   Reads come from the SAME branch, so a player still sees their own score the
+   moment it lands rather than waiting for the daily merge. Only rosterLookup
+   below still reads branch() (main): the data branch is resynced to main after
+   each merge, but between merges its copy of db/students is up to a day stale,
+   and a student who registered this morning must not be turned away. */
+function dataBranch() { return process.env.GH_LB_BRANCH || 'leaderboard-data'; }
+
+// Created on first write if it does not exist yet, so a fresh clone or fork
+// needs no manual branch setup. Cached per instance: the ref only has to be
+// checked once per warm function.
+let _branchReady = false;
+async function ensureDataBranch(token) {
+  if (_branchReady) return;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'compiler2-leaderboard',
+  };
+  const base = `https://api.github.com/repos/${repo()}`;
+  const existing = await fetch(`${base}/git/ref/heads/${dataBranch()}`, { headers });
+  if (existing.ok) { _branchReady = true; return; }
+  if (existing.status === 401 || existing.status === 403) throw authError(existing.status);
+  const head = await fetch(`${base}/git/ref/heads/${branch()}`, { headers });
+  if (!head.ok) throw new Error(`could not read ${branch()} head (${head.status})`);
+  const sha = (await head.json())?.object?.sha;
+  const created = await fetch(`${base}/git/refs`, {
+    method: 'POST',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ref: `refs/heads/${dataBranch()}`, sha }),
+  });
+  // 422 means a concurrent request created it first - equally fine.
+  if (!created.ok && created.status !== 422) {
+    if (created.status === 401 || created.status === 403) throw authError(created.status);
+    throw new Error(`could not create branch ${dataBranch()} (${created.status})`);
+  }
+  _branchReady = true;
+}
+
 // Reading needs no credentials: the repo is public and these files are
 // committed, so raw.githubusercontent serves them directly. Reads used to go
 // through the authenticated Contents API, which meant a stale or revoked
 // GH_TOKEN took every leaderboard down with a 500 even though the scores were
 // sitting in a public file. Only writing a new score needs the token now.
 async function readPublic(file) {
-  const url = `https://raw.githubusercontent.com/${repo()}/${branch()}/${file}?t=${Date.now()}`;
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'compiler2-leaderboard', 'Cache-Control': 'no-cache' },
-  });
-  if (res.status === 404) return emptyDB();
-  if (!res.ok) throw new Error(`public read failed (${res.status})`);
-  return normalizeDB(JSON.parse(await res.text()));
+  // The data branch is the fresher copy, but it is not guaranteed to exist:
+  // before the first score of all time, and on a fork that has never run the
+  // merge workflow, only main has the file. Falling back to main there keeps a
+  // populated board on screen instead of a blank one.
+  for (const ref of [dataBranch(), branch()]) {
+    const url = `https://raw.githubusercontent.com/${repo()}/${ref}/${file}?t=${Date.now()}`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'compiler2-leaderboard', 'Cache-Control': 'no-cache' },
+    });
+    if (res.status === 404) continue;
+    if (!res.ok) throw new Error(`public read failed (${res.status})`);
+    return normalizeDB(JSON.parse(await res.text()));
+  }
+  return emptyDB();
 }
 
 // GitHub rejecting the credential is a server misconfiguration, not a blip.
@@ -188,7 +241,7 @@ function authError(status) {
 }
 
 async function ghGet(token, file) {
-  const url = `https://api.github.com/repos/${repo()}/contents/${file}?ref=${branch()}`;
+  const url = `https://api.github.com/repos/${repo()}/contents/${file}?ref=${dataBranch()}`;
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -212,7 +265,7 @@ async function ghPut(token, file, db, sha) {
   const body = {
     message: 'Update Compiler Run leaderboard',
     content: Buffer.from(JSON.stringify(db, null, 2) + '\n').toString('base64'),
-    branch: branch(),
+    branch: dataBranch(),
   };
   if (sha) body.sha = sha;
   const res = await fetch(url, {
@@ -326,6 +379,11 @@ export default async function handler(req, res) {
           message: "You're sending requests too quickly. Wait a moment and try again.",
         });
       }
+
+      // The scores branch may not exist yet (first score ever, or a fresh
+      // fork). Create it before the write rather than letting every attempt
+      // fail with a confusing 404 on a branch nobody made.
+      await ensureDataBranch(token);
 
       // Retry a few times: concurrent submissions change the file sha.
       let lastErr;
