@@ -1511,5 +1511,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0771",
+    "name": "Abdullah",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fjmgmxwT9xo:APA91bExQ6e8khKU8-pDCjA0c7L4xVzg6Xr4ArdUUbUej8gKVLi0ELVyLCVc0htSMZP89yikjJO2Mv6LOuhOicu7O32seYL9kaqmpIPvaroUiCowivc8zQAADpQHdLlHAu4q4h_-D4IH",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BEBYYnL93mtvKg98PpGLjZZevmafMYwvV-cRVOhk1diidy1NMh_jGvcCGXTlCF17wb-agnMtd5qGFR4qL8YMwR8",
+        "auth": "1rWu_7lf2FPIltkvO8mz2w"
+      }
+    },
+    "updated_at": 1787211036183,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
