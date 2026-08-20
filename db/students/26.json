@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:28:08.715Z",
+  "updated_at": "2026-08-20T17:28:44.088Z",
   "source_subject": "Seating Plan 26",
-  "count": 168,
+  "count": 169,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2178,6 +2178,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:28:08.715Z"
+    },
+    {
+      "name": "Wadia Rehman",
+      "nuid": "26I-2129",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:28:44.088Z"
     }
   ]
 }
