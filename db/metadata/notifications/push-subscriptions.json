@@ -2076,11 +2076,11 @@
         "auth": "XbEzysbSrvyvblBN_Tp1Ng"
       }
     },
-    "updated_at": 1787247125117,
+    "updated_at": 1787247125639,
     "prefs": {
       "cls": true,
       "exam": false,
-      "show": true,
+      "show": false,
       "seat": true,
       "room": false
     }
