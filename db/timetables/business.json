@@ -1625,12 +1625,12 @@
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-III",
+              "location": "KHYBER I",
               "time": "02:25-03:45"
             },
             {
               "name": "Data Analysis for Business -II Lab (LG2009)",
-              "location": "KK-III",
+              "location": "KHYBER I",
               "time": "03:50-05:10"
             }
           ],
@@ -2061,6 +2061,26 @@
               "name": "English - I (SS1016)",
               "location": "A-103",
               "time": "11:30-01:20"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "KK-II",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "KK-II",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "KK-III",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "KK-III",
+              "time": "03:50-05:10"
             }
           ],
           "Tuesday": [
@@ -2073,26 +2093,6 @@
               "name": "Marketing Management (MG1002)",
               "location": "A-315",
               "time": "03:50-05:10"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KHYBER II",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KHYBER II",
-              "time": "10:00-11:20"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KHYBER III",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KHYBER III",
-              "time": "10:00-11:20"
             }
           ],
           "Wednesday": [
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-20T10:54:14.955925+00:00"
+  "generatedAt": "2026-08-20T11:17:18.830641+00:00"
 }
