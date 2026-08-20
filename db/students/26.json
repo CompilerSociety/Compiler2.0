@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T15:14:28.805Z",
+  "updated_at": "2026-08-20T15:15:24.294Z",
   "source_subject": "Seating Plan 26",
-  "count": 136,
+  "count": 137,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1762,6 +1762,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T15:14:28.805Z"
+    },
+    {
+      "name": "Sahil gayas",
+      "nuid": "26I-2617",
+      "section": "C",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T15:15:24.294Z"
     }
   ]
 }
