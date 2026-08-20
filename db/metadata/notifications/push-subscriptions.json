@@ -1534,5 +1534,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0770",
+    "name": "Muhammad Ahmed Mushtaq",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "F",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QLdBdFjaLUpv0GSFY1csSg8Rr2n56wYLgrmGSzePz9E9pMlkB6ZSTXXGEeGNAqUUSL7OgbD1_dpjhSv8kESHT0x-JWyvd5DAG4DDjr6lmXK5Oq4fgI--2E_fnu0nR7r1dq5dJlKgJUcrQHIfHT1kfXcUzZfNf-T3SsDTbhAOmtg",
+      "keys": {
+        "p256dh": "BJ-MbsYiPM0jEgsXWoYv8ifEf5bQVd_uJymuhZhIyWKepI1lhDMWPTtJyuQPmRadmRvRzCe0H-prMP1uDjwRjZ4",
+        "auth": "LTqurXpqmhyq8m3cSuibsg"
+      }
+    },
+    "updated_at": 1787212786755,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
