@@ -2015,5 +2015,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2008",
+    "name": "Muhammad Husnain Shahid",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fWpZNjjeCV4:APA91bHBVxopAK5_Hok3thgJJGXItHt4GpffnSqIsKxc1qexGN4TyzbP-SFoBygTsdnuxyq_4PJaEVp2hoeezXAXr-dInBSkT8L4QLFQ8lJxQC4ExhGMqywEDuVtNgafvBWpqK4RScrs",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBxjSFwdLkXCCqq9rwn-WUhH6AJRof3XLhlY3i4REjMd0D8gkvY2mLnRz4Dq5IoKMt7FFbZ1LYQhv4y01NgH1Aw",
+        "auth": "d4BIY6WrbgU18SjWqh3xBg"
+      }
+    },
+    "updated_at": 1787246356803,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
