@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T07:11:57.235Z",
+  "updated_at": "2026-08-20T07:12:36.490Z",
   "source_subject": "Seating Plan 26",
-  "count": 86,
+  "count": 87,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1112,6 +1112,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T07:11:57.235Z"
+    },
+    {
+      "name": "Fatima Abbasi",
+      "nuid": "26I-0133",
+      "section": "C",
+      "department": "AI",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T07:12:36.490Z"
     }
   ]
 }
