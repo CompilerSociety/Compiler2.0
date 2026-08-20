@@ -240,8 +240,8 @@
       "section": "B",
       "department": "BS CS",
       "batch": "24",
-      "highScore": 103,
-      "achievedAt": "2026-08-19T06:09:49.660Z"
+      "highScore": 397,
+      "achievedAt": "2026-08-20T15:15:43.970Z"
     },
     "25I-0647": {
       "nuid": "25I-0647",
@@ -408,6 +408,15 @@
       "achievedAt": "2026-08-19T16:51:09.053Z"
     },
     {
+      "nuid": "24I-0658",
+      "name": "Sanaam Ul",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 397,
+      "achievedAt": "2026-08-20T15:15:43.970Z"
+    },
+    {
       "nuid": "25I-0957",
       "name": "Rayan Khalid",
       "section": "B",
@@ -415,15 +424,6 @@
       "batch": "25",
       "highScore": 257,
       "achievedAt": "2026-08-19T13:27:32.221Z"
-    },
-    {
-      "nuid": "24I-0658",
-      "name": "Sanaam Ul",
-      "section": "B",
-      "department": "BS CS",
-      "batch": "24",
-      "highScore": 103,
-      "achievedAt": "2026-08-19T06:09:49.660Z"
     },
     {
       "nuid": "25I-0564",
