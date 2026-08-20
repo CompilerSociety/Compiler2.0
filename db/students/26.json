@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:15:15.182Z",
+  "updated_at": "2026-08-20T16:28:55.298Z",
   "source_subject": "Seating Plan 26",
-  "count": 145,
+  "count": 146,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1879,6 +1879,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:15:15.182Z"
+    },
+    {
+      "name": "Adeena Akram",
+      "nuid": "26I-2022",
+      "section": "A",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T16:28:55.298Z"
     }
   ]
 }
