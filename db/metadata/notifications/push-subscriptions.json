@@ -1877,5 +1877,28 @@
       "seat": false,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0617",
+    "name": "Abdur Rafey Amir",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fsxIrUTXa54:APA91bFUVwS17QX5NaaH_qplU5DsAPGvBSxrmQ9ADspiDosfqG1S9bA26MnhUZX0UePmiwmBzyv15y8eqg-Feg14JE6gmDfbIjJPKzaIM2RTiR31qwH1Zt3yZXc481Proc67M7tUx_4G",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLQhVVzXD7QfL3dLzDeK8XArNVnIqd0wmrDfHxq6shf8JB-I7F-i3KE4WL_oz72WVv8f4dDHLtyqs7Ed1P0uuos",
+        "auth": "nENAPw9EkE8DYLqHmzP3sQ"
+      }
+    },
+    "updated_at": 1787240180132,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
