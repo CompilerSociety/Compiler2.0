@@ -377,6 +377,15 @@
       "batch": "25",
       "highScore": 49,
       "achievedAt": "2026-08-20T17:29:12.536Z"
+    },
+    "25I-3047": {
+      "nuid": "25I-3047",
+      "name": "Taham Rahim",
+      "section": "C",
+      "department": "BS SE",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-20T17:29:56.343Z"
     }
   },
   "leaderboard": [
