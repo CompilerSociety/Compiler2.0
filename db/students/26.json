@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T05:29:04.716Z",
+  "updated_at": "2026-08-20T05:34:35.474Z",
   "source_subject": "Seating Plan 26",
-  "count": 62,
+  "count": 63,
   "students": [
     {
       "name": "Hammad rehan",
@@ -800,6 +800,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T05:29:04.716Z"
+    },
+    {
+      "name": "Muhammad Talha Yousafzai",
+      "nuid": "26I-4005",
+      "section": "A",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:34:35.474Z"
     }
   ]
 }
