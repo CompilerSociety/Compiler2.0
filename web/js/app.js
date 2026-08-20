@@ -1001,7 +1001,7 @@ const DEFAULT_BLOCK_FLOORS={
     0:["B-019","B-020","B-027","B-028","B-030"],
     1:["B-119","B-127","B-129","B-130"],
     2:["B-227","B-229","B-230","B-Rawal Lab 3","B-DLD Lab"],
-    Labs:["B-Phy","B-Ckt","B-Poth","B-Wshop","B-Comp-I","B-Comp-II","B-Comp-III","B-Koh","B-IPC"],
+    Labs:["B-Phy","B-Ckt","B-Poth","B-Wshop","B-Comp-I","B-Comp-II","B-Comp-III","B-Koh","B-IPC","B-Elect","B-Mdel","B-Cont"],
   },
   C:{
     1:["C-110"],
@@ -1179,7 +1179,7 @@ let _cdSheetLastSync=null;
      Block C/D → FSC (computing) only
    Each school's db/timetables/{school}.json is loaded into ROOM_TT. */
 let ROOM_TT={computing:{},business:{},engineering:{}};
-const BLOCK_SOURCES={A:['computing','business'],B:['computing','engineering'],C:['computing'],D:['computing']};
+const BLOCK_SOURCES={A:['computing','business'],B:['computing','engineering'],C:['computing','business'],D:['computing']};
 
 
 function cloneFloors(obj){return JSON.parse(JSON.stringify(obj));}
@@ -2300,6 +2300,13 @@ function getUpcomingSlots(slots){
 // sheets (e.g. "KK-I", "PHY", "COMP-I", "A-KHYBER-1"). labSig() reduces any
 // of them to a comparable signature so they map onto the room-card names.
 let _labSigMap=null;
+// Known Excel aliases for the same physical room cards.
+const ROOM_CARD_ALIASES={
+  CIRCUIT:'B-Ckt', DLD:'B-DLD Lab', ELECT:'B-Elect',
+  MDEL:'B-Mdel', CONT:'B-Cont', COMPUTING3:'B-Comp-III',
+  CALILAB:'A-CALL-1', CALIILAB:'A-CALL-2',
+  KYBHER2:'A-Khyber II', KYBHER3:'A-Khyber III',
+};
 function labSig(x){
   let s=oneLine(x).toUpperCase().replace(/\bLABS?\b/g,' ').replace(/^[A-D]\s*-\s*/,'');
   s=s.replace(/\bIV\b/g,'4').replace(/\bIII\b/g,'3').replace(/\bII\b/g,'2').replace(/\bI\b/g,'1');
@@ -2324,7 +2331,8 @@ function labSigMap(){
 function canonicalizeLoc(loc){
   if(!loc) return loc;
   if(/^[A-D]-\d{2,3}$/.test(normalizeRoomName(loc))) return loc; // plain classroom
-  return labSigMap()[labSig(loc)]||loc;
+  const sig=labSig(loc);
+  return ROOM_CARD_ALIASES[sig]||labSigMap()[sig]||loc;
 }
 function canonicalizeTTLocations(tt){
   Object.values(tt||{}).forEach(batches=>Object.values(batches||{}).forEach(sections=>Object.values(sections||{}).forEach(days=>Object.values(days||{}).forEach(arr=>(arr||[]).forEach(e=>{
