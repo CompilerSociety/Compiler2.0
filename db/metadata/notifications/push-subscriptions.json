@@ -1923,5 +1923,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-1034",
+    "name": "Abdul Mutaal",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eL5NhvT-meY:APA91bFyOecqpSWq5rT3C9iMkK9OIp0mzTOfmBrqp4v_2V-nuqEotxyZQL62zpHVCHpaPYexxmRo4etjwGFEdbhhkgZlcw9MJ0_i5mJG36E6iL2jfvwKTb6RKrpnds3k3GoZ3KWoY27w",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAvlO6Vtplt40GsLlZ5z87y8SiR--zAYY91efR4F0FAcO1XintFM3K0kAGN2sqfqpRc-mg_dBTpw4d5q4Q4B1Ew",
+        "auth": "PRnj6I18ECg_0HTehaxssA"
+      }
+    },
+    "updated_at": 1787241432683,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
