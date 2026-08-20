@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T05:43:22.925Z",
+  "updated_at": "2026-08-20T05:43:43.929Z",
   "source_subject": "Seating Plan 26",
-  "count": 67,
+  "count": 68,
   "students": [
     {
       "name": "Hammad rehan",
@@ -865,6 +865,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T05:43:22.925Z"
+    },
+    {
+      "name": "Ridda Abbas",
+      "nuid": "26I-3297",
+      "section": "D",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:43:43.929Z"
     }
   ]
 }
