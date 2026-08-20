@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T15:16:09.098Z",
+  "updated_at": "2026-08-20T15:16:47.573Z",
   "source_subject": "Seating Plan 26",
-  "count": 138,
+  "count": 139,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1788,6 +1788,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T15:16:09.098Z"
+    },
+    {
+      "name": "Owais Nadeem",
+      "nuid": "26I-2634",
+      "section": "C",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T15:16:47.573Z"
     }
   ]
 }
