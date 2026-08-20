@@ -1374,5 +1374,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0897",
+    "name": "MOIZ KHAN",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "H",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QPJeDLbB7l1JW8sMabDeAH4EJuKSn6rd2Ec6JqV5Y8IkbTh7LWlfrtCcn8lQCh68EHpokdiBYXBAuYMaB7JKoZGUhLRq5wchPmbV1plKsAIVK1aE8ZMIZXIV8hBPti_Qo8KhXfSEJTAzI2MWHM290GRGatyd_T2pE4eBfqr16u8",
+      "keys": {
+        "p256dh": "BMhtgCGJUs62l-wIvUHLwlhSR-sQpIyqkSf72c6O4PopcgwTLHB_tnJmF2FIEDv_6bBB7QZQ8VWXBup8sQDARfY",
+        "auth": "KX0CgyPWAwby5XvMJTq6fQ"
+      }
+    },
+    "updated_at": 1787206731798,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
