@@ -1831,5 +1831,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0122",
+    "name": "Ali Hamza",
+    "department": "BS AI",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fXUZf0SJlE8:APA91bHF7Ho8QEUpwrt9k44XwcrpoOB70MFp9Z_YLDf3bnMcolWQVluUlIqwjbu6XnVuG-mQ_Gz8WXm5P7VYFND_wqFHD3ok5BLhNAx3bBosqeqT4mPOMnRtATB_sJ3vdPLFf0iKP6G-",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BNJcwzuRen4fT-E_scZSjPHv8s4asScP1EeRggJDufMXp6aV-EgV6AUwYt5Tl-OPp-AUpnzqRAts_ID459RGTPI",
+        "auth": "Oslq4KSetbYyQVZWzDUhVg"
+      }
+    },
+    "updated_at": 1787237519443,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
