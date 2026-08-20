@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:12:13.927Z",
+  "updated_at": "2026-08-20T13:13:18.405Z",
   "source_subject": "Seating Plan 26",
-  "count": 117,
+  "count": 118,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1515,6 +1515,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:12:13.927Z"
+    },
+    {
+      "name": "Syed Muhammad Shehroz Naqvi",
+      "nuid": "26I-2164",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:13:18.405Z"
     }
   ]
 }
