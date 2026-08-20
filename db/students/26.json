@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T05:41:31.583Z",
+  "updated_at": "2026-08-20T05:42:06.883Z",
   "source_subject": "Seating Plan 26",
-  "count": 65,
+  "count": 66,
   "students": [
     {
       "name": "Hammad rehan",
@@ -839,6 +839,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T05:41:31.583Z"
+    },
+    {
+      "name": "Ayesha Rafiq",
+      "nuid": "26I-3183",
+      "section": "D",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:42:06.883Z"
     }
   ]
 }
