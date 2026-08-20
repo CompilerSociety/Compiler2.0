@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:25:17.931Z",
+  "updated_at": "2026-08-20T06:28:17.314Z",
   "source_subject": "Seating Plan 26",
-  "count": 77,
+  "count": 78,
   "students": [
     {
       "name": "Hammad rehan",
@@ -995,6 +995,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:25:17.931Z"
+    },
+    {
+      "name": "Riham Zahoor",
+      "nuid": "26I-2219",
+      "section": "D",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:28:17.314Z"
     }
   ]
 }
