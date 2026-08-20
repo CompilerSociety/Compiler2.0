@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T05:42:06.883Z",
+  "updated_at": "2026-08-20T05:43:22.925Z",
   "source_subject": "Seating Plan 26",
-  "count": 66,
+  "count": 67,
   "students": [
     {
       "name": "Hammad rehan",
@@ -852,6 +852,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T05:42:06.883Z"
+    },
+    {
+      "name": "Zuha Shafqat",
+      "nuid": "26I-0699",
+      "section": "D",
+      "department": "BS CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:43:22.925Z"
     }
   ]
 }
