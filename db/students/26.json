@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:39:27.144Z",
+  "updated_at": "2026-08-20T16:51:16.759Z",
   "source_subject": "Seating Plan 26",
-  "count": 149,
+  "count": 150,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1931,6 +1931,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:39:27.144Z"
+    },
+    {
+      "name": "Ali Asghar",
+      "nuid": "26I-2593",
+      "section": "C",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T16:51:16.759Z"
     }
   ]
 }
