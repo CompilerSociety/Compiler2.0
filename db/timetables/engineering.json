@@ -460,11 +460,6 @@
               "name": "Electromagnetic Theory",
               "location": "B-019",
               "time": "09:55-11:15"
-            },
-            {
-              "name": "Electronic Circuit Design Lab",
-              "location": "CIRCUIT LAB",
-              "time": "12:50-02:10"
             }
           ],
           "Friday": [
@@ -479,8 +474,8 @@
               "time": "09:55-11:15"
             },
             {
-              "name": "Data Communication and Networks - Lab",
-              "location": "COMP-III",
+              "name": "Electronic Circuit Design Lab",
+              "location": "ELECT",
               "time": "02:00-03:20"
             }
           ]
@@ -740,6 +735,13 @@
               "time": "8:30-09:50"
             }
           ],
+          "Tuesday": [
+            {
+              "name": "Digital Logic Design Lab",
+              "location": "DLD",
+              "time": "02:20-03:40"
+            }
+          ],
           "Friday": [
             {
               "name": "Digital Logic Design Lab",
@@ -889,7 +891,7 @@
             {
               "name": "Electronic Devices & Circuits Lab",
               "location": "ELECT",
-              "time": "12:50-02:10"
+              "time": "02:20-03:40"
             }
           ],
           "Wednesday": [
@@ -1297,5 +1299,5 @@
     }
   },
   "count": 210,
-  "generatedAt": "2026-08-20T09:48:14.379274+00:00"
+  "generatedAt": "2026-08-20T10:18:56.208108+00:00"
 }

@@ -2355,6 +2355,11 @@
           ],
           "Thursday": [
             {
+              "name": "Info Ret & Text Mining Cancelled",
+              "location": "C-402",
+              "time": "02:30-03:50"
+            },
+            {
               "name": "Fund of Data Vis",
               "location": "D-412",
               "time": "11:30-12:50"
@@ -2609,7 +2614,7 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Arts & Humanities",
+              "name": "Psychology",
               "location": "C-409",
               "time": "01:00-02:45"
             }
@@ -2640,7 +2645,7 @@
         "B": {
           "Monday": [
             {
-              "name": "Arts & Humanities",
+              "name": "Psychology",
               "location": "C-601",
               "time": "01:00-02:45"
             },
@@ -2781,7 +2786,7 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Arts & Humanities",
+              "name": "Psychology",
               "location": "C-601",
               "time": "01:00-02:45"
             }
@@ -2834,7 +2839,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "Arts & Humanities",
+              "name": "Psychology",
               "location": "C-602",
               "time": "03:00-04:45"
             },
@@ -2882,7 +2887,7 @@
           ],
           "Thursday": [
             {
-              "name": "Arts & Humanities",
+              "name": "Psychology",
               "location": "C-603",
               "time": "08:30-10:15"
             },
@@ -3941,18 +3946,6 @@
               "name": "OOP",
               "location": "D-314",
               "time": "08:30-09:50"
-            },
-            {
-              "name": "Edge Comp",
-              "location": "D-402",
-              "time": "10:00-11:20"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Edge Comp",
-              "location": "C-406",
-              "time": "10:00-11:20"
             }
           ],
           "Friday": [
@@ -5201,7 +5194,7 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "Arts & Hum",
+              "name": "Psychology",
               "location": "D-414",
               "time": "01:00-02:45"
             }
@@ -5242,7 +5235,7 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Arts & Hum",
+              "name": "Psychology",
               "location": "D-415",
               "time": "02:00-03:45"
             }
@@ -5324,7 +5317,7 @@
           ],
           "Wednesday": [
             {
-              "name": "Arts & Hum",
+              "name": "Psychology",
               "location": "D-414",
               "time": "01:00-02:45"
             },
@@ -5399,7 +5392,7 @@
           ],
           "Thursday": [
             {
-              "name": "Elective",
+              "name": "Psychology",
               "location": "D-416",
               "time": "08:30-10:15"
             },
@@ -6208,7 +6201,7 @@
             {
               "name": "Agentic AI",
               "location": "D-401",
-              "time": "11:30-12:50"
+              "time": "08:30-09:50"
             }
           ],
           "Wednesday": [
@@ -6226,8 +6219,8 @@
           "Thursday": [
             {
               "name": "Agentic AI",
-              "location": "D-315",
-              "time": "11:30-12:50"
+              "location": "D-316",
+              "time": "08:30-09:50"
             },
             {
               "name": "Multiagent Sys",
@@ -6967,7 +6960,7 @@
             {
               "name": "Software Process Mining and Intelligence",
               "location": "C-402",
-              "time": "08:30-09:50"
+              "time": "09:00-12:00"
             }
           ]
         }
@@ -7041,6 +7034,6 @@
       }
     }
   },
-  "count": 1163,
-  "generatedAt": "2026-08-20T09:48:12.100848+00:00"
+  "count": 1162,
+  "generatedAt": "2026-08-20T10:18:53.883564+00:00"
 }
