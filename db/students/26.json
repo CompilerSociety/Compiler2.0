@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T11:30:17.869Z",
+  "updated_at": "2026-08-20T11:32:17.418Z",
   "source_subject": "Seating Plan 26",
-  "count": 108,
+  "count": 109,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1398,6 +1398,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T11:30:17.869Z"
+    },
+    {
+      "name": "Amna Ashraf",
+      "nuid": "26I-3072",
+      "section": "B",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T11:32:17.418Z"
     }
   ]
 }
