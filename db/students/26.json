@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:57:54.185Z",
+  "updated_at": "2026-08-20T07:05:03.160Z",
   "source_subject": "Seating Plan 26",
-  "count": 82,
+  "count": 83,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1060,6 +1060,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:57:54.185Z"
+    },
+    {
+      "name": "Hammad Zafeer Abbasi",
+      "nuid": "26I-0628",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T07:05:03.160Z"
     }
   ]
 }
