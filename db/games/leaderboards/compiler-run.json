@@ -314,6 +314,15 @@
       "batch": "26",
       "highScore": 49,
       "achievedAt": "2026-08-20T05:17:15.538Z"
+    },
+    "25I-0585": {
+      "nuid": "25I-0585",
+      "name": "Ahmed Ayan",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 34,
+      "achievedAt": "2026-08-20T05:37:14.426Z"
     }
   },
   "leaderboard": [
