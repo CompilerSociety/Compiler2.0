@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T11:10:19.083Z",
+  "updated_at": "2026-08-20T11:28:37.220Z",
   "source_subject": "Seating Plan 26",
-  "count": 105,
+  "count": 106,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1359,6 +1359,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T11:10:19.083Z"
+    },
+    {
+      "name": "Tehreem Basharat",
+      "nuid": "26I-0697",
+      "section": "D",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T11:28:37.220Z"
     }
   ]
 }
