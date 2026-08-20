@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:09:14.360Z",
+  "updated_at": "2026-08-20T17:09:47.476Z",
   "source_subject": "Seating Plan 26",
-  "count": 155,
+  "count": 156,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2009,6 +2009,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:09:14.360Z"
+    },
+    {
+      "name": "Muhammad Shaheer Yasin",
+      "nuid": "26I-3281",
+      "section": "E",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:09:47.476Z"
     }
   ]
 }
