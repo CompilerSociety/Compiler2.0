@@ -532,7 +532,7 @@
             {
               "name": "Seerah",
               "location": "C-304",
-              "time": "02:30-03:25"
+              "time": "02:50-03:45"
             },
             {
               "name": "Func Eng",
@@ -5846,6 +5846,11 @@
           ],
           "Thursday": [
             {
+              "name": "Intro to DS",
+              "location": "D-312",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "COAL",
               "location": "D-315",
               "time": "01:00-02:20"
@@ -5854,11 +5859,6 @@
               "name": "Data St",
               "location": "D-403",
               "time": "10:00-11:20"
-            },
-            {
-              "name": "Intro to DS",
-              "location": "D-403",
-              "time": "11:30-12:50"
             }
           ]
         },
@@ -6144,11 +6144,6 @@
               "name": "Comp Net",
               "location": "D-401",
               "time": "10:00-11:20"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-401",
-              "time": "11:30-12:50"
             }
           ],
           "Wednesday": [
@@ -6169,11 +6164,6 @@
             }
           ],
           "Thursday": [
-            {
-              "name": "Agentic AI",
-              "location": "D-315",
-              "time": "11:30-12:50"
-            },
             {
               "name": "Multiagent Sys",
               "location": "D-316",
@@ -6218,7 +6208,7 @@
             {
               "name": "Agentic AI",
               "location": "D-401",
-              "time": "08:30-09:50"
+              "time": "11:30-12:50"
             }
           ],
           "Wednesday": [
@@ -6235,6 +6225,11 @@
           ],
           "Thursday": [
             {
+              "name": "Agentic AI",
+              "location": "D-315",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Multiagent Sys",
               "location": "D-316",
               "time": "10:00-11:20"
@@ -6243,11 +6238,6 @@
               "name": "Comp Net",
               "location": "D-316",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "Agentic AI",
-              "location": "D-403",
-              "time": "08:30-09:50"
             }
           ]
         },
@@ -7051,6 +7041,6 @@
       }
     }
   },
-  "count": 1165,
-  "generatedAt": "2026-08-20T07:04:04.977260+00:00"
+  "count": 1163,
+  "generatedAt": "2026-08-20T07:54:03.034374+00:00"
 }
