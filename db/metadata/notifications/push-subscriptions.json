@@ -1556,5 +1556,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2035",
+    "name": "HAMZA",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eVhgdBiVLOY:APA91bH1k4yUpM16P5V0wxhTgL4p7sVjO5TpZaipsmA4xG2dqxuC0SxvbMzG2W0BzPsPcB8kaS34S6x0KwhrdgntZQyoKB-eeOgTZrGNfHOlHvvAPs8W4dsTK3K1Bmi_u3ohLgkNnoS7",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BMxfruxJuNN1_8H3cBo8vW-J-aVhVfNucvvNXGVgRJgo7nVlK6idZj3ZWdjgoHGSY6BnirC_oM--BpMB3sTHAZw",
+        "auth": "NRmDQFOppJyYi3Ue0I2FZA"
+      }
+    },
+    "updated_at": 1787214697123,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
