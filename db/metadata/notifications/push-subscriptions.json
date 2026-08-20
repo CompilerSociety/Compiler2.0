@@ -1465,5 +1465,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0641",
+    "name": "Muhammad Faiq",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fkJCEuPTcM0:APA91bEjKQ0k04tJt9XMwd174cHIJxV5Pmm6bwJIDnvUJ_d_FNcG748Nd9muyguBrggbzE3699V-J6qP9AJRztIpmHGYRylExI8JRnKkK7D12K5u5hh0dQnNUBns-_AKVaJTR8fc9x05",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDBOowx7W1XoDvn8SW9U0sG4sCEOpAqvAsr5k2QP8zewETR7s-zDkCWMVAgIUypRxpanl8hfqyNGsdrq7CA_PX0",
+        "auth": "FIUJkyjg5KeUdAIy9eSeqA"
+      }
+    },
+    "updated_at": 1787209148409,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
