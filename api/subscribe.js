@@ -7,14 +7,10 @@
 // authenticated API calls and two commits (the list plus rate-limit
 // bookkeeping), rewrote an 88-entry array to change one row, and needed a
 // sha-retry loop because two devices subscribing at once raced each other.
-// Reads still fall back to that committed file when the database is
-// unreachable, so an outage degrades this to read-only rather than breaking it.
 //
 // Required environment variables (set in Vercel project settings):
-//   MONGODB_URI - Atlas connection string (required to CHANGE a subscription)
+//   MONGODB_URI - Atlas connection string (required)
 //   MONGODB_DB  - database name (optional, default "compiler2")
-//   GH_REPO     - "owner/name" (optional) - only for the read-only fallback
-//   GH_BRANCH   - branch to read the fallback from (optional, default "main")
 
 import { isEnabled } from '../lib/db/mongo.mjs';
 import {
@@ -125,8 +121,6 @@ function isValidSubscription(subscription) {
     typeof keys.auth === 'string' && keys.auth.length > 0;
 }
 
-function repo() { return process.env.GH_REPO || 'Riftwalker23x/Compiler2.0'; }
-function branch() { return process.env.GH_BRANCH || 'main'; }
 
 
 function parseBody(req) {
