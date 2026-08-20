@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:28:17.314Z",
+  "updated_at": "2026-08-20T06:31:06.354Z",
   "source_subject": "Seating Plan 26",
-  "count": 78,
+  "count": 79,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1008,6 +1008,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:28:17.314Z"
+    },
+    {
+      "name": "Ebad Ullah",
+      "nuid": "26I-0676",
+      "section": "D",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:31:06.354Z"
     }
   ]
 }
