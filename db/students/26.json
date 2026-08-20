@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T04:56:33.238Z",
+  "updated_at": "2026-08-20T05:26:05.993Z",
   "source_subject": "Seating Plan 26",
-  "count": 60,
+  "count": 61,
   "students": [
     {
       "name": "Hammad rehan",
@@ -774,6 +774,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T04:56:33.238Z"
+    },
+    {
+      "name": "Muhammad Mustafa Waheed",
+      "nuid": "26I-0568",
+      "section": "B",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:26:05.993Z"
     }
   ]
 }
