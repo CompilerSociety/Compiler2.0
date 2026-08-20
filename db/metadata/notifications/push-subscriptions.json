@@ -1915,12 +1915,12 @@
         "auth": "BA0p048CcUpAjQ6UW3c3jQ"
       }
     },
-    "updated_at": 1787240692902,
+    "updated_at": 1787240706523,
     "prefs": {
       "cls": true,
       "exam": true,
       "show": true,
-      "seat": true,
+      "seat": false,
       "room": false
     }
   }
