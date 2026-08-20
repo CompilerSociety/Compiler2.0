@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T15:23:21.761Z",
+  "updated_at": "2026-08-20T15:32:07.077Z",
   "source_subject": "Seating Plan 26",
-  "count": 140,
+  "count": 141,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1814,6 +1814,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T15:23:21.761Z"
+    },
+    {
+      "name": "Muhammed Faseeh Shahid",
+      "nuid": "26I-2118",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T15:32:07.077Z"
     }
   ]
 }
