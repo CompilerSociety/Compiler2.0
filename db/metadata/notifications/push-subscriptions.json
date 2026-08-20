@@ -1344,5 +1344,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-2588",
+    "name": "Areeba Laiq",
+    "department": "BS CY",
+    "batch": "25",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ehrzKgwSRjo:APA91bFg2yVi-qsUNBr4REPIrm0SohfPxdcxngY-X5pibdUmCA2C1Z9BY7iQTr-tW3Yi1FXjLpXoeWqS1gTvo-G_SSULFdXsrdqimLlNYJzU67GYfpRcqyMAx1fMb6-dRdxHeufsl4zN",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BKPUCPCD5WrJfnDYMBmQbBfU7Lz24j4Lxe-_cm6SI6DK3Em4r2czvF1D2hU4s95AKpeNEhawGBSA3k46IztR4iU",
+        "auth": "9qgMonlMVPuNYNuiX_vkNw"
+      }
+    },
+    "updated_at": 1787206154728,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
