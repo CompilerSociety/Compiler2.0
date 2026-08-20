@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T07:33:13.087Z",
+  "updated_at": "2026-08-20T07:59:35.220Z",
   "source_subject": "Seating Plan 26",
-  "count": 89,
+  "count": 90,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1151,6 +1151,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T07:33:13.087Z"
+    },
+    {
+      "name": "Muhammad Ahmed Mushtaq",
+      "nuid": "26I-0770",
+      "section": "F",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T07:59:35.220Z"
     }
   ]
 }
