@@ -1648,5 +1648,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3079",
+    "name": "AHMED Raza",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cxIE1RHejU0:APA91bFreVHbgyIrDD2btkk_bDbb7HX8gPhAZxqiSO1U8_VjSmFVLbweXW-Vb-eE1ytAUDkfAX0CYlB3tk0LTwiVPVKsXntj4YAmXrPBmExzA24oYEitv-wrRoMf2iEJnzmIqxB_xRrG",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BOSfhudCKatzd_5j8Kkv-30p9dDh6SS7WkAPyjC0Mr3fEUjMhN49RnQ7O-DcJTJnfm7v7ScIpkRdo7gwxNQkAC4",
+        "auth": "gZTZXKsdOKW4bIL90thi9Q"
+      }
+    },
+    "updated_at": 1787227326129,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
