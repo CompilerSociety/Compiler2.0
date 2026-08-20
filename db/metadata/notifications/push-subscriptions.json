@@ -1252,5 +1252,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0677",
+    "name": "Iman Mashkoor",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eNg3eptNgmk:APA91bFl8drb-ubR6lC2pLp8CYCEfnwlCOcGXjfCgcaLjZifXZCLQuxCIHpEpYtbs-rXVeJpfKL20horghkVsFHQ_0m9CavDJE3283jRT9DvhS7HTDPiJLp9L1G_uMVCbj0ei5PGoiGG",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BFX36GQqxrDAkERAMIzryNbN20SoOa2nW479HUR4zP0zP7hqgKo3PTFBj2AkxE0mnifA0eojYVWQye3FoXGfA6k",
+        "auth": "imWJmTzTQ1BxdLxAYXjSXQ"
+      }
+    },
+    "updated_at": 1787204523701,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
