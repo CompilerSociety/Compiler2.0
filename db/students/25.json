@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T08:46:43.488Z",
+  "updated_at": "2026-08-20T11:51:45.446Z",
   "source_subject": "Seating Plan 25",
-  "count": 965,
+  "count": 966,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6827,6 +6827,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T08:46:43.487Z"
+    },
+    {
+      "name": "Ameer Sultan Zahid",
+      "nuid": "25I-2224",
+      "section": "C",
+      "department": "CY",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T11:51:45.446Z"
     }
   ]
 }
