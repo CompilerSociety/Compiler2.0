@@ -1671,5 +1671,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0981",
+    "name": "Fahad Abdullah",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dZEjYPSwhIc:APA91bEVsorM4z1wb_TnVi--KeT6jGv7PHxYxwCL-IwWN-zpgZAjHegwJci5gvEn9c7ws0bCT1TN4CV26emT4SL1ZD7uGEdHjZ4N_pu6RrEDhH-6TnaAbXu9wYD6LN9GfNALuX02gKfR",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPWuRVlN_oysod3CtbtYrVixXMN9YeBm1RyH_hma4DxMrvCOXf_8C7IQvKG282UmELX3TrRQrlDHu8pU49GGdKQ",
+        "auth": "4tRBjY_gpvJlZbMLDbBhyQ"
+      }
+    },
+    "updated_at": 1787228926359,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
