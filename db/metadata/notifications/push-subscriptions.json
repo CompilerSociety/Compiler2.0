@@ -1739,5 +1739,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2160",
+    "name": "Aliyan Shakeel",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/c10fEhy2Z9c:APA91bFLKyQIgKUr_Vl67Tgk_oMrGzvJkZ6CJM8aZr731tpIRVSlJMSt5BLzfSn_rcjnlqhNLuXhvvieJvJVtjx1Y-tkM5QCsXRqE6eecpPiGm4PfhRFvPxUY3xVTZ4-bGJCWNBV7mFz",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAUvJwKnjhvtnucuwHCq5fNdBgU2_l0nkTkYub23zttaD-AAA-kP4-1_U1kO3H4WOJ3ic6nbdvrV-oEjkPan7TA",
+        "auth": "D4vNcujVrvfHV7ih5S510A"
+      }
+    },
+    "updated_at": 1787232753874,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
