@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:12:47.096Z",
+  "updated_at": "2026-08-20T17:14:39.627Z",
   "source_subject": "Seating Plan 26",
-  "count": 159,
+  "count": 160,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2061,6 +2061,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:12:47.096Z"
+    },
+    {
+      "name": "Haiqa Asif",
+      "nuid": "26L-0519",
+      "section": "A",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:14:39.627Z"
     }
   ]
 }
