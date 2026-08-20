@@ -6,7 +6,8 @@
     "db:migrate": "node scripts/db/migrate-to-mongo.mjs",
     "db:migrate:dry": "node scripts/db/migrate-to-mongo.mjs --dry-run",
     "db:smoke": "node scripts/db/smoke-test.mjs",
-    "db:check-uri": "node scripts/db/check-uri.mjs"
+    "db:check-uri": "node scripts/db/check-uri.mjs",
+    "db:stats": "node scripts/db/stats.mjs"
   },
   "dependencies": {
     "mongodb": "^7.5.0",
