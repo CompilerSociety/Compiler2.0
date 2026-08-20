@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:10:18.245Z",
+  "updated_at": "2026-08-20T13:12:13.927Z",
   "source_subject": "Seating Plan 26",
-  "count": 116,
+  "count": 117,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1502,6 +1502,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:10:18.245Z"
+    },
+    {
+      "name": "Muhammad Zaid Azam",
+      "nuid": "26I-3198",
+      "section": "D",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:12:13.927Z"
     }
   ]
 }
