@@ -1808,5 +1808,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-0599",
+    "name": "Hibba Zamir",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "J",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eMktNIL8hkw:APA91bFyw7LU8sInWb1-VggaYMyFndgYXG8Opj3aBdtHEW8cxtspXguZnKb8J4oC1Ou-soqmtxhgg6qO66-DTjIzfjXeQHJSMmj16FOrh4jw2MBD_nBMskjCk3GEO2obt6_DrVaWYdZi",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPbd4_N3MFPB-e5HtqvG4ej9CcGDVU5B8apSFeJotgoQEOUkPvnFjO0nRo9fxRDyQgrACjDTjy8ZkXZkczeP1fo",
+        "auth": "otDkVb8ZHb_yMbeTOhI_Qg"
+      }
+    },
+    "updated_at": 1787235584798,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
