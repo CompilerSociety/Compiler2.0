@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T03:57:57.078Z",
+  "updated_at": "2026-08-20T04:23:25.827Z",
   "source_subject": "Seating Plan 26",
-  "count": 58,
+  "count": 59,
   "students": [
     {
       "name": "Hammad rehan",
@@ -748,6 +748,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T03:57:57.078Z"
+    },
+    {
+      "name": "Moiz mansoor kanth",
+      "nuid": "26I-0615",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T04:23:25.827Z"
     }
   ]
 }
