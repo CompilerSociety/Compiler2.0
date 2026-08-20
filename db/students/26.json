@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:09:30.231Z",
+  "updated_at": "2026-08-20T16:15:15.182Z",
   "source_subject": "Seating Plan 26",
-  "count": 144,
+  "count": 145,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1866,6 +1866,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:09:30.231Z"
+    },
+    {
+      "name": "Javeria Sial",
+      "nuid": "26I-2217",
+      "section": "D",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T16:15:15.182Z"
     }
   ]
 }
