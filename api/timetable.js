@@ -603,8 +603,10 @@ function flushSectionless(target, pending) {
 
 const FSM_COURSE_RE = /^([A-Za-z]{2,4}\s?\d{4,5})\s*/;
 const FSM_TIME_OVERRIDE_RE = /\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s*-\s*\d{1,2}:\d{2}\s*(?:AM|PM)?)\)\s*$/i;
-const FSM_SECTION_RE = /^([A-Z]{2,5})(\d{2})([A-Z])(\d)?$/;
-const FSM_COMBINED_RE = /^([A-Z]{2,5}\d{2})\s*([A-Z](?:\s*[\/&]\s*[A-Z])+)$/;
+// Business uses both zero-padded semesters (FT03A) and single-digit forms
+// (FT3A, BBA7A), so accept one or two digits in both section forms.
+const FSM_SECTION_RE = /^([A-Z]{2,5})(\d{1,2})([A-Z])(\d)?$/;
+const FSM_COMBINED_RE = /^([A-Z]{2,5}\d{1,2})\s*([A-Z](?:\s*[\/&]\s*[A-Z])+)$/;
 
 const FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48];
 const FSM_SLOT_WIDTH = 9;

@@ -135,9 +135,11 @@ FSM_COURSE_RE = re.compile(r'^([A-Za-z]{2,4}\s?\d{4,5})\s*')
 FSM_TIME_OVERRIDE_RE = re.compile(
     r'\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s*-\s*\d{1,2}:\d{2}\s*(?:AM|PM)?)\)\s*$', re.IGNORECASE)
 
-FSM_SECTION_RE = re.compile(r'^([A-Z]{2,5})(\d{2})([A-Z])(\d)?$')
+# Business timetable section identifiers use both zero-padded semesters
+# (`FT03A`) and single-digit semesters (`FT3A` / `BBA7A`).
+FSM_SECTION_RE = re.compile(r'^([A-Z]{2,5})(\d{1,2})([A-Z])(\d)?$')
 
-FSM_COMBINED_RE = re.compile(r'^([A-Z]{2,5}\d{2})\s*([A-Z](?:\s*[/&]\s*[A-Z])+)$')
+FSM_COMBINED_RE = re.compile(r'^([A-Z]{2,5}\d{1,2})\s*([A-Z](?:\s*[/&]\s*[A-Z])+)$')
 
 FSM_DAY_RE = re.compile(r'^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$', re.IGNORECASE)
 
