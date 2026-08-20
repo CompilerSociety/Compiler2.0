@@ -314,6 +314,15 @@
       "batch": "25",
       "highScore": 28,
       "achievedAt": "2026-08-19T17:19:30.192Z"
+    },
+    "25I-0617": {
+      "nuid": "25I-0617",
+      "name": "Shajee Mehdi",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-20T05:06:46.807Z"
     }
   },
   "leaderboard": [
