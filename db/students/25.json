@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-19T07:59:50.193Z",
+  "updated_at": "2026-08-20T05:55:42.599Z",
   "source_subject": "Seating Plan 25",
-  "count": 962,
+  "count": 963,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6788,6 +6788,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-19T07:59:50.193Z"
+    },
+    {
+      "name": "M.Umar",
+      "nuid": "25F-0533",
+      "section": "J",
+      "department": "CS",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T05:55:42.599Z"
     }
   ]
 }
