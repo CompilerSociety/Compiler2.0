@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:28:54.849Z",
+  "updated_at": "2026-08-20T13:31:52.036Z",
   "source_subject": "Seating Plan 26",
-  "count": 121,
+  "count": 122,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1567,6 +1567,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:28:54.849Z"
+    },
+    {
+      "name": "Aliyan Shakeel",
+      "nuid": "26I-2160",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:31:52.036Z"
     }
   ]
 }
