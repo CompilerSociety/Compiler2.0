@@ -6457,11 +6457,6 @@
               "time": "05:20-06:40"
             },
             {
-              "name": "App Prog",
-              "location": "D-303",
-              "time": "06:45-08:05"
-            },
-            {
               "name": "Research Methodology",
               "location": "D-313",
               "time": "06:45-08:05"
@@ -6486,11 +6481,6 @@
           ],
           "Thursday": [
             {
-              "name": "App Prog",
-              "location": "D-303",
-              "time": "06:45-08:05"
-            },
-            {
               "name": "Adv AI",
               "location": "D-304",
               "time": "05:20-06:40"
@@ -6499,6 +6489,13 @@
               "name": "Research Methodology",
               "location": "D-313",
               "time": "06:45-08:05"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "App Prog",
+              "location": "D-305",
+              "time": "05:20-06:40"
             }
           ]
         },
@@ -6516,6 +6513,11 @@
             }
           ],
           "Tuesday": [
+            {
+              "name": "App Prog",
+              "location": "D-304",
+              "time": "05:20-06:40"
+            },
             {
               "name": "Adv AI",
               "location": "D-304",
@@ -6536,16 +6538,14 @@
           ],
           "Thursday": [
             {
+              "name": "App Prog",
+              "location": "D-303",
+              "time": "05:20-06:40"
+            },
+            {
               "name": "Adv AI",
               "location": "D-304",
               "time": "06:45-08:05"
-            }
-          ],
-          "Friday": [
-            {
-              "name": "App Prog",
-              "location": "D-305",
-              "time": "05:20-06:40"
             }
           ]
         }
@@ -6911,5 +6911,5 @@
     }
   },
   "count": 1138,
-  "generatedAt": "2026-08-20T13:24:33.154946+00:00"
+  "generatedAt": "2026-08-20T14:06:09.796983+00:00"
 }
