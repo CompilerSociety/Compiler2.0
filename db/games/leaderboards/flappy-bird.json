@@ -368,6 +368,15 @@
       "batch": "25",
       "highScore": 5,
       "achievedAt": "2026-08-20T07:07:46.550Z"
+    },
+    "25I-1031": {
+      "nuid": "25I-1031",
+      "name": "Ali Kashif",
+      "section": "C",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 0,
+      "achievedAt": "2026-08-20T11:33:51.581Z"
     }
   },
   "leaderboard": [
