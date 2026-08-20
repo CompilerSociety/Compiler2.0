@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T11:51:45.446Z",
+  "updated_at": "2026-08-20T14:58:26.376Z",
   "source_subject": "Seating Plan 25",
-  "count": 966,
+  "count": 967,
   "students": [
     {
       "name": "Ahmad Zeb",
@@ -6840,6 +6840,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T11:51:45.446Z"
+    },
+    {
+      "name": "Umar Ahmed",
+      "nuid": "25K-0083",
+      "section": "C",
+      "department": "AI",
+      "batch": "25",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T14:58:26.376Z"
     }
   ]
 }
