@@ -1206,5 +1206,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "24I-0719",
+    "name": "Sara Nasir",
+    "department": "BS CS",
+    "batch": "24",
+    "section": "F",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/faoTesfXywY:APA91bEvkx_omJC87qFw78bPOdikEth07QFC7tHyyESV9h93Zinz-BCCGenIxKsIF8iIWP7ixVTjyH7hZs8QgfnEshzBVE2PSwLfiHz5TC359r6JE6mu7FoXXnHCogVSK3ekknyuxqaL",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPYxYT4-ALvwmebsvPQVAj0l4Mfqf78OEQpnDN9nBoC70dH0ceXogsJL1PIb6F6XF6-41OsjiRj4p_YCMSYERrU",
+        "auth": "aY7P4HKEH0rlF3IdRNVbuA"
+      }
+    },
+    "updated_at": 1787201978920,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
