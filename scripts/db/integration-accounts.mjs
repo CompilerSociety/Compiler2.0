@@ -146,6 +146,50 @@ check('unknown batch still subscribes', r.statusCode === 200, `${r.statusCode} $
 const enrolled = await db.collection(COLLECTIONS.STUDENTS).findOne({ nuid: '27I-0001' });
 check('and enrols them onto the roster', Boolean(enrolled), JSON.stringify(enrolled));
 
+console.log('\n--- FSE / FSM students are never stored ---');
+// The rule: only School of Computing students exist server-side, because only
+// they are ever notified. FSE and FSM keep their profile in a cookie.
+for (const [label, dept, id] of [['engineering', 'EE', '25I-7001'], ['business', 'FT', '25I-7002']]) {
+  r = await call(registerH, {
+    method: 'POST', headers: ip('10.5.0.' + id.slice(-1)),
+    body: { nuid: id, name: 'Should Not Persist', department: dept, section: 'A' },
+  });
+  check(label + ' register returns 200 (not an error for the user)',
+    r.statusCode === 200, `${r.statusCode} ${JSON.stringify(r.body)}`);
+  check(label + ' register reports it did not store',
+    r.body?.stored === false && r.body?.added === false, JSON.stringify(r.body));
+  const rows = await db.collection(COLLECTIONS.STUDENTS).countDocuments({ nuid: id });
+  check(label + ' student is NOT in the roster', rows === 0, `found ${rows} row(s)`);
+
+  const endpoint = 'https://fcm.googleapis.com/fcm/send/' + label;
+  r = await call(subscribeH, {
+    method: 'POST', headers: ip('10.5.1.' + id.slice(-1)),
+    body: {
+      nuid: id, name: 'Should Not Persist', department: dept, batch: '25', section: 'A',
+      subscription: sub(endpoint),
+    },
+  });
+  check(label + ' subscribe returns 200', r.statusCode === 200, `${r.statusCode}`);
+  check(label + ' subscribe reports it did not store', r.body?.stored === false,
+    JSON.stringify(r.body));
+  const subRows = await db.collection(COLLECTIONS.SUBSCRIPTIONS).countDocuments({ _id: endpoint });
+  check(label + ' subscription is NOT stored', subRows === 0, `found ${subRows}`);
+  const enrolled = await db.collection(COLLECTIONS.STUDENTS).countDocuments({ nuid: id });
+  check(label + ' subscribe did not enrol them either', enrolled === 0, `found ${enrolled}`);
+}
+
+// The rule must not catch computing students, including PCS - which was missing
+// from the department list and would otherwise have been silently excluded.
+for (const [dept, id] of [['CS', '25I-7010'], ['PCS', '25I-7011'], ['BS AI', '25I-7012']]) {
+  r = await call(registerH, {
+    method: 'POST', headers: ip('10.5.2.9'),
+    body: { nuid: id, name: 'Computing Student', department: dept, section: 'A' },
+  });
+  const rows = await db.collection(COLLECTIONS.STUDENTS).countDocuments({ nuid: id });
+  check('computing dept "' + dept + '" IS stored', rows === 1,
+    `${r.statusCode} rows=${rows} ${JSON.stringify(r.body)}`);
+}
+
 console.log('\n--- unsubscribe ---');
 r = await call(subscribeH, {
   method: 'DELETE', headers: ip('10.0.3.1'),

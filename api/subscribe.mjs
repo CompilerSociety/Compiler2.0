@@ -17,6 +17,7 @@ import {
   rosterHas as dbRosterHas, enrolStudent, getSubscription, upsertSubscription,
   removeSubscription, countSubscriptions, rateLimitCheck, rateLimitNote,
 } from '../lib/db/repos.mjs';
+import { isComputingDept } from '../lib/schools.mjs';
 
 /* ── Security: input validation, identity check, rate limiting ──────────
    - NUID_RE requires a well-formed NU ID, which also rules out junk keys.
@@ -253,7 +254,21 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3) Cap string fields so a client can't grow the stored record unbounded
+    // 3) Only FSC students are stored. Every sender - seat alerts, exam and
+    //    show-up reminders, class cancellations - targets computing only, so a
+    //    subscription from FSE or FSM would sit in the database forever and
+    //    never be delivered to. Storing it would be keeping a device token and
+    //    a roll number for no purpose. See lib/schools.mjs.
+    if (!isComputingDept(department)) {
+      return res.status(200).json({
+        ok: true,
+        stored: false,
+        message: 'Class alerts are only sent to School of Computing students. '
+          + 'Your timetable works exactly the same either way.',
+      });
+    }
+
+    // 4) Cap string fields so a client can't grow the stored record unbounded
     //    (the values are later interpolated into push notification bodies).
     const record = {
       nuid,
@@ -276,7 +291,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 4) Identity: on the roster already, or enrol them onto it now.
+    // 5) Identity: on the roster already, or enrol them onto it now.
     //    A roster miss is not a rejection any more — the seating-plan email is
     //    the only thing that ever populates db/students/, so it lags every new
     //    intake and used to lock those students out entirely.

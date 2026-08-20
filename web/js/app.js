@@ -224,7 +224,11 @@ function resetProfileModal(){
   if(status) status.textContent='Type your NU ID and press sync.';
 }
 // ── Use the saved profile to pre-select the schedule tabs ──────────────
-const COMPUTING_DEPTS=['CS','AI','DS','CY','SE']; // School of Computing
+// School of Computing. PCS belongs here too - it appears as "BS PCS" in the
+// computing timetable - and omitting it would cut those students out of the
+// roster, and so out of every notification. Kept in step with lib/schools.mjs,
+// which enforces the same list server-side.
+const COMPUTING_DEPTS=['CS','AI','DS','CY','SE','PCS'];
 function profileDeptCode(profile){
   return String(profile?.department||'').replace(/^BS\s+/i,'').trim().toUpperCase();
 }
@@ -432,15 +436,27 @@ function deptLabelToCode(label){
   // api/timetable.js ever recognised.
   return String(label||'').trim().toUpperCase().replace(/^BS\s+/,'');
 }
-// Publish a just-registered student to db/students/<batch>.json so the roster
-// knows they exist — the seating-plan email is otherwise the only thing that
-// ever adds anyone, and it trails each new intake by months.
+// Publish a just-registered student to the server-side roster so it knows they
+// exist — the seating-plan email is otherwise the only thing that ever adds
+// anyone, and it trails each new intake by months.
+//
+// COMPUTING ONLY. The roster exists to drive notifications: seat alerts, exam
+// and show-up reminders, class cancellations. None of that is sent to FSE or
+// FSM students, so storing their name and roll number server-side would be
+// collecting personal data the system has no use for. They get exactly the same
+// timetable features — their profile just lives in this browser's cookie and
+// never leaves it.
 //
 // Strictly additive: the caller has already saved the profile locally, and a
 // failure here must not cost the user that profile or block the UI. Every
 // failure path is a console warning and a false return, never a throw.
 async function publishProfileToRoster(profile){
   try{
+    if(!profileIsComputing(profile)){
+      // Not an error, and not worth a warning — this is the designed path for
+      // two of the three schools.
+      return false;
+    }
     const nuid=String(profile&&profile.nuid||'').trim().toUpperCase();
     const name=String(profile&&profile.name||'').trim();
     const section=String(profile&&profile.section||'').trim().toUpperCase();
@@ -623,8 +639,9 @@ function registerProfile(){
     return;
   }
   if(status) status.classList.remove('is-error');
-  // The profile lives in this browser; the roster row is published separately
-  // so the server side knows the student exists (see publishProfileToRoster).
+  // The profile lives in this browser. For computing students it is also
+  // published to the server-side roster so notifications can reach them; FSE
+  // and FSM students are cookie-only (see publishProfileToRoster).
   const profile={ nuid, name, section, batch, department: deptCodeToLabel(departmentRaw) };
   setProfileCookie(profile);
   publishProfileToRoster(profile);

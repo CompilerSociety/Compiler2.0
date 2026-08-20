@@ -34,6 +34,7 @@
 
 import { isEnabled } from '../lib/db/mongo.mjs';
 import { enrolStudent, rateLimitCheck, rateLimitNote } from '../lib/db/repos.mjs';
+import { isComputingDept } from '../lib/schools.mjs';
 
 const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
 const RATE_WINDOW_MS = 60_000;
@@ -97,6 +98,23 @@ export default async function handler(req, res) {
         ok: false,
         error: 'incomplete_profile',
         message: 'Name, department and section are all required.',
+      });
+    }
+
+    // Only FSC students are stored. FSE and FSM get the same timetable, but
+    // none of the notification features are sent to them, so there is nothing
+    // for a stored row to serve - see lib/schools.mjs.
+    //
+    // A 200 rather than a 403: the client is not doing anything wrong, and this
+    // is the designed outcome for two of the three schools. The profile is
+    // already saved in their browser, which is the only place it is needed.
+    if (!isComputingDept(department)) {
+      return res.status(200).json({
+        ok: true,
+        batch,
+        added: false,
+        stored: false,
+        message: 'Saved on this device only.',
       });
     }
 
