@@ -1579,5 +1579,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "23I-2572",
+    "name": "Rawiya Khalid",
+    "department": "BS DS",
+    "batch": "23",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/eruBVjYidc4:APA91bF2lznmfz6ndG3qXm5ECMGSM5bYswDTVz61t8H3lbwioo63OJgjmUA38Zs7Os40dDLcN-GOTUaIFdffW8DZoy7dZYWiYYGHwJ_nTJo5kRamX3FQzbZEKi80qhK0SLGSUnHwBBVP",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BMJUuiLxOUamotj1s1Mk4eqrUREHgBq_xzlILNK3_dopQE2V90Ar0Ly9PWSKTZiI5o6KOhvYm00Pn2pF-Yrwx8g",
+        "auth": "7ayeQ5H_DC33HW973zrEqw"
+      }
+    },
+    "updated_at": 1787220479117,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
