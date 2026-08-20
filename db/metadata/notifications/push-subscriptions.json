@@ -1785,5 +1785,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "24I-2008",
+    "name": "Abdul Raffay",
+    "department": "BS CY",
+    "batch": "24",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dPjj6KvZQJA:APA91bHMdSgTZMANeVs9wKIVmtmAN_1ytcsMTezCmFNPDmD9jBFGheAOhmIF40F5YUOI5lzitmF8ClGNbGrtsk99uARvvAIGhqzqBZD8LnynEUeiV19i6Z2oZcPeLt_thTUOHIWqjYUz",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BGhtVVe-pMEZ1oGpOTZwRMyUBlVj9G-YQYgYbj6Nt1nJqt14i2EI_6dHbgPNGHRGJEegcDuBj2FTNmvqx7n8lxA",
+        "auth": "eP9wY1EUHliX7Pes9ri-2Q"
+      }
+    },
+    "updated_at": 1787233582975,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
