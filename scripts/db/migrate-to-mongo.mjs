@@ -2,17 +2,19 @@
 // One-time (and safely repeatable) import of every committed db/*.json file
 // into MongoDB.
 //
-//   node scripts/db/migrate-to-mongo.mjs --dry-run   # report only, writes nothing
-//   node scripts/db/migrate-to-mongo.mjs             # perform the import
+//   node scripts/db/migrate-to-mongo.mjs --dry-run            # report only
+//   node scripts/db/migrate-to-mongo.mjs                      # import
+//   node scripts/db/migrate-to-mongo.mjs --from path/to/dump  # from elsewhere
 //
 // Requires MONGODB_URI in the environment. Every write is an upsert keyed by a
 // natural id, so running it twice imports the same data into the same
 // documents rather than duplicating rows - safe to re-run after a partial
 // failure, and safe to run again later to backfill.
 //
-// It never deletes. If a record exists in Mongo but not in the JSON, it is left
-// alone: the JSON files are a point-in-time snapshot, and a score saved after
-// that snapshot was taken must not be rolled back by re-running the migration.
+// It never deletes, and it never lowers a high score (see migrateLeaderboards).
+// If a record exists in Mongo but not in the source, it is left alone: the
+// source is a point-in-time snapshot, and a score saved after it was taken must
+// not be rolled back by re-running the import.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,8 +25,17 @@ import {
   scoreId, notifyStateId, studentId, ensureIndexes,
 } from '../../lib/db/collections.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const DRY = process.argv.includes('--dry-run');
+
+// --from <dir> points the import at a db/ tree anywhere on disk. Needed because
+// the committed tree no longer exists in the repo: the two real uses now are
+// restoring a dump from the backup-mongo workflow, and backfilling a snapshot
+// taken before the deletion. Defaults to the repo root, which is where the
+// tree used to live.
+const fromFlag = process.argv.indexOf('--from');
+const ROOT = fromFlag !== -1 && process.argv[fromFlag + 1]
+  ? path.resolve(process.argv[fromFlag + 1])
+  : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 function readJson(rel) {
   const abs = path.join(ROOT, rel);
@@ -58,16 +69,33 @@ function migrateLeaderboards() {
     // is a derived top-10 cache and is deliberately NOT imported - it is
     // recomputed from the collection by the rank index on every read.
     for (const [nuid, p] of Object.entries(data.players || {})) {
-      ops.push(upsert(scoreId(game, nuid), {
-        game,
-        nuid: String(nuid).toUpperCase(),
-        name: p.name ?? 'Unknown',
-        section: p.section ?? '-',
-        department: p.department ?? '-',
-        batch: p.batch ?? '-',
-        highScore: Number(p.highScore) || 0,
-        achievedAt: p.achievedAt || new Date(0).toISOString(),
-      }));
+      // $max, not $set, on the score. This runs on restores and backfills, so
+      // the source file can easily be OLDER than what is already in the
+      // database - and a restore that quietly demoted somebody's personal best
+      // to last week's number would be a nasty way to find that out. $max makes
+      // the import raise a score or leave it alone, never lower it.
+      //
+      // achievedAt is $setOnInsert for the same reason: it is the tie-break, so
+      // it must stay pinned to whichever run actually set the surviving score.
+      ops.push({
+        updateOne: {
+          filter: { _id: scoreId(game, nuid) },
+          update: {
+            $max: { highScore: Number(p.highScore) || 0 },
+            $set: {
+              game,
+              nuid: String(nuid).toUpperCase(),
+              name: p.name ?? 'Unknown',
+              section: p.section ?? '-',
+              department: p.department ?? '-',
+              batch: p.batch ?? '-',
+              migratedAt: new Date(),
+            },
+            $setOnInsert: { achievedAt: p.achievedAt || new Date(0).toISOString() },
+          },
+          upsert: true,
+        },
+      });
     }
   }
   return { collection: COLLECTIONS.LEADERBOARD, ops };
@@ -124,8 +152,13 @@ function migrateNotifyState() {
 function migrateStudents() {
   const ops = [];
   const metaOps = [];
-  const batchFiles = fs.readdirSync(path.join(ROOT, 'db/students'))
-    .filter((f) => f.endsWith('.json'));
+  // The directory is absent whenever the source tree holds no rosters - a
+  // partial dump, or a repo checkout after the deletion. Not an error; there is
+  // simply nothing to import.
+  const studentsDir = path.join(ROOT, 'db/students');
+  const batchFiles = fs.existsSync(studentsDir)
+    ? fs.readdirSync(studentsDir).filter((f) => f.endsWith('.json'))
+    : [];
   for (const file of batchFiles) {
     const batch = path.basename(file, '.json');
     const data = readJson(`db/students/${file}`);
