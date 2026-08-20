@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:41:05.210Z",
+  "updated_at": "2026-08-20T13:54:43.276Z",
   "source_subject": "Seating Plan 26",
-  "count": 125,
+  "count": 126,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1619,6 +1619,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:41:05.210Z"
+    },
+    {
+      "name": "Eman Murtaza",
+      "nuid": "26I-2041",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:54:43.276Z"
     }
   ]
 }
