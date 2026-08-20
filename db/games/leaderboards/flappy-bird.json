@@ -341,6 +341,15 @@
       "batch": "24",
       "highScore": 7,
       "achievedAt": "2026-08-20T05:11:11.837Z"
+    },
+    "26I-0662": {
+      "nuid": "26I-0662",
+      "name": "Ahmed Hassan",
+      "section": "D",
+      "department": "BS CS",
+      "batch": "26",
+      "highScore": 10,
+      "achievedAt": "2026-08-20T05:17:45.193Z"
     }
   },
   "leaderboard": [
