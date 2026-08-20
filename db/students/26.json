@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T10:25:58.760Z",
+  "updated_at": "2026-08-20T10:35:50.860Z",
   "source_subject": "Seating Plan 26",
-  "count": 102,
+  "count": 103,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1320,6 +1320,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T10:25:58.760Z"
+    },
+    {
+      "name": "Azkah Azeem",
+      "nuid": "26I-0113",
+      "section": "C",
+      "department": "AI",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T10:35:50.860Z"
     }
   ]
 }
