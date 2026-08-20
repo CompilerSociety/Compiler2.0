@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists. Only computing has a show-up sheet today,
@@ -25,10 +26,6 @@ const SHOWUP_FILES = fs.existsSync('db/showup')
 const SUBS = 'db/metadata/notifications/push-subscriptions.json';
 const STATE = 'db/metadata/notifications/showup-notify-state.json';
 
-function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
-}
-function writeJson(p, val) { fs.writeFileSync(p, JSON.stringify(val, null, 2) + '\n'); }
 
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
@@ -62,7 +59,7 @@ for (const f of SHOWUP_FILES) {
 
 if (current.size === 0) { console.log('No show-up data — nothing to do.'); process.exit(0); }
 
-const prevState = readJson(STATE, {});
+const prevState = await loadState(STATE);
 const firstRun = Object.keys(prevState).length === 0;
 
 // Determine which slots changed time/venue (only meaningful after the first run).
@@ -78,12 +75,12 @@ if (!firstRun) {
 // Persist the new snapshot for next time (covers additions and removals).
 const newState = {};
 for (const [key, { value }] of current) newState[key] = value;
-writeJson(STATE, newState);
+await saveState(STATE, newState);
 
 if (firstRun) { console.log('First run — recorded show-up snapshot, no notifications sent.'); process.exit(0); }
 if (changed.size === 0) { console.log('No show-up time/venue changes.'); process.exit(0); }
 
-const subs = readJson(SUBS, []);
+const subs = await loadSubs();
 if (!Array.isArray(subs) || subs.length === 0) { console.log('Slots changed but no subscriptions.'); process.exit(0); }
 
 let sent = 0, skipped = 0;

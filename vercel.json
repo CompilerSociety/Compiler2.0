@@ -1,11 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "//git": "leaderboard-data carries the arcade scores, one commit per personal best. Without this, every score would still cost a Vercel PREVIEW deployment and the daily merge into main would have bought nothing. Only the once-a-day merge commit on main deploys.",
-  "git": {
-    "deploymentEnabled": {
-      "leaderboard-data": false
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",

@@ -26,6 +26,7 @@
 import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
 
 // These three paths and the file list below must track the actual db/ layout.
 // They previously pointed at a flat db/push-subscriptions.json and a
@@ -37,10 +38,6 @@ const TIMETABLE_FILES = ['db/timetables/computing.json', 'db/timetables/business
 const SUBS = 'db/metadata/notifications/push-subscriptions.json';
 const STATE = 'db/metadata/notifications/class-notify-state.json';
 
-function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
-}
-function writeJson(p, val) { fs.writeFileSync(p, JSON.stringify(val, null, 2) + '\n'); }
 
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
@@ -123,8 +120,8 @@ for (const f of TIMETABLE_FILES) {
 
 if (slots.length === 0) { console.log('No timetable data — nothing to do.'); process.exit(0); }
 
-const subs = readJson(SUBS, []);
-const state = readJson(STATE, {}); // { endpoint: { slotKey: value } }
+const subs = await loadSubs();
+const state = await loadState(STATE); // { endpoint: { slotKey: value } }
 const liveEndpoints = new Set();
 
 // Pre-index every class currently in the timetable by its stable slotKey.
@@ -213,6 +210,6 @@ let sent = 0, skipped = 0, pruned = 0;
   // Drop devices that are no longer subscribed.
   for (const ep of Object.keys(state)) { if (!liveEndpoints.has(ep)) delete state[ep]; }
 
-  writeJson(STATE, state);
+  await saveState(STATE, state);
   console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}, recovered/pruned: ${pruned}`);
 })();

@@ -14,16 +14,12 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { readJson, loadSubs, loadState, saveState, pruneSubs } from './store.mjs';
 
 const SEATING = 'db/seating/plan.json';
 const SUBS = 'db/metadata/notifications/push-subscriptions.json';
 const STATE = 'db/metadata/notifications/push-state.json';
 
-function readJson(path, fallback) {
-  try { return JSON.parse(fs.readFileSync(path, 'utf-8')); }
-  catch { return fallback; }
-}
-function writeJson(path, val) { fs.writeFileSync(path, JSON.stringify(val, null, 2) + '\n'); }
 
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
@@ -42,8 +38,8 @@ for (const s of students) {
   if (k) byNuid.set(k, s);
 }
 
-const subs = readJson(SUBS, []);
-const state = readJson(STATE, {});
+const subs = await loadSubs();
+const state = await loadState(STATE);
 
 if (!Array.isArray(subs) || subs.length === 0) {
   console.log('No subscriptions — nothing to send.');
@@ -110,6 +106,6 @@ for (const entry of subs) {
   }
 }
 
-writeJson(SUBS, keptSubs);
-writeJson(STATE, state);
+await pruneSubs(keptSubs);
+await saveState(STATE, state);
 console.log(`Push summary — sent: ${sent}, skipped: ${skipped}, pruned: ${pruned}`);

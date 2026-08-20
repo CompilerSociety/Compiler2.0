@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { getDb, closeMongo, isEnabled, dbName } from '../../lib/db/mongo.mjs';
 import {
   COLLECTIONS, DOCUMENT_FILES, NOTIFY_STATE_FILES, LEADERBOARD_FILES,
-  scoreId, notifyStateId, ensureIndexes,
+  scoreId, notifyStateId, studentId, ensureIndexes,
 } from '../../lib/db/collections.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -142,7 +142,16 @@ function migrateStudents() {
     for (const s of data.students || []) {
       const nuid = String(s.nuid || '').trim().toUpperCase();
       if (!nuid) continue;
-      ops.push(upsert(nuid, {
+      // Keyed by roll no AND department/section: a student enrolled across two
+      // departments has a row for each, and they are not duplicates. 22.json
+      // has 1804 rows for 1304 roll numbers precisely because of this - keying
+      // on the roll no alone would silently drop 500 real records.
+      //
+      // It DOES collapse rows that are identical on all three, of which 22.json
+      // has 68 - byte-for-byte repeats of the same student from a double
+      // import. Those carry no information, so the roster comes out at 1736
+      // rows instead of 1804 the first time the mirror is exported.
+      ops.push(upsert(studentId(nuid, s.department, s.section), {
         nuid,
         name: s.name ?? null,
         section: s.section ?? null,

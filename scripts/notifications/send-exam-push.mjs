@@ -11,6 +11,7 @@
 import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists.
@@ -18,10 +19,6 @@ const EXAM_FILES = ['db/exams/computing.json', 'db/exams/business.json', 'db/exa
 const SUBS = 'db/metadata/notifications/push-subscriptions.json';
 const STATE = 'db/metadata/notifications/push-exam-state.json';
 
-function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
-}
-function writeJson(p, val) { fs.writeFileSync(p, JSON.stringify(val, null, 2) + '\n'); }
 
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
@@ -36,9 +33,9 @@ const examDocs = EXAM_FILES
 
 if (examDocs.length === 0) { console.log('No exam schedules present — nothing to send.'); process.exit(0); }
 
-const subs = readJson(SUBS, []);
+const subs = await loadSubs();
 if (!Array.isArray(subs) || subs.length === 0) { console.log('No subscriptions.'); process.exit(0); }
-const state = readJson(STATE, {});
+const state = await loadState(STATE);
 
 const deptCode = (dep) => String(dep || '').replace(/^BS\s+/i, '').trim().toUpperCase();
 const fullBatch = (b) => (/^\d{2}$/.test(String(b || '').trim()) ? '20' + String(b).trim() : String(b || '').trim());
@@ -103,5 +100,5 @@ for (const entry of subs) {
   }
 }
 
-writeJson(STATE, state);
+await saveState(STATE, state);
 console.log(`Exam push summary — sent: ${sent}, skipped: ${skipped}`);

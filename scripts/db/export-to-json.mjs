@@ -131,9 +131,11 @@ async function exportStudents(db) {
   const metas = await db.collection(COLLECTIONS.ROSTER_META)
     .find({}).sort({ _id: 1 }).toArray();
   for (const meta of metas) {
+    // Sorted by _id, not by nuid: a student enrolled in two departments has a
+    // row for each, and only the composite _id orders those two deterministically.
     const students = await db.collection(COLLECTIONS.STUDENTS)
-      .find({ batch: meta.batch }, { projection: { _id: 0, batch: 0, migratedAt: 0 } })
-      .sort({ nuid: 1 })
+      .find({ batch: meta.batch }, { projection: { batch: 0, migratedAt: 0 } })
+      .sort({ _id: 1 })
       .toArray();
     // Field order matters for the diff, and `count` is recomputed rather than
     // trusted: the stored meta can lag behind a registration that added a row.

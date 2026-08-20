@@ -1,0 +1,83 @@
+name: Export the db/ mirror from MongoDB
+
+# MongoDB is the source of truth for db/ since the migration, but the committed
+# JSON tree does not go away - it is a generated mirror that several things
+# still depend on:
+#
+#   * the frontend fetches /db/timetable-computing.json and friends as STATIC
+#     files through the vercel.json rewrites, with no API call and no auth;
+#   * api/leaderboard.js and api/subscribe.js read it when Atlas is unreachable,
+#     which is what turns a database outage into a read-only site instead of a
+#     broken one;
+#   * python/tools/timetable_audit/*.py read db/timetables/*.json off disk.
+#
+# The Python sync jobs and the notification senders already write their own
+# files and commit them, so those parts of the mirror stay fresh on their own.
+# This job covers the rest - the data written by the Vercel functions, which
+# now never touches git at all: leaderboard scores, self-registrations, push
+# subscriptions and rate-limit rows.
+#
+# Once a day is deliberate. This is the ONLY thing that still commits arcade
+# scores, and the whole point of moving them to Mongo was to stop a busy
+# evening of play from spending the day's Vercel deploy quota. One commit a
+# day, one deployment.
+
+on:
+  schedule:
+    # 00:20 UTC = 05:20 PKT, the quietest hour for a student site.
+    - cron: "20 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: export-db-mirror
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci --silent
+
+      - name: Export MongoDB to db/
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_DB: ${{ secrets.MONGODB_DB }}
+        run: |
+          if [ -z "$MONGODB_URI" ]; then
+            echo "::notice::MONGODB_URI secret is not set - nothing to export yet."
+            exit 0
+          fi
+          node scripts/db/export-to-json.mjs
+
+      - name: Commit the refreshed mirror
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add db/
+          if git diff --cached --quiet; then
+            echo "Mirror already matches the database - nothing to commit."
+            exit 0
+          fi
+          git commit -m "Refresh the db/ mirror from MongoDB"
+          # main is pushed to constantly by the other scheduled workflows, so a
+          # push here can lose the race. Rebase onto the latest remote and retry
+          # rather than failing the run.
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push; then
+              exit 0
+            fi
+            echo "Push attempt $attempt failed, retrying..."
+            sleep $((RANDOM % 8 + 3))
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

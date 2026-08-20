@@ -19,6 +19,16 @@ on:
 permissions:
   contents: write
 
+# Every step below inherits the database connection: the Gmail sync writes
+# generated documents to Mongo as well as to their committed JSON, and the
+# push senders read subscriptions from Mongo so a student who subscribed today
+# is reachable on this run rather than after the next mirror export. Unset,
+# every one of them falls back to the files and behaves as it did before.
+env:
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  MONGODB_DB: ${{ secrets.MONGODB_DB }}
+
+
 jobs:
   poll:
     runs-on: ubuntu-latest
