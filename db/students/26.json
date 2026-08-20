@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T07:09:43.802Z",
+  "updated_at": "2026-08-20T07:11:57.235Z",
   "source_subject": "Seating Plan 26",
-  "count": 85,
+  "count": 86,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1099,6 +1099,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T07:09:43.802Z"
+    },
+    {
+      "name": "Izza Maryam",
+      "nuid": "26I-0616",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T07:11:57.235Z"
     }
   ]
 }
