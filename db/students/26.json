@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T11:29:58.638Z",
+  "updated_at": "2026-08-20T11:30:17.869Z",
   "source_subject": "Seating Plan 26",
-  "count": 107,
+  "count": 108,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1385,6 +1385,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T11:29:58.638Z"
+    },
+    {
+      "name": "Rehana Soomro",
+      "nuid": "26I-3098",
+      "section": "B",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T11:30:17.869Z"
     }
   ]
 }
