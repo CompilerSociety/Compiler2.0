@@ -381,7 +381,8 @@ def parse_fse_course_title(title):
     # A time written into the cell beats the column's slot, exactly as one on
     # the instructor row does.
     tm = FSE_CELL_TIME_RE.search(t[len(parsed["course"]):])
-    parsed["time_override"] = (f"{tm.group(1)}-{tm.group(2)}" if tm else None)
+    parsed["time_override"] = (
+        _fse_slot(f"{tm.group(1)}-{tm.group(2)}") if tm else None)
     parsed["batch_hint"] = batch_hint
     return parsed
 
@@ -977,6 +978,30 @@ def _fse_minutes(hhmm):
     return None
 
 
+def _fse_slot(text):
+    """Normalise a slot string from the sheet to zero-padded HH:MM-HH:MM.
+
+    The FSE sheet writes its first period as "8:30 - 09:50" while every other
+    column is already padded ("09:55 - 11:15"). Passing that through verbatim
+    produced "8:30-09:50" for 50 entries, and a time is compared and sorted as
+    a STRING everywhere downstream:
+
+      * api/timetable.js looks the start up in SLOT_MINUTE_MAP, which is keyed
+        "08:30". A miss falls back to 99999, so those classes sorted to the end
+        of the day - an 8:30am lecture displayed after the 5:15pm one.
+      * anything deduplicating on (course, room, time) sees "8:30-09:50" and
+        "08:30-09:50" as two different slots.
+
+    Returns the input unchanged if it is not a recognisable time range, so a
+    malformed cell is left for the existing warnings to report rather than
+    being silently rewritten.
+    """
+    m = re.match(r'^\s*(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})\s*$', str(text or ''))
+    if not m:
+        return text
+    return f"{int(m.group(1)):02d}:{m.group(2)}-{int(m.group(3)):02d}:{m.group(4)}"
+
+
 def _fse_bounds(slot):
     parts = str(slot or '').split('-')
     if len(parts) != 2:
@@ -1134,7 +1159,7 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                 cell = one_line(row[c] if c < len(row) else "").strip()
                 tm = re.match(r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})', cell)
                 if tm:
-                    slot_map[c] = cell.replace(" ", "")
+                    slot_map[c] = _fse_slot(cell.replace(" ", ""))
             if len(slot_map) >= 3:
                 is_labs = (col2 == "LABS")
                 header_rows.append((r, is_labs, slot_map))
@@ -1197,7 +1222,7 @@ def parse_engineering_grid(text_grid, colour_grid, tt, course_lookup, common):
                     instr_text = one_line(instr_row[course_col] if course_col < len(instr_row) else "")
                     tm_override = re.search(r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})', instr_text)
                     if tm_override:
-                        effective_time = tm_override.group(0).replace(" ", "")
+                        effective_time = _fse_slot(tm_override.group(0).replace(" ", ""))
 
                 parsed = parse_fse_course_title(course_text)
                 if not parsed:

@@ -206,10 +206,29 @@ const SLOT_MINUTE_MAP = {
   "02:30-05:15":870, "05:20-08:05":1040,
 };
 
+// Minutes past midnight for a slot's START, used to order a day's classes.
+//
+// SLOT_MINUTE_MAP covers FSC's grid exactly and stays the first answer. What
+// changed is the fallback: it used to return 99999, which parked every
+// unrecognised slot at the END of the day. That table only ever held FSC's
+// eight periods, but FSE and FSB run their own grids - 09:55, 11:25, 12:50,
+// 02:20, 03:45, 05:15 for engineering; 02:25-03:45 for business - so 63% of
+// engineering and 17% of business sorted after the last evening class. An
+// 8:30am lecture displayed below a 5:15pm one.
+//
+// Parsing the start time instead handles any grid, including ones nobody has
+// added a school for yet. parseClock already knows the sheet's unlabelled
+// 12-hour convention (1-6 means afternoon), which is the only reason a bare
+// "02:20" can be placed at all.
 function slotToMinutes(slot) {
   if (slot in SLOT_MINUTE_MAP) return SLOT_MINUTE_MAP[slot];
   const start = String(slot || "").split("-")[0] || "";
-  return SLOT_MINUTE_MAP[start] ?? 99999;
+  if (start in SLOT_MINUTE_MAP) return SLOT_MINUTE_MAP[start];
+  const m = start.match(/^\s*(\d{1,2})[:.](\d{2})\s*$/);
+  if (m) return parseClock(m[1], m[2], "");
+  // Genuinely unparseable: keep the old behaviour and sort it last, where it
+  // is visible rather than silently interleaved at the wrong hour.
+  return 99999;
 }
 
 /* ── Room helpers ── */
