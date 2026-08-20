@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:54:59.681Z",
+  "updated_at": "2026-08-20T17:03:56.162Z",
   "source_subject": "Seating Plan 26",
-  "count": 151,
+  "count": 152,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1957,6 +1957,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:54:59.681Z"
+    },
+    {
+      "name": "Fatima Ahmad",
+      "nuid": "26I-0834",
+      "section": "G",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:03:56.162Z"
     }
   ]
 }
