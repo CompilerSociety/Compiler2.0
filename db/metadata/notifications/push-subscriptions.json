@@ -1762,5 +1762,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2141",
+    "name": "Muhammad Ibrahim",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dxBHhhFegpE:APA91bFAddjTcGYoFawBu1hYf1X3AUQzOs96dGWnHSp2FKqKeDs4_9ifvs1nfeicDKyVdkvJT7BVEt10sAij1kpKOQ4TQn7gW18w6amlIjePim_GIp7g-zMJMVmxCLaBrS5momB1kswq",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLMwUoFtnVmL_WyGTukA43UVBXUbRb1fZH1dWJGcrU-0NZXPJ095pyHOyY1ingICY-t-bqhS9KkxSgOV46gCkXQ",
+        "auth": "qTmt0Qzr1-v_YVI2WjUELQ"
+      }
+    },
+    "updated_at": 1787233018461,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
