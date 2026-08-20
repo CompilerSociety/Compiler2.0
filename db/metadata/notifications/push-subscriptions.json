@@ -1602,5 +1602,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0143",
+    "name": "Mohammad Waqas",
+    "department": "BS AI",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dZbuG_I_U0A:APA91bH1D112qo6lzXcBpcL55AkC1mw3kXkG0UHC18nI4PohtWpTf8T4o6WxPMuBKDwIIcQXIg_RwF7CAeEa6racTThfAJEE6K06b60lTIDOFS14o67OBONBeS9VaVbEq2C9Zc8gPRvo",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BHjILeNdejdQJUb8FZNgu033-9DkLJI0Zq1qKy9LAzNQu5x2q4VC-WvWBr7QBwHVZB4QdODbXIX7tWNsmKjGEnQ",
+        "auth": "JIkGHuNlNowSGo8XKlfwvg"
+      }
+    },
+    "updated_at": 1787221077485,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
