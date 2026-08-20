@@ -760,8 +760,18 @@ function inferFSMBatchFromCourse(courseTitle) {
 }
 
 function parseBusinessGrid(grid, tabName, target) {
+  // The day comes from column 0 of the grid, NOT from the tab name.
+  //
+  // FSM publishes the whole week on a single tab called "Timetable", unlike FSC
+  // which has one tab per weekday. This used to open with
+  // `if (!normalizeDay(tabName)) return 0;`, so every business request bailed
+  // here and answered "Parsed 0 classes for business" - the sheet was fetched
+  // and then thrown away. The site fell back to the last generated snapshot, so
+  // business quietly ran on stale data while the other two schools were live.
+  //
+  // A tab that IS named after a day still works: it seeds currentDay below, and
+  // any day cell in the grid overrides it.
   const day = normalizeDay(tabName);
-  if (!day) return 0;
   let added = 0;
 
   // Find header row with time slots
@@ -787,7 +797,8 @@ function parseBusinessGrid(grid, tabName, target) {
   }
   if (Object.keys(headerTimes).length < 3) return 0;
 
-  // Walk data rows after header
+  // Walk data rows after header. Null until the first day cell is seen, so a
+  // stray row above the first day block cannot be filed under the wrong day.
   let currentDay = day;
   let currentType = "Classes";
   const processedCourses = new Set();
@@ -803,6 +814,11 @@ function parseBusinessGrid(grid, tabName, target) {
     // Track Classes/Labs (col 1)
     const typeCell = oneLine(rowData[1] || "");
     if (typeCell === "Classes" || typeCell === "Labs") currentType = typeCell;
+
+    // Nothing can be filed until a day is known. With a weekday tab that is
+    // true from the first row; with FSM's single "Timetable" tab it becomes
+    // true at the first day cell.
+    if (!currentDay) continue;
 
     // Room (col 2)
     const rawRoom = oneLine(rowData[2] || "");
