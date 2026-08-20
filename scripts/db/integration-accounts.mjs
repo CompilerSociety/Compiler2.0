@@ -33,8 +33,8 @@ const { ensureIndexes, COLLECTIONS } = await import(M('lib/db/collections.mjs'))
 const db = await getDb();
 await ensureIndexes(db);
 
-const registerH = (await import(M('api/register.js'))).default;
-const subscribeH = (await import(M('api/subscribe.js'))).default;
+const registerH = (await import(M('api/register.mjs'))).default;
+const subscribeH = (await import(M('api/subscribe.mjs'))).default;
 
 function mkRes() {
   return {

@@ -3,16 +3,19 @@
 //
 //   node scripts/db/smoke-test.mjs
 //
-// With MONGODB_URI unset it proves the FALLBACK contract: reads still serve the
-// committed JSON mirror and writes refuse cleanly with a 503, which is exactly
-// how production behaves until the Atlas cluster exists. With MONGODB_URI set
-// it proves the live path end to end, including that a lower score is correctly
-// rejected as "not a personal best".
+// With MONGODB_URI set it proves the live path end to end, including that a
+// lower score is correctly rejected as "not a personal best".
+//
+// With it unset it proves the opposite contract, which is what the design now
+// calls for: there is no committed JSON to fall back to any more, so reads must
+// fail VISIBLY with a 503 rather than answering with an empty board. An empty
+// leaderboard is indistinguishable from "nobody has played yet", and quietly
+// showing that would hide a misconfigured deployment.
 //
 // It is deliberately dependency-free (no test runner) so it can run in CI or on
 // a laptop with nothing installed but the app's own packages.
 
-import handler from '../../api/leaderboard.js';
+import handler from '../../api/leaderboard.mjs';
 
 let failures = 0;
 
@@ -49,22 +52,28 @@ async function main() {
   const live = Boolean(process.env.MONGODB_URI);
   console.log(live
     ? 'MONGODB_URI is set - testing the live database path.'
-    : 'MONGODB_URI is NOT set - testing the JSON fallback path.');
+    : 'MONGODB_URI is NOT set - testing that it fails visibly rather than silently.');
 
-  // --- GET must work in every configuration -------------------------------
+  // --- GET ----------------------------------------------------------------
   const get = await call({ method: 'GET', query: { game: 'compiler_run' } });
-  check('GET returns 200', get.statusCode === 200, `got ${get.statusCode}`);
-  check('GET returns a leaderboard array', Array.isArray(get.body?.leaderboard),
-    JSON.stringify(get.body)?.slice(0, 120));
-  check('GET board is non-empty (mirror or db has data)',
-    (get.body?.leaderboard?.length || 0) > 0,
-    'an empty board here means neither Mongo nor the committed mirror was readable');
-  const top = get.body?.leaderboard?.[0];
-  check('GET entries keep their original shape',
-    !top || (typeof top.nuid === 'string' && typeof top.highScore === 'number'),
-    JSON.stringify(top)?.slice(0, 120));
-  check('GET board is sorted by score, highest first',
-    (get.body?.leaderboard || []).every((e, i, a) => i === 0 || a[i - 1].highScore >= e.highScore));
+  if (live) {
+    check('GET returns 200', get.statusCode === 200, `got ${get.statusCode}`);
+    check('GET returns a leaderboard array', Array.isArray(get.body?.leaderboard),
+      JSON.stringify(get.body)?.slice(0, 120));
+    check('GET board is non-empty', (get.body?.leaderboard?.length || 0) > 0,
+      'an empty board means the leaderboard_scores collection has no rows');
+    const top = get.body?.leaderboard?.[0];
+    check('GET entries keep their original shape',
+      !top || (typeof top.nuid === 'string' && typeof top.highScore === 'number'),
+      JSON.stringify(top)?.slice(0, 120));
+    check('GET board is sorted by score, highest first',
+      (get.body?.leaderboard || []).every((e, i, a) => i === 0 || a[i - 1].highScore >= e.highScore));
+  } else {
+    check('GET fails visibly with 503 rather than an empty board',
+      get.statusCode === 503, `got ${get.statusCode}`);
+    check('GET names the cause for an operator',
+      String(get.body?.detail || '').includes('MONGODB_URI'), get.body?.detail);
+  }
 
   // --- Validation is storage-independent ----------------------------------
   const badId = await call({ method: 'POST', body: { nuid: 'not-an-id', score: 5 } });

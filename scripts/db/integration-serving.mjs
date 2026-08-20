@@ -3,7 +3,7 @@
 //   npm i --no-save mongodb-memory-server
 //   node scripts/db/integration-serving.mjs
 //
-// Covers api/db.js, which replaced the deleted db/*.json tree. The properties
+// Covers api/db.mjs, which replaced the deleted db/*.json tree. The properties
 // here are the ones that keep the site working now that there is no file to
 // fall back to: every public URL still resolves, the payloads keep the exact
 // shape the old files had, and cache headers let the CDN absorb the read load
@@ -38,7 +38,7 @@ await db.collection(COLLECTIONS.ROSTER_META).insertOne({ _id: '26', batch: '26',
 await db.collection(COLLECTIONS.STUDENTS).insertOne({ _id: '26I-0001:CS:A', nuid: '26I-0001', name: 'A', section: 'A', department: 'CS', batch: '26' });
 await db.collection(COLLECTIONS.LEADERBOARD).insertOne({ _id: 'compiler_run:26I-0001', game: 'compiler_run', nuid: '26I-0001', name: 'A', highScore: 42, achievedAt: new Date().toISOString() });
 
-const handler = (await import(M('api/db.js'))).default;
+const handler = (await import(M('api/db.mjs'))).default;
 const call = async (doc) => {
   const res = {
     statusCode: null, body: null, headers: {},

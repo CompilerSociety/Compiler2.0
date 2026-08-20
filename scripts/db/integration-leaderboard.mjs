@@ -129,7 +129,7 @@ subs = await repos.listSubscriptions();
 check('removal works', subs.length === 0, `got ${subs.length}`);
 
 console.log('\n--- endpoint through the real handler ---');
-const handler = (await import(M('api/leaderboard.js'))).default;
+const handler = (await import(M('api/leaderboard.mjs'))).default;
 const res = {
   statusCode: null, body: null, headers: {},
   setHeader(k, v) { this.headers[k] = v; },

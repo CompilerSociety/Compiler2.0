@@ -87,8 +87,14 @@ function sendFile(res, full) {
 // Vercel hands the handler a Node req/res with a few extras bolted on
 // (req.query, parsed req.body, res.status().json()). Recreate just those.
 async function runApi(name, req, res, query) {
-  const file = path.join(ROOT, 'api', `${name}.js`);
-  if (!fs.existsSync(file)) return false;
+  // .mjs first: the handlers that use ESM carry that extension so Vercel treats
+  // them as modules (package.json declares no "type", so a bare .js is CommonJS
+  // there and an `import` is a syntax error). The older CommonJS handlers are
+  // still plain .js.
+  const file = ['.mjs', '.js']
+    .map((ext) => path.join(ROOT, 'api', `${name}${ext}`))
+    .find((p) => fs.existsSync(p));
+  if (!file) return false;
 
   const chunks = [];
   for await (const c of req) chunks.push(c);
@@ -124,7 +130,7 @@ const server = http.createServer(async (req, res) => {
       const name = pathname.slice(5).split('/')[0];
       if (await runApi(name, req, res, query)) return;
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ ok: false, error: `No api/${name}.js` }));
+      return res.end(JSON.stringify({ ok: false, error: `No api/${name}.(mjs|js)` }));
     }
 
     // 2. A real file at the literal path (this is how /db/timetables/*.json,
@@ -177,7 +183,7 @@ function lanAddresses() {
 // 0.0.0.0 so a phone on the same Wi-Fi can reach it.
 server.listen(PORT, '0.0.0.0', () => {
   const api = fs.existsSync(path.join(ROOT, 'api'))
-    ? fs.readdirSync(path.join(ROOT, 'api')).filter((f) => f.endsWith('.js')).map((f) => '/api/' + f.replace(/\.js$/, ''))
+    ? fs.readdirSync(path.join(ROOT, 'api')).filter((f) => /\.(mjs|js)$/.test(f)).map((f) => '/api/' + f.replace(/\.(mjs|js)$/, ''))
     : [];
   console.log(`\n  V Table dev server\n`);
   console.log(`  desktop   http://localhost:${PORT}`);
