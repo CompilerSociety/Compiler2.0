@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:17:31.434Z",
+  "updated_at": "2026-08-20T17:19:08.308Z",
   "source_subject": "Seating Plan 26",
-  "count": 161,
+  "count": 162,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2087,6 +2087,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:17:31.434Z"
+    },
+    {
+      "name": "Muhammad Husnain Shahid",
+      "nuid": "26I-2008",
+      "section": "A",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:19:08.308Z"
     }
   ]
 }
