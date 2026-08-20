@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:12:45.527Z",
+  "updated_at": "2026-08-20T17:12:47.096Z",
   "source_subject": "Seating Plan 26",
-  "count": 158,
+  "count": 159,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2048,6 +2048,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:12:45.527Z"
+    },
+    {
+      "name": "haseeb anwar mir",
+      "nuid": "26I-0071",
+      "section": "B",
+      "department": "AI",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:12:47.096Z"
     }
   ]
 }
