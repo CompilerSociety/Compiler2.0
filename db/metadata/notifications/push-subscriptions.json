@@ -1442,5 +1442,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0613",
+    "name": "Kamran Ali",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/difkdvoMh_Y:APA91bFhyOhqNnlIQgL9nchoefWEWY_R-nS9Sq3DAfpkCxFkYlhW-H6ZrIh0U-IZRBOLvHCqj7dSCOwX91s5Iu7uSTWu6H1F14ZcaVvqQP4-4bkoLhNgudU8r4wRj42I94hl8E_FawoW",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BNVVP9jIG6Qz9TPes3b0FRjVvuiTgwhyd39EvQ-aNQHjXEIM0IWT7OwBIJOGIUA14eKUVTEtMWkQpUvTr6G7Vko",
+        "auth": "Ci7SvawPg2dvTFq-0XgzJw"
+      }
+    },
+    "updated_at": 1787208618836,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
