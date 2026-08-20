@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:08:54.173Z",
+  "updated_at": "2026-08-20T17:09:14.360Z",
   "source_subject": "Seating Plan 26",
-  "count": 154,
+  "count": 155,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1996,6 +1996,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:08:54.173Z"
+    },
+    {
+      "name": "Muhammad Anas irfan",
+      "nuid": "26L-0619",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:09:14.360Z"
     }
   ]
 }
