@@ -1694,5 +1694,27 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0800",
+    "name": "Ammaar Ahmed Abbasi",
+    "department": "BS AI",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QMP0q8ExkkOiJoyrc8fxD_ey6Palyl2BtNsDzJuq4Ug6fmlbIXUJ--49Ojug8HZbc9ys6szEMSKlb0zHf9O_TuYWGbBEgfYY_fmB0qy4-Z15HUXLxb52wRY4SFwD2n-mm7X4lV8Ij9xiIyVt3owPkHpbxfpg1vrfiYHJidlT83g",
+      "keys": {
+        "p256dh": "BPdi9xjtq3yidqOpSdchMizCxwlXKkBLn297QIWttG6flDugBlnkPsJNjABser4uW6u7aSHylTwp4-w90GW3YlE",
+        "auth": "ZEYx3-pZeUcZ2d2hNeLEEw"
+      }
+    },
+    "updated_at": 1787230426387,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
