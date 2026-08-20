@@ -1625,5 +1625,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "25I-2137",
+    "name": "Abdullah Fiaz",
+    "department": "BS SE",
+    "batch": "25",
+    "section": "A",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dBHBbI2W5-E:APA91bHLKXGa50qeBkzWk3dW9ddN6hyZCofTD3-H4aJ8eHcH9kWHWkUlMYWv18nRkjJs0SLly3rAp4fT2MVaz5iWMbGfFObbskuqvsB1OsHQ1T9SIhi2OMkRwQIyWVs6oM30Oy2vpKVi",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BJ-OqWTPUZA9h2PBI5k4Z48FYj37xKP8y5pRgM_G2ZSlJncfa-Jm_wlyZInhmOJC-8GoIQj2VNaBdfigHOBTJxw",
+        "auth": "FYFs_eT5brWGWOo83BebOQ"
+      }
+    },
+    "updated_at": 1787225697146,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
