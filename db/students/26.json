@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:40:13.623Z",
+  "updated_at": "2026-08-20T13:41:05.210Z",
   "source_subject": "Seating Plan 26",
-  "count": 124,
+  "count": 125,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1606,6 +1606,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:40:13.623Z"
+    },
+    {
+      "name": "Sana Maryam",
+      "nuid": "26I-0845",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:41:05.210Z"
     }
   ]
 }
