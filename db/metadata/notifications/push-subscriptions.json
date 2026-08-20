@@ -1321,5 +1321,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0087",
+    "name": "Hammad Rashid",
+    "department": "BS AI",
+    "batch": "26",
+    "section": "B",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fEPRY_gtJUk:APA91bHcyfOTjQtuyUOi9CNG4jAu19srKFSEUWaIpn9QHS-_pJaeuj__pradEWW6JN-Wrerd31cw-k46-jg8Ax4wpaBrgiBIuzF-hRQKJgF6RtBk2mr_SYNKPNkxGXE2OSeLYcB7tM2j",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BCvHMqqMWKTHJrJnPWmmY26rxcghkhpl0tVVFy0PlmexSVYJUifElRlVuEkgL3AcgigxGmWFpUnurpECAuU7k6s",
+        "auth": "C01PFd0oc4zeI47vHIIITA"
+      }
+    },
+    "updated_at": 1787204972348,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
