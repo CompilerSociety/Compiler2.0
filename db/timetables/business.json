@@ -453,7 +453,7 @@
           "Thursday": [
             {
               "name": "Consumer Behaviour (MG2003)",
-              "location": "A-102",
+              "location": "A-03",
               "time": "11:30-12:50"
             },
             {
@@ -838,7 +838,7 @@
           "Thursday": [
             {
               "name": "Environmental Science and Sustainability for Business (MG2011)",
-              "location": "A-03",
+              "location": "A-102",
               "time": "11:30-12:50"
             },
             {
@@ -1427,8 +1427,8 @@
             },
             {
               "name": "Financial Management (AF3001)",
-              "location": "A-101",
-              "time": "08:30-09:50"
+              "location": "A-102",
+              "time": "10:00-11:20"
             },
             {
               "name": "Financial Management Lab (FL3001)",
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-20T10:18:54.612125+00:00"
+  "generatedAt": "2026-08-20T10:54:14.955925+00:00"
 }

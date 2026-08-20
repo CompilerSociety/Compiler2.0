@@ -267,14 +267,14 @@
           ],
           "Thursday": [
             {
+              "name": "Seerah",
+              "location": "C-301",
+              "time": "02:50-03:45"
+            },
+            {
               "name": "Func Eng",
               "location": "C-305",
               "time": "08:30-10:15"
-            },
-            {
-              "name": "Seerah",
-              "location": "C-307",
-              "time": "02:30-03:25"
             },
             {
               "name": "PF Lab",
@@ -6892,13 +6892,13 @@
         "ALL": {
           "Monday": [
             {
-              "name": "Vision Based AI Agent",
-              "location": "D-301",
-              "time": "06:45-08:05"
+              "name": "Recent Adv in Deep Learn",
+              "location": "C-403",
+              "time": "03:55-05:15"
             },
             {
-              "name": "Recent Adv in Deep Learn",
-              "location": "D-401",
+              "name": "Vision Based AI Agent",
+              "location": "D-301",
               "time": "06:45-08:05"
             },
             {
@@ -6914,7 +6914,7 @@
               "time": "03:55-05:15"
             },
             {
-              "name": "Adv Parallel Processing",
+              "name": "Parallel Dist Sys",
               "location": "D-401",
               "time": "05:20-06:40"
             }
@@ -6926,13 +6926,13 @@
               "time": "10:00-12:45"
             },
             {
-              "name": "Vision Based AI Agent",
-              "location": "D-301",
-              "time": "06:45-08:05"
+              "name": "Recent Adv in Deep Learn",
+              "location": "C-405",
+              "time": "03:55-05:15"
             },
             {
-              "name": "Recent Adv in Deep Learn",
-              "location": "D-401",
+              "name": "Vision Based AI Agent",
+              "location": "D-301",
               "time": "06:45-08:05"
             },
             {
@@ -7035,5 +7035,5 @@
     }
   },
   "count": 1162,
-  "generatedAt": "2026-08-20T10:18:53.883564+00:00"
+  "generatedAt": "2026-08-20T10:54:14.255958+00:00"
 }
