@@ -296,6 +296,15 @@
       "batch": "25",
       "highScore": 211,
       "achievedAt": "2026-08-19T20:09:29.795Z"
+    },
+    "24I-0625": {
+      "nuid": "24I-0625",
+      "name": "Sahar E Iman",
+      "section": "F",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 34,
+      "achievedAt": "2026-08-20T05:08:42.382Z"
     }
   },
   "leaderboard": [
