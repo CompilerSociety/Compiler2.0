@@ -305,6 +305,15 @@
       "batch": "25",
       "highScore": 177,
       "achievedAt": "2026-08-20T06:11:45.626Z"
+    },
+    "25I-0729": {
+      "nuid": "25I-0729",
+      "name": "Bilal Taj",
+      "section": "B",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 104,
+      "achievedAt": "2026-08-20T07:09:55.152Z"
     }
   },
   "leaderboard": [
