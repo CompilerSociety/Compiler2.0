@@ -224,6 +224,5 @@
       "source": "/:path*",
       "destination": "/web/index.html"
     }
-  ],
-  "//db": "db/*.json is gone: MongoDB is the only store. These rewrites keep the old public URLs working by serving the same payloads from api/db.js, so nothing on the client had to change and the data is live rather than as stale as the last commit."
+  ]
 }
