@@ -1396,5 +1396,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0709",
+    "name": "Mohammad Usman Khan",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cT9Pa8LmwwI:APA91bH5aTayRyBx-SA_IJjUx7bm_qB8s7Q1ejx9u70OcOaSB56doHV9_JkLtY7T8n7xW_cYdTA5oNdZnAP8prtx9AsnfI9KFzKUkgBwrMnOEOqkfn_Vl0XKX7ZOAM92HGOV4R8M6C6L",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BL0yUBouGA1Om2HCpGWQGcRJCdq3FNOYqrPGB3URSLHKrsc49qn5yMA3gnFcBw_mfG-MFTmbESAz5k1Iq5XtOto",
+        "auth": "KmaR67qsup8cqiO72l_LhA"
+      }
+    },
+    "updated_at": 1787206782222,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
