@@ -452,4 +452,16 @@ body.has-pwa-bar{padding-bottom:0!important}
 
 :focus-visible{outline:2px solid #2f6b31;outline-offset:2px}
 
+/* ── My courses (phone) ─────────────────────────────────────────────── */
+/* Same card language as .m-toggle-row so the list reads as part of the
+   profile rather than something bolted on. */
+.m-course-list{display:flex;flex-direction:column;gap:8px}
+.m-course-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:20px;padding:12px 14px;background:#fff}
+.m-course-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.m-course-name{font-size:14px;font-weight:600;color:var(--ink);word-break:break-word}
+.m-course-origin{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.m-course-remove{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(168,53,42,.28);background:rgba(168,53,42,.08);color:#a8352a;font-size:19px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.m-course-remove:active{transform:scale(.94)}
+.m-course-add[disabled]{opacity:.55;box-shadow:none;cursor:default}
+
 } /* end mobile breakpoint */

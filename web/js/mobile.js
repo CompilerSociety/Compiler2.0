@@ -428,6 +428,23 @@
     if(school&&school!=='computing'&&typeof ROOM_TT!=='undefined'&&ROOM_TT[school]) return ROOM_TT[school];
     return TT;
   }
+  /* My Courses replaces the section timetable once anything is saved.
+     Everything that shows the student their OWN day — Today, Week, the up-next
+     banner — goes through myClassesFor, so the swap happens in one place
+     instead of three that could drift apart.
+
+     The saved list is shared with the desktop layer (same profile cookie, same
+     helpers in app.js), so a course added on a laptop is already there on the
+     phone. */
+  function hasOwnCourses(){
+    return typeof hasMyCourses==='function' && hasMyCourses();
+  }
+  function myClassesFor(keys,day){
+    if(hasOwnCourses() && typeof myCoursesRowsForDay==='function'){
+      return myCoursesRowsForDay(day).map(r=>({name:r.name,location:r.location,time:r.time}));
+    }
+    return classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+  }
   function classesFor(dept,batch,sec,day,src){
     const t=src||TT;
     const base=(t[dept]&&t[dept][batch]&&t[dept][batch][sec]&&t[dept][batch][sec][day])||[];
@@ -481,8 +498,8 @@
 
   function renderTodayList(keys,pane){
     const day=todayName();
-    const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
-    if(!Object.keys(keys.tt||{}).length){
+    const list=myClassesFor(keys,day);
+    if(!Object.keys(keys.tt||{}).length&&!hasOwnCourses()){
       pane.innerHTML='<div class="m-empty">Loading your timetable…</div>';
       return;
     }
@@ -532,8 +549,14 @@
         <div class="m-now-name">The university cannot<br>hurt you right now.</div>
       </div>`;
     }
+    // Name what is actually on screen. While a saved course list is in use
+    // these are NOT the profile section's classes, and labelling them with the
+    // section reads as a bug — "0 classes, BS CS 2025-G" on a day the student
+    // does have a class, just not one of that section's.
+    const meta=hasOwnCourses()?'MY COURSES'
+      :`${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}`;
     html+=`<div class="m-meta-row"><span>${rows.length} CLASS${rows.length===1?'':'ES'}</span>
-      <b>${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}</b></div>`;
+      <b>${meta}</b></div>`;
 
     if(!rows.length){
       html+='<div class="m-empty">Nothing scheduled today. Enjoy it.</div>';
@@ -615,7 +638,7 @@
     for(let off=0;off<=7;off++){
       const day=weekdayIn(off);
       if(day==='Sunday') continue; // no classes are published for Sunday
-      const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+      const list=myClassesFor(keys,day);
       for(const e of list){
         const time=e.time||e.t||'';
         const b=slotBounds(time);
@@ -633,10 +656,10 @@
   }
 
   function renderWeek(keys,pane){
-    if(!Object.keys(keys.tt||{}).length){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
+    if(!Object.keys(keys.tt||{}).length&&!hasOwnCourses()){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
     const today=todayName();
     const cards=DAYS.map(day=>{
-      const list=classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+      const list=myClassesFor(keys,day);
       const body=list.length
         ? list.map(e=>{
             const time=e.time||e.t||'';
@@ -657,7 +680,7 @@
   }
 
   /* ══ LOOKUP ════════════════════════════════════════════════════════ */
-  const lk={school:'computing',program:'',batch:'',section:'',day:''};
+  const lk={school:'computing',program:'',batch:'',section:'',day:'',course:''};
   const SCHOOL_LABELS={computing:'Computing',engineering:'Engineering',business:'Business'};
 
   function renderLookup(){
@@ -673,18 +696,35 @@
       : [];
     if(lk.section&&!sections.includes(lk.section)) lk.section='';
 
+    // The distinct courses that section runs — what "add a course" picks from.
+    const courseNames=[];
+    if(lk.program&&lk.batch&&lk.section){
+      const seen=new Set();
+      [lk.section,ALL_SECTIONS].forEach(sec=>{
+        const days=((src[lk.program]||{})[lk.batch]||{})[sec]||{};
+        Object.values(days).forEach(arr=>(arr||[]).forEach(e=>{
+          const n=(typeof stripNote==='function'?stripNote(e.name||e.c||''):(e.name||e.c||'')).trim();
+          if(n&&!seen.has(n)){ seen.add(n); courseNames.push(n); }
+        }));
+      });
+      courseNames.sort();
+    }
+    if(lk.course&&!courseNames.includes(lk.course)) lk.course='';
+
     const batchLabel=b=>b==='REPEAT'?'Repeat':b;
     fields.innerHTML=[
       fieldHTML('School','school',lk.school?SCHOOL_LABELS[lk.school]:'',Object.keys(SCHOOL_LABELS),lk.school,k=>SCHOOL_LABELS[k]),
       fieldHTML('Program','program',lk.program,programs,lk.program),
       fieldHTML('Batch','batch',batchLabel(lk.batch),batches,lk.batch,batchLabel,'Pick a program first.'),
       fieldHTML('Section','section',lk.section,sections,lk.section,null,'Pick a batch first.'),
-      fieldHTML('Day','day',lk.day,DAYS,lk.day)
+      fieldHTML('Day','day',lk.day,DAYS,lk.day),
+      fieldHTML('Course','course',lk.course,courseNames,lk.course,null,'Pick a section first.')
     ].join('');
 
     fields.querySelectorAll('.m-chip').forEach(chip=>{
       chip.addEventListener('click',()=>onLookupPick(chip.dataset.field,chip.dataset.value));
     });
+    renderLookupAdd(courseNames);
     renderLookupOut();
   }
   function fieldHTML(label,field,valueLabel,options,selected,fmt,emptyCopy){
@@ -699,7 +739,7 @@
   function onLookupPick(field,value){
     if(field==='school'){
       if(lk.school===value) return;
-      lk.school=value; lk.program=''; lk.batch=''; lk.section='';
+      lk.school=value; lk.program=''; lk.batch=''; lk.section=''; lk.course='';
       // Only loader available: drive the desktop selector, same as a click there.
       const sel=$('school');
       if(sel){ sel.value=value; }
@@ -709,10 +749,41 @@
       renderLookup();
       return;
     }
-    if(field==='program'){ lk.program=lk.program===value?'':value; lk.batch=''; lk.section=''; }
-    else if(field==='batch'){ lk.batch=lk.batch===value?'':value; lk.section=''; }
-    else if(field==='section'){ lk.section=lk.section===value?'':value; }
+    // Anything broader than the course invalidates it — a course only means
+    // something inside one section.
+    if(field==='program'){ lk.program=lk.program===value?'':value; lk.batch=''; lk.section=''; lk.course=''; }
+    else if(field==='batch'){ lk.batch=lk.batch===value?'':value; lk.section=''; lk.course=''; }
+    else if(field==='section'){ lk.section=lk.section===value?'':value; lk.course=''; }
     else if(field==='day'){ lk.day=lk.day===value?'':value; }
+    else if(field==='course'){ lk.course=lk.course===value?'':value; }
+    renderLookup();
+  }
+  function renderLookupAdd(courseNames){
+    const host=$('m-lookup-add');
+    if(!host) return;
+    if(!lk.course||!courseNames.length){ host.innerHTML=''; return; }
+    const already=typeof getMyCourses==='function'
+      && getMyCourses().some(c=>String(c.name).trim().toUpperCase()===lk.course.trim().toUpperCase()
+        && c.dept===lk.program && c.batch===lk.batch && c.section===lk.section);
+    host.innerHTML='<button class="m-btn-primary m-course-add" type="button"'+(already?' disabled':'')+'>'
+      +(already?'Already in my courses':'+ Add "'+esc(lk.course)+'" to my courses')+'</button>'
+      +'<div class="m-signin-status" id="m-lookup-add-status" role="status" aria-live="polite"></div>';
+    const btn=host.querySelector('.m-course-add');
+    if(btn&&!already) btn.addEventListener('click',addLookupCourse);
+  }
+  function addLookupCourse(){
+    const el=$('m-lookup-add-status');
+    const say=(m,bad)=>{ if(el){ el.textContent=m; el.classList.toggle('is-error',!!bad); } };
+    if(typeof addMyCourse!=='function'){ say('Course saving is unavailable.',true); return; }
+    if(!profile()){ say('Set up your profile first — courses are saved with it.',true); return; }
+    const res=addMyCourse({school:lk.school,dept:lk.program,batch:lk.batch,section:lk.section,name:lk.course});
+    if(!res.ok){
+      say(res.reason==='duplicate'?'Already in your courses.'
+        :res.reason==='full'?'You have reached the saved-course limit.'
+        :'Set up your profile first — courses are saved with it.',true);
+      return;
+    }
+    toast('Added '+lk.course);
     renderLookup();
   }
   function renderLookupOut(){
@@ -721,7 +792,10 @@
       out.innerHTML='<div class="m-empty">Pick a school, program, batch, section and day to load a timetable.</div>';
       return;
     }
-    const list=classesFor(lk.program,lk.batch,lk.section,lk.day);
+    // ttFor(lk.school), not the global TT: TT only ever holds whichever school
+    // the desktop layer last loaded, so an FSE or FSM lookup listed the right
+    // sections and then showed computing's classes for them (usually none).
+    const list=classesFor(lk.program,lk.batch,lk.section,lk.day,ttFor(lk.school));
     let html=`<div class="m-rooms-bar m-reveal"><span>${esc(lk.program)} · ${esc(lk.batch)} · ${esc(lk.section)}</span><span>${esc(lk.day.slice(0,3).toUpperCase())}</span></div>`;
     if(!list.length){
       html+='<div class="m-empty">No published classes for that combination.</div>';
@@ -1532,6 +1606,32 @@
     }).catch(()=>pushLive);
   }
 
+  function myCoursesSectionHTML(){
+    if(typeof getMyCourses!=='function') return '';
+    const list=getMyCourses();
+    const rows=list.length
+      ? list.map(c=>{
+          const origin=(String(c.dept||'').replace(/^BS\s+/,'')+' '+(c.batch||'')
+            +(c.section?('-'+c.section):'')).trim();
+          return '<div class="m-course-row"><span class="m-course-text">'
+            +'<span class="m-course-name">'+esc(c.name)+'</span>'
+            +'<span class="m-course-origin">'+esc(origin)+'</span></span>'
+            +'<button class="m-course-remove" type="button" data-key="'+esc(myCourseKey(c))
+            +'" aria-label="Remove '+esc(c.name)+'">&times;</button></div>';
+        }).join('')
+      : '<div class="m-empty" style="margin:0">No courses saved. Add them from Lookup.</div>';
+    return '<div class="m-section-label">My courses ('+list.length+')</div>'
+      +'<div class="m-course-list" id="m-course-list">'+rows+'</div>';
+  }
+  function wireMyCourses(){
+    document.querySelectorAll('#m-course-list .m-course-remove').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        if(typeof removeMyCourse==='function') removeMyCourse(btn.dataset.key);
+        renderProfile();
+        toast('Course removed');
+      });
+    });
+  }
   function renderProfile(){
     const p=profile();
     const out=$('m-profile-out');
@@ -1555,6 +1655,7 @@
           <div class="m-pcard-sub">${esc(sub)}</div>
         </div>
       </div>
+      ${myCoursesSectionHTML()}
       <div class="m-section-label">Notifications</div>
       <!-- One master switch, then the categories it governs. The categories are
            inert until it is on: a per-category choice is meaningless while
@@ -1654,6 +1755,8 @@
     // Correct the cached state on entry, in case permission was revoked or the
     // subscription was dropped since the last time this screen was open.
     refreshPushState();
+
+    wireMyCourses();
 
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{
