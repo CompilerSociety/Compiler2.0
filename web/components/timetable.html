@@ -40,7 +40,13 @@
               <select class="rsel" id="sec"><option value="">Select Section</option></select>
               <div class="tt-helper" id="tt-section-help">Select a batch first to load sections.</div>
             </div>
+            <div id="tt-course-cell">
+              <label class="flabel">COURSE</label>
+              <select class="rsel" id="tt-course"><option value="">Select a section first</option></select>
+              <button class="tt-course-add" id="tt-course-add" type="button" onclick="addSelectedCourse()">+ Add to my courses</button>
+            </div>
           </div>
+          <div class="tt-course-status" id="tt-course-status" role="status" aria-live="polite"></div>
           <div class="tt-actions">
             <button class="go" onclick="loadTT()">&#9658; Get timetable</button>
             <div class="tt-hint">Selections are remembered automatically on this device.</div>

@@ -66,7 +66,7 @@ canvas#bg3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-e
 .tt-live-badge.is-error:hover{background:rgba(201,51,34,0.14)}
 .tt-live-badge:focus-visible{outline:3px solid rgba(201,51,34,0.4);outline-offset:2px}
 .tt-form{padding:16px 18px;border:1.5px solid rgba(0,120,60,0.16);border-radius:12px;background:#fff;margin-bottom:14px}
-.tt-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.tt-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}/* 6, not 5: the COURSE picker joined the row. */
 .tt-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
 .tt-hint{font-family:var(--font-sans);font-size:10px;letter-spacing:0;color:#234f3b;font-weight:600;text-transform:none}
 .tt-helper{font-family:var(--font-sans);font-size:10px;line-height:1.4;color:var(--muted);margin-top:5px;letter-spacing:.01em;font-weight:500}
@@ -1051,3 +1051,37 @@ html[data-theme="dark"] .fv-empty{color:var(--muted)}
   .cs-features{margin-top:18px}
   .cs-feature{padding:10px 4px}
 }
+
+/* ── My Courses ──────────────────────────────────────────────────────── */
+/* The COURSE picker rides in the same .tt-grid as the other selectors, so it
+   inherits the responsive column collapse for free. Only the Add button and the
+   status line below the grid are new. */
+.tt-course-add{margin-top:6px;width:100%;background:#eaf6ee;border:1px solid #b7dcc4;border-radius:6px;padding:8px 10px;color:#0e6234;font-family:var(--font-sans);font-size:11px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:background .18s ease}
+.tt-course-add:hover:not([disabled]){background:#dcefe2}
+.tt-course-add[disabled]{opacity:.45;cursor:not-allowed}
+.tt-course-add:focus-visible{outline:2px solid #0a7a3a;outline-offset:2px}
+.tt-course-status{font-family:var(--font-sans);font-size:11px;line-height:1.45;color:#1f5c3c;margin-top:8px;min-height:15px}
+.tt-course-status.is-error{color:var(--danger);font-weight:600}
+#tt-course-cell[hidden]{display:none}
+
+/* The removable list inside the profile modal. */
+.profile-courses{margin-top:12px;border-top:1px solid rgba(10,122,58,0.14);padding-top:10px}
+.profile-courses[hidden]{display:none}
+.profile-courses-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.profile-courses-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;max-height:220px;overflow-y:auto}
+.profile-courses-empty{font-size:10px;line-height:1.4;color:var(--muted)}
+.profile-course-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid rgba(10,122,58,0.12);border-radius:8px;padding:8px 10px}
+.profile-course-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.profile-course-name{font-size:12px;font-weight:600;color:#1a4a2e;word-break:break-word}
+.profile-course-origin{font-family:var(--font-mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.profile-course-remove{flex-shrink:0;width:26px;height:26px;border-radius:6px;border:1px solid #e49494;background:#f6d0d0;color:#7f1d1d;font-size:16px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.profile-course-remove:hover{background:#f2b8b8}
+.profile-course-remove:focus-visible{outline:2px solid #b91c1c;outline-offset:2px}
+
+html[data-theme="dark"] .tt-course-add{background:#122a1c;border-color:#22452f;color:#4ade80}
+html[data-theme="dark"] .tt-course-add:hover:not([disabled]){background:#173420}
+html[data-theme="dark"] .tt-course-status{color:var(--muted)}
+html[data-theme="dark"] .profile-course-row{background:var(--surface-strong);border-color:rgba(120,220,160,0.16)}
+html[data-theme="dark"] .profile-course-name{color:var(--text)}
+html[data-theme="dark"] .profile-course-remove{background:#3a1616;border-color:#5a2323;color:#f2938c}
+html[data-theme="dark"] .profile-course-remove:hover{background:#471a1a}

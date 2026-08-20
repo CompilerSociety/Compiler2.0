@@ -203,6 +203,7 @@ function renderProfileCard(profile){
   if(deptEl) deptEl.textContent=profile.department || '-';
   if(card) card.hidden=false;
   if(registration) registration.hidden=true;
+  renderMyCoursesList();
 }
 function clearRegistrationFields(){
   ['profile-name','profile-section-input','profile-department-input','profile-batch-input'].forEach(id=>{
@@ -328,6 +329,9 @@ function saveProfileCookie(){
 }
 function deleteSavedProfile(){
   if(!window.confirm('Delete this saved profile from this browser?')) return;
+  // The saved courses live inside the profile cookie, so they go with it. The
+  // timetable has to be rebuilt afterwards or it would keep offering the
+  // "My Courses" department for a list that no longer exists.
   clearProfileCookie();
   try{ localStorage.removeItem(PROFILE_STORAGE_KEY); }catch(err){ /* ignore */ }
   const input=document.getElementById('profile-nuid');
@@ -337,6 +341,8 @@ function deleteSavedProfile(){
   if(status) status.textContent='Saved profile removed. You can sync again.';
   showProfileSuccessToast('Your profile has been deleted',true);
   closeProfileModal();
+  renderMyCoursesList();
+  try{ refreshTTFilters(); if(document.getElementById('p0')?.classList.contains('on')) loadTT(); }catch(e){ /* timetable not loaded yet */ }
 }
 function openProfileModal(){
   const backdrop=document.getElementById('profile-modal-backdrop');
@@ -1002,6 +1008,15 @@ try{ const _savedProfile=getProfileCookie(); if(_savedProfile) seedProfileSchedu
    TIMETABLE DATA
 ══════════════════════════════════════════ */
 let TT={};
+// The school TT currently holds. Kept beside TT because the two are only
+// meaningful together - see refreshTimetableFromGoogleSheet.
+let TT_SCHOOL='computing';
+// Every school's timetable as it was last loaded into TT, keyed by school.
+// My Courses resolves against this so a saved course is looked up in exactly
+// the data the picker offered it from. ROOM_TT is a near-miss for that job: it
+// is fetched separately and can disagree — it was missing the 2026 batch that
+// TT had, which silently resolved a perfectly valid saved course to nothing.
+const TT_BY_SCHOOL={};
 // Hand-maintained repeat (yellow) courses, loaded from db/repeat-<school>.json.
 // Lets you list repeat classes without regenerating from the Google Sheet.
 let MANUAL_REPEAT=[];
@@ -1358,11 +1373,19 @@ function legacyTTToReferenceTT(tt){
   return out;
 }
 
-function applyTimetablePayload(payload,sourceLabel){
+function applyTimetablePayload(payload,sourceLabel,school){
   if(!payload||typeof payload!=='object') throw new Error('Timetable payload is empty');
   if(!payload.tt||typeof payload.tt!=='object') throw new Error('Timetable payload is missing timetable data');
 
   TT=payload.tt;
+  // Set here, with TT, and nowhere else. Anything that labels TT with the
+  // #school select instead is wrong for the whole time a fetch is in flight:
+  // the select flips on click, TT only when the data lands.
+  //
+  // An empty string means "this data is not school-scoped" (the reference
+  // fallback), which addSelectedCourse treats as "cannot attribute a course".
+  if(school!==undefined) TT_SCHOOL=school;
+  if(school) TT_BY_SCHOOL[school]=payload.tt;
   try{ console.debug('applyTimetablePayload: source=', sourceLabel, 'depts=', Object.keys(TT||{}).length); }catch(e){}
   if(Array.isArray(payload.slots)&&payload.slots.length) replaceSlots(payload.slots);
   else rebuildSlotsFromTimetable(TT);
@@ -1831,7 +1854,18 @@ function refreshTTFilters(){
     opt.value=REPEAT_DEPT;opt.textContent=REPEAT_DEPT_LABEL;
     deptSel.appendChild(opt);
   }
-  if(prefs.dept===REPEAT_DEPT) deptSel.value=REPEAT_DEPT;
+  // A student's own course list is a virtual department too, on the same
+  // pattern. Offering it as a department rather than a separate mode is what
+  // lets it REPLACE their timetable while still leaving every real department
+  // reachable — which they need, since browsing a section is how a course gets
+  // added in the first place.
+  if(hasMyCourses()){
+    const mine=document.createElement('option');
+    mine.value=MYCOURSES_DEPT;mine.textContent=MYCOURSES_DEPT_LABEL;
+    deptSel.insertBefore(mine,deptSel.firstChild.nextSibling||null);
+  }
+  if(prefs.dept===MYCOURSES_DEPT&&hasMyCourses()) deptSel.value=MYCOURSES_DEPT;
+  else if(prefs.dept===REPEAT_DEPT) deptSel.value=REPEAT_DEPT;
   else if(prefs.dept&&depts.includes(prefs.dept)) deptSel.value=prefs.dept;
   // onSchoolChange() disables this select while the new school's sheet loads,
   // and nothing ever re-enabled it — Batch and Section are recomputed below on
@@ -1845,6 +1879,17 @@ function refreshTTFilters(){
     hasDepts?(dep?'':'Pick a department first to unlock batch options.')
             :'No timetable is published for this school yet.',
     !dep);
+  if(dep===MYCOURSES_DEPT){
+    applyRepeatModeUI();
+    refreshMyCoursePicker();
+    if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
+    else setDefaultDay();
+    setTimetableSelectorState(batchSel,'Your saved courses',true);
+    setTimetableSelectorState(secSel,'Your saved courses',true);
+    setTimetableDependencyHelp('tt-batch-help','Your courses keep their own batch and section.',true);
+    setTimetableDependencyHelp('tt-section-help','Manage the list from your profile.',true);
+    return;
+  }
   if(dep===REPEAT_DEPT){
     applyRepeatModeUI();
     if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
@@ -1870,6 +1915,7 @@ function refreshTTFilters(){
   else if(secs.length===1) secSel.value=secs[0];
   if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
   else setDefaultDay();
+  refreshMyCoursePicker();
 }
 function onSchoolChange(){
   saveTTPrefs();
@@ -1905,6 +1951,18 @@ function setupTTFilterListeners(){
     deptSel.addEventListener('change',()=>{
       const dep=deptSel.value;
       setTimetableDependencyHelp('tt-dept-help',dep?'':'Pick a department first to unlock batch options.',!dep);
+      if(dep===MYCOURSES_DEPT){
+        applyRepeatModeUI();
+        refreshMyCoursePicker();
+        // Batch and section belong to each saved course, not to this view, so
+        // they are locked out the same way the repeat department locks them.
+        setTimetableSelectorState(batchSel,'Your saved courses',true);
+        setTimetableSelectorState(secSel,'Your saved courses',true);
+        setTimetableDependencyHelp('tt-batch-help','Your courses keep their own batch and section.',true);
+        setTimetableDependencyHelp('tt-section-help','Manage the list from your profile.',true);
+        saveTTPrefs();loadTT();
+        return;
+      }
       if(dep===REPEAT_DEPT){
         applyRepeatModeUI();
         saveTTPrefs();loadTT();
@@ -1924,6 +1982,7 @@ function setupTTFilterListeners(){
       if(secs.length===1) secSel.value=secs[0];
       setTimetableDependencyHelp('tt-batch-help',batches.length ? 'Select a batch to load section options.' : 'No batches available for this department.',true);
       setTimetableDependencyHelp('tt-section-help',secs.length ? 'Select a section to view the timetable.' : 'Select a batch first to load sections.',true);
+      refreshMyCoursePicker();
       saveTTPrefs();loadTT();
     });
   }
@@ -1941,11 +2000,12 @@ function setupTTFilterListeners(){
       secSel.disabled=!bat;
       setTimetableDependencyHelp('tt-section-help',secs.length ? 'Select a section to view the timetable.' : 'No sections available for this batch.',true);
       if(secs.length===1) secSel.value=secs[0];
+      refreshMyCoursePicker();
       saveTTPrefs();loadTT();
     });
   }
   [secSel,daySel].forEach(sel=>{
-    if(sel&&!sel.dataset.liveBound){sel.dataset.liveBound='1';sel.addEventListener('change',()=>{saveTTPrefs();loadTT();});}
+    if(sel&&!sel.dataset.liveBound){sel.dataset.liveBound='1';sel.addEventListener('change',()=>{refreshMyCoursePicker();saveTTPrefs();loadTT();});}
   });
 }
 
@@ -2103,12 +2163,18 @@ const LAB_BLOCK={
 /* ── Timetable sync: API only ── */
 
 async function refreshTimetableFromGoogleSheet(){
+  // Which school TT actually holds. The #school select changes the instant it
+  // is clicked, but TT is only replaced when the fetch lands, so reading the
+  // select to label the data is wrong for the whole time in between — long
+  // enough for someone to add a course and have it saved under the wrong
+  // school, pointing at a department that school does not have.
+  const requestedSchool=document.getElementById('school')?.value||'computing';
   setSheetStatus('SHEET: SYNCING...',true);
   setTimetableLiveBadge('Syncing…','syncing');
   try{
     const apiData=await fetchTimetableJSON(timetableApiUrl());
     if(!apiData.ok) throw new Error(apiData.error||'Timetable API returned an error');
-    applyTimetablePayload(apiData,'SHEET: LIVE API');
+    applyTimetablePayload(apiData,'SHEET: LIVE API',requestedSchool);
   }catch(apiErr){
     console.warn('Primary timetable source failed:',apiErr);
     // Fallback 1: the committed per-school snapshot (db/timetables/<school>.json),
@@ -2118,10 +2184,10 @@ async function refreshTimetableFromGoogleSheet(){
       const school=document.getElementById('school')?.value||'computing';
       const snapData=await fetchTimetableJSON(`/db/timetables/${school}.json?cachebust=${Date.now()}`);
       if(snapData&&snapData.ok&&snapData.tt&&ttHasRealRooms(snapData.tt)){
-        applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase());
+        applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase(),school);
         return;
       }
-      if(snapData&&snapData.tt&&Object.keys(snapData.tt).length) applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase());
+      if(snapData&&snapData.tt&&Object.keys(snapData.tt).length) applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase(),school);
     }catch(snapErr){
       console.warn('Snapshot timetable source failed:',snapErr);
     }
@@ -2152,7 +2218,11 @@ async function refreshTimetableFromGoogleSheet(){
       });
       let n=0;
       Object.values(tt).forEach(b=>Object.values(b).forEach(s=>Object.values(s).forEach(d=>Object.values(d).forEach(a=>{n+=a.length;}))));
-      applyTimetablePayload({ok:true,tt,count:n},'FALLBACK: fastschedule.github.io');
+      // No school passed on purpose. This reference feed is not school-scoped,
+      // so labelling it with the school that was REQUESTED would be a lie —
+      // and a course added from it would be filed under a school whose
+      // timetable it is not in, resolving to nothing forever after.
+      applyTimetablePayload({ok:true,tt,count:n},'FALLBACK: fastschedule.github.io','');
     }catch(fbErr){
       console.warn('Fallback timetable source also failed:',fbErr);
       const message=(apiErr&&apiErr.message)?apiErr.message:String(apiErr);
@@ -2744,6 +2814,268 @@ function loadRepeatTT(){
     }).join('')}</tbody>
   </table>`;
 }
+
+/* ── My Courses ─────────────────────────────────────────────────────────
+   A student builds their own course list instead of being stuck with whatever
+   their section's row happens to say. Repeats, electives taken with another
+   section, a course they are not enrolled in this semester — none of that fits
+   a single dept/batch/section lookup, which is the only view that existed.
+
+   Storage is the profile cookie, deliberately. These are a handful of
+   identifiers, only ever read by this browser to draw a table, and FSE/FSM
+   students have no server-side record at all (see lib/schools.mjs) — so there
+   is nothing to sync them to and no reason to upload them.
+
+   A saved course records WHERE it came from, not the class times. Times and
+   rooms move during a semester; resolving them from the live timetable on every
+   render means a saved course follows those changes instead of freezing
+   whatever happened to be true on the day it was added.
+
+   Resolution reads ROOM_TT, not TT. TT holds one school at a time and is
+   replaced wholesale on every school switch, while ROOM_TT holds all three —
+   which is what lets a student mix courses across schools, and what makes this
+   work identically for FSC, FSE and FSM. */
+const MYCOURSES_DEPT='__MYCOURSES__';
+const MYCOURSES_DEPT_LABEL='★ My Courses';
+const MYCOURSES_MAX=40;
+
+function myCourseKey(c){
+  return [c.school||'',c.dept||'',c.batch||'',c.section||'',String(c.name||'').trim().toUpperCase()].join('|');
+}
+function getMyCourses(){
+  const profile=getProfileCookie();
+  const list=profile&&Array.isArray(profile.courses)?profile.courses:[];
+  return list.filter(c=>c&&c.name&&c.dept);
+}
+function setMyCourses(list){
+  const profile=getProfileCookie();
+  if(!profile) return false;
+  profile.courses=list.slice(0,MYCOURSES_MAX);
+  setProfileCookie(profile);
+  return true;
+}
+function hasMyCourses(){ return getMyCourses().length>0; }
+
+function addMyCourse(course){
+  if(!getProfileCookie()) return {ok:false,reason:'no_profile'};
+  const list=getMyCourses();
+  const key=myCourseKey(course);
+  if(list.some(c=>myCourseKey(c)===key)) return {ok:false,reason:'duplicate'};
+  if(list.length>=MYCOURSES_MAX) return {ok:false,reason:'full'};
+  list.push({
+    school:course.school||'',dept:course.dept||'',batch:course.batch||'',
+    section:course.section||'',name:String(course.name||'').trim()
+  });
+  setMyCourses(list);
+  return {ok:true,count:list.length};
+}
+function removeMyCourse(key){
+  const list=getMyCourses().filter(c=>myCourseKey(c)!==key);
+  setMyCourses(list);
+  return list.length;
+}
+
+/* Every timetable row belonging to one saved course, across every day.
+   Matched on course name within the saved dept/batch/section: a course can sit
+   in several slots a week (a lecture plus its lab), and all of them belong to
+   the student who took it. ALL_SECTIONS rows are batch-wide classes and count
+   for whichever section was saved, exactly as loadTT folds them in. */
+function myCourseSource(school){
+  // TT first for the school currently on screen, ROOM_TT for the others.
+  //
+  // The order matters and is not arbitrary. TT is the live sheet; ROOM_TT is
+  // the stored copy, produced by a SECOND, independent parser. The two agree on
+  // roughly nine classes in ten but disagree about which section a class
+  // belongs to far more often than that — so a course offered by the picker
+  // (which lists from TT) could resolve to nothing at all if it were then
+  // looked up in ROOM_TT. Reading both from the same source means what a
+  // student can add is exactly what they will see.
+  //
+  // ROOM_TT still carries the other two schools, which is what allows a course
+  // list to span FSC, FSE and FSM at once.
+  const current=TT_SCHOOL;
+  const live=(typeof TT==='object'&&TT)||{};
+  if((!school||school===current)&&Object.keys(live).length) return live;
+  // What this school looked like when it was last on screen — the same data
+  // the course was picked from.
+  const seen=TT_BY_SCHOOL[school];
+  if(seen&&Object.keys(seen).length) return seen;
+  // A school this browser has never opened: the stored timetable is all there
+  // is, and it is better than nothing.
+  const stored=(typeof ROOM_TT==='object'&&ROOM_TT&&ROOM_TT[school])||{};
+  if(Object.keys(stored).length) return stored;
+  return (!school||school===current)?live:{};
+}
+function resolveMyCourseRows(course){
+  const tt=myCourseSource(course.school);
+  const batches=tt[course.dept]||{};
+  const wanted=String(course.name||'').trim().toUpperCase();
+  const rows=[];
+  [course.section,ALL_SECTIONS].forEach((sec,idx)=>{
+    const days=((batches[course.batch]||{})[sec])||{};
+    Object.keys(days).forEach(day=>{
+      (days[day]||[]).forEach(e=>{
+        if(stripNote(entryCourse(e)).trim().toUpperCase()!==wanted) return;
+        // A batch-wide duplicate of a row the section already lists would draw
+        // the same class twice.
+        if(idx===1&&rows.some(r=>r.day===day&&r.time===entryTime(e)&&r.location===entryLocation(e))) return;
+        rows.push({
+          day,
+          name:entryCourse(e),
+          location:entryLocation(e),
+          time:entryTime(e),
+          note:e.note||extractNote(entryCourse(e)),
+          course
+        });
+      });
+    });
+  });
+  return rows;
+}
+
+function myCoursesRowsForDay(day){
+  const rows=[];
+  getMyCourses().forEach(c=>{ resolveMyCourseRows(c).forEach(r=>{ if(!day||r.day===day) rows.push(r); }); });
+  const dayOrder=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  rows.sort((a,b)=>{
+    const d=dayOrder.indexOf(a.day)-dayOrder.indexOf(b.day);
+    if(d!==0) return d;
+    try{ return timeToNumber(a.time)-timeToNumber(b.time); }catch(e){ return 0; }
+  });
+  return rows;
+}
+
+function loadMyCoursesTT(){
+  const out=document.getElementById('tt-out');
+  if(!out) return;
+  const day=document.getElementById('day')?.value||'';
+  const saved=getMyCourses();
+  saveTTPrefs();
+  if(!saved.length){
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:'No courses saved yet',
+      message:'Pick a department, batch and section, choose a course, then press "Add to my courses".',
+      note:'Your courses are saved on this device along with your profile.'
+    });
+    return;
+  }
+  const rows=myCoursesRowsForDay(day);
+  if(!rows.length){
+    out.innerHTML=renderUiState({
+      kind:'empty',
+      title:day?('Nothing on '+day):'No sessions found',
+      message:'You have '+saved.length+' saved course'+(saved.length===1?'':'s')+', but none of them meet on the selected day.',
+      note:'Try another day, or manage your courses from your profile.'
+    });
+    return;
+  }
+  const currentSlot=getCurrentSlot();
+  out.innerHTML='<table class="tt-result-table">'+
+    '<thead><tr><th style="width:32%">Course</th><th style="width:13%">Day</th><th style="width:15%">Class</th><th style="width:18%">Location</th><th style="width:22%">Time</th></tr></thead>'+
+    '<tbody>'+rows.map(r=>{
+      const note=r.note||'';
+      const cls=/cancel/i.test(note)?'tt-course is-cancelled':'tt-course';
+      const isCurrent=currentSlot && String(r.time||'').includes('-') && String(r.time||'').split('-')[0].trim()===currentSlot.split('-')[0].trim();
+      const fmtTime = r.time && r.time.includes('-') ? fmtSlot(r.time) : r.time;
+      const origin=(String(r.course.dept||'').replace(/^BS\s+/,'')+' '+(r.course.batch||'')+(r.course.section?('-'+r.course.section):'')).trim();
+      return '<tr class="'+(isCurrent?'is-current':'')+'"><td>'+noteBadgeHTML(note)+'<div class="'+cls+'">'+escHtml(stripNote(r.name))+'</div></td>'+
+             '<td><div class="tt-day">'+escHtml(r.day)+'</div></td>'+
+             '<td><div class="tt-sec">'+escHtml(origin)+'</div></td>'+
+             '<td><div class="tt-room">'+escHtml(r.location)+'</div></td>'+
+             '<td><div class="tt-time">'+escHtml(fmtTime)+'</div></td></tr>';
+    }).join('')+'</tbody></table>';
+}
+
+/* The COURSE picker sits after SECTION and lists that section's distinct
+   courses. Hidden in the two virtual departments, which have no section. */
+function refreshMyCoursePicker(){
+  const cell=document.getElementById('tt-course-cell');
+  const sel=document.getElementById('tt-course');
+  const btn=document.getElementById('tt-course-add');
+  if(!cell||!sel||!btn) return;
+  const dep=document.getElementById('dept')?.value||'';
+  const bat=document.getElementById('batch')?.value||'';
+  const sec=document.getElementById('sec')?.value||'';
+  if(dep===MYCOURSES_DEPT||dep===REPEAT_DEPT){ cell.hidden=true; return; }
+  cell.hidden=false;
+  const names=new Set();
+  if(dep&&bat&&sec){
+    [sec,ALL_SECTIONS].forEach(s=>{
+      const days=((TT[dep]||{})[bat]||{})[s]||{};
+      Object.values(days).forEach(arr=>(arr||[]).forEach(e=>{
+        const n=stripNote(entryCourse(e)).trim();
+        if(n) names.add(n);
+      }));
+    });
+  }
+  const list=[...names].sort();
+  fillSelectOptions(sel,list,null,sec?(list.length?'-- Course --':'No courses in this section'):'Select a section first');
+  sel.disabled=!list.length;
+  btn.disabled=!list.length;
+}
+
+function addSelectedCourse(){
+  const status=document.getElementById('tt-course-status');
+  const say=(msg,bad)=>{ if(status){ status.textContent=msg; status.classList.toggle('is-error',!!bad); } };
+  if(!getProfileCookie()){ say('Make your profile first — your courses are saved with it.',true); return; }
+  // TT_SCHOOL, not the select: the picker lists from TT, so the course being
+  // added belongs to whichever school TT holds right now.
+  const school=TT_SCHOOL;
+  if(!school){
+    say('The timetable is running on backup data right now, so a course cannot be saved to the right school yet. Try again once it reloads.',true);
+    return;
+  }
+  const dept=document.getElementById('dept')?.value||'';
+  const batch=document.getElementById('batch')?.value||'';
+  const section=document.getElementById('sec')?.value||'';
+  const name=document.getElementById('tt-course')?.value||'';
+  if(!dept||!batch||!section||!name){ say('Choose a department, batch, section and course first.',true); return; }
+  const res=addMyCourse({school,dept,batch,section,name});
+  if(!res.ok){
+    if(res.reason==='duplicate') say('"'+name+'" is already in your courses.',true);
+    else if(res.reason==='full') say('You can save up to '+MYCOURSES_MAX+' courses.',true);
+    else say('Make your profile first — your courses are saved with it.',true);
+    return;
+  }
+  say('Added "'+name+'". You now have '+res.count+' course'+(res.count===1?'':'s')+'.');
+  renderMyCoursesList();
+  refreshTTFilters();
+  showProfileSuccessToast('Course added to your courses');
+}
+
+/* The list inside the profile modal, where courses are removed. */
+function renderMyCoursesList(){
+  const wrap=document.getElementById('profile-courses');
+  const body=document.getElementById('profile-courses-list');
+  const count=document.getElementById('profile-courses-count');
+  if(!wrap||!body) return;
+  const list=getMyCourses();
+  wrap.hidden=!getProfileCookie();
+  if(count) count.textContent=String(list.length);
+  if(!list.length){
+    body.innerHTML='<div class="profile-courses-empty">No courses saved yet. Add them from the Timetable tab.</div>';
+    return;
+  }
+  body.innerHTML=list.map(c=>{
+    const key=myCourseKey(c).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    const origin=(String(c.dept||'').replace(/^BS\s+/,'')+' '+(c.batch||'')+(c.section?('-'+c.section):'')).trim();
+    return '<div class="profile-course-row">'+
+      '<span class="profile-course-text"><span class="profile-course-name">'+escHtml(c.name)+'</span>'+
+      '<span class="profile-course-origin">'+escHtml(origin)+'</span></span>'+
+      '<button class="profile-course-remove" type="button" title="Remove this course" aria-label="Remove '+escHtml(c.name)+'" onclick="removeMyCourseAndRefresh(&quot;'+key+'&quot;)">&times;</button>'+
+    '</div>';
+  }).join('');
+}
+function removeMyCourseAndRefresh(key){
+  removeMyCourse(key);
+  renderMyCoursesList();
+  refreshTTFilters();
+  if(document.getElementById('p0')?.classList.contains('on')) loadTT();
+}
+window.addSelectedCourse=addSelectedCourse;
+window.removeMyCourseAndRefresh=removeMyCourseAndRefresh;
+window.renderMyCoursesList=renderMyCoursesList;
 function showTTSkeleton(){
   const out=document.getElementById('tt-out');
   if(!out) return;
@@ -2754,6 +3086,7 @@ function showTTSkeleton(){
 function loadTT(){
   showTTSkeleton();
   const dep=document.getElementById('dept').value;
+  if(dep===MYCOURSES_DEPT){loadMyCoursesTT();return;}
   if(dep===REPEAT_DEPT){loadRepeatTT();return;}
   const bat=document.getElementById('batch').value;
   const sec=document.getElementById('sec').value;
