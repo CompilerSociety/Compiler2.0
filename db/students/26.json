@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T14:12:29.623Z",
+  "updated_at": "2026-08-20T14:17:18.712Z",
   "source_subject": "Seating Plan 26",
-  "count": 128,
+  "count": 129,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1658,6 +1658,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T14:12:29.623Z"
+    },
+    {
+      "name": "Farjad Ahmed Fareed",
+      "nuid": "26I-2152",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T14:17:18.712Z"
     }
   ]
 }
