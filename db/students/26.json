@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:03:58.994Z",
+  "updated_at": "2026-08-20T17:08:54.173Z",
   "source_subject": "Seating Plan 26",
-  "count": 153,
+  "count": 154,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1983,6 +1983,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:03:58.994Z"
+    },
+    {
+      "name": "Muhammad Saad Shakir",
+      "nuid": "26L-0750",
+      "section": "F",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:08:54.173Z"
     }
   ]
 }
