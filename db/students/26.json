@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T15:16:47.573Z",
+  "updated_at": "2026-08-20T15:23:21.761Z",
   "source_subject": "Seating Plan 26",
-  "count": 139,
+  "count": 140,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1801,6 +1801,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T15:16:47.573Z"
+    },
+    {
+      "name": "Jaffar Kazmi",
+      "nuid": "26I-2614",
+      "section": "C",
+      "department": "DS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T15:23:21.761Z"
     }
   ]
 }
