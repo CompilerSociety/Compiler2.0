@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:44:10.364Z",
+  "updated_at": "2026-08-20T06:50:09.372Z",
   "source_subject": "Seating Plan 26",
-  "count": 80,
+  "count": 81,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1034,6 +1034,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:44:10.364Z"
+    },
+    {
+      "name": "Kamran Ali",
+      "nuid": "26I-0613",
+      "section": "C",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:50:09.372Z"
     }
   ]
 }
