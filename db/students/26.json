@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:34:08.732Z",
+  "updated_at": "2026-08-20T16:39:27.144Z",
   "source_subject": "Seating Plan 26",
-  "count": 148,
+  "count": 149,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1918,6 +1918,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:34:08.732Z"
+    },
+    {
+      "name": "Muhammad Ayaan Qasim Khan",
+      "nuid": "26I-3083",
+      "section": "B",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T16:39:27.144Z"
     }
   ]
 }
