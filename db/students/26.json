@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T16:30:21.023Z",
+  "updated_at": "2026-08-20T16:34:08.732Z",
   "source_subject": "Seating Plan 26",
-  "count": 147,
+  "count": 148,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1905,6 +1905,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T16:30:21.023Z"
+    },
+    {
+      "name": "Mueez Ahmed Malik",
+      "nuid": "26I-3094",
+      "section": "B",
+      "department": "SE",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T16:34:08.732Z"
     }
   ]
 }
