@@ -808,7 +808,7 @@
               "time": "08:30-09:50"
             },
             {
-              "name": "U-Holy Quran-I&II (SS1022)",
+              "name": "/SS1021 U-Holy Quran-I&II (SS1022)",
               "location": "A-316",
               "time": "02:25-04:15"
             }
@@ -851,7 +851,7 @@
         "B": {
           "Monday": [
             {
-              "name": "U-Holy Quran-I&II (SS1022)",
+              "name": "/SS1021 U-Holy Quran-I&II (SS1022)",
               "location": "A-305",
               "time": "02:25-04:15"
             },
@@ -970,7 +970,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "U-Holy Quran-I&II (SS1022)",
+              "name": "/SS1021 U-Holy Quran-I&II (SS1022)",
               "location": "A-314",
               "time": "02:25-04:15"
             }
@@ -1177,7 +1177,7 @@
             {
               "name": "Islamic Studies/Ethics (SS1007)",
               "location": "A-303",
-              "time": "02:25-04:15"
+              "time": "08:30-10:20"
             }
           ]
         },
@@ -1269,7 +1269,7 @@
             {
               "name": "English - I (SS1016)",
               "location": "A-305",
-              "time": "11:30-01:20"
+              "time": "08:30-10:20"
             }
           ]
         }
@@ -2537,7 +2537,7 @@
           ],
           "Wednesday": [
             {
-              "name": "U-Holy Quran-I&II (SS1022)",
+              "name": "/SS1021 U-Holy Quran-I&II (SS1022)",
               "location": "A-104",
               "time": "11:30-01:20"
             },
@@ -2639,7 +2639,7 @@
               "time": "01:00-02:20"
             },
             {
-              "name": "U-Holy Quran-I&II (SS1022)",
+              "name": "/SS1021 U-Holy Quran-I&II (SS1022)",
               "location": "A-302",
               "time": "08:30-10:20"
             }
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-20T06:02:55.088640+00:00"
+  "generatedAt": "2026-08-20T07:04:08.064047+00:00"
 }

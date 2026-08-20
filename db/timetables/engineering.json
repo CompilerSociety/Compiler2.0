@@ -320,7 +320,7 @@
             {
               "name": "Embedded Systems Lab",
               "location": "COMP-I",
-              "time": "8:30-09:50"
+              "time": "09:55-11:15"
             }
           ],
           "Thursday": [
@@ -463,7 +463,7 @@
             },
             {
               "name": "Electronic Circuit Design Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "12:50-02:10"
             }
           ],
@@ -611,7 +611,7 @@
             },
             {
               "name": "Elect. Netwk. Analysis Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "8:30-09:50"
             }
           ],
@@ -710,7 +710,7 @@
             },
             {
               "name": "Elect. Netwk. Analysis Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "8:30-09:50"
             }
           ],
@@ -736,7 +736,7 @@
           "Monday": [
             {
               "name": "Elect. Netwk. Analysis Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "8:30-09:50"
             }
           ],
@@ -776,7 +776,7 @@
             },
             {
               "name": "Elect. Netwk. Analysis Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "8:30-09:50"
             }
           ]
@@ -843,7 +843,7 @@
             },
             {
               "name": "Linear Circuit Analysis Lab",
-              "location": "CKT",
+              "location": "CIRCUIT LAB",
               "time": "02:00-03:20"
             },
             {
@@ -1297,5 +1297,5 @@
     }
   },
   "count": 210,
-  "generatedAt": "2026-08-20T06:02:56.825291+00:00"
+  "generatedAt": "2026-08-20T07:04:09.687234+00:00"
 }

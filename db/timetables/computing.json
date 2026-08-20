@@ -2368,14 +2368,14 @@
         "A": {
           "Monday": [
             {
-              "name": "Algo",
-              "location": "C-408",
-              "time": "08:30-09:50"
-            },
-            {
               "name": "AI",
               "location": "C-408",
               "time": "10:00-11:20"
+            },
+            {
+              "name": "Algo",
+              "location": "C-409",
+              "time": "11:30-12:50"
             },
             {
               "name": "S/w Const",
@@ -2403,8 +2403,8 @@
             },
             {
               "name": "Algo",
-              "location": "C-607",
-              "time": "08:30-09:50"
+              "location": "C-409",
+              "time": "11:30-12:50"
             },
             {
               "name": "AI",
@@ -3787,14 +3787,14 @@
               "time": "08:30-09:50"
             },
             {
+              "name": "COAL",
+              "location": "D-302",
+              "time": "10:00-11:20"
+            },
+            {
               "name": "Prog for AI",
               "location": "D-304",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "COAL",
-              "location": "D-315",
-              "time": "10:00-11:20"
             }
           ],
           "Wednesday": [
@@ -3979,8 +3979,8 @@
           "Thursday": [
             {
               "name": "Business Research",
-              "location": "D-402",
-              "time": "01:00-02:20"
+              "location": "D-314",
+              "time": "11:30-12:50"
             }
           ]
         },
@@ -4896,11 +4896,6 @@
               "time": "10:00-11:20"
             },
             {
-              "name": "DB",
-              "location": "D-504",
-              "time": "11:30-12:50"
-            },
-            {
               "name": "OS",
               "location": "D-504",
               "time": "01:00-02:20"
@@ -5493,7 +5488,7 @@
             },
             {
               "name": "Edge Comp",
-              "location": "D-316",
+              "location": "D-402",
               "time": "11:30-12:50"
             }
           ],
@@ -5812,16 +5807,6 @@
           ],
           "Tuesday": [
             {
-              "name": "Data St",
-              "location": "D-312",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Intro to DS",
-              "location": "D-313",
-              "time": "11:30-12:50"
-            },
-            {
               "name": "COAL",
               "location": "D-313",
               "time": "01:00-02:20"
@@ -5830,6 +5815,16 @@
               "name": "Seerah",
               "location": "D-313",
               "time": "03:00-03:55"
+            },
+            {
+              "name": "Data St",
+              "location": "D-315",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Intro to DS",
+              "location": "D-315",
+              "time": "11:30-12:50"
             }
           ],
           "Wednesday": [
@@ -5969,14 +5964,14 @@
               "time": "10:00-11:20"
             },
             {
+              "name": "DAV",
+              "location": "D-311",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Data Ware & BI",
               "location": "D-314",
               "time": "08:30-09:50"
-            },
-            {
-              "name": "DAV",
-              "location": "D-315",
-              "time": "11:30-12:50"
             }
           ],
           "Wednesday": [
@@ -7056,6 +7051,6 @@
       }
     }
   },
-  "count": 1166,
-  "generatedAt": "2026-08-20T06:02:54.311405+00:00"
+  "count": 1165,
+  "generatedAt": "2026-08-20T07:04:04.977260+00:00"
 }
