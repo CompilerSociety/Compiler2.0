@@ -1488,5 +1488,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0628",
+    "name": "Hammad Zafeer Abbasi",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fXTfxTLjAWQ:APA91bEX97oO8YP9a0ifU66hsiW0FTyjB9n8S1zr_sFBSzg_wV9va2K6cQ5vdk4on51RQGVBQaLg3Dx9gFi3stnj6RlI3-zYG70i8i6EBl_AB8cHcp3tihTAbk4x4A0D4dAcJ6JTuGpi",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BHF0XwSHEVAFRxw-J0GiTqRDS-miqylD9c8eBIWIx0531MuPq-oqRgc8KSyFBrhtsClZzWZUKwM5ntENjdTrVBk",
+        "auth": "is_gh6R1UslgccPominSMA"
+      }
+    },
+    "updated_at": 1787209509880,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
