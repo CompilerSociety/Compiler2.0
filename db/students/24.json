@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-18T08:36:17.559Z",
+  "updated_at": "2026-08-20T06:33:12.660Z",
   "source_subject": "Seating Plan 24",
-  "count": 750,
+  "count": 751,
   "students": [
     {
       "name": "Muhammad Aun",
@@ -5264,6 +5264,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-18T08:36:17.559Z"
+    },
+    {
+      "name": "Ali Haider Awan",
+      "nuid": "24F-0577",
+      "section": "E",
+      "department": "CS",
+      "batch": "24",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:33:12.660Z"
     }
   ]
 }
