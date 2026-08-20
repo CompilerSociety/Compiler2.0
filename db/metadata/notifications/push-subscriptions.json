@@ -1298,5 +1298,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-0699",
+    "name": "Zuha Shafqat",
+    "department": "BS CS",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dtVWrdPGIDs:APA91bHYpXx7uBjoQ5x1ECe18e04p3u_P8eUMl5BXdJ64cxAwBQIjljOzwg4PcEwE1X1AXz2QvNQnd-yGxJiXz8jovWNKWU-P6tTkgCCaX-zqwo4zh_PmE3kvfdnHEUgFr7cA0r6e8Ru",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPGDqjiwCc41qm3ob3zoovcqHlX1y9edPXMItrbZaeSF0I9swXzj2rBFPXxJaDaUhZpVHW3gUdXtQfd7yEr9eTw",
+        "auth": "1qHrgs0Hice95E83OGuzFg"
+      }
+    },
+    "updated_at": 1787204602789,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
