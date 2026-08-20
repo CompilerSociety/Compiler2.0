@@ -323,6 +323,15 @@
       "batch": "25",
       "highScore": 145,
       "achievedAt": "2026-08-20T05:44:01.905Z"
+    },
+    "24I-0719": {
+      "nuid": "24I-0719",
+      "name": "Sara Nasir",
+      "section": "F",
+      "department": "BS CS",
+      "batch": "24",
+      "highScore": 34,
+      "achievedAt": "2026-08-20T05:50:57.184Z"
     }
   },
   "leaderboard": [
