@@ -6908,8 +6908,28 @@
           ]
         }
       }
+    },
+    "Unassigned": {
+      "2023": {
+        "ALL": {
+          "Tuesday": [
+            {
+              "name": "Adv Topics in Req Engg",
+              "location": "D-402",
+              "time": "05:20-06:40"
+            }
+          ],
+          "Thursday": [
+            {
+              "name": "Adv Topics in Req Engg",
+              "location": "D-316",
+              "time": "05:20-06:40"
+            }
+          ]
+        }
+      }
     }
   },
-  "count": 1138,
-  "generatedAt": "2026-08-20T19:41:39.630257+00:00"
+  "count": 1140,
+  "generatedAt": "2026-08-20T20:12:14.033060+00:00"
 }

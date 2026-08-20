@@ -721,9 +721,18 @@ def flush_bare(tt, bare):
                     added += 1
 
     for cell in bare["cells"]:
-        if not cell.get("placed"):
-            dlog_warn(f"  {cell['day']}: no department for '{cell['course']}' "
-                      f"in {cell['room']} at {cell['time']} — dropped")
+        if cell.get("placed"):
+            continue
+        # The sheet still establishes a real room occupancy even when it omits
+        # the cohort label. Preserve the class under an explicit unassigned
+        # bucket rather than guessing a department or falsely exposing the room
+        # as free. The fill still supplies the batch where available.
+        batch = resolve_batch(cell["colour"], "", cell["course"], []) or "Unknown"
+        if add_course(tt, "Unassigned", batch, ALL_SECTIONS, cell["day"],
+                      cell["course"], cell["room"], cell["time"]):
+            added += 1
+        dlog_warn(f"  {cell['day']}: preserved unassigned class '{cell['course']}' "
+                  f"in {cell['room']} at {cell['time']}")
     return added
 
 

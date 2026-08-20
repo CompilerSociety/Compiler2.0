@@ -2305,7 +2305,11 @@ const ROOM_CARD_ALIASES={
   CIRCUIT:'B-Ckt', DLD:'B-DLD Lab', ELECT:'B-Elect',
   MDEL:'B-Mdel', CONT:'B-Cont', COMPUTING3:'B-Comp-III',
   CALILAB:'A-CALL-1', CALIILAB:'A-CALL-2',
-  KYBHER2:'A-Khyber II', KYBHER3:'A-Khyber III',
+KYBHER2:'A-Khyber II', KYBHER3:'A-Khyber III',
+  CALL1A213:'A-CALL-1', CALL2A214:'A-CALL-2', CALL3A308:'A-CALL-3',
+  MEHRAN2A306:'A-Mehran 2',
+  IT1D210:'D-IT Lab 1', IT2D211:'D-IT Lab 2',
+  IT3D213:'D-IT Lab 3', IT4GPUD203:'D-IT Lab 4',
 };
 function labSig(x){
   let s=oneLine(x).toUpperCase().replace(/\bLABS?\b/g,' ').replace(/^[A-D]\s*-\s*/,'');
