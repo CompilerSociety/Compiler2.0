@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:33:12.660Z",
+  "updated_at": "2026-08-20T06:52:56.263Z",
   "source_subject": "Seating Plan 24",
-  "count": 751,
+  "count": 752,
   "students": [
     {
       "name": "Muhammad Aun",
@@ -5277,6 +5277,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:33:12.660Z"
+    },
+    {
+      "name": "Emaan sher",
+      "nuid": "24I-6568",
+      "section": "A",
+      "department": "CS",
+      "batch": "24",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:52:56.263Z"
     }
   ]
 }
