@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:12:41.615Z",
+  "updated_at": "2026-08-20T06:15:48.021Z",
   "source_subject": "Seating Plan 26",
-  "count": 72,
+  "count": 73,
   "students": [
     {
       "name": "Hammad rehan",
@@ -930,6 +930,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:12:41.615Z"
+    },
+    {
+      "name": "MOIZ KHAN",
+      "nuid": "26I-0897",
+      "section": "H",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:15:48.021Z"
     }
   ]
 }
