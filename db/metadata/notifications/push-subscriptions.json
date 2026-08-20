@@ -2061,5 +2061,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3281",
+    "name": "Muhammad Shaheer Yasin",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fL1XlHUbkIs:APA91bFVTmK0zrkLZVgTmFTpfyl2oMn9w0PbG4zWKT8SvZd_l6Dj5WTa6WJSxhk4zjTrWU_0VnD0iNxyc4ZVTW4b19qg444PfX5ZcxVpa3xl-3A9Bzheq6cdVswlgmwXgV_d0WY4lgwy",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BGWjgM2Ow36x3h28FEz43jQZ5Bmpcle3pKw7LkGGfuVlSDC0tZ-EmKadu2kDdyg8mNeDph0YJ56xl5C-u3jV56U",
+        "auth": "XbEzysbSrvyvblBN_Tp1Ng"
+      }
+    },
+    "updated_at": 1787247120543,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
