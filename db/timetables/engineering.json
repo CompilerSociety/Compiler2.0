@@ -1201,11 +1201,6 @@
               "time": "02:20-03:40"
             },
             {
-              "name": "Blockchain Technologies",
-              "location": "B-230",
-              "time": "03:45-05:05"
-            },
-            {
               "name": "Digital Signal Processing Lab",
               "location": "KOH",
               "time": "8:30-09:50"
@@ -1301,6 +1296,6 @@
       }
     }
   },
-  "count": 211,
-  "generatedAt": "2026-08-20T05:44:17.960512+00:00"
+  "count": 210,
+  "generatedAt": "2026-08-20T06:02:56.825291+00:00"
 }

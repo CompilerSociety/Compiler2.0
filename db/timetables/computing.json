@@ -24,7 +24,7 @@
           "Tuesday": [
             {
               "name": "PF Lab",
-              "location": "IT LAB 1 (D-210)",
+              "location": "C-MARGALA 1",
               "time": "08:30-11:15"
             },
             {
@@ -234,7 +234,7 @@
           "Tuesday": [
             {
               "name": "IICT Lab",
-              "location": "C-RAWAL 1",
+              "location": "C-MARGALA 4",
               "time": "08:30-11:15"
             },
             {
@@ -297,7 +297,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "IT LAB 1 (D-210)",
+              "location": "C-MARGALA 1",
               "time": "08:30-11:15"
             }
           ],
@@ -471,7 +471,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "IT LAB 1 (D-210)",
+              "location": "C-MARGALA 1",
               "time": "08:30-11:15"
             }
           ],
@@ -541,7 +541,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "IT LAB 1 (D-210)",
+              "location": "C-MARGALA 1",
               "time": "11:30-02:15"
             }
           ],
@@ -2593,7 +2593,7 @@
             },
             {
               "name": "IICT",
-              "location": "C-MARGALA 4",
+              "location": "C-RAWAL 1",
               "time": "08:30-11:15"
             }
           ],
@@ -2707,7 +2707,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "C-MARGALA 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             }
           ]
@@ -2720,14 +2720,14 @@
               "time": "11:30-12:50"
             },
             {
+              "name": "IICT",
+              "location": "IT LAB 1 (D-210)",
+              "time": "08:30-11:15"
+            },
+            {
               "name": "PF Lab",
               "location": "IT LAB 1 (D-210)",
               "time": "02:30-05:15"
-            },
-            {
-              "name": "IICT",
-              "location": "C-MARGALA 1",
-              "time": "08:30-11:15"
             }
           ],
           "Tuesday": [
@@ -2840,7 +2840,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "C-MARGALA 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "08:30-11:15"
             }
           ],
@@ -2910,7 +2910,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "C-RAWAL 4",
+              "location": "IT LAB 2 (D-211)",
               "time": "10:00-12:45"
             }
           ],
@@ -2927,12 +2927,12 @@
             },
             {
               "name": "Func Eng Lab (E1)",
-              "location": "CALL-1 (A-213)",
+              "location": "C-MARGALA 3",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (E2)",
-              "location": "CALL-2 (A-214)",
+              "location": "C-MARGALA 4",
               "time": "11:30-02:15"
             }
           ]
@@ -3675,12 +3675,12 @@
             },
             {
               "name": "Func Eng Lab (B2)",
-              "location": "C-RAWAL 4",
+              "location": "C-MARGALA 1",
               "time": "11:30-02:15"
             },
             {
               "name": "Func Eng Lab (B1)",
-              "location": "CALL-3 (A-308)",
+              "location": "C-RAWAL 4",
               "time": "11:30-02:15"
             }
           ]
@@ -3963,7 +3963,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "IT LAB 2 (D-211)",
+              "location": "C-RAWAL 4",
               "time": "10:00-12:45"
             }
           ]
@@ -3979,8 +3979,8 @@
           "Thursday": [
             {
               "name": "Business Research",
-              "location": "D-403",
-              "time": "11:30-12:50"
+              "location": "D-402",
+              "time": "01:00-02:20"
             }
           ]
         },
@@ -5190,7 +5190,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "C-MARGALA 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             }
           ],
@@ -5265,7 +5265,7 @@
             },
             {
               "name": "IICT Lab",
-              "location": "C-MARGALA 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "11:30-02:15"
             }
           ],
@@ -5323,7 +5323,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "C-MARGALA 1",
+              "location": "IT LAB 1 (D-210)",
               "time": "08:30-11:15"
             }
           ],
@@ -5449,12 +5449,12 @@
             },
             {
               "name": "Func Eng Lab (D1)",
-              "location": "CALL-1 (A-213)",
+              "location": "C-MARGALA 3",
               "time": "08:30-11:15"
             },
             {
               "name": "Func Eng Lab (D2)",
-              "location": "CALL-2 (A-214)",
+              "location": "C-MARGALA 4",
               "time": "08:30-11:15"
             }
           ]
@@ -5531,7 +5531,7 @@
             },
             {
               "name": "OOP Lab",
-              "location": "IT LAB 2 (D-211)",
+              "location": "C-RAWAL 4",
               "time": "10:00-12:45"
             }
           ]
@@ -5618,7 +5618,7 @@
             },
             {
               "name": "PF Lab",
-              "location": "IT LAB 3 (D-213)",
+              "location": "C-MARGALA 3",
               "time": "08:30-11:15"
             },
             {
@@ -5780,12 +5780,12 @@
             },
             {
               "name": "Func Eng Lab (C1)",
-              "location": "CALL-1 (A-213)",
+              "location": "C-MARGALA 3",
               "time": "02:30-05:15"
             },
             {
               "name": "Func Eng Lab (C2)",
-              "location": "CALL-2 (A-214)",
+              "location": "C-MARGALA 4",
               "time": "02:30-05:15"
             }
           ]
@@ -5851,19 +5851,19 @@
           ],
           "Thursday": [
             {
-              "name": "Data St",
-              "location": "D-313",
-              "time": "08:30-09:50"
-            },
-            {
-              "name": "Intro to DS",
-              "location": "D-314",
-              "time": "11:30-12:50"
-            },
-            {
               "name": "COAL",
               "location": "D-315",
               "time": "01:00-02:20"
+            },
+            {
+              "name": "Data St",
+              "location": "D-403",
+              "time": "10:00-11:20"
+            },
+            {
+              "name": "Intro to DS",
+              "location": "D-403",
+              "time": "11:30-12:50"
             }
           ]
         },
@@ -7057,5 +7057,5 @@
     }
   },
   "count": 1166,
-  "generatedAt": "2026-08-20T05:44:15.795208+00:00"
+  "generatedAt": "2026-08-20T06:02:54.311405+00:00"
 }
