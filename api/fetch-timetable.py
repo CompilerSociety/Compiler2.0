@@ -19,8 +19,10 @@ Fetches the latest matching Gmail message and routes it by subject keyword:
 Required environment variables:
   GMAIL_USER  – Gmail address
   GMAIL_PASS  – Gmail App Password (not your regular password)
-  GH_TOKEN    – GitHub PAT with repo contents write access (Vercel handler only;
-                the GitHub Actions CLI commits with its own built-in token)
+  MONGODB_URI – Atlas connection string. Everything parsed here is stored in
+                MongoDB; there is no file or commit fallback, so a sync with
+                this unset fails loudly rather than silently discarding a
+                freshly parsed schedule.
   SYNC_SECRET – shared secret that must accompany every request to the Vercel
                 handler. Read from the Authorization: Bearer header, the
                 X-Sync-Secret header, or the ?secret= query parameter. When
@@ -28,8 +30,11 @@ Required environment variables:
                 the sync endpoint can never be triggered by anonymous traffic.
 
 Optional environment variables:
-  GH_REPO     – "owner/repo" (defaults to VERCEL_GIT_REPO_OWNER/SLUG)
-  GH_BRANCH   – target branch (default: main)
+  MONGODB_DB  – database name (default: compiler2)
+
+No GitHub credentials any more. This module used to commit its output back to
+db/*.json through the Contents API; that tree was deleted when MongoDB became
+the only store, and leaving the commit in would have quietly re-created it.
 """
 
 from __future__ import annotations
@@ -1223,91 +1228,6 @@ def fetch_showup_sheet_export_bytes(sheet_id: str) -> bytes:
     return resp.content
 
 
-# ── GitHub REST API commit ─────────────────────────────────────────────────────
-
-def github_request(method: str, url: str, token: str, payload: dict | None = None) -> Any:
-    data = None
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
-        "User-Agent": "vtable-seating-sync",
-    }
-    if payload is not None:
-        data = json.dumps(payload).encode("utf-8")
-        headers["Content-Type"] = "application/json"
-    req = Request(url, data=data, headers=headers, method=method)
-    try:
-        with urlopen(req, timeout=30) as resp:
-            raw = resp.read().decode("utf-8")
-            return json.loads(raw) if raw else {}
-    except HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"GitHub API {exc.code}: {detail}") from exc
-    except URLError as exc:
-        raise RuntimeError(f"GitHub API network error: {exc}") from exc
-
-
-def resolve_repo() -> tuple[str, str]:
-    repo = os.environ.get("GH_REPO", "").strip()
-    if repo and "/" in repo:
-        owner, name = repo.split("/", 1)
-        return owner, name
-    owner = os.environ.get("VERCEL_GIT_REPO_OWNER", "").strip()
-    slug = os.environ.get("VERCEL_GIT_REPO_SLUG", "").strip()
-    if owner and slug:
-        return owner, slug
-    raise RuntimeError(
-        "Set GH_REPO (owner/repo) or deploy via Vercel properties"
-    )
-
-
-def commit_json_to_github(document: dict[str, Any], repo_path: str) -> dict[str, Any]:
-    """Overwrite `repo_path` completely with `document` via the GitHub contents API.
-
-    Also writes the document to Mongo first. This is the path taken when the
-    sync runs as a Vercel function rather than inside the workflow, and it has
-    to keep the database current too - otherwise a sync triggered from the web
-    would update the committed mirror while leaving Mongo, the source of truth,
-    behind.
-    """
-    if _store is not None:
-        _store.save_document(repo_path, document)
-
-    token = os.environ.get("GH_TOKEN", "").strip()
-    if not token:
-        raise RuntimeError("GH_TOKEN environment variable is required")
-
-    owner, repo = resolve_repo()
-    branch = os.environ.get("GH_BRANCH", "main").strip() or "main"
-    api_base = f"https://api.github.com/repos/{owner}/{repo}/contents/{repo_path}"
-
-    existing_sha: str | None = None
-    try:
-        meta = github_request("GET", f"{api_base}?ref={branch}", token)
-        existing_sha = meta.get("sha")
-    except RuntimeError as exc:
-        if "404" not in str(exc):
-            raise
-
-    content_bytes = json.dumps(document, indent=2, ensure_ascii=False).encode("utf-8")
-    payload: dict[str, Any] = {
-        "message": f"Sync {repo_path} from Gmail ({document.get('count', 0)} entries)",
-        "content": base64.b64encode(content_bytes).decode("ascii"),
-        "branch": branch,
-    }
-    if existing_sha:
-        payload["sha"] = existing_sha
-
-    result = github_request("PUT", api_base, token, payload)
-    return {
-        "committed": True,
-        "path": repo_path,
-        "branch": branch,
-        "sha": result.get("content", {}).get("sha"),
-        "html_url": result.get("content", {}).get("html_url"),
-    }
-
-
 def _write_json_file(path: str, document: dict[str, Any]) -> None:
     """Stores one synced document in MongoDB.
 
@@ -1396,7 +1316,7 @@ class handler(BaseHTTPRequestHandler):
             if kind == "seating":
                 document = parse_seating_plan_email(body, subject, attachment)
                 path = SUBJECT_ROUTES["seating"][1]
-                commit_info = commit_json_to_github(document, path)
+                _write_json_file(path, document)
                 json_response(
                     self, 200,
                     {
@@ -1404,7 +1324,7 @@ class handler(BaseHTTPRequestHandler):
                         "message": "Seating plan synced successfully from PDF file",
                         "students_parsed": document["count"],
                         "source_subject": subject,
-                        "github": commit_info,
+                        "stored": path,
                     },
                 )
             else:
@@ -1416,10 +1336,11 @@ class handler(BaseHTTPRequestHandler):
                 )
                 documents = parser(attachment, subject, attachment_filename)
                 prefix = SCHEDULE_FILE_PREFIX[kind]
-                github_results = {}
+                stored = []
                 for school, doc in documents.items():
                     path = f"db/{prefix.replace('exam-schedule', 'exams').replace('showup-schedule', 'showup')}/{school}.json"
-                    github_results[school] = commit_json_to_github(doc, path)
+                    _write_json_file(doc_path := path, doc)
+                    stored.append(doc_path)
                 json_response(
                     self, 200,
                     {
@@ -1427,7 +1348,7 @@ class handler(BaseHTTPRequestHandler):
                         "message": f"{kind} synced successfully from xlsx file",
                         "schools_parsed": {s: d["count"] for s, d in documents.items()},
                         "source_subject": subject,
-                        "github": github_results,
+                        "stored": stored,
                     },
                 )
         except Exception as exc:
