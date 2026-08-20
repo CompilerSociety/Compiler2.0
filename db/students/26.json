@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T13:08:32.939Z",
+  "updated_at": "2026-08-20T13:10:18.245Z",
   "source_subject": "Seating Plan 26",
-  "count": 115,
+  "count": 116,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1489,6 +1489,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T13:08:32.939Z"
+    },
+    {
+      "name": "Mohammad Ahmed Abbasi",
+      "nuid": "26I-2180",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T13:10:18.245Z"
     }
   ]
 }
