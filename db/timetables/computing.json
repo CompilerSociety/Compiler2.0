@@ -3775,14 +3775,14 @@
               "time": "11:30-12:50"
             },
             {
-              "name": "Data St Lab",
-              "location": "IT LAB 4-GPU (D-203)",
-              "time": "08:30-11:15"
-            },
-            {
               "name": "Prof for AI Lab",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
+            },
+            {
+              "name": "Data St Lab",
+              "location": "CYBER (D-514)",
+              "time": "08:30-11:15"
             }
           ],
           "Tuesday": [
@@ -4047,7 +4047,7 @@
             },
             {
               "name": "ML Lab",
-              "location": "C-RAWAL 3",
+              "location": "IT LAB 2 (D-211)",
               "time": "11:30-02:15"
             }
           ],
@@ -4134,7 +4134,7 @@
             },
             {
               "name": "ML Lab",
-              "location": "C-RAWAL 3",
+              "location": "C-RAWAL 4",
               "time": "11:30-02:15"
             }
           ],
@@ -4170,7 +4170,7 @@
             },
             {
               "name": "ML Lab",
-              "location": "C-RAWAL 3",
+              "location": "IT LAB 4-GPU (D-203)",
               "time": "08:30-11:15"
             }
           ],
@@ -4321,28 +4321,11 @@
           ]
         },
         "ALL": {
-          "Monday": [
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "11:30-02:15"
-            }
-          ],
           "Tuesday": [
             {
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "02:30-05:15"
             }
           ],
           "Wednesday": [
@@ -4355,11 +4338,6 @@
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
             }
           ],
           "Thursday": [
@@ -4377,21 +4355,6 @@
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "11:30-02:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "02:30-05:15"
             }
           ],
           "Friday": [
@@ -4403,16 +4366,6 @@
             {
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
-              "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
               "time": "02:30-05:15"
             }
           ]
@@ -4437,11 +4390,6 @@
               "name": "Cloud Comp",
               "location": "D-504",
               "time": "11:30-12:50"
-            },
-            {
-              "name": "Security Ops",
-              "location": "CYBER (D-514)",
-              "time": "08:30-11:15"
             }
           ],
           "Tuesday": [
@@ -4541,11 +4489,6 @@
               "name": "Cloud Comp",
               "location": "D-506",
               "time": "10:00-11:20"
-            },
-            {
-              "name": "Security Ops",
-              "location": "CYBER (D-514)",
-              "time": "11:30-02:15"
             }
           ],
           "Thursday": [
@@ -4566,11 +4509,6 @@
             {
               "name": "Project",
               "location": "CYBER (D-514)",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "CYBER (D-514)",
               "time": "02:30-05:15"
             }
           ],
@@ -4587,11 +4525,6 @@
             }
           ],
           "Wednesday": [
-            {
-              "name": "Project",
-              "location": "CYBER (D-514)",
-              "time": "11:30-02:15"
-            },
             {
               "name": "Project",
               "location": "CYBER (D-514)",
@@ -5035,7 +4968,7 @@
             },
             {
               "name": "AI Lab",
-              "location": "C-RAWAL 4",
+              "location": "CYBER (D-514)",
               "time": "11:30-02:15"
             }
           ],
@@ -5087,13 +5020,6 @@
       },
       "REPEAT": {
         "A": {
-          "Monday": [
-            {
-              "name": "Web Comp",
-              "location": "IT LAB 3 (D-213)",
-              "time": "02:30-05:15"
-            }
-          ],
           "Tuesday": [
             {
               "name": "Digital Sustain",
@@ -5490,11 +5416,6 @@
               "name": "OS",
               "location": "C-307",
               "time": "01:00-02:20"
-            },
-            {
-              "name": "Web Comp",
-              "location": "IT LAB 2 (D-211)",
-              "time": "11:30-02:15"
             }
           ],
           "Wednesday": [
@@ -5946,7 +5867,7 @@
             },
             {
               "name": "DAV Lab",
-              "location": "C-RAWAL 3",
+              "location": "IT LAB 3 (D-213)",
               "time": "02:30-05:15"
             }
           ],
@@ -6050,7 +5971,7 @@
             },
             {
               "name": "DAV Lab",
-              "location": "C-RAWAL 3",
+              "location": "C-RAWAL 1",
               "time": "02:30-05:15"
             }
           ],
@@ -6108,6 +6029,11 @@
           ],
           "Thursday": [
             {
+              "name": "Multiagent Sys",
+              "location": "D-316",
+              "time": "11:30-12:50"
+            },
+            {
               "name": "Business Research",
               "location": "D-401",
               "time": "02:30-03:50"
@@ -6159,8 +6085,8 @@
           "Thursday": [
             {
               "name": "Multiagent Sys",
-              "location": "D-316",
-              "time": "11:30-12:50"
+              "location": "D-401",
+              "time": "08:30-09:50"
             },
             {
               "name": "Comp Net",
@@ -6235,28 +6161,11 @@
           ]
         },
         "ALL": {
-          "Monday": [
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "11:30-02:15"
-            }
-          ],
           "Tuesday": [
             {
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "11:30-02:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "02:30-05:15"
             }
           ],
           "Wednesday": [
@@ -6269,11 +6178,6 @@
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
             }
           ],
           "Thursday": [
@@ -6291,21 +6195,6 @@
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
               "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "11:30-02:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "02:30-05:15"
             }
           ],
           "Friday": [
@@ -6317,16 +6206,6 @@
             {
               "name": "Project",
               "location": "IT LAB 4-GPU (D-203)",
-              "time": "02:30-05:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
-              "time": "08:30-11:15"
-            },
-            {
-              "name": "Project",
-              "location": "C-RAWAL 3",
               "time": "02:30-05:15"
             }
           ]
@@ -6638,11 +6517,6 @@
           ],
           "Tuesday": [
             {
-              "name": "App Prog",
-              "location": "D-304",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Adv AI",
               "location": "D-304",
               "time": "06:45-08:05"
@@ -6662,14 +6536,16 @@
           ],
           "Thursday": [
             {
-              "name": "App Prog",
-              "location": "D-303",
-              "time": "05:20-06:40"
-            },
-            {
               "name": "Adv AI",
               "location": "D-304",
               "time": "06:45-08:05"
+            }
+          ],
+          "Friday": [
+            {
+              "name": "App Prog",
+              "location": "D-305",
+              "time": "05:20-06:40"
             }
           ]
         }
@@ -7034,6 +6910,6 @@
       }
     }
   },
-  "count": 1162,
-  "generatedAt": "2026-08-20T11:17:17.826279+00:00"
+  "count": 1138,
+  "generatedAt": "2026-08-20T11:49:39.560889+00:00"
 }

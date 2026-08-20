@@ -2061,37 +2061,37 @@
               "name": "English - I (SS1016)",
               "location": "A-103",
               "time": "11:30-01:20"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KK-II",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A1)",
-              "location": "KK-II",
-              "time": "03:50-05:10"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KK-III",
-              "time": "02:25-03:45"
-            },
-            {
-              "name": "English - I- Lab (SL1016) (Group A2)",
-              "location": "KK-III",
-              "time": "03:50-05:10"
             }
           ],
           "Tuesday": [
             {
-              "name": "Psychology (SS2019)",
-              "location": "A-302",
-              "time": "01:00-02:50"
-            },
-            {
               "name": "Marketing Management (MG1002)",
               "location": "A-315",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "Psychology 8:30 - 10:20 (SS2019)",
+              "location": "A-316",
+              "time": "08:30-09:50"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "CAL-I LAB",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A1)",
+              "location": "CAL-I LAB",
+              "time": "03:50-05:10"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "CAL-II LAB",
+              "time": "02:25-03:45"
+            },
+            {
+              "name": "English - I- Lab (SL1016) (Group A2)",
+              "location": "CAL-II LAB",
               "time": "03:50-05:10"
             }
           ],
@@ -2150,14 +2150,14 @@
           ],
           "Tuesday": [
             {
-              "name": "Marketing Management (MG1002)",
-              "location": "A-315",
-              "time": "02:25-03:45"
+              "name": "Psychology (SS2019)",
+              "location": "A-302",
+              "time": "01:00-02:50"
             },
             {
-              "name": "Psychology 8:30 - 10:20 (SS2019)",
-              "location": "A-316",
-              "time": "08:30-09:50"
+              "name": "Marketing Management (MG1002)",
+              "location": "A-315",
+              "time": "03:50-05:10"
             }
           ],
           "Wednesday": [
@@ -3754,5 +3754,5 @@
     }
   },
   "count": 637,
-  "generatedAt": "2026-08-20T11:17:18.830641+00:00"
+  "generatedAt": "2026-08-20T11:49:40.268954+00:00"
 }
