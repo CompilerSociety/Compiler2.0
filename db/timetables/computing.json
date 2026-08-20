@@ -6486,6 +6486,16 @@
               "name": "App Prog",
               "location": "D-304",
               "time": "05:20-06:40"
+            },
+            {
+              "name": "Empirical S/w Engg",
+              "location": "D-314",
+              "time": "05:20-06:40"
+            },
+            {
+              "name": "Engg AI",
+              "location": "D-314",
+              "time": "06:45-08:05"
             }
           ],
           "Tuesday": [
@@ -6529,6 +6539,20 @@
               "name": "Research Methodology",
               "location": "D-303",
               "time": "05:20-06:40"
+            }
+          ]
+        },
+        "ALL": {
+          "Wednesday": [
+            {
+              "name": "Empirical S/w Engg",
+              "location": "D-314",
+              "time": "05:20-06:40"
+            },
+            {
+              "name": "Engg AI",
+              "location": "D-314",
+              "time": "06:45-08:05"
             }
           ]
         }
@@ -6999,35 +7023,11 @@
     "MS (Electives)": {
       "MS": {
         "ALL": {
-          "Monday": [
-            {
-              "name": "Empirical S/w Engg",
-              "location": "D-314",
-              "time": "05:20-06:40"
-            },
-            {
-              "name": "Engg AI",
-              "location": "D-314",
-              "time": "06:45-08:05"
-            }
-          ],
           "Tuesday": [
             {
               "name": "Securing Cloud",
               "location": "D-302",
               "time": "05:20-06:40"
-            }
-          ],
-          "Wednesday": [
-            {
-              "name": "Empirical S/w Engg",
-              "location": "D-314",
-              "time": "05:20-06:40"
-            },
-            {
-              "name": "Engg AI",
-              "location": "D-314",
-              "time": "06:45-08:05"
             }
           ],
           "Thursday": [
@@ -7042,5 +7042,5 @@
     }
   },
   "count": 1163,
-  "generatedAt": "2026-08-20T09:03:17.426662+00:00"
+  "generatedAt": "2026-08-20T09:48:12.100848+00:00"
 }
