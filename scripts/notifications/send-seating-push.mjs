@@ -1,23 +1,21 @@
 // Runs in GitHub Actions after the seating plan syncs.
-// For every stored subscription, look up its NU ID in db/seating/plan.json;
+// For every stored subscription, look up its NU ID in the seating plan;
 // if the seat details changed since last time, send a system-tray push.
 //
 // Env: VAPID_PRIVATE_KEY (required), VAPID_PUBLIC_KEY (required),
 //      VAPID_SUBJECT (optional, e.g. "mailto:compilersociety@gmail.com")
 //
 // Reads/writes (the workflow commits these):
-//   db/seating/plan.json       - source seat data (read only)
-//   db/metadata/notifications/push-subscriptions.json - who to notify (dead subs pruned)
+//   documents/seating/plan     - source seat data (read only)
+//   push_subscriptions         - who to notify (dead subs pruned)
 //   db/metadata/notifications/push-state.json         - endpoint -> last seat hash (avoids re-spamming)
 
-import fs from 'node:fs';
 import crypto from 'node:crypto';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
-import { readJson, loadSubs, loadState, saveState, pruneSubs } from './store.mjs';
+import { loadSubs, loadState, saveState, pruneSubs, loadDocument } from './store.mjs';
 
-const SEATING = 'db/seating/plan.json';
-const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const SEATING = 'seating/plan';
 const STATE = 'db/metadata/notifications/push-state.json';
 
 
@@ -30,7 +28,7 @@ if (!priv || !pub) {
 }
 webpush.setVapidDetails(subject, pub, priv);
 
-const seating = readJson(SEATING, { students: [] });
+const seating = (await loadDocument(SEATING)) || { students: [] };
 const students = Array.isArray(seating.students) ? seating.students : [];
 const byNuid = new Map();
 for (const s of students) {

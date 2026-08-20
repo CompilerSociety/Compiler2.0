@@ -5,18 +5,16 @@
 // Env: VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY (required),
 //      VAPID_SUBJECT (optional)
 //
-// Reads:  db/exams/*.json, db/metadata/notifications/push-subscriptions.json
+// Reads:  the `documents` and `push_subscriptions` collections in MongoDB
 // Writes: db/metadata/notifications/push-exam-state.json  (endpoint -> exam-doc id already notified)
 
-import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
-import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
+import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists.
-const EXAM_FILES = ['db/exams/computing.json', 'db/exams/business.json', 'db/exams/engineering.json'];
-const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const EXAM_DOCS = ['exams/computing', 'exams/business', 'exams/engineering'];
 const STATE = 'db/metadata/notifications/push-exam-state.json';
 
 
@@ -26,9 +24,8 @@ const subject = process.env.VAPID_SUBJECT || 'mailto:compilersociety@gmail.com';
 if (!priv || !pub) { console.log('VAPID keys not set — skipping exam push.'); process.exit(0); }
 webpush.setVapidDetails(subject, pub, priv);
 
-// Load every exam schedule file (computing / business / engineering).
-const examDocs = EXAM_FILES
-  .map((f) => readJson(f, null))
+// Load every exam schedule (computing / business / engineering) from Mongo.
+const examDocs = (await Promise.all(EXAM_DOCS.map((id) => loadDocument(id))))
   .filter((d) => d && Array.isArray(d.exams));
 
 if (examDocs.length === 0) { console.log('No exam schedules present — nothing to send.'); process.exit(0); }

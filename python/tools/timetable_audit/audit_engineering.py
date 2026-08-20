@@ -21,6 +21,22 @@ from collections import defaultdict, Counter
 
 CACHE, REPO = sys.argv[1], sys.argv[2]
 
+# Timetables live in MongoDB now, not in db/timetables/*.json. Read them through
+# the shared store so this tool keeps auditing whatever the generator actually
+# published.
+sys.path.insert(0, os.path.join(REPO, "python"))
+from db import store as _store  # noqa: E402
+
+
+def _load_timetable(doc_id: str):
+    doc = _store.load_document(doc_id)
+    if doc is None:
+        raise SystemExit(
+            f"No timetable stored for {doc_id}. Set MONGODB_URI and make sure the "
+            "generator has run."
+        )
+    return doc["tt"]
+
 
 def cache_name(school, tab):
     """Mirror how fetch_cache.py names its snapshots (non-alphanumerics -> '_').
@@ -361,8 +377,7 @@ def main():
         by_key[a["key"]].append(a)
 
     cells = parse_schedule(load(SCHED), problems)
-    tt = json.load(open(os.path.join(REPO, "db/timetables/engineering.json"),
-                        encoding="utf-8"))["tt"]
+    tt = _load_timetable("db/timetables/engineering.json")
     entries = []
     for dept, bs in tt.items():
         for batch, ss in bs.items():

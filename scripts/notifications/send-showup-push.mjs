@@ -4,26 +4,25 @@
 //
 // Env: VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY (required), VAPID_SUBJECT (optional)
 //
-// Reads:  db/showup/*.json, db/metadata/notifications/push-subscriptions.json
+// Reads:  the `documents` and `push_subscriptions` collections in MongoDB
 // Writes: db/metadata/notifications/showup-notify-state.json  (slotKey -> "time@venue" last seen)
 //
 // The state file is what makes this a *change* detector: on the first run it is
 // just recorded (no spam), and thereafter only slots whose time/venue differ
 // from the stored value fire a notification.
 
-import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
-import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
+import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists. Only computing has a show-up sheet today,
 // but this lists every school so a new one starts working without a code
 // change here — same shape send-exam-push.mjs uses for its three schools.
-const SHOWUP_FILES = fs.existsSync('db/showup')
-  ? fs.readdirSync('db/showup').filter((f) => f.endsWith('.json')).map((f) => `db/showup/${f}`)
-  : [];
-const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+// Was a readdir of db/showup, which no longer exists. Listed explicitly now:
+// only computing has a show-up sheet today, and adding a school here is the
+// same one-line change it was before.
+const SHOWUP_DOCS = ['showup/computing'];
 const STATE = 'db/metadata/notifications/showup-notify-state.json';
 
 
@@ -40,8 +39,8 @@ const slotKey = (dep, sec, batch, code, date) => [dep, sec, batch, code, date].j
 
 // Build the current snapshot of every section slot across all show-up files.
 const current = new Map(); // slotKey -> { value, info }
-for (const f of SHOWUP_FILES) {
-  const doc = readJson(f, null);
+for (const f of SHOWUP_DOCS) {
+  const doc = await loadDocument(f);
   const exams = doc && Array.isArray(doc.exams) ? doc.exams : [];
   for (const e of exams) {
     const secs = e.sections || {};

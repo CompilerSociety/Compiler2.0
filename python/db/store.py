@@ -38,6 +38,9 @@ DOCUMENT_IDS: dict[str, str] = {
     "db/exams/business.json": "exams/business",
     "db/exams/engineering.json": "exams/engineering",
     "db/showup/computing.json": "showup/computing",
+    "db/showup/business.json": "showup/business",
+    "db/showup/engineering.json": "showup/engineering",
+    "db/showup/source.json": "showup/source",
     "db/seating/plan.json": "seating/plan",
     "db/faculty/data.json": "faculty/data",
 }

@@ -1025,11 +1025,13 @@ const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 // into whatever section the student selects.
 const ALL_SECTIONS="ALL";
 /* ── Game leaderboards ──────────────────────────────────────────────────
-   The scores live in committed JSON that Vercel also serves as a static
-   file, so when /api/leaderboard is unavailable — a revoked GH_TOKEN once
-   took it down with a 500 — the board is still readable. Read the API
-   first (it is the freshest), then fall back to the static copy rather
-   than showing an empty "could not load" board. */
+   Scores live in MongoDB and are read live, so a board is never staler than
+   the moment it is drawn. There used to be a second path here that fell back
+   to a committed JSON copy of the scores; that copy no longer exists, and it
+   could not have been current anyway — it was only as fresh as the last
+   commit. /db/leaderboard.json still resolves (vercel.json rewrites it to
+   /api/db), so the constant below stays as a genuine second try against a
+   different endpoint rather than a stale mirror. */
 const LB_STATIC_PATHS={
   compiler_run:'/db/leaderboard.json',
   duck_hunter:'/db/leaderboard-duck-hunter.json',
@@ -1077,7 +1079,7 @@ async function fetchLeaderboard(game){
     return data.leaderboard||[];
   }catch(apiErr){
     const path=LB_STATIC_PATHS[game]||LB_STATIC_PATHS.compiler_run;
-    console.warn(`Leaderboard API unavailable (${apiErr.message}); using ${path}`);
+    console.warn(`Leaderboard API unavailable (${apiErr.message}); retrying via ${path}`);
     const res=await fetch(`${path}?cachebust=${Date.now()}`,{cache:'no-store'});
     if(!res.ok) throw new Error(`static leaderboard HTTP ${res.status}`);
     const data=await res.json();

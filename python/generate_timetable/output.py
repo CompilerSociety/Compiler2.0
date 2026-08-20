@@ -48,14 +48,19 @@ def write_json(tt, out_path):
         "count": count_entries(ref_tt),
         "generatedAt": datetime.now(timezone.utc).isoformat(),
     }
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    if _store is not None:
-        # out_path is an absolute path from main.py; save_document matches on
-        # the repo-relative tail, so pass the part starting at "db/".
-        rel = out_path.replace("\\", "/")
-        idx = rel.find("db/")
-        _store.save_document(rel[idx:] if idx >= 0 else rel, output)
+    # Stored in MongoDB, not written to disk: db/*.json is gone and api/db.js
+    # serves timetables to the frontend straight from the database. out_path is
+    # an absolute path from main.py and is now only an identifier, so pass the
+    # repo-relative tail starting at "db/".
+    rel = out_path.replace("\\", "/")
+    idx = rel.find("db/")
+    doc_id = rel[idx:] if idx >= 0 else rel
+    if _store is None or not _store.enabled():
+        raise RuntimeError(
+            f"MONGODB_URI is not configured - refusing to discard the timetable for {doc_id}"
+        )
+    if not _store.save_document(doc_id, output):
+        raise RuntimeError(f"Could not store {doc_id} in MongoDB")
     return ref_tt, output["count"]
 
 

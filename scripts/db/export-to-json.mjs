@@ -1,28 +1,20 @@
 // scripts/db/export-to-json.mjs
-// Rebuilds the committed db/*.json tree from MongoDB.
+// Dumps MongoDB back out as the db/*.json tree it replaced.
 //
-//   node scripts/db/export-to-json.mjs [--check]
+//   node scripts/db/export-to-json.mjs --out backup/
 //
-// Mongo is the source of truth after the migration, but db/ does NOT go away.
-// It stays as a generated mirror, because a lot of the system reads those files
-// directly and none of it should have to care that the storage moved:
+// This is a BACKUP tool, not part of serving the site. db/ was deleted and
+// Mongo is the only store, so nothing reads its output at runtime.
 //
-//   - the frontend fetches /db/timetable-computing.json and friends as static
-//     files through the vercel.json rewrites, with no API call and no auth;
-//   - api/leaderboard.js and api/subscribe.js fall back to the committed copy
-//     when the database is unreachable, so an Atlas outage degrades the site to
-//     read-only instead of taking it down;
-//   - python/tools/timetable_audit/*.py read db/timetables/*.json off disk.
+// It exists because an Atlas M0 free cluster has NO automated backups, and
+// deleting the committed JSON removed the only other copy of this data. The
+// scheduled workflow runs this and uploads the result as a GitHub Actions
+// artifact - a real backup, retained without putting a single commit back into
+// the repo. To restore, unpack an artifact and run scripts/db/migrate-to-mongo.mjs
+// against it.
 //
-// A scheduled job runs this and commits the result, so the mirror is at most a
-// day behind and the fallback is never badly stale.
-//
-// DETERMINISM MATTERS: this output is committed, so an unstable ordering would
-// produce a huge diff on every run and re-create exactly the commit churn this
-// whole migration is meant to remove. Every collection is therefore read with
-// an explicit sort, and every map is rebuilt in sorted key order. The first
-// export reorders some records once (Mongo's sort vs. the old roster order);
-// after that the output is byte-stable until the data actually changes.
+// Output is deterministic (explicit sorts everywhere), so two backups of
+// unchanged data are byte-identical and easy to diff.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,30 +24,29 @@ import {
   COLLECTIONS, DOCUMENT_FILES, NOTIFY_STATE_FILES, LEADERBOARD_FILES,
 } from '../../lib/db/collections.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const CHECK_ONLY = process.argv.includes('--check');
+
+// --out <dir> writes the dump somewhere other than the repo. Without it the
+// output lands in the working directory, which for a backup run is a scratch
+// dir the workflow then uploads.
+const outFlag = process.argv.indexOf('--out');
+const ROOT = outFlag !== -1 && process.argv[outFlag + 1]
+  ? path.resolve(process.argv[outFlag + 1])
+  : REPO_ROOT;
 
 const MAX_ENTRIES = 10; // top-N cached into each leaderboard file
 
 let changed = 0;
 let unchanged = 0;
 
-// Detects the indent an existing file already uses so the export does not
-// reformat a file it is otherwise not changing. db/faculty/data.json is kept at
-// 4 spaces by hand; everything the Python jobs write uses 2.
-function detectIndent(abs, fallback = 2) {
-  try {
-    const line = fs.readFileSync(abs, 'utf-8').split('\n')[1] || '';
-    const m = /^(\s+)/.exec(line);
-    return m ? m[1].length : fallback;
-  } catch {
-    return fallback;
-  }
-}
+// Matches the indentation these files were committed with, so one backup
+// diffs cleanly against an older one.
+const INDENT = 2;
 
 function writeJson(rel, value) {
   const abs = path.join(ROOT, rel);
-  const text = JSON.stringify(value, null, detectIndent(abs)) + '\n';
+  const text = JSON.stringify(value, null, INDENT) + '\n';
   const existing = fs.existsSync(abs) ? fs.readFileSync(abs, 'utf-8') : null;
   if (existing === text) {
     unchanged += 1;

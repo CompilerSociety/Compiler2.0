@@ -1,31 +1,27 @@
 // scripts/notifications/store.mjs
 // Storage for the four send-*-push.mjs senders, shared so the four copies of
-// readJson/writeJson cannot drift apart the way the old path constants did.
+// the old readJson/writeJson helpers cannot drift apart the way their path
+// constants once did.
 //
-// Reads come from MongoDB, which matters most for the subscription list: a
-// student who enables alerts at 9am is written straight to Mongo by
-// api/subscribe.js, and if these scripts read the committed mirror instead they
-// would not see that device until the mirror was next exported. Reading the
-// database means a new subscriber is reachable on the very next run, which is
-// how it behaved when subscribe.js committed the file directly.
+// Everything comes from MongoDB. db/*.json is gone, so there is no file to read
+// and nothing is written back to the repo - a notification run no longer
+// produces a commit at all.
 //
-// Writes go to BOTH Mongo and the committed file. These scripts run inside a
-// workflow that already commits their output, so writing the file too keeps the
-// db/ mirror fresh for free, with no extra export job for this data.
-//
-// With no MONGODB_URI everything falls back to the files on disk, so the
-// senders behave exactly as they did before the migration.
+// FAILING SAFELY IS THE POINT OF THIS MODULE. The obvious implementation
+// returns an empty object when the database cannot be read, and that is the
+// worst possible answer here: an empty notify-state means "nothing has ever
+// been sent", so every sender would cheerfully re-deliver its entire backlog
+// to every subscribed device. Reads therefore throw, and `abortOnFailure`
+// turns that into a clean exit that sends nothing.
 
-import fs from 'node:fs';
 import { isEnabled } from '../../lib/db/mongo.mjs';
 import {
   listSubscriptions, getNotifyState, setNotifyState, removeSubscription,
+  getDocument,
 } from '../../lib/db/repos.mjs';
 
-export const SUBS_PATH = 'db/metadata/notifications/push-subscriptions.json';
-
-// Maps a state file to the `kind` tag its rows carry in the notify_state
-// collection. Mirrors NOTIFY_STATE_FILES in lib/db/collections.mjs.
+// Maps a sender's state name to the `kind` tag its rows carry in the
+// notify_state collection. Mirrors NOTIFY_STATE_FILES in lib/db/collections.mjs.
 const STATE_KINDS = {
   'db/metadata/notifications/push-state.json': 'push',
   'db/metadata/notifications/push-exam-state.json': 'push-exam',
@@ -33,86 +29,76 @@ const STATE_KINDS = {
   'db/metadata/notifications/showup-notify-state.json': 'showup-notify',
 };
 
-export function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return fallback; }
+// Exits 0, not 1: a database that is briefly unreachable is not a broken build,
+// and a red workflow every time Atlas hiccups trains people to ignore it. The
+// next scheduled run picks up exactly where this one stopped, because nothing
+// was sent and no state was advanced.
+function abortOnFailure(what, err) {
+  console.error(`Could not read ${what} from MongoDB: ${err?.message || err}`);
+  console.error('Sending nothing this run rather than risk re-notifying everyone.');
+  process.exit(0);
 }
 
-export function writeJson(p, val) {
-  fs.writeFileSync(p, JSON.stringify(val, null, 2) + '\n');
+function requireMongo() {
+  if (!isEnabled()) {
+    console.error('MONGODB_URI is not set - skipping push notifications.');
+    process.exit(0);
+  }
 }
 
-// The subscription list, newest state first. Falls back to the committed file.
 export async function loadSubs() {
-  if (!isEnabled()) return readJson(SUBS_PATH, []);
+  requireMongo();
   try {
-    const subs = await listSubscriptions();
-    // An empty database with a populated file almost certainly means the
-    // migration has not been run yet, not that everyone unsubscribed. Sending
-    // to nobody is a silent failure, so prefer the file in that case.
-    if (!subs.length) {
-      const fromFile = readJson(SUBS_PATH, []);
-      if (fromFile.length) {
-        console.warn(`No subscriptions in Mongo but ${fromFile.length} in ${SUBS_PATH} - using the file.`);
-        return fromFile;
-      }
-    }
-    return subs;
+    return await listSubscriptions();
   } catch (err) {
-    console.warn('Subscription read from Mongo failed, using the committed file:', err?.message);
-    return readJson(SUBS_PATH, []);
+    return abortOnFailure('the subscription list', err);
   }
 }
 
-// Replaces the stored subscription list with `kept`, dropping the rest. Used by
-// the seating sender when a push service reports an endpoint as gone (404/410).
-// Deletes the dropped rows from Mongo as well as rewriting the file - pruning
-// only the mirror would leave dead endpoints in the database to be retried on
-// every future run.
+// One generated document (a timetable, exam schedule, seating plan...) by the
+// id it carries in the `documents` collection, e.g. "timetables/computing".
+// Returns null when it is not there, which every caller already treats as
+// "nothing to notify about" rather than an error - a school with no timetable
+// published yet is a normal state.
+export async function loadDocument(id) {
+  requireMongo();
+  try {
+    return await getDocument(id);
+  } catch (err) {
+    return abortOnFailure(`document "${id}"`, err);
+  }
+}
+
+export async function loadState(name) {
+  requireMongo();
+  const kind = STATE_KINDS[name];
+  if (!kind) throw new Error(`Unknown notify state: ${name}`);
+  try {
+    return await getNotifyState(kind);
+  } catch (err) {
+    return abortOnFailure(`notify state "${kind}"`, err);
+  }
+}
+
+export async function saveState(name, state) {
+  const kind = STATE_KINDS[name];
+  if (!kind) throw new Error(`Unknown notify state: ${name}`);
+  await setNotifyState(kind, state);
+}
+
+// Drops the subscriptions the push services reported as gone (404/410). Used by
+// the seating sender, which is the one that fans out to every device.
 export async function pruneSubs(kept) {
-  const kepts = new Set(kept.map((e) => e?.subscription?.endpoint).filter(Boolean));
-  if (isEnabled()) {
-    const before = await loadSubs();
-    for (const entry of before) {
-      const endpoint = entry?.subscription?.endpoint;
-      if (endpoint && !kepts.has(endpoint)) {
-        try {
-          await removeSubscription(endpoint);
-        } catch (err) {
-          console.warn(`Could not prune ${endpoint}:`, err?.message);
-        }
+  const keptEndpoints = new Set(kept.map((e) => e?.subscription?.endpoint).filter(Boolean));
+  const all = await listSubscriptions();
+  for (const entry of all) {
+    const endpoint = entry?.subscription?.endpoint;
+    if (endpoint && !keptEndpoints.has(endpoint)) {
+      try {
+        await removeSubscription(endpoint);
+      } catch (err) {
+        console.warn(`Could not prune ${endpoint}:`, err?.message);
       }
     }
-  }
-  writeJson(SUBS_PATH, kept);
-}
-
-export async function loadState(path) {
-  const kind = STATE_KINDS[path];
-  if (!isEnabled() || !kind) return readJson(path, {});
-  try {
-    const state = await getNotifyState(kind);
-    // Same reasoning as above, and here it is worse: an empty state makes every
-    // sender think nothing has been notified yet and re-send the entire
-    // backlog to every device.
-    if (!Object.keys(state).length) return readJson(path, {});
-    return state;
-  } catch (err) {
-    console.warn(`State read from Mongo failed for ${kind}, using ${path}:`, err?.message);
-    return readJson(path, {});
-  }
-}
-
-// Writes state to Mongo AND to its committed file. The file write always
-// happens - it is what the workflow commits, and what the fallback above reads.
-export async function saveState(path, state) {
-  writeJson(path, state);
-  const kind = STATE_KINDS[path];
-  if (!isEnabled() || !kind) return;
-  try {
-    await setNotifyState(kind, state);
-  } catch (err) {
-    // The file was still written and will still be committed, so the run is
-    // not lost - it just has to be reconciled by the next export.
-    console.warn(`State write to Mongo failed for ${kind}:`, err?.message);
   }
 }

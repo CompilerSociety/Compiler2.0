@@ -1,0 +1,74 @@
+name: Back up MongoDB
+
+# An Atlas M0 free cluster has NO automated backups, and db/*.json - which used
+# to double as a historical copy of every score, roster and timetable - has been
+# deleted. Without this job, a bad migration or a dropped collection would be
+# unrecoverable.
+#
+# It dumps the database to the same JSON layout db/ used and uploads it as a
+# GitHub Actions artifact. An artifact, not a commit: the whole point of moving
+# to MongoDB was to stop this data churning the repo, and a backup that produced
+# a daily commit would put that right back.
+#
+# To restore: download an artifact, unzip it, and run
+#   node scripts/db/migrate-to-mongo.mjs
+# from a checkout with that db/ tree in place. The migration is an idempotent
+# upsert and never deletes, so restoring on top of a live database fills gaps
+# rather than rolling anything back.
+
+on:
+  schedule:
+    # 00:20 UTC = 05:20 PKT, the quietest hour for a student site.
+    - cron: "20 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup-mongo
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci --silent
+
+      - name: Dump MongoDB
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_DB: ${{ secrets.MONGODB_DB }}
+        run: |
+          if [ -z "$MONGODB_URI" ]; then
+            echo "::error::MONGODB_URI secret is not set - there is nothing backing up this data."
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/backup"
+          node scripts/db/export-to-json.mjs --out "$RUNNER_TEMP/backup"
+
+      - name: Fail if the dump looks empty
+        # A backup job that silently uploads an empty archive is worse than no
+        # backup job, because it looks like it is working.
+        run: |
+          count=$(find "$RUNNER_TEMP/backup" -name '*.json' | wc -l)
+          echo "Dumped $count JSON files."
+          if [ "$count" -lt 10 ]; then
+            echo "::error::Only $count files in the dump - expected at least 10. Not uploading."
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mongo-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/backup
+          # Long enough to notice and recover from a problem that took a while
+          # to spot, short enough not to hoard student data indefinitely.
+          retention-days: 30

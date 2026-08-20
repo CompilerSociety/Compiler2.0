@@ -1,4 +1,0 @@
-{
-  "_README": "Hand-maintained repeat (yellow) courses for Computing (FSC), merged into the frontend's \"Repeat Courses (Yellow)\" department on top of whatever the pipeline extracted (see buildRepeatIndex in web/js/app.js). Optional note field: Rescheduled | Cancelled. This list is now EMPTY on purpose: the generator reads the repeat fill from the sheet's own \"BS Repeat Courses\" legend swatch and writes every yellow cell to the REPEAT batch key itself, so the whole list is produced automatically. It was previously carrying a semester's worth of stale entries — 63 classes, not one of which matched any cell in the current sheet — which the frontend showed as real. Add entries here only for repeat classes the source sheet does not paint yellow.",
-  "repeat": []
-}

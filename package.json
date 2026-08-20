@@ -5,8 +5,6 @@
     "dev": "node scripts/devserver.mjs",
     "db:migrate": "node scripts/db/migrate-to-mongo.mjs",
     "db:migrate:dry": "node scripts/db/migrate-to-mongo.mjs --dry-run",
-    "db:export": "node scripts/db/export-to-json.mjs",
-    "db:check": "node scripts/db/export-to-json.mjs --check",
     "db:smoke": "node scripts/db/smoke-test.mjs"
   },
   "dependencies": {

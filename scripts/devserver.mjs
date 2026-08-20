@@ -8,8 +8,8 @@
  * so two things silently misbehave locally in ways they never do in production.
  *
  *   1. vercel.json rewrites the flat /db/*.json names the app actually asks
- *      for onto their real nested paths (/db/leaderboard.json ->
- *      db/games/leaderboards/compiler-run.json, and 20-odd others). Without
+ *      for onto /api/db?doc=... now that the committed db/ tree is gone and
+ *      MongoDB is the only store (20-odd routes). Without
  *      them the leaderboards, seating plan and exam schedules 404 and the app
  *      shows its "could not load" fallbacks — which looks like a bug in the
  *      feature you are testing.
@@ -136,7 +136,24 @@ const server = http.createServer(async (req, res) => {
     for (const rule of REWRITES) {
       const rest = rule.test(pathname);
       if (rest === null) continue;
-      const target = fileAt(rule.to(rest));
+      const dest = rule.to(rest);
+
+      // A rewrite can now land on a FUNCTION, not just a file: db/*.json was
+      // deleted, so every dataset the app fetches (/db/timetable-computing.json
+      // and the rest) is rewritten to /api/db?doc=... Without this branch the
+      // dev server resolved the target as a path, found no file, and 404'd
+      // every piece of data on the page.
+      const [destPath, destQuery = ''] = dest.split('?');
+      if (destPath.startsWith('/api/')) {
+        const name = destPath.slice(5).split('/')[0];
+        // The rewrite's own query merges UNDER the caller's, so an explicit
+        // ?doc= in the request cannot be silently overridden by the rule.
+        const merged = { ...Object.fromEntries(new URLSearchParams(destQuery)), ...query };
+        if (await runApi(name, req, res, merged)) return;
+        continue;
+      }
+
+      const target = fileAt(destPath);
       if (target) return sendFile(res, target);
     }
 

@@ -1,27 +1,30 @@
 name: Class cancel/reschedule notifications
 
-# Fires when a timetable JSON is updated (regenerated and pushed). Uses `on:
-# push` with a path filter because those commits come from a real user push,
-# which does trigger push workflows. The state file this writes
-# (db/metadata/notifications/class-notify-state.json) is committed by the Actions bot and does not match
-# the trigger path, so there is no loop.
+# Fires once the generator has published a new timetable.
+#
+# This used to be `on: push` filtered to db/timetables/*.json, which worked
+# while a regenerated timetable arrived as a commit. Timetables now go straight
+# to MongoDB and never touch the repo, so that trigger could never fire again -
+# chaining off the generator's own run is what replaces it.
+#
+# The hourly schedule is a safety net: it catches a timetable written by
+# anything other than that workflow (a manual run of the generator, or the
+# Gmail sync), and a run with nothing new to say sends nothing.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "db/timetables/computing.json"
-      - "db/timetables/business.json"
-      - "db/timetables/engineering.json"
+  workflow_run:
+    workflows: ["Generate timetables"]
+    types: [completed]
+  schedule:
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# Every step below inherits the database connection: the Gmail sync writes
-# generated documents to Mongo as well as to their committed JSON, and the
-# push senders read subscriptions from Mongo so a student who subscribed today
-# is reachable on this run rather than after the next mirror export. Unset,
-# every one of them falls back to the files and behaves as it did before.
+# Every step below needs the database connection: MongoDB is the only store, so
+# without it the sync jobs have nowhere to put what they parse and the push
+# senders have nothing to read. Jobs fail loudly rather than quietly doing
+# nothing if it is missing.
 env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
   MONGODB_DB: ${{ secrets.MONGODB_DB }}
@@ -48,22 +51,7 @@ jobs:
           npm ci --silent
           node scripts/notifications/send-class-push.mjs
 
-      - name: Commit notification state
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          [ -e db/metadata/notifications/class-notify-state.json ] && git add db/metadata/notifications/class-notify-state.json
-          if git diff --cached --quiet; then
-            echo "No state changes to commit"
-            exit 0
-          fi
-          git commit -m "Update class notification state"
-          for attempt in 1 2 3 4 5; do
-            if git pull --rebase origin main && git push; then
-              exit 0
-            fi
-            echo "Push attempt $attempt failed, retrying..."
-            sleep $((RANDOM % 8 + 3))
-          done
-          echo "Push failed after 5 attempts"
-          exit 1
+      # No commit step any more. This job used to write its results into db/
+      # and push them; that data now lives in MongoDB, written directly by the
+      # step above, so a run produces no repo changes at all. That was the point
+      # of the migration: notifications and syncs stopped churning main.

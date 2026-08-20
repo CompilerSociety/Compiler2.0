@@ -32,13 +32,13 @@
     }
   ],
   "rewrites": [
-   {
-  	"source": "/robots.txt",
-  	"destination": "/web/robots.txt"
-   },
-   {
-  	"source": "/sitemap.xml",
-  	"destination": "/web/sitemap.xml"
+    {
+      "source": "/robots.txt",
+      "destination": "/web/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/web/sitemap.xml"
     },
     {
       "source": "/",
@@ -78,79 +78,152 @@
     },
     {
       "source": "/db/22.json",
-      "destination": "/db/students/22.json"
+      "destination": "/api/db?doc=students/22"
     },
     {
       "source": "/db/23.json",
-      "destination": "/db/students/23.json"
+      "destination": "/api/db?doc=students/23"
     },
     {
       "source": "/db/24.json",
-      "destination": "/db/students/24.json"
+      "destination": "/api/db?doc=students/24"
     },
     {
       "source": "/db/25.json",
-      "destination": "/db/students/25.json"
+      "destination": "/api/db?doc=students/25"
     },
     {
       "source": "/db/26.json",
-      "destination": "/db/students/26.json"
+      "destination": "/api/db?doc=students/26"
     },
     {
       "source": "/db/exam-schedule-business.json",
-      "destination": "/db/exams/business.json"
+      "destination": "/api/db?doc=exams/business"
     },
     {
       "source": "/db/exam-schedule-computing.json",
-      "destination": "/db/exams/computing.json"
+      "destination": "/api/db?doc=exams/computing"
     },
     {
       "source": "/db/exam-schedule-engineering.json",
-      "destination": "/db/exams/engineering.json"
+      "destination": "/api/db?doc=exams/engineering"
     },
     {
       "source": "/db/faculty_data.json",
-      "destination": "/db/faculty/data.json"
+      "destination": "/api/db?doc=faculty/data"
     },
     {
       "source": "/db/leaderboard.json",
-      "destination": "/db/games/leaderboards/compiler-run.json"
+      "destination": "/api/db?doc=leaderboards/compiler-run"
     },
     {
       "source": "/db/leaderboard-duck-hunter.json",
-      "destination": "/db/games/leaderboards/duck-hunter.json"
+      "destination": "/api/db?doc=leaderboards/duck-hunter"
     },
     {
       "source": "/db/leaderboard-flappy-bird.json",
-      "destination": "/db/games/leaderboards/flappy-bird.json"
+      "destination": "/api/db?doc=leaderboards/flappy-bird"
     },
     {
       "source": "/db/repeat-computing.json",
-      "destination": "/db/timetables/repeat-computing.json"
+      "destination": "/api/db?doc=timetables/repeat-computing"
     },
     {
       "source": "/db/seating-plan.json",
-      "destination": "/db/seating/plan.json"
+      "destination": "/api/db?doc=seating/plan"
     },
     {
       "source": "/db/showup-schedule-computing.json",
-      "destination": "/db/showup/computing.json"
+      "destination": "/api/db?doc=showup/computing"
     },
     {
       "source": "/db/timetable-business.json",
-      "destination": "/db/timetables/business.json"
+      "destination": "/api/db?doc=timetables/business"
     },
     {
       "source": "/db/timetable-computing.json",
-      "destination": "/db/timetables/computing.json"
+      "destination": "/api/db?doc=timetables/computing"
     },
     {
       "source": "/db/timetable-engineering.json",
-      "destination": "/db/timetables/engineering.json"
+      "destination": "/api/db?doc=timetables/engineering"
+    },
+    {
+      "source": "/db/students/22.json",
+      "destination": "/api/db?doc=students/22"
+    },
+    {
+      "source": "/db/students/23.json",
+      "destination": "/api/db?doc=students/23"
+    },
+    {
+      "source": "/db/students/24.json",
+      "destination": "/api/db?doc=students/24"
+    },
+    {
+      "source": "/db/students/25.json",
+      "destination": "/api/db?doc=students/25"
+    },
+    {
+      "source": "/db/students/26.json",
+      "destination": "/api/db?doc=students/26"
+    },
+    {
+      "source": "/db/exams/business.json",
+      "destination": "/api/db?doc=exams/business"
+    },
+    {
+      "source": "/db/exams/computing.json",
+      "destination": "/api/db?doc=exams/computing"
+    },
+    {
+      "source": "/db/exams/engineering.json",
+      "destination": "/api/db?doc=exams/engineering"
+    },
+    {
+      "source": "/db/faculty/data.json",
+      "destination": "/api/db?doc=faculty/data"
+    },
+    {
+      "source": "/db/games/leaderboards/compiler-run.json",
+      "destination": "/api/db?doc=leaderboards/compiler-run"
+    },
+    {
+      "source": "/db/games/leaderboards/duck-hunter.json",
+      "destination": "/api/db?doc=leaderboards/duck-hunter"
+    },
+    {
+      "source": "/db/games/leaderboards/flappy-bird.json",
+      "destination": "/api/db?doc=leaderboards/flappy-bird"
+    },
+    {
+      "source": "/db/timetables/repeat-computing.json",
+      "destination": "/api/db?doc=timetables/repeat-computing"
+    },
+    {
+      "source": "/db/seating/plan.json",
+      "destination": "/api/db?doc=seating/plan"
+    },
+    {
+      "source": "/db/showup/computing.json",
+      "destination": "/api/db?doc=showup/computing"
+    },
+    {
+      "source": "/db/timetables/business.json",
+      "destination": "/api/db?doc=timetables/business"
+    },
+    {
+      "source": "/db/timetables/computing.json",
+      "destination": "/api/db?doc=timetables/computing"
+    },
+    {
+      "source": "/db/timetables/engineering.json",
+      "destination": "/api/db?doc=timetables/engineering"
     },
     {
       "source": "/:path*",
       "destination": "/web/index.html"
     }
-  ]
+  ],
+  "//db": "db/*.json is gone: MongoDB is the only store. These rewrites keep the old public URLs working by serving the same payloads from api/db.js, so nothing on the client had to change and the data is live rather than as stale as the last commit."
 }

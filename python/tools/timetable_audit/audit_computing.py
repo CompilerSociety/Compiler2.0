@@ -19,6 +19,23 @@ from collections import defaultdict, Counter
 CACHE = sys.argv[1]
 REPO = sys.argv[2]
 
+# Timetables live in MongoDB now, not in db/timetables/*.json. Read them through
+# the shared store so this tool keeps auditing whatever the generator actually
+# published.
+sys.path.insert(0, os.path.join(REPO, "python"))
+from db import store as _store  # noqa: E402
+
+
+def _load_timetable(doc_id: str):
+    doc = _store.load_document(doc_id)
+    if doc is None:
+        raise SystemExit(
+            f"No timetable stored for {doc_id}. Set MONGODB_URI and make sure the "
+            "generator has run."
+        )
+    return doc["tt"]
+
+
 # ---------------------------------------------------------------- sheet model
 
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -374,8 +391,7 @@ def main():
     for d in DAYS:
         cells.extend(extract_day(d, tabs[d][0], tabs[d][1], problems, variants))
 
-    tt = json.load(open(os.path.join(REPO, "db/timetables/computing.json"),
-                        encoding="utf-8"))["tt"]
+    tt = _load_timetable("db/timetables/computing.json")
 
     # Flatten JSON
     entries = []

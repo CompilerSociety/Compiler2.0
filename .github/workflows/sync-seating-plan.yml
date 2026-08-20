@@ -26,11 +26,10 @@ on:
 permissions:
   contents: write
 
-# Every step below inherits the database connection: the Gmail sync writes
-# generated documents to Mongo as well as to their committed JSON, and the
-# push senders read subscriptions from Mongo so a student who subscribed today
-# is reachable on this run rather than after the next mirror export. Unset,
-# every one of them falls back to the files and behaves as it did before.
+# Every step below needs the database connection: MongoDB is the only store, so
+# without it the sync jobs have nowhere to put what they parse and the push
+# senders have nothing to read. Jobs fail loudly rather than quietly doing
+# nothing if it is missing.
 env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
   MONGODB_DB: ${{ secrets.MONGODB_DB }}
@@ -107,32 +106,7 @@ jobs:
           npm ci --silent
           node scripts/notifications/send-seating-push.mjs
 
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Add each output only if it exists - some appear only once their
-          # feature has synced at least once (e.g. showup-sheet-source.json is
-          # created only after a show-up email's sheet link is discovered), and
-          # a plain "git add" of a missing path aborts the whole step.
-          for f in db/seating/plan.json db/exams/*.json db/showup/*.json db/showup/source.json db/metadata/notifications/push-subscriptions.json db/metadata/notifications/push-state.json; do
-            [ -e "$f" ] && git add "$f"
-          done
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-          git commit -m "Sync seating plan / exam schedule / show up schedule from Gmail"
-          # This workflow can be triggered concurrently (Apps Script dispatch +
-          # the 30-min schedule + poll-showup-sheet.yml all write to db/),
-          # so a push can race and get rejected as non-fast-forward. Retry with
-          # a rebase onto the latest remote each time instead of failing the run.
-          for attempt in 1 2 3 4 5; do
-            if git pull --rebase origin main && git push; then
-              exit 0
-            fi
-            echo "Push attempt $attempt failed, retrying..."
-            sleep $((RANDOM % 8 + 3))
-          done
-          echo "Push failed after 5 attempts"
-          exit 1
+      # No commit step any more. This job used to write its results into db/
+      # and push them; that data now lives in MongoDB, written directly by the
+      # step above, so a run produces no repo changes at all. That was the point
+      # of the migration: notifications and syncs stopped churning main.

@@ -1180,16 +1180,18 @@ def extract_google_sheet_id(text: str) -> str | None:
 
 
 def read_showup_sheet_id() -> str | None:
-    try:
-        with open(SHOWUP_SHEET_SOURCE_PATH, encoding="utf-8") as fh:
-            return (json.load(fh) or {}).get("sheet_id") or None
-    except (FileNotFoundError, json.JSONDecodeError):
+    # Stored in MongoDB now rather than on disk - see _write_json_file. Returns
+    # None when the link has not been spotted yet, which is a normal state on a
+    # fresh deployment and makes the poller sit idle instead of failing.
+    if _store is None:
         return None
+    doc = _store.load_document(SHOWUP_SHEET_SOURCE_PATH)
+    return (doc or {}).get("sheet_id") or None
 
 
 def maybe_bootstrap_showup_sheet_source(kind: str, subject: str, body: str) -> None:
     """If this is a showup-schedule email and its body contains a Google Sheets
-    link we haven't recorded yet, save it to disk so the poller can use it.
+    link we haven't recorded yet, store it so the poller can use it.
     Safe to call every run - a no-op once the link is already recorded (or if
     none is found at all)."""
     if kind != "showup_schedule":
@@ -1307,20 +1309,23 @@ def commit_json_to_github(document: dict[str, Any], repo_path: str) -> dict[str,
 
 
 def _write_json_file(path: str, document: dict[str, Any]) -> None:
-    """Writes one synced document to Mongo AND to its committed JSON file.
+    """Stores one synced document in MongoDB.
 
-    Both, not either: Mongo is the source of truth, while the file remains the
-    mirror that the frontend fetches statically and that the API reads when the
-    database is unreachable. The workflow already commits whatever this writes,
-    so the mirror stays fresh with no extra job.
+    Named for the file it used to write. db/*.json is gone - Mongo is the only
+    store, and api/db.js serves these documents to the frontend live - so a sync
+    no longer produces a commit at all. `path` is still the old repo-relative
+    path because that is what identifies the document (see DOCUMENT_IDS).
+
+    Raises if the write fails: silently dropping a freshly parsed timetable
+    would leave the site serving last week's, with nothing to notice it by.
     """
-    directory = os.path.dirname(path)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as fh:
-        json.dump(document, fh, indent=2, ensure_ascii=False)
-    if _store is not None:
-        _store.save_document(path, document)
+    if _store is None or not _store.enabled():
+        raise RuntimeError(
+            "MONGODB_URI is not configured - refusing to discard the synced "
+            f"document for {path}"
+        )
+    if not _store.save_document(path, document):
+        raise RuntimeError(f"Could not store {path} in MongoDB")
 
 
 # ── Vercel handler ───────────────────────────────────────────────────────────

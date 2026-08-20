@@ -20,13 +20,12 @@
 // on the first cancellation.
 //
 // Env: VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY (required), VAPID_SUBJECT (optional)
-// Reads:  db/timetables/*.json, db/metadata/notifications/push-subscriptions.json
-// Writes: db/metadata/notifications/class-notify-state.json
+// Reads:  the `documents` and `push_subscriptions` collections in MongoDB
+// Writes: the `notify_state` collection (kind "class-notify"). No commit.
 
-import fs from 'node:fs';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
-import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs';
+import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 
 // These three paths and the file list below must track the actual db/ layout.
 // They previously pointed at a flat db/push-subscriptions.json and a
@@ -34,8 +33,7 @@ import { readJson, writeJson, loadSubs, loadState, saveState } from './store.mjs
 // nested db/timetables/, db/exams/, db/showup/, db/metadata/notifications/
 // directories — so this script silently found zero files, exited via the
 // "No timetable data" branch, and never sent a single notification.
-const TIMETABLE_FILES = ['db/timetables/computing.json', 'db/timetables/business.json', 'db/timetables/engineering.json'];
-const SUBS = 'db/metadata/notifications/push-subscriptions.json';
+const TIMETABLES = ['timetables/computing', 'timetables/business', 'timetables/engineering'];
 const STATE = 'db/metadata/notifications/class-notify-state.json';
 
 
@@ -91,8 +89,8 @@ function fmtSlot(range) {
 
 // Build the current set of class slots across all timetable files.
 const slots = []; // { slotKey, value, status, deptKey, batch, secLetter, section, course, day, time, venue }
-for (const f of TIMETABLE_FILES) {
-  const doc = readJson(f, null);
+for (const f of TIMETABLES) {
+  const doc = await loadDocument(f);
   const tt = doc && doc.tt ? doc.tt : null;
   if (!tt) continue;
   for (const dep of Object.keys(tt)) {
