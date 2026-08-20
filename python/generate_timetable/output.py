@@ -49,26 +49,23 @@ def write_json(tt, out_path):
         "generatedAt": datetime.now(timezone.utc).isoformat(),
     }
 
-    # Primary output: write to disk, same as before Mongo was introduced.
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-
-    # Mongo write is best-effort only for now — if MONGODB_URI isn't
-    # configured, or the write fails, that no longer blocks the JSON file
-    # (which is the source of truth again). out_path is an absolute path
-    # from main.py; pass the repo-relative tail starting at "db/" as the
-    # doc id.
+    # MongoDB is the only store. Writing the file back as well was tried and
+    # reverted: db/timetables/*.json sits at exactly the path the frontend
+    # fetches, and Vercel checks the filesystem BEFORE applying the rewrite to
+    # /api/db - so the moment those files exist, every timetable read is served
+    # from the commit and the database is never consulted at all.
+    #
+    # out_path is an absolute path from main.py and is now only an identifier,
+    # so pass the repo-relative tail starting at "db/".
     rel = out_path.replace("\\", "/")
     idx = rel.find("db/")
     doc_id = rel[idx:] if idx >= 0 else rel
-    if _store is not None and _store.enabled():
-        try:
-            if not _store.save_document(doc_id, output):
-                print(f"  [warn] could not store {doc_id} in MongoDB (JSON file still written)")
-        except Exception as e:  # noqa: BLE001
-            print(f"  [warn] MongoDB write failed for {doc_id}: {e} (JSON file still written)")
-
+    if _store is None or not _store.enabled():
+        raise RuntimeError(
+            f"MONGODB_URI is not configured - refusing to discard the timetable for {doc_id}"
+        )
+    if not _store.save_document(doc_id, output):
+        raise RuntimeError(f"Could not store {doc_id} in MongoDB")
     return ref_tt, output["count"]
 
 
