@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:28:44.088Z",
+  "updated_at": "2026-08-20T17:32:47.771Z",
   "source_subject": "Seating Plan 26",
-  "count": 169,
+  "count": 170,
   "students": [
     {
       "name": "Hammad rehan",
@@ -2191,6 +2191,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:28:44.088Z"
+    },
+    {
+      "name": "Daniyal Aamir",
+      "nuid": "26I-0795",
+      "section": "D",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:32:47.771Z"
     }
   ]
 }
