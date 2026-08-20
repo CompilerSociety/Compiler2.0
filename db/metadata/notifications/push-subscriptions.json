@@ -1275,5 +1275,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3183",
+    "name": "Ayesha Rafiq",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fFceTnc0wro:APA91bFrbjBHGGE5wHrGRXBEqgzrnK3Oo7CJTMBz5nBflMyx4pNhVV3Bl5TWOnfbPcA6q5Jk4QAUwu2UdulpBLiYImwRz-MdpMzh7y78GdW5GyMs152K5VJ7rigciJ1A0I_0ce4Fnby4",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BDfKxLGccJTrYsdoTsAf1LFGA1K6Nk4qJSporAM9df5UhkFCKVamlrwNNphHHjMjaCj9z9EBhRV0iHBFt5hWmkc",
+        "auth": "_Tc6mAtOhvy95XjochUmcQ"
+      }
+    },
+    "updated_at": 1787204550260,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
