@@ -1419,5 +1419,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2219",
+    "name": "Riham Zahoor",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cVNm2EMjHr0:APA91bE7qJt__91NfMy0nqPD9lNvOcNbBtCPAcRjXJlmbJ9VN9WaA661tD2kx3otDaQ_zSU29GZW7WHaNyf4ZvlIPMuRW_wphwbqlB8yerw6EOzL_JPaG8ZNqANwSPq58CiySq_BDT76",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BPpRu5BvsQiLRvwYQVMh-LtpA2zCCpyzdvPe1-8ZNgL6Ebt4D7mX56SZ8VoCiVrNBM5LFdlQkI5nL9zhLt4F5kM",
+        "auth": "AYtXB2oHfKFKvRgubd6bTg"
+      }
+    },
+    "updated_at": 1787207306946,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
