@@ -377,6 +377,15 @@
       "batch": "25",
       "highScore": 0,
       "achievedAt": "2026-08-20T11:33:51.581Z"
+    },
+    "25I-0542": {
+      "nuid": "25I-0542",
+      "name": "Khubaib Khalil",
+      "section": "J",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 1,
+      "achievedAt": "2026-08-20T17:25:54.876Z"
     }
   },
   "leaderboard": [
