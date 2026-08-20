@@ -1992,5 +1992,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-3253",
+    "name": "Muhammad Abubakar",
+    "department": "BS SE",
+    "batch": "26",
+    "section": "E",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/c9cjG2InRpY:APA91bFiCyRUcGnFpcfjrc-N_raZwgBIxqzznszVIOfT_wdySXHgymNACC8iQDGK0Ntox-0EcBvCwLEPepSbcF6qy3Rnk4S-XNSlEJ0kOJh9m6l-oCr-hIQQWEQ0VphvsUcbwvlijLBM",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBLVAwqqICJ1gl9WU7eBHGbFdroMNkfCWZcpA9Wh1mOiVW4dOjRD96V1Pllwi0ihRZkp2nYXkmrcF-wqQ9eUjHU",
+        "auth": "_7uR9bcUgmPrJlkff2FCeA"
+      }
+    },
+    "updated_at": 1787246152524,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
