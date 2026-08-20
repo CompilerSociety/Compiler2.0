@@ -1946,5 +1946,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2217",
+    "name": "Javeria Sial",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "D",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/f9p3KzxzAEc:APA91bFnQMh-G8MtK1x9Rgsx0yVOHhNU41y1r4WoWMfd1IHzcZgcFyt6EGtcmPIrCIuNTvOhwPsq9Vt8OXZvZOXoN4UmeGezlpNgCQMwVIRWelbbzUSTE-kHclQum97B2GVzssxmk72M",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBhmJYpylG0QwJ7DjoP6cr_JxljmZzqrVyK1e_E6oA4OmldyBDUAqy67sStxsjri9RSSDlPf9D_BF0w7QWL-ch8",
+        "auth": "zziB-EHAIJt4mG82EC_m7A"
+      }
+    },
+    "updated_at": 1787242521336,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
