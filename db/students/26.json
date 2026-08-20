@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T17:03:56.162Z",
+  "updated_at": "2026-08-20T17:03:58.994Z",
   "source_subject": "Seating Plan 26",
-  "count": 152,
+  "count": 153,
   "students": [
     {
       "name": "Hammad rehan",
@@ -1970,6 +1970,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T17:03:56.162Z"
+    },
+    {
+      "name": "Ehtasham ul haq",
+      "nuid": "26I-2166",
+      "section": "C",
+      "department": "CY",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T17:03:58.994Z"
     }
   ]
 }
