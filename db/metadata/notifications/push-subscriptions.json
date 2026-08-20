@@ -48,22 +48,6 @@
     "updated_at": 1786558081517
   },
   {
-    "nuid": "25I-0814",
-    "name": "Hashim Amjad",
-    "department": "BS CS",
-    "batch": "25",
-    "section": "G",
-    "subscription": {
-      "endpoint": "https://web.push.apple.com/QP7-FoD3KvWJV4X287QACy0XS0_OEHKeTr7Hcq4IXR0sfVa4uu3kbhaoRI7QXXWl3l25NSNvlsQXGywEwxCYfJkRqytxabkVMY5ALTd0RErfeNQWcU0eTgolrPfNl5T790crcoJHozgQOci4M-5W3skXdJwZNDrHQ7bFKiWwg1A",
-      "expirationTime": null,
-      "keys": {
-        "p256dh": "BBSlLjBkAHKAY4CaoZYrFl8RuyrPSKFA63EhP8SRQmHvwoTHTc9bHaru8QFFBTELSvXUrBw9R9rB2RBP_0xeKh8",
-        "auth": "BioBzf-wqE8QJQVWsDWj9g"
-      }
-    },
-    "updated_at": 1786563708836
-  },
-  {
     "nuid": "26I-0816",
     "name": "Hammad Rehan",
     "department": "BS CS",
@@ -1363,6 +1347,29 @@
     "prefs": {
       "cls": true,
       "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
+  },
+  {
+    "nuid": "25I-0814",
+    "name": "Hashim Amjad",
+    "department": "BS CS",
+    "batch": "25",
+    "section": "G",
+    "subscription": {
+      "endpoint": "https://web.push.apple.com/QP7-FoD3KvWJV4X287QACy0XS0_OEHKeTr7Hcq4IXR0sfVa4uu3kbhaoRI7QXXWl3l25NSNvlsQXGywEwxCYfJkRqytxabkVMY5ALTd0RErfeNQWcU0eTgolrPfNl5T790crcoJHozgQOci4M-5W3skXdJwZNDrHQ7bFKiWwg1A",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBSlLjBkAHKAY4CaoZYrFl8RuyrPSKFA63EhP8SRQmHvwoTHTc9bHaru8QFFBTELSvXUrBw9R9rB2RBP_0xeKh8",
+        "auth": "BioBzf-wqE8QJQVWsDWj9g"
+      }
+    },
+    "updated_at": 1787206709690,
+    "prefs": {
+      "cls": true,
+      "exam": false,
       "show": true,
       "seat": true,
       "room": false
