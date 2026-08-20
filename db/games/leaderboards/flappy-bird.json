@@ -350,6 +350,15 @@
       "batch": "26",
       "highScore": 10,
       "achievedAt": "2026-08-20T05:17:45.193Z"
+    },
+    "25I-2624": {
+      "nuid": "25I-2624",
+      "name": "Eman Khalid",
+      "section": "J",
+      "department": "BS CS",
+      "batch": "25",
+      "highScore": 2,
+      "achievedAt": "2026-08-20T06:08:36.551Z"
     }
   },
   "leaderboard": [
