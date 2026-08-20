@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-20T06:15:48.021Z",
+  "updated_at": "2026-08-20T06:16:59.604Z",
   "source_subject": "Seating Plan 26",
-  "count": 73,
+  "count": 74,
   "students": [
     {
       "name": "Hammad rehan",
@@ -943,6 +943,19 @@
       "seat": "",
       "self_registered": true,
       "added_at": "2026-08-20T06:15:48.021Z"
+    },
+    {
+      "name": "Mohammad Usman Khan",
+      "nuid": "26I-0709",
+      "section": "E",
+      "department": "CS",
+      "batch": "26",
+      "paper": "",
+      "time": "",
+      "class": "",
+      "seat": "",
+      "self_registered": true,
+      "added_at": "2026-08-20T06:16:59.604Z"
     }
   ]
 }
