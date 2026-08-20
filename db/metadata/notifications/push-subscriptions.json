@@ -1602,5 +1602,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2148",
+    "name": "Hasnain Ali",
+    "department": "BS CY",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/dw8U2ug-Mko:APA91bEJGepK_mHD_b_kY4_B0RbZOMjpdjdST6tUSGLf98USw_D8L7So5yMbNWnBxtSQQjWHzMmYEUpXi_juXSsGrcU122VkRcA3w7HFJ8sM1qPJ7aDOUsHxh46r_UKqX4NOgzmwJ2Zw",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLBTL_sXddGizNTBtdWku1LCNYbsNqgSwl4Ba-4oX2VM8ctto8e28cr6JgQWYqyep2OFlRketdP3iTGeExi6rWk",
+        "auth": "omYeeigkxP6G71I-_nLvSw"
+      }
+    },
+    "updated_at": 1787224228256,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
