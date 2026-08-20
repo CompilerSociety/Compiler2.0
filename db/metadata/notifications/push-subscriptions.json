@@ -1969,5 +1969,28 @@
       "seat": true,
       "room": false
     }
+  },
+  {
+    "nuid": "26I-2569",
+    "name": "Umar Imran",
+    "department": "BS DS",
+    "batch": "26",
+    "section": "C",
+    "subscription": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/fb-73g19iPE:APA91bHx2GKlPciMzNsFnzWD4p45j-Rxq_zFzO6FzLSr4Vt5HqdEaHmGRjfLejVQYaE2wLnXwNPizdn_om_i6FDVPxyjp7fdelfCZkbpBymqHQ8yylwAp9IhBtOfR8cqcVI58ZSYVCKH",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BD2Y3CrkcX1baA3TOUXy8zuSSr-GSTHyBs23q6onagC2TcGHx6ESoQ7AQidxadVP3A2pH9cPKqajFdaSnIbVj4I",
+        "auth": "CH71CdAGW4bQsnDshgi_tA"
+      }
+    },
+    "updated_at": 1787244487673,
+    "prefs": {
+      "cls": true,
+      "exam": true,
+      "show": true,
+      "seat": true,
+      "room": false
+    }
   }
 ]
