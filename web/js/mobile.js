@@ -436,14 +436,26 @@
      The saved list is shared with the desktop layer (same profile cookie, same
      helpers in app.js), so a course added on a laptop is already there on the
      phone. */
-  function hasOwnCourses(){
-    return typeof hasMyCourses==='function' && hasMyCourses();
-  }
+  // Under the overlay model getMyCourses() defaults to exactly the student's
+  // own section (defaults minus anything removed, plus anything added), so
+  // routing through it unconditionally is correct, not just for a customised
+  // profile: a brand-new profile with nothing changed yet produces exactly
+  // the rows the plain section lookup would. Only fall back to the raw
+  // section lookup when no scope could be resolved at all (myScopeFromCookie
+  // returns null) - a rare edge case, not something a genuinely empty day
+  // should be mistaken for.
   function myClassesFor(keys,day){
-    if(hasOwnCourses() && typeof myCoursesRowsForDay==='function'){
+    if(typeof myCoursesRowsForDay==='function'
+       && (typeof myScopeFromCookie!=='function' || myScopeFromCookie())){
       return myCoursesRowsForDay(day).map(r=>({name:r.name,location:r.location,time:r.time}));
     }
     return classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
+  }
+  function hasOwnCourses(){
+    // Kept for callers that only care "is my course list meaningfully
+    // populated" (the Today meta label). Under the overlay model this is
+    // almost always true once a profile exists.
+    return typeof getMyCourses==='function' && getMyCourses().length>0;
   }
   function classesFor(dept,batch,sec,day,src){
     const t=src||TT;
@@ -549,11 +561,12 @@
         <div class="m-now-name">The university cannot<br>hurt you right now.</div>
       </div>`;
     }
-    // Name what is actually on screen. While a saved course list is in use
-    // these are NOT the profile section's classes, and labelling them with the
-    // section reads as a bug — "0 classes, BS CS 2025-G" on a day the student
-    // does have a class, just not one of that section's.
-    const meta=hasOwnCourses()?'MY COURSES'
+    // The section identity while nothing has been customised (more useful
+    // than "MY COURSES" when the two are identical anyway); once something
+    // has actually been added or removed, this genuinely stops being "just
+    // BS CS 2025-G" and the label says so.
+    const customised=typeof hasMyCourses==='function' && hasMyCourses();
+    const meta=customised?'MY COURSES'
       :`${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}`;
     html+=`<div class="m-meta-row"><span>${rows.length} CLASS${rows.length===1?'':'ES'}</span>
       <b>${meta}</b></div>`;
@@ -1516,6 +1529,171 @@
     if(cv) cv.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,clientX:0,clientY:0}));
   }
 
+
+  /* ══ MY COURSES SHEET ═══════════════════════════════════════════════
+     Opened from the button on Today. Shows the effective list (the
+     student's own section by default, plus whatever they added, minus
+     whatever they removed) with a remove control on every row, and a
+     compact add-a-course cascade below it.
+
+     The cascade is a second, independent copy of Lookup's school → program →
+     batch → section → course steps, on its own state object (`mc`, not
+     `lk`) so opening this sheet can never disturb whatever a student is
+     mid-way through browsing in Lookup. */
+  const mc={school:'',program:'',batch:'',section:'',course:''};
+
+  function openCoursesSheet(){
+    const wrap=$('m-courses-sheet');
+    if(!wrap) return;
+    wrap.hidden=false;
+    // Defaults to the student's own school, if one is known, so adding a
+    // course usually starts from the school the student is actually in.
+    const p=(typeof profile==='function')?profile():null;
+    if(p&&!mc.school) mc.school=p.school||(typeof profileIsComputing==='function'&&profileIsComputing(p)?'computing':'computing');
+    renderCoursesSheet();
+  }
+  function closeCoursesSheet(){
+    const wrap=$('m-courses-sheet');
+    if(wrap) wrap.hidden=true;
+  }
+
+  function renderCoursesSheet(){
+    renderCoursesList();
+    renderCourseAddFields();
+  }
+
+  function renderCoursesList(){
+    const host=$('m-courses-list');
+    const btnCount=$('m-courses-btn-count');
+    if(!host) return;
+    const list=(typeof getMyCourses==='function')?getMyCourses():[];
+    if(btnCount){
+      if(list.length){ btnCount.hidden=false; btnCount.textContent=String(list.length); }
+      else btnCount.hidden=true;
+    }
+    if(!list.length){
+      host.innerHTML='<div class="m-empty">Nothing here yet. Your section&#39;s classes will appear once your profile is set up.</div>';
+      return;
+    }
+    host.innerHTML='<div class="m-section-label">Your courses ('+list.length+')</div>'+
+      '<div class="m-course-list" id="m-course-list">'+list.map(c=>{
+        const key=myCourseKey(c);
+        const origin=(String(c.dept||'').replace(/^BS\s+/,'')+' '+(c.batch||'')+(c.section?('-'+c.section):'')).trim();
+        const tag=c.isDefault?'<span class="m-course-tag">SECTION</span>':'<span class="m-course-tag is-added">ADDED</span>';
+        return '<div class="m-course-row"><span class="m-course-text">'
+          +'<span class="m-course-name">'+esc(c.name)+tag+'</span>'
+          +'<span class="m-course-origin">'+esc(origin)+'</span></span>'
+          +'<button class="m-course-remove" type="button" data-key="'+esc(key)+'" aria-label="Remove '+esc(c.name)+'">&times;</button></div>';
+      }).join('')+'</div>';
+    host.querySelectorAll('.m-course-remove').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const course=getMyCourses().find(c=>myCourseKey(c)===btn.dataset.key);
+        if(course) removeMyCourse(course);
+        renderCoursesSheet();
+        if(route==='today') renderToday();
+        toast('Course removed');
+      });
+    });
+  }
+
+  function renderCourseAddFields(){
+    const fieldsHost=$('mc-fields');
+    if(!fieldsHost) return;
+    const src=(typeof ttFor==='function')?(ttFor(mc.school)||{}):{};
+    const programs=Object.keys(src||{});
+    if(mc.program&&!programs.includes(mc.program)) mc.program='';
+    const batches=mc.program?Object.keys(src[mc.program]||{}):[];
+    if(mc.batch&&!batches.includes(mc.batch)) mc.batch='';
+    const sections=(mc.program&&mc.batch)
+      ? Object.keys(src[mc.program][mc.batch]||{}).filter(s=>s!==ALL_SECTIONS)
+          .sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
+      : [];
+    if(mc.section&&!sections.includes(mc.section)) mc.section='';
+    const courseNames=[];
+    if(mc.program&&mc.batch&&mc.section){
+      const seen=new Set();
+      [mc.section,ALL_SECTIONS].forEach(sec=>{
+        const days=((src[mc.program]||{})[mc.batch]||{})[sec]||{};
+        Object.values(days).forEach(arr=>(arr||[]).forEach(e=>{
+          const n=(typeof stripNote==='function'?stripNote(e.name||e.c||''):(e.name||e.c||'')).trim();
+          if(n&&!seen.has(n)){ seen.add(n); courseNames.push(n); }
+        }));
+      });
+      courseNames.sort();
+    }
+    if(mc.course&&!courseNames.includes(mc.course)) mc.course='';
+
+    const batchLabel=b=>b==='REPEAT'?'Repeat':b;
+    fieldsHost.innerHTML=[
+      fieldHTML('School','mc-school',mc.school?SCHOOL_LABELS[mc.school]:'',Object.keys(SCHOOL_LABELS),mc.school,k=>SCHOOL_LABELS[k]),
+      fieldHTML('Program','mc-program',mc.program,programs,mc.program),
+      fieldHTML('Batch','mc-batch',batchLabel(mc.batch),batches,mc.batch,batchLabel,'Pick a program first.'),
+      fieldHTML('Section','mc-section',mc.section,sections,mc.section,null,'Pick a batch first.'),
+      fieldHTML('Course','mc-course',mc.course,courseNames,mc.course,null,'Pick a section first.')
+    ].join('');
+    fieldsHost.querySelectorAll('.m-chip').forEach(chip=>{
+      chip.addEventListener('click',()=>onCourseAddPick(chip.dataset.field,chip.dataset.value));
+    });
+    renderCourseAddButton(courseNames);
+  }
+
+  function onCourseAddPick(field,value){
+    if(field==='mc-school'){
+      if(mc.school===value) return;
+      mc.school=value; mc.program=''; mc.batch=''; mc.section=''; mc.course='';
+      // Loads that school's sheet if it has not been opened yet this session,
+      // exactly as picking a school in Lookup does.
+      const sel=$('school');
+      if(sel && sel.value!==value){ sel.value=value; if(typeof onSchoolChange==='function') onSchoolChange(); }
+      renderCourseAddFields();
+      return;
+    }
+    if(field==='mc-program'){ mc.program=mc.program===value?'':value; mc.batch=''; mc.section=''; mc.course=''; }
+    else if(field==='mc-batch'){ mc.batch=mc.batch===value?'':value; mc.section=''; mc.course=''; }
+    else if(field==='mc-section'){ mc.section=mc.section===value?'':value; mc.course=''; }
+    else if(field==='mc-course'){ mc.course=mc.course===value?'':value; }
+    renderCourseAddFields();
+  }
+
+  function renderCourseAddButton(courseNames){
+    const host=$('mc-add');
+    if(!host) return;
+    if(!mc.course||!courseNames.length){ host.innerHTML=''; return; }
+    const already=(typeof getMyCourses==='function') && getMyCourses().some(c=>
+      String(c.name).trim().toUpperCase()===mc.course.trim().toUpperCase()
+      && c.dept===mc.program && c.batch===mc.batch && c.section===mc.section);
+    host.innerHTML='<button class="m-btn-primary m-course-add" type="button"'+(already?' disabled':'')+'>'
+      +(already?'Already in your courses':'+ Add "'+esc(mc.course)+'" to my courses')+'</button>'
+      +'<div class="m-course-status" id="mc-add-status" role="status" aria-live="polite"></div>';
+    const btn=host.querySelector('.m-course-add');
+    if(btn&&!already) btn.addEventListener('click',addCourseFromSheet);
+  }
+
+  function addCourseFromSheet(){
+    const el=$('mc-add-status');
+    const say=(m,bad)=>{ if(el){ el.textContent=m; el.classList.toggle('is-error',!!bad); } };
+    if(typeof addMyCourse!=='function'){ say('Course saving is unavailable.',true); return; }
+    if(!(typeof profile==='function'&&profile())){ say('Set up your profile first — courses are saved with it.',true); return; }
+    const res=addMyCourse({school:mc.school,dept:mc.program,batch:mc.batch,section:mc.section,name:mc.course});
+    if(!res.ok){
+      say(res.reason==='duplicate'?'Already in your courses.'
+        :res.reason==='full'?'You have reached the saved-course limit.'
+        :'Set up your profile first — courses are saved with it.',true);
+      return;
+    }
+    toast('Added '+mc.course);
+    renderCoursesSheet();
+    if(route==='today') renderToday();
+  }
+
+  function wireCoursesSheet(){
+    const btn=$('m-courses-btn');
+    const close=$('m-courses-close');
+    if(btn) btn.addEventListener('click',openCoursesSheet);
+    if(close) close.addEventListener('click',closeCoursesSheet);
+    renderCoursesList(); // populate the header badge on load
+  }
+
   function wireArcade(){
     const wrap=$('m-arcade');
     if(!wrap) return;
@@ -1791,6 +1969,7 @@
     $('m-avatar-btn').addEventListener('click',()=>go('profile'));
     $('m-bell-btn').addEventListener('click',()=>toast('Notification inbox is coming soon'));
     wireArcade();
+    wireCoursesSheet();
 
     $('m-seg-today').addEventListener('click',()=>{ weekMode=false; renderToday(); });
     $('m-seg-week').addEventListener('click',()=>{ weekMode=true; renderToday(); });

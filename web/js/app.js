@@ -2842,37 +2842,135 @@ const MYCOURSES_MAX=40;
 function myCourseKey(c){
   return [c.school||'',c.dept||'',c.batch||'',c.section||'',String(c.name||'').trim().toUpperCase()].join('|');
 }
-function getMyCourses(){
+
+/* getMyCourses() is an OVERLAY, not a stored list: it defaults to exactly the
+   student's own section — the same rows they would see with no customisation
+   at all — computed live, minus anything they removed, plus anything they
+   explicitly added from somewhere else. Two things are stored; the effective
+   list is not:
+
+     profile.courseRemoved  - plain course names the student hid from their
+                               own section's default list
+     profile.courses        - explicit extra picks, {school,dept,batch,
+                               section,name}, exactly as before
+
+   Recomputing the default from the live timetable on every call is what makes
+   a room change or a newly published elective show up on its own; freezing it
+   at "whatever the section had the day the student first opened the app"
+   would have made this feature go stale in exactly the way it was meant to
+   fix. */
+function getAddedCourses(){
   const profile=getProfileCookie();
   const list=profile&&Array.isArray(profile.courses)?profile.courses:[];
   return list.filter(c=>c&&c.name&&c.dept);
 }
-function setMyCourses(list){
+function setAddedCourses(list){
   const profile=getProfileCookie();
   if(!profile) return false;
   profile.courses=list.slice(0,MYCOURSES_MAX);
   setProfileCookie(profile);
   return true;
 }
-function hasMyCourses(){ return getMyCourses().length>0; }
+function getRemovedCourseNames(){
+  const profile=getProfileCookie();
+  const list=profile&&Array.isArray(profile.courseRemoved)?profile.courseRemoved:[];
+  return list.filter(n=>typeof n==='string'&&n);
+}
+function setRemovedCourseNames(list){
+  const profile=getProfileCookie();
+  if(!profile) return false;
+  profile.courseRemoved=[...new Set(list)].slice(0,MYCOURSES_MAX);
+  setProfileCookie(profile);
+  return true;
+}
+
+/* Where "the student's own section" resolves to. Independent of the mobile-
+   only profileKeys()/ttFor() so it works from either surface off the same
+   profile cookie.
+
+   A profile with no determinable school (a non-computing profile made on
+   desktop, whose free-text department input was never validated against a
+   real timetable key) returns null rather than guessing — getMyCourses()
+   degrades to the explicit add list only in that case, which is a narrower
+   feature than intended but never a wrong one. */
+function myScopeFromCookie(){
+  const p=getProfileCookie();
+  if(!p) return null;
+  const dept=String(p.department||'').trim();
+  const batch=p.manual?String(p.batch||''):((typeof profileFullBatch==='function')?profileFullBatch(p):String(p.batch||''));
+  const section=String(p.section||'').trim().toUpperCase();
+  if(!dept||!batch||!section) return null;
+  const school=p.school||(profileIsComputing(p)?'computing':'');
+  if(!school) return null;
+  return {school,dept,batch,section};
+}
+function myDefaultCourseNames(scope){
+  if(!scope) return [];
+  const src=myCourseSource(scope.school);
+  const names=new Set();
+  [scope.section,ALL_SECTIONS].forEach(sec=>{
+    const days=((src[scope.dept]||{})[scope.batch]||{})[sec]||{};
+    Object.values(days).forEach(arr=>(arr||[]).forEach(e=>{
+      const n=stripNote(entryCourse(e)).trim();
+      if(n) names.add(n);
+    }));
+  });
+  return [...names];
+}
+function getMyCourses(){
+  const scope=myScopeFromCookie();
+  const removed=getRemovedCourseNames().map(n=>n.toUpperCase());
+  const defaults=myDefaultCourseNames(scope)
+    .filter(n=>!removed.includes(n.toUpperCase()))
+    .map(n=>({school:scope.school,dept:scope.dept,batch:scope.batch,section:scope.section,name:n,isDefault:true}));
+  return [...defaults,...getAddedCourses()];
+}
+// Whether the student has customised anything at all, as opposed to whether
+// they have a course list (which, under the model above, is almost always
+// true once a profile exists — their own section IS their default course
+// list). Used only to decide whether the desktop "My Courses" department is
+// worth offering as a distinct view from the ordinary per-section one; both
+// show identical rows until something has actually been changed.
+function hasMyCourses(){
+  return getRemovedCourseNames().length>0||getAddedCourses().length>0;
+}
 
 function addMyCourse(course){
   if(!getProfileCookie()) return {ok:false,reason:'no_profile'};
-  const list=getMyCourses();
   const key=myCourseKey(course);
-  if(list.some(c=>myCourseKey(c)===key)) return {ok:false,reason:'duplicate'};
-  if(list.length>=MYCOURSES_MAX) return {ok:false,reason:'full'};
-  list.push({
+  // Checked against the EFFECTIVE list: a course already on the student's own
+  // section by default is already something they have, and adding a second
+  // copy of it would just be a confusing duplicate row.
+  if(getMyCourses().some(c=>myCourseKey(c)===key)) return {ok:false,reason:'duplicate'};
+  const added=getAddedCourses();
+  if(added.length>=MYCOURSES_MAX) return {ok:false,reason:'full'};
+  added.push({
     school:course.school||'',dept:course.dept||'',batch:course.batch||'',
     section:course.section||'',name:String(course.name||'').trim()
   });
-  setMyCourses(list);
-  return {ok:true,count:list.length};
+  setAddedCourses(added);
+  return {ok:true,count:getMyCourses().length};
 }
-function removeMyCourse(key){
-  const list=getMyCourses().filter(c=>myCourseKey(c)!==key);
-  setMyCourses(list);
-  return list.length;
+// Takes the COURSE OBJECT (from getMyCourses()), not a bare key, because the
+// two halves of the overlay are removed differently: a default entry is not
+// stored anywhere to delete, it is hidden by naming it in courseRemoved; an
+// added entry is a real row in profile.courses and is spliced out of it.
+function removeMyCourse(course){
+  if(!course) return getMyCourses().length;
+  if(course.isDefault){
+    const key=String(course.name).trim().toUpperCase();
+    const removed=getRemovedCourseNames();
+    if(!removed.map(n=>n.toUpperCase()).includes(key)){ removed.push(course.name.trim()); setRemovedCourseNames(removed); }
+  }else{
+    const target=myCourseKey(course);
+    setAddedCourses(getAddedCourses().filter(c=>myCourseKey(c)!==target));
+  }
+  return getMyCourses().length;
+}
+// Undoes a removal: the default course reappears with no further action.
+function restoreMyCourse(name){
+  const key=String(name).trim().toUpperCase();
+  setRemovedCourseNames(getRemovedCourseNames().filter(n=>n.toUpperCase()!==key));
 }
 
 /* Every timetable row belonging to one saved course, across every day.
@@ -3051,24 +3149,31 @@ function renderMyCoursesList(){
   const count=document.getElementById('profile-courses-count');
   if(!wrap||!body) return;
   const list=getMyCourses();
+  // Shown whenever a profile exists, not just once something has been
+  // customised: this list IS the student's courses now, editable from the
+  // first time they open it.
   wrap.hidden=!getProfileCookie();
   if(count) count.textContent=String(list.length);
   if(!list.length){
-    body.innerHTML='<div class="profile-courses-empty">No courses saved yet. Add them from the Timetable tab.</div>';
+    body.innerHTML='<div class="profile-courses-empty">No courses yet. Add them from the Timetable tab.</div>';
     return;
   }
   body.innerHTML=list.map(c=>{
     const key=myCourseKey(c).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
     const origin=(String(c.dept||'').replace(/^BS\s+/,'')+' '+(c.batch||'')+(c.section?('-'+c.section):'')).trim();
+    const tag=c.isDefault?'<span class="profile-course-tag">SECTION</span>':'<span class="profile-course-tag is-added">ADDED</span>';
     return '<div class="profile-course-row">'+
-      '<span class="profile-course-text"><span class="profile-course-name">'+escHtml(c.name)+'</span>'+
+      '<span class="profile-course-text"><span class="profile-course-name">'+escHtml(c.name)+tag+'</span>'+
       '<span class="profile-course-origin">'+escHtml(origin)+'</span></span>'+
       '<button class="profile-course-remove" type="button" title="Remove this course" aria-label="Remove '+escHtml(c.name)+'" onclick="removeMyCourseAndRefresh(&quot;'+key+'&quot;)">&times;</button>'+
     '</div>';
   }).join('');
 }
+// Looks the course object up by its key rather than taking one, since the two
+// halves of the overlay are removed differently — see removeMyCourse.
 function removeMyCourseAndRefresh(key){
-  removeMyCourse(key);
+  const course=getMyCourses().find(c=>myCourseKey(c)===key);
+  removeMyCourse(course);
   renderMyCoursesList();
   refreshTTFilters();
   if(document.getElementById('p0')?.classList.contains('on')) loadTT();

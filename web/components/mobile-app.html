@@ -114,8 +114,34 @@
           <button class="m-seg-btn is-active" id="m-seg-today" role="tab" aria-selected="true" type="button">Today</button>
           <button class="m-seg-btn" id="m-seg-week" role="tab" aria-selected="false" type="button">Week</button>
         </div>
+        <button class="m-courses-btn" id="m-courses-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>My courses</span>
+          <span class="m-courses-btn-count" id="m-courses-btn-count" hidden></span>
+        </button>
         <div id="m-today-pane" role="status" aria-live="polite"></div>
         <div id="m-week-pane" hidden></div>
+      </section>
+
+      <!-- My courses: your section's classes by default, editable. Removing
+           one hides it from Today/Week from then on; adding one from
+           elsewhere brings it in alongside your section's own. -->
+      <section class="m-arcade" id="m-courses-sheet" hidden>
+        <header class="m-arcade-head">
+          <div class="m-arcade-head-text">
+            <div class="m-kicker">YOUR TIMETABLE</div>
+            <div class="m-head-title">My courses</div>
+          </div>
+          <button class="m-icon-btn" id="m-courses-close" type="button" aria-label="Close my courses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </header>
+        <div class="m-arcade-body" id="m-courses-body">
+          <div id="m-courses-list"></div>
+          <div class="m-section-label">Add a course</div>
+          <div id="mc-fields"></div>
+          <div id="mc-add"></div>
+        </div>
       </section>
 
       <!-- Lookup -->
