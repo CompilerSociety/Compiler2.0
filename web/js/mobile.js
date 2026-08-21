@@ -1967,7 +1967,11 @@
       btn.addEventListener('click',()=>go(btn.dataset.route));
     });
     $('m-avatar-btn').addEventListener('click',()=>go('profile'));
-    $('m-bell-btn').addEventListener('click',()=>toast('Notification inbox is coming soon'));
+    // The bell is not its own inbox - it opens Profile, which already has the
+    // real notification toggles (see the "NOTIFICATIONS" section rendered by
+    // renderProfile()). Same destination as the avatar button, just a second,
+    // more discoverable way to reach it.
+    $('m-bell-btn').addEventListener('click',()=>go('profile'));
     wireArcade();
     wireCoursesSheet();
 
