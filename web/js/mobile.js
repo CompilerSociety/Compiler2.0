@@ -530,6 +530,7 @@
       const b=slotBounds(time);
       return {
         name:e.name||e.c||'', room:e.location||e.l||'—', time,
+        note:e.note||e.n||'',
         start:time.split('-')[0]||'', end:(time.split('-')[1]||'').trim(),
         isNow:Boolean(b&&now>=b[0]&&now<=b[1]),
         isPast:Boolean(b&&now>b[1]), startMin:b?b[0]:null, endMin:b?b[1]:null
