@@ -569,6 +569,22 @@ h2.fv-top-label{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight
 html[data-theme="dark"] .theme-toggle-sun{display:none}
 html[data-theme="dark"] .theme-toggle-moon{display:block}
 @media(max-width:560px){.theme-toggle{top:12px;right:12px;width:42px;height:42px}}
+/* Bottom-right pet mascot. Fixed at the app root (not inside .shell), so it
+   floats over both the desktop layout and the phone app. Decorative only —
+   pointer-events:none keeps it from ever stealing a tap from whatever is
+   underneath it (the phone tab bar in particular). js/app.js triggers the
+   jump on a random 30-40s timer via the .is-jumping class. */
+.mascot{position:fixed;right:18px;bottom:18px;z-index:42;font-size:34px;line-height:1;pointer-events:none;user-select:none;filter:drop-shadow(0 6px 10px rgba(10,122,58,0.22))}
+.mascot-emoji{display:inline-block;transform-origin:50% 100%}
+.mascot.is-jumping .mascot-emoji{animation:mascot-jump .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mascot-jump{
+  0%{transform:translateY(0) scaleY(1)}
+  20%{transform:translateY(2px) scaleY(.85)}
+  55%{transform:translateY(-26px) scaleY(1.05)}
+  80%{transform:translateY(0) scaleY(.92)}
+  100%{transform:translateY(0) scaleY(1)}
+}
+@media(max-width:560px){.mascot{right:14px;bottom:14px;font-size:28px}}
 .profile-modal-backdrop{position:fixed;inset:0;background:rgba(4,20,10,0.68);z-index:55;display:flex;align-items:center;justify-content:center;padding:16px}
 .profile-modal-backdrop[hidden]{display:none}
 .profile-modal{width:min(100%,380px);background:#fff;border:2px solid rgba(10,122,58,0.24);border-radius:14px;box-shadow:0 12px 40px rgba(10,122,58,0.22);overflow:hidden}

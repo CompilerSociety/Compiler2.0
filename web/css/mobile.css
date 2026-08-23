@@ -34,6 +34,8 @@
 
 /* Desktop chrome stands down on phones. */
 .shell,#bg3d,.profile-launcher,.theme-toggle{display:none!important}
+/* Sit above the tab bar instead of behind/under it. */
+.mascot{right:12px;bottom:calc(70px + env(safe-area-inset-bottom));font-size:26px}
 body{padding-bottom:0!important;background:var(--page)}
 body.has-pwa-bar{padding-bottom:0!important}
 #app{border-radius:0;box-shadow:none;min-height:100vh}

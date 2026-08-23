@@ -24,6 +24,19 @@ const timeFormatter=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE
   tick();
   setInterval(tick,1000);
 })();
+(function mascotJump(){
+  const mascot=document.getElementById('mascot');
+  if(!mascot) return;
+  function scheduleJump(){
+    const delay=30000+Math.random()*10000; // 30-40s
+    setTimeout(()=>{
+      mascot.classList.add('is-jumping');
+      setTimeout(()=>mascot.classList.remove('is-jumping'),700);
+      scheduleJump();
+    },delay);
+  }
+  scheduleJump();
+})();
 (function headerScrollHide(){
   let lastY=0;
   const hdr=document.querySelector('.hdr');
