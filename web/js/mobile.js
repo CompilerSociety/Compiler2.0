@@ -528,39 +528,66 @@
     });
     const current=rows.find(r=>r.isNow);
 
-    // The banner is always on screen and has three states: the live class
-    // (red, counting down to the end), the next one still to come (green,
-    // counting down to the start), and the idle card once the day is done.
-    // data-until is seconds-since-midnight; tickBanner() re-reads it every
-    // second so the countdown moves without re-rendering the whole pane.
+    // The widget is always on screen: a left status card with three states
+    // (live class red counting down to the end, next-to-come green counting
+    // down to the start, idle once nothing is left) and a right card listing
+    // whatever of today's classes hasn't started yet. data-until is
+    // seconds-since-midnight; tickBanner() re-reads it every second so the
+    // countdown moves without re-rendering the whole pane.
     const next=findNextClass(keys);
-    let html='';
+    let statusHtml='';
     if(current){
-      html+=`<div class="m-now is-live" id="m-now-banner" data-until="${Date.now()+(current.endMin*60-nowSeconds())*1000}">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>IN CLASS NOW · ${esc(toAmPm(current.start))} – ${esc(toAmPm(current.end))}</span></div>
-        <div class="m-now-name">${esc(cleanName(current.name))}</div>
-        <div class="m-now-stats">
-          <div><div class="m-now-stat-label">Room</div><div class="m-now-stat-value">${esc(current.room)}</div></div>
-          <div><div class="m-now-stat-label">Ends in</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
+      statusHtml=`<div class="m-widget-col m-widget-status is-live" id="m-now-banner" data-until="${Date.now()+(current.endMin*60-nowSeconds())*1000}">
+        <div class="m-widget-head"><span class="m-widget-dot"></span><span>IN CLASS NOW</span></div>
+        <div class="m-widget-name">${esc(cleanName(current.name))}</div>
+        <div class="m-widget-room">${esc(current.room)} · ${esc(toAmPm(current.start))}–${esc(toAmPm(current.end))}</div>
+        <div class="m-widget-count-wrap">
+          <div class="m-widget-count-label">Ends in</div>
+          <div class="m-widget-count" id="m-now-count">—</div>
         </div>
       </div>`;
     }else if(next){
       const when=next.dayOffset===0?'UP NEXT'
         :next.dayOffset===1?'TOMORROW':next.day.toUpperCase();
-      html+=`<div class="m-now" id="m-now-banner" data-until="${Date.now()+next.startsIn*1000}">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(when)} · ${esc(toAmPm(next.start))} – ${esc(toAmPm(next.end))}</span></div>
-        <div class="m-now-name">${esc(cleanName(next.name))}</div>
-        <div class="m-now-stats">
-          <div><div class="m-now-stat-label">Room</div><div class="m-now-stat-value">${esc(next.room)}</div></div>
-          <div><div class="m-now-stat-label">Starts in</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
+      statusHtml=`<div class="m-widget-col m-widget-status" id="m-now-banner" data-until="${Date.now()+next.startsIn*1000}">
+        <div class="m-widget-head"><span class="m-widget-dot"></span><span>${esc(when)}</span></div>
+        <div class="m-widget-name">${esc(cleanName(next.name))}</div>
+        <div class="m-widget-room">${esc(next.room)} · ${esc(toAmPm(next.start))}–${esc(toAmPm(next.end))}</div>
+        <div class="m-widget-count-wrap">
+          <div class="m-widget-count-label">Starts in</div>
+          <div class="m-widget-count" id="m-now-count">—</div>
         </div>
       </div>`;
     }else{
-      html+=`<div class="m-now is-idle" id="m-now-banner">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>NO CLASSES FOUND</span></div>
-        <div class="m-now-name">The university cannot<br>hurt you right now.</div>
+      statusHtml=`<div class="m-widget-col m-widget-status is-idle" id="m-now-banner">
+        <div class="m-widget-head"><span class="m-widget-dot"></span><span>NO CLASSES FOUND</span></div>
+        <div class="m-widget-name">The university cannot<br>hurt you right now.</div>
       </div>`;
     }
+    // Rest of today, minus whatever the left card already shows (the class in
+    // progress, or the very next one) — everything still ahead, in order.
+    const upcoming=rows.filter(r=>!r.isPast&&!r.isNow);
+    let upcomingBody='';
+    if(upcoming.length){
+      upcomingBody=upcoming.map(r=>`<div class="m-widget-item">
+          <div class="m-widget-item-time">${esc(toAmPm(r.start))}</div>
+          <div class="m-widget-item-body">
+            <div class="m-widget-item-name">${esc(cleanName(r.name))}</div>
+            <div class="m-widget-item-room">${esc(r.room)}</div>
+          </div>
+        </div>`).join('');
+    }else if(next&&next.dayOffset>0){
+      upcomingBody=`<div class="m-widget-empty">Nothing else today.<br>Next: ${esc(next.day)} · ${esc(toAmPm(next.start))}</div>`;
+    }else{
+      upcomingBody='<div class="m-widget-empty">Nothing else today.</div>';
+    }
+    let html=`<div class="m-widget">
+      ${statusHtml}
+      <div class="m-widget-col m-widget-upcoming">
+        <div class="m-widget-head"><span>UPCOMING</span></div>
+        <div class="m-widget-list">${upcomingBody}</div>
+      </div>
+    </div>`;
     // The section identity while nothing has been customised (more useful
     // than "MY COURSES" when the two are identical anyway); once something
     // has actually been added or removed, this genuinely stops being "just
