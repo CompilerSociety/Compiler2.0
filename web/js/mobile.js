@@ -456,7 +456,7 @@
   function myClassesFor(keys,day){
     if(typeof myCoursesRowsForDay==='function'
        && (typeof myScopeFromCookie!=='function' || myScopeFromCookie())){
-      return myCoursesRowsForDay(day).map(r=>({name:r.name,location:r.location,time:r.time}));
+      return myCoursesRowsForDay(day).map(r=>({name:r.name,location:r.location,time:r.time,note:r.note||''}));
     }
     return classesFor(keys.dept,keys.batch,keys.sec,day,keys.tt);
   }
@@ -615,7 +615,7 @@
   }
 
   function classRowHTML(r){
-    const note=noteOf(r.name);
+    const note=r.note||noteOf(r.name);
     const noteCls=/cancel/i.test(note)?'cancel':'resch';
     return `<div class="m-row${r.isNow?' is-now':''}${r.isPast?' is-past':''}">
       <div class="m-row-time"><div class="m-row-start">${esc(toAmPm(r.start))}</div><div class="m-row-end">${esc(toAmPm(r.end))}</div></div>
