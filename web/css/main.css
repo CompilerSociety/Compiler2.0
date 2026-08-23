@@ -662,6 +662,10 @@ html[data-theme="dark"] .theme-toggle-moon{display:block}
 .profile-item{background:#fff;border:1px solid rgba(10,122,58,0.12);border-radius:8px;padding:10px 12px}
 .profile-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
 .profile-value{font-family:'Share Tech Mono',monospace;font-size:13px;color:#1a4a2e;word-break:break-word}
+/* An editable .profile-value (currently just Section): keep the card's plain
+   text look, no native input chrome, while staying a real focusable field. */
+.profile-value.profile-inline-edit{appearance:none;-webkit-appearance:none;background:transparent;border:none;padding:0;margin:0;width:100%;cursor:text}
+.profile-value.profile-inline-edit:focus-visible{outline:2px solid rgba(10,122,58,0.35);outline-offset:2px;border-radius:4px}
 .profile-notif{margin-top:12px;border-top:1px solid rgba(10,122,58,0.14);padding-top:10px}
 .profile-notif-title{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 .profile-notif-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid rgba(10,122,58,0.12);border-radius:8px;padding:9px 11px;margin-bottom:6px;cursor:pointer}

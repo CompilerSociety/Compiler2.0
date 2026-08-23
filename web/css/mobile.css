@@ -52,7 +52,7 @@ body.has-pwa-bar{padding-bottom:0!important}
 /* ── Boot splash ─────────────────────────────────────────────────────── */
 .m-app>.m-splash.on{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;height:100%;background:#fff;animation:none}
 .m-splash-mark{font-family:var(--mono);font-weight:500;font-size:30px;letter-spacing:.16em;color:var(--green)}
-.m-splash-ring{width:34px;height:34px;border-radius:50%;border:3px solid rgba(47,107,49,.16);border-top-color:var(--green);animation:m-spin .7s linear infinite}
+.m-splash-tag{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 
 /* ── Sign in ─────────────────────────────────────────────────────────── */
 .m-signin,.m-onboard{padding:24px 22px;justify-content:space-between;gap:24px}

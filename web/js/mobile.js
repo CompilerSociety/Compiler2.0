@@ -1810,6 +1810,48 @@
       });
     });
   }
+  // Sections the student's own department+batch actually publishes, from the
+  // same live timetable data the Today/Lookup screens already read — so the
+  // list can never offer a section with nothing behind it.
+  function availableSectionsForProfile(p){
+    const src=ttFor(p.school)||{};
+    const dept=String(p.department||'').trim();
+    const batch=p.manual?String(p.batch||'')
+      :((typeof profileFullBatch==='function')?profileFullBatch(p):p.batch);
+    const secs=Object.keys((src[dept]||{})[batch]||{}).filter(s=>s!==ALL_SECTIONS);
+    return secs.sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  }
+  function sectionPickerHTML(p){
+    const secs=availableSectionsForProfile(p);
+    if(!secs.length){
+      return '<div class="m-caption" style="margin:8px 2px 0">Sections aren’t available to change right now.</div>';
+    }
+    const chips=secs.map(s=>
+      `<button class="m-chip${s===p.section?' is-on':''}" data-sec="${esc(s)}" type="button">${esc(s)}</button>`
+    ).join('');
+    return `<div class="m-lk-field" style="margin-top:10px">
+      <div class="m-meta-row"><span>Section</span><b>${esc(p.section||'—')}</b></div>
+      <div class="m-chip-row" id="m-profile-sec-chips">${chips}</div>
+    </div>`;
+  }
+  // Switches which section's classes the student sees, and — if push
+  // notifications are already on for this device — quietly re-syncs the
+  // server's subscription record so class-change alerts follow the new
+  // section too (senders match on the subscription's own section field, not
+  // the append-only roster, so this is the write that actually matters).
+  function changeProfileSection(newSection){
+    const p=profile();
+    if(!p) return;
+    const sec=String(newSection||'').trim().toUpperCase();
+    if(!sec||sec===String(p.section||'').trim().toUpperCase()) return;
+    const updated={...p,section:sec};
+    setProfileCookie(updated);
+    if(typeof seedProfileSchedulePrefs==='function') seedProfileSchedulePrefs(updated,true);
+    if(typeof syncNotificationPrefs==='function') syncNotificationPrefs();
+    toast('Section changed to '+sec);
+    renderProfile();
+  }
+
   function renderProfile(){
     const p=profile();
     const out=$('m-profile-out');
@@ -1862,8 +1904,9 @@
         }).join('')}
       </div>
       <div class="m-section-label">Your section</div>
-      <div class="m-drow"><div class="m-drow-label">Program · batch · section</div>
-        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')} · ${esc(p.section||'—')}</div></div>
+      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
+        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
+      ${sectionPickerHTML(p)}
       <button class="m-btn-ghost" id="m-signout" type="button" style="margin-top:18px">Sign out</button>`;
 
     // app.js writes every push status line through this hook; point it at the
@@ -1935,6 +1978,10 @@
     refreshPushState();
 
     wireMyCourses();
+
+    document.querySelectorAll('#m-profile-sec-chips .m-chip').forEach(chip=>{
+      chip.addEventListener('click',()=>changeProfileSection(chip.dataset.sec));
+    });
 
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{

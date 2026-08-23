@@ -198,7 +198,8 @@
           </div>
           <div class="profile-item">
             <div class="profile-label">Section</div>
-            <div class="profile-value" id="profile-section">-</div>
+            <input class="profile-value profile-inline-edit" id="profile-section" type="text" maxlength="10"
+                   onkeydown="if(event.key==='Enter')this.blur()" onblur="changeProfileSection(this.value)">
           </div>
           <div class="profile-item">
             <div class="profile-label">Batch</div>

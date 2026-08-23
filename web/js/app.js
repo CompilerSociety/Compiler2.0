@@ -190,7 +190,7 @@ function buildSavedProfileFromDom(){
   const profile={
     nuid,
     name: document.getElementById('profile-card-top')?.textContent?.trim() || 'Student',
-    section: document.getElementById('profile-section')?.textContent?.trim() || '-',
+    section: document.getElementById('profile-section')?.value?.trim() || '-',
     department: document.getElementById('profile-department')?.textContent?.trim() || '-',
     batch: document.getElementById('profile-batch')?.textContent?.trim() || '-'
   };
@@ -211,7 +211,7 @@ function renderProfileCard(profile){
   }
   if(top) top.textContent=profile.name || 'Student';
   if(nuidEl) nuidEl.textContent=profile.nuid || '-';
-  if(sectionEl) sectionEl.textContent=profile.section || '-';
+  if(sectionEl) sectionEl.value=profile.section || '';
   if(batchEl) batchEl.textContent=profile.batch || '-';
   if(deptEl) deptEl.textContent=profile.department || '-';
   if(card) card.hidden=false;
@@ -673,6 +673,34 @@ function registerProfile(){
   closeProfileModal();
   applyProfileToOpenScheduleTabs();
 }
+// Editing the section on an already-saved profile. Deliberately separate from
+// registerProfile()/saveProfileCookie(): those commit a freshly-synced or
+// freshly-typed profile wholesale, while this only ever changes the one
+// field, on every existing tab that reads it, without the user re-entering
+// anything else.
+//
+// The roster (db/students/*.json, written by /api/register) is deliberately
+// NOT touched here — it's append-only by design (an anonymous POST must never
+// be able to overwrite another student's row), so a changed section never
+// reaches it. What actually decides who gets a class-change push is the
+// separate push_subscriptions record written by /api/subscribe, keyed by this
+// device's own endpoint, which syncNotificationPrefs() below re-sends.
+function changeProfileSection(newSection){
+  const profile=getProfileCookie();
+  if(!profile) return;
+  const input=document.getElementById('profile-section');
+  const sec=String(newSection||'').trim().toUpperCase();
+  if(!sec){ if(input) input.value=profile.section||''; return; }
+  if(sec===String(profile.section||'').trim().toUpperCase()) return;
+  const updated={...profile,section:sec};
+  setProfileCookie(updated);
+  seedProfileSchedulePrefs(updated,true);
+  renderProfileCard(updated);
+  applyProfileToOpenScheduleTabs();
+  showProfileSuccessToast('Section updated to '+sec);
+  if(typeof syncNotificationPrefs==='function') syncNotificationPrefs();
+}
+window.changeProfileSection=changeProfileSection;
 window.openProfileModal=openProfileModal;
 window.closeProfileModal=closeProfileModal;
 window.syncProfile=syncProfile;
