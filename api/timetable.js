@@ -114,6 +114,59 @@ function readSnapshot(schoolParam) {
   }
 }
 
+/* ── Snapshot reconciliation ─────────────────────────────────────────────
+   The live sheet parser resolves a cell's batch year from its column
+   header — but the computing grid stacks all four year headers (2026 down
+   to 2023) over the SAME columns, and the last one read wins. Any cell
+   without an explicit "(..., 25)" suffix is therefore filed under 2023.
+   The Python generator never has this problem because it also reads each
+   cell's background colour, which gviz does not expose.
+
+   The generator writes the correctly-bucketed timetable to MongoDB every
+   15 minutes, so this API borrows that document as ground truth: entries
+   the live parse landed in a bucket the snapshot does not corroborate are
+   MOVED to their unique snapshot match (keeping fresh notes such as
+   "Cancelled"), and classes present only in the snapshot are ADDED. When
+   Mongo is unavailable the live parse is served untouched, exactly as
+   before. */
+
+const MONGO_CACHE_KEY = Symbol.for("compiler2.mongo.client.cjs");
+
+function getMongoDb() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) return Promise.reject(new Error("MONGODB_URI is not set"));
+  if (!globalThis[MONGO_CACHE_KEY]) {
+    const { MongoClient } = require("mongodb");
+    globalThis[MONGO_CACHE_KEY] = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
+      maxPoolSize: 10,
+      minPoolSize: 0,
+    }).connect().catch((err) => {
+      globalThis[MONGO_CACHE_KEY] = null; // don't cache failures
+      throw err;
+    });
+  }
+  return globalThis[MONGO_CACHE_KEY].then((client) =>
+    client.db(process.env.MONGODB_DB || "compiler2")
+  );
+}
+
+// Fetch the generated reference-format timetable for a school from Mongo.
+// Returns null on ANY failure so callers can proceed with the live parse.
+async function loadSnapshotTT(schoolParam) {
+  try {
+    const db = await getMongoDb();
+    const row = await db.collection("documents")
+      .findOne({ _id: `timetables/${schoolParam}` }, { projection: { data: 1 } });
+    const tt = row && row.data && row.data.tt;
+    return tt && typeof tt === "object" ? tt : null;
+  } catch (err) {
+    console.warn(`Snapshot load failed for ${schoolParam}:`, err.message || err);
+    return null;
+  }
+}
+
 function cleanTxt(v) {
   return String(v ?? "")
     .replace(/\u00a0/g, " ")
@@ -1244,6 +1297,153 @@ function buildTTForSchool(grids, school) {
   return tt;
 }
 
+// Course identity for matching across the two parsers: letters and digits
+// only, case-folded. "Intro to DS Lab", "Intro to DS  Lab" and "INTRO-TODSLAB"
+// all collapse to the same key; punctuation drift must not block a match.
+function reconcileCourseKey(name) {
+  return String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+// Two parsers label the same slot with the same string in practice
+// ("11:30-02:15"), but compare start minutes as well so a cosmetic relabel
+// ("11:30-14:15") still matches.
+function reconcileTimeMatch(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const ma = slotToMinutes(String(a).split("-")[0]);
+  const mb = slotToMinutes(String(b).split("-")[0]);
+  return Number.isFinite(ma) && ma === mb;
+}
+
+function* iterateTTEntries(tt) {
+  for (const [dept, batches] of Object.entries(tt || {})) {
+    for (const [batch, sections] of Object.entries(batches || {})) {
+      for (const [section, days] of Object.entries(sections || {})) {
+        for (const [day, arr] of Object.entries(days || {})) {
+          for (const entry of arr || []) yield { dept, batch, section, day, entry };
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Correct the live parse against the generator's Mongo snapshot.
+ * Returns a NEW tt (internal entry shape) plus counters; the input is
+ * untouched.
+ *
+ * The snapshot is the BASE of the output, not a patch: the generator resolves
+ * every cell's batch via the cell's background colour — knowledge gviz cannot
+ * provide — so its bucketing is trusted wholesale. The live parse then
+ * contributes only what the snapshot cannot know yet:
+ *
+ *   1. Fresh notes. A "Cancelled"/"Rescheduled" written into the sheet after
+ *      the last generator run is applied onto the matching snapshot class.
+ *   2. Genuinely new classes. A live entry that matches nothing in the
+ *      snapshot is appended under the parser's own bucket; if the stacked-
+ *      header heuristic put it in the wrong year, the next generator run
+ *      (≤15 min away) corrects it.
+ *
+ * A live copy whose (dept/day/course/time) match was already consumed is
+ * DROPPED rather than appended: the same physical class regularly parses into
+ * several wrong buckets, and keeping each representation would show phantom
+ * duplicates to other batches.
+ */
+function reconcileWithSnapshot(tt, snapTT) {
+  // Deep-clone the snapshot into internal shape — this IS the output skeleton.
+  const out = {};
+  for (const { dept, batch, section, day, entry } of iterateTTEntries(snapTT)) {
+    const arr = (((out[dept] ??= {})[batch] ??= {})[section] ??= {})[day] ??= [];
+    arr.push({ c: entry.name, l: entry.location || "", t: entry.time || "", n: entry.note || "" });
+  }
+
+  // Index the base for matching. Two tiers: same department first, then a
+  // cross-department fallback, because the live parser occasionally assigns
+  // even the DEPARTMENT from a neighbouring column block (observed: "Adv
+  // Stats" filed under BS CS; the generator colours say BS DS).
+  const byDept = new Map(); // dept|day|courseKey → base entries
+  const byDay = new Map();  // day|courseKey      → base entries
+  for (const { dept, batch, section, day, entry } of iterateTTEntries(out)) {
+    const ck = reconcileCourseKey(entry.c);
+    const b = entry;
+    const k1 = `${dept}|${day}|${ck}`;
+    const k2 = `${day}|${ck}`;
+    if (!byDept.has(k1)) byDept.set(k1, []);
+    byDept.get(k1).push(b);
+    if (!byDay.has(k2)) byDay.set(k2, []);
+    byDay.get(k2).push(b);
+  }
+  const bucketOf = (e) => `${e._dept}|${e._batch}|${e._sec}`;
+
+  let merged = 0;
+  let noted = 0;
+  let appended = 0;
+  let dropped = 0;
+
+  const pickMatch = (cands, time, room) => {
+    let fallback = null;
+    for (const cand of cands) {
+      if (!reconcileTimeMatch(cand.t, time)) continue;
+      if (sameRoom(cand.l || "", room || "")) return cand;
+      if (!fallback) fallback = cand; // right class, room edited since sync
+    }
+    return fallback;
+  };
+
+  for (const { dept, batch, section, day, entry } of iterateTTEntries(tt)) {
+    const courseKey = reconcileCourseKey(entry.c);
+    if (!courseKey) continue;
+
+    // Tier 1: same department, same day, same course.
+    let match = pickMatch(byDept.get(`${dept}|${day}|${courseKey}`) || [], entry.t, entry.l);
+    if (match) {
+      merged++;
+      if (entry.n && entry.n !== match.n) {
+        // The live sheet is the fresher source for cancellation/reschedule state.
+        match.n = entry.n;
+        noted++;
+      }
+      continue;
+    }
+
+    // Tier 2: any department. Only commit when every surviving candidate is
+    // the SAME base bucket — otherwise the class is offered to several
+    // sections at once and the live parse gives no way to attribute it.
+    const globals = (byDay.get(`${day}|${courseKey}`) || []).filter(
+      (cand) => reconcileTimeMatch(cand.t, entry.t)
+    );
+    const inRoom = globals.filter((cand) => sameRoom(cand.l || "", entry.l || ""));
+    const pool = inRoom.length ? inRoom : globals;
+    if (pool.length) {
+      const buckets = new Set(pool.map((cand) => bucketOf(cand)));
+      if (buckets.size === 1) {
+        merged++;
+        const cand = pool[0];
+        if (entry.n && entry.n !== cand.n) {
+          cand.n = entry.n;
+          noted++;
+        }
+      } else {
+        dropped++; // parallel offerings — the snapshot already serves each of them
+      }
+      continue;
+    }
+
+    // Genuinely new — the snapshot has never seen this class.
+    const arr = (((out[dept] ??= {})[batch] ??= {})[section] ??= {})[day] ??= [];
+    arr.push({ c: entry.c, l: entry.l || "", t: entry.t || "", n: entry.n || "" });
+    appended++;
+  }
+
+  // Restore chronological order everywhere we may have appended.
+  for (const { dept, batch, section, day } of iterateTTEntries(out)) {
+    const arr = out[dept]?.[batch]?.[section]?.[day];
+    if (arr && arr.length > 1) arr.sort((a, b) => slotToMinutes(a.t) - slotToMinutes(b.t));
+  }
+
+  return { tt: out, stats: { merged, noted, appended, dropped } };
+}
+
 /* ══════════════════════════════════════════
    Vercel Handler
    ══════════════════════════════════════════ */
@@ -1322,7 +1522,33 @@ module.exports = async (req, res) => {
     }
 
     const tt = buildTTForSchool(sheets, school);
-    const refTT = legacyTTToReferenceTT(tt);
+
+    // Correct header-driven mis-bucketing and parser drops against the
+    // generator's snapshot. Best-effort: without Mongo the live parse is
+    // served as-is, which was always the behaviour before this existed.
+    let reconcile = { merged: 0, noted: 0, appended: 0, dropped: 0, skipped: false };
+    let ttOut;
+    if (school.format === "matrix") {
+      const snapTT = await loadSnapshotTT(schoolParam);
+      if (snapTT) {
+        try {
+          const result = reconcileWithSnapshot(tt, snapTT);
+          Object.assign(reconcile, result.stats);
+          ttOut = result.tt;
+        } catch (err) {
+          console.warn("Snapshot reconciliation failed:", err.message || err);
+          reconcile.skipped = true;
+          ttOut = tt;
+        }
+      } else {
+        reconcile.skipped = true;
+        ttOut = tt;
+      }
+    } else {
+      ttOut = tt;
+    }
+
+    const refTT = legacyTTToReferenceTT(ttOut);
     const count = countReferenceEntries(refTT);
 
     if (!count) {
@@ -1352,7 +1578,10 @@ module.exports = async (req, res) => {
     const payload = {
       ok: true, count, tt: refTT, school: schoolParam,
       updatedAt: new Date().toISOString(),
-      source: `google-sheet-${schoolParam}`
+      source: `google-sheet-${schoolParam}`,
+      reconcile: reconcile.skipped
+        ? "skipped"
+        : `${reconcile.merged} merged, ${reconcile.noted} noted, ${reconcile.appended} new, ${reconcile.dropped} dupes`,
     };
     if (!req.query?.raw) cacheStore(key, payload);
     res.setHeader("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
@@ -1367,3 +1596,10 @@ module.exports = async (req, res) => {
     });
   }
 };
+
+// Test surface: the pure reconciliation helpers, so a harness can drive them
+// without Mongo or the Sheets API. Assigning onto the handler keeps the
+// default export shape untouched.
+module.exports.reconcileWithSnapshot = reconcileWithSnapshot;
+module.exports.reconcileCourseKey = reconcileCourseKey;
+module.exports.reconcileTimeMatch = reconcileTimeMatch;

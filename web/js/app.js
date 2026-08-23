@@ -1270,7 +1270,7 @@ function gvizUrl(sheetName){
 
 function timetableApiUrl(){
   const school=document.getElementById('school')?.value||'computing';
-  return `/db/timetables/${school}.json?cachebust=${Date.now()}`;
+  return `/api/timetable?school=${school}&cachebust=${Date.now()}`;
 }
 function cdRoomsApiUrl(){
   return `/api/timetable?rooms=cd&cachebust=${Date.now()}`;
