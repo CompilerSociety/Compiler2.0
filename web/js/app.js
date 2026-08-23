@@ -1405,7 +1405,8 @@ function legacyTTToReferenceTT(tt){
           out[depLabel][batch][section][day]=(arr||[]).map(entry=>({
             name:entry.name||entry.c||'',
             location:entry.location||entry.l||'',
-            time:entry.time||entry.t||''
+            time:entry.time||entry.t||'',
+            note:entry.note||entry.n||''
           }));
         });
       });
@@ -3067,7 +3068,7 @@ function resolveMyCourseRows(course){
           name:entryCourse(e),
           location:entryLocation(e),
           time:entryTime(e),
-          note:e.note||extractNote(entryCourse(e)),
+          note:e.note||e.n||extractNote(entryCourse(e)),
           course
         });
       });
@@ -3294,7 +3295,7 @@ function loadTT(){
         const name=r.name||r.c||'';
         const location=r.location||r.l||'';
         const time=r.time||r.t||'';
-        const note=r.note||extractNote(name);
+        const note=r.note||r.n||extractNote(name);
         const cls=/cancel/i.test(note)?'tt-course is-cancelled':'tt-course';
         const isCurrent=currentSlot && String(time).includes('-') && String(time).split('-')[0].trim()===currentSlot.split('-')[0].trim();
         const fmtTime = time && time.includes('-') ? fmtSlot(time) : time;

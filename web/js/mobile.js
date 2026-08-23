@@ -615,7 +615,7 @@
   }
 
   function classRowHTML(r){
-    const note=r.note||noteOf(r.name);
+    const note=r.note||r.n||noteOf(r.name);
     const noteCls=/cancel/i.test(note)?'cancel':'resch';
     return `<div class="m-row${r.isNow?' is-now':''}${r.isPast?' is-past':''}">
       <div class="m-row-time"><div class="m-row-start">${esc(toAmPm(r.start))}</div><div class="m-row-end">${esc(toAmPm(r.end))}</div></div>
