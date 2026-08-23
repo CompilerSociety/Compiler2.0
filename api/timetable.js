@@ -376,6 +376,7 @@ function parseTimetableCell(text) {
   const parenEnd = t.indexOf(")");
   const core = parenEnd >= 0 ? t.slice(0, parenEnd + 1) : t;
   const tail = parenEnd >= 0 ? t.slice(parenEnd + 1) : "";
+  const note = /cancel/i.test(tail) ? "Cancelled" : /\bresch\b|reschedul/i.test(tail) ? "Rescheduled" : "";
   const ov = tail.match(CELL_TIME_OVERRIDE_RE);
   const timeOverride = ov ? `${ov[1]}-${ov[2]}` : null;
   const m = core.match(CELL_REGEX);
@@ -396,7 +397,7 @@ function parseTimetableCell(text) {
       return null;
     }
   }
-  return { depts, section: section || null, hasSection: Boolean(section), course, timeOverride };
+  return { depts, section: section || null, hasSection: Boolean(section), course, timeOverride, note };
 }
 
 function isMSContext(batch, dept) {
@@ -453,7 +454,7 @@ function slotForColumn(col, slotCols) {
   return chosen;
 }
 
-function addCourseToTT(target, { dept, batch, section, day, course, room, time }) {
+function addCourseToTT(target, { dept, batch, section, day, course, room, time, note = "" }) {
   if (!dept || !batch || !section || !day || !course || !room || !time) return false;
   registerSlot(time);
   const depts = Array.isArray(dept) ? dept : [dept];
@@ -466,7 +467,7 @@ function addCourseToTT(target, { dept, batch, section, day, course, room, time }
     target[deptCode][batch][section][day] = target[deptCode][batch][section][day] || [];
     const arr = target[deptCode][batch][section][day];
     if (!arr.some((x) => x.c === course && sameRoom(x.l, room) && x.t === time)) {
-      arr.push({ c: course, l: room, t: time });
+      arr.push({ c: course, l: room, t: time, n: note });
       added = true;
     }
   }
@@ -518,7 +519,8 @@ function legacyTTToReferenceTT(tt) {
           out[depLabel][batch][section][day] = (arr || []).map((entry) => ({
             name: entry.c,
             location: entry.l,
-            time: entry.t
+            time: entry.t,
+            note: entry.n || ""
           }));
         });
       });
@@ -557,11 +559,11 @@ function parseMatrixBlock(grid, startRow, endRow, block, day, target, colBatchMa
             // because they apply to the whole batch. Dropping them silently
             // emptied the final-year timetables, so hold them here and fan
             // them out across that batch's sections once every day is read.
-            pending.push({ depts, batch, day, course: parsed.course, room, time });
+            pending.push({ depts, batch, day, course: parsed.course, room, time, note: parsed.note });
             break;
           }
           for (const dept of depts) {
-            if (addCourseToTT(target, { dept, batch, section, day, course: parsed.course, room, time })) added++;
+            if (addCourseToTT(target, { dept, batch, section, day, course: parsed.course, room, time, note: parsed.note })) added++;
           }
           break;
         }
@@ -604,7 +606,7 @@ function flushSectionless(target, pending) {
     for (const dept of item.depts) {
       if (addCourseToTT(target, {
         dept, batch: item.batch, section: ALL_SECTIONS, day: item.day,
-        course: item.course, room: item.room, time: item.time,
+        course: item.course, room: item.room, time: item.time, note: item.note,
       })) added++;
     }
   }

@@ -2255,7 +2255,7 @@ async function refreshTimetableFromGoogleSheet(){
             Object.entries(sections).forEach(([sec,arr])=>{
               tt[dept][batch][sec]=tt[dept][batch][sec]||{};
               tt[dept][batch][sec][day]=(arr||[]).map(e=>({
-                name:e.name||e.c||'',location:e.location||e.l||'',time:e.time||e.t||''
+                name:e.name||e.c||'',location:e.location||e.l||'',time:e.time||e.t||'',note:e.note||''
               }));
             });
           });
