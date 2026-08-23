@@ -249,12 +249,21 @@
     const rows=[
       ['Name',p.name||'—'],
       ['Program',p.department||'—'],
-      ['Batch',(typeof profileFullBatch==='function'?profileFullBatch(p):p.batch)||'—'],
-      ['Section',p.section||'—']
+      ['Batch',(typeof profileFullBatch==='function'?profileFullBatch(p):p.batch)||'—']
     ];
     $('m-onboard-rows').innerHTML=rows.map(([l,v])=>
       `<div class="m-orow"><div class="m-orow-label">${esc(l)}</div><div class="m-orow-value">${esc(v)}</div></div>`
     ).join('');
+    // Wrong section on the roster (a late section swap, a roster typo) is
+    // exactly the kind of thing a student notices right here, first look —
+    // so it's fixable on the spot rather than only later in Profile.
+    const secHost=$('m-onboard-sec');
+    if(secHost){
+      secHost.innerHTML=sectionPickerHTML(p,'m-onboard-sec-chips');
+      secHost.querySelectorAll('.m-chip').forEach(chip=>{
+        chip.addEventListener('click',()=>changeProfileSection(chip.dataset.sec));
+      });
+    }
   }
 
   /* ══ NOTIFICATIONS ═════════════════════════════════════════════════
@@ -1821,7 +1830,11 @@
     const secs=Object.keys((src[dept]||{})[batch]||{}).filter(s=>s!==ALL_SECTIONS);
     return secs.sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
   }
-  function sectionPickerHTML(p){
+  // chipsId is per-caller (not a fixed id) because the onboarding screen and
+  // the Profile tab can both hold one of these in the DOM at once — only one
+  // is ever "on" at a time, but a duplicate id would still make
+  // #id-based querySelectorAll wiring match both.
+  function sectionPickerHTML(p,chipsId){
     const secs=availableSectionsForProfile(p);
     if(!secs.length){
       return '<div class="m-caption" style="margin:8px 2px 0">Sections aren’t available to change right now.</div>';
@@ -1831,7 +1844,7 @@
     ).join('');
     return `<div class="m-lk-field" style="margin-top:10px">
       <div class="m-meta-row"><span>Section</span><b>${esc(p.section||'—')}</b></div>
-      <div class="m-chip-row" id="m-profile-sec-chips">${chips}</div>
+      <div class="m-chip-row" id="${chipsId}">${chips}</div>
     </div>`;
   }
   // Switches which section's classes the student sees, and — if push
@@ -1849,7 +1862,8 @@
     if(typeof seedProfileSchedulePrefs==='function') seedProfileSchedulePrefs(updated,true);
     if(typeof syncNotificationPrefs==='function') syncNotificationPrefs();
     toast('Section changed to '+sec);
-    renderProfile();
+    if(route==='onboard') renderOnboard(updated);
+    else if(route==='profile') renderProfile();
   }
 
   function renderProfile(){
@@ -1875,6 +1889,10 @@
           <div class="m-pcard-sub">${esc(sub)}</div>
         </div>
       </div>
+      <div class="m-section-label">Your section</div>
+      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
+        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
+      ${sectionPickerHTML(p,'m-profile-sec-chips')}
       ${myCoursesSectionHTML()}
       <div class="m-section-label">Notifications</div>
       <!-- One master switch, then the categories it governs. The categories are
@@ -1903,10 +1921,6 @@
         </label>`;
         }).join('')}
       </div>
-      <div class="m-section-label">Your section</div>
-      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
-        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
-      ${sectionPickerHTML(p)}
       <button class="m-btn-ghost" id="m-signout" type="button" style="margin-top:18px">Sign out</button>`;
 
     // app.js writes every push status line through this hook; point it at the
