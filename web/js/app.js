@@ -1700,15 +1700,18 @@ function applyCDRoomOccupancy(occupancy,total,sourceLabel){
 async function refreshCDRoomScheduleFromSheet(){
   try{
     const apiRes=await fetch(cdRoomsApiUrl(),{cache:'no-store'});
+    if(!apiRes.ok) return;
     if(apiRes.ok){
       const data=await apiRes.json();
+      if(!(data.ok&&data.occupancy)) return;
       if(data.ok&&data.occupancy){
         applyCDRoomOccupancy(data.occupancy,data.count||0,'FREE ROOMS C/D · API');
         return;
       }
     }
   }catch(apiErr){
-    console.warn('CD rooms API unavailable, loading Google Sheet directly:',apiErr);
+    console.warn('CD rooms Mongo API unavailable:',apiErr);
+    return;
   }
   try{
     const grids=await Promise.all(GOOGLE_SHEET_TABS.map(tab=>loadSheetGrid(tab).catch(()=>null)));
@@ -2215,14 +2218,21 @@ async function refreshTimetableFromGoogleSheet(){
   // enough for someone to add a course and have it saved under the wrong
   // school, pointing at a department that school does not have.
   const requestedSchool=document.getElementById('school')?.value||'computing';
-  setSheetStatus('SHEET: SYNCING...',true);
+  setSheetStatus('TIMETABLE: SYNCING...',true);
   setTimetableLiveBadge('Syncing…','syncing');
   try{
     const apiData=await fetchTimetableJSON(timetableApiUrl());
     if(!apiData.ok) throw new Error(apiData.error||'Timetable API returned an error');
-    applyTimetablePayload(apiData,'SHEET: LIVE API',requestedSchool);
+    applyTimetablePayload(apiData,'MONGODB: GENERATED TIMETABLE',requestedSchool);
   }catch(apiErr){
-    console.warn('Primary timetable source failed:',apiErr);
+    console.warn('Mongo timetable source failed:',apiErr);
+    const message=(apiErr&&apiErr.message)?apiErr.message:String(apiErr);
+    setSheetStatus((_sheetHadSuccessfulLoad?'MONGODB: LAST DATA · ':'MONGODB ERROR · ')+message,false);
+    setTimetableLiveBadge(_sheetHadSuccessfulLoad
+      ? `Cached · Updated ${relativeTimeAgo(_timetableLastSyncMs)}`
+      : 'Sync failed · Retry',
+      _sheetHadSuccessfulLoad?'cached':'error');
+    return;
     // Fallback 1: the committed per-school snapshot (db/timetables/<school>.json),
     // same source fetchSchoolTT() uses for Free Rooms. This is what keeps FSE
     // selectable when the live sheet's tab is missing or returns nothing parseable.
@@ -2301,9 +2311,8 @@ function ttHasRealRooms(tt){
   return false;
 }
 
-// Fetch one school's timetable: live Google-Sheet API first (reflects
-// reschedules), committed db/*.json snapshot as fallback when the serverless
-// API isn't reachable (e.g. static local hosting).
+// Fetch one school's timetable from the generated Mongo snapshot.  Do not
+// fall back to a file or Google Sheets: Mongo is the sole timetable source.
 async function fetchSchoolTT(school){
   try{
     const res=await fetch(`/api/timetable?school=${school}&cachebust=${Date.now()}`,{cache:'no-store'});
@@ -2311,11 +2320,7 @@ async function fetchSchoolTT(school){
       const data=await res.json();
       if(data&&data.ok&&data.tt&&ttHasRealRooms(data.tt)) return data.tt;
     }
-  }catch(err){/* fall through to static snapshot */}
-  try{
-    const data=await fetchTimetableJSON(`/db/timetables/${school}.json?cachebust=${Date.now()}`);
-    if(data&&data.tt) return data.tt;
-  }catch(err){console.warn(`Free Rooms: ${school} timetable load failed`,err);}
+  }catch(err){console.warn(`Free Rooms: Mongo timetable load failed for ${school}`,err);}
   return null;
 }
 

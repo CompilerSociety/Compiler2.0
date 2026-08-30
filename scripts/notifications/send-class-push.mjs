@@ -27,6 +27,7 @@ import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+import { recordNotificationDelivery } from './notify-log.mjs';
 
 const job = createNotificationJob('class-push');
 
@@ -221,6 +222,10 @@ let sent = 0, skipped = 0, pruned = 0, failed = 0;
         });
         try {
           await webpush.sendNotification(subscription, payload);
+          recordNotificationDelivery({
+            kind: 'class', recipient: { name, nuid: entry.nuid || null, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
+            change: { status: s.status, course: s.course, day: s.day, time: s.time, venue: s.venue },
+          });
           seen[s.slotKey] = s.value; // remembered until the class recovers
           sent++;
         } catch (err) {

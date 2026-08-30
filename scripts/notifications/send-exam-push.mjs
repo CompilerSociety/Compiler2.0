@@ -12,6 +12,7 @@ import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+import { recordNotificationDelivery } from './notify-log.mjs';
 
 const job = createNotificationJob('exam-push');
 
@@ -106,6 +107,10 @@ for (const entry of subs) {
   });
   try {
     await webpush.sendNotification(subscription, payload);
+    recordNotificationDelivery({
+      kind: 'exam', recipient: { name, nuid: entry.nuid || null, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
+      change: { exam_type: examType(doc), schedule_id: id },
+    });
     state[endpoint] = id;
     sent++;
   } catch (err) {

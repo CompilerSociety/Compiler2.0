@@ -34,6 +34,9 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    concurrency:
+      group: notification-delivery-and-audit
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -54,13 +57,19 @@ jobs:
           node scripts/notifications/send-class-push.mjs
           status=$?
           set -e
+          if [ -f notifylog.jsonl ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git pull --rebase origin main
+            git add notifylog.jsonl
+            git diff --cached --quiet || git commit -m "audit: record notification deliveries"
+            git push origin HEAD:main
+          fi
           if [ "$status" -eq 10 ]; then
             echo "Notification sender completed with no work."
             exit 0
           fi
           exit "$status"
 
-      # No commit step any more. This job used to write its results into db/
-      # and push them; that data now lives in MongoDB, written directly by the
-      # step above, so a run produces no repo changes at all. That was the point
-      # of the migration: notifications and syncs stopped churning main.
+      # notifylog.jsonl is a temporary, explicit exception: successful sends
+      # are committed above so delivery recipients can be audited.

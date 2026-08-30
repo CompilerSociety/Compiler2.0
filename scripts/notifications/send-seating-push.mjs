@@ -15,6 +15,7 @@ import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, pruneSubs, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+import { recordNotificationDelivery } from './notify-log.mjs';
 
 const job = createNotificationJob('seating-push');
 
@@ -94,6 +95,10 @@ for (const entry of subs) {
   const payload = JSON.stringify(buildMessage(student));
   try {
     await webpush.sendNotification(subscription, payload);
+    recordNotificationDelivery({
+      kind: 'seating', recipient: { name: student.name || entry.name || null, nuid, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
+      change: { paper: student.paper || null, time: student.time || null, venue: student.class || null, seat: student.seat || null },
+    });
     state[endpoint] = hash;
     keptSubs.push(entry);
     sent++;
