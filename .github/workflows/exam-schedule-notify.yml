@@ -44,8 +44,10 @@ jobs:
           VAPID_SUBJECT: mailto:compilersociety@gmail.com
         run: |
           npm ci --silent
+          set +e
           node scripts/notifications/send-exam-push.mjs
           status=$?
+          set -e
           if [ "$status" -eq 10 ]; then
             echo "Notification sender completed with no work."
             exit 0

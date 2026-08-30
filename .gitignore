@@ -14,6 +14,7 @@ debugLog.txt
 api/log.txt
 
 # Generated timetable/output data
+db/
 db/timetable-*.json
 db/repeat-*.json
 dbfolder/*.json
