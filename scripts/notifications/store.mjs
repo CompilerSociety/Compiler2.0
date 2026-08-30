@@ -29,20 +29,17 @@ const STATE_KINDS = {
   'db/metadata/notifications/showup-notify-state.json': 'showup-notify',
 };
 
-// Exits 0, not 1: a database that is briefly unreachable is not a broken build,
-// and a red workflow every time Atlas hiccups trains people to ignore it. The
-// next scheduled run picks up exactly where this one stopped, because nothing
-// was sent and no state was advanced.
 function abortOnFailure(what, err) {
-  console.error(`Could not read ${what} from MongoDB: ${err?.message || err}`);
-  console.error('Sending nothing this run rather than risk re-notifying everyone.');
-  process.exit(0);
+  const failure = new Error(`Could not read ${what} from MongoDB: ${err?.message || err}`, { cause: err });
+  failure.name = 'MongoNotificationStoreError';
+  throw failure;
 }
 
 function requireMongo() {
   if (!isEnabled()) {
-    console.error('MONGODB_URI is not set - skipping push notifications.');
-    process.exit(0);
+    const failure = new Error('MONGODB_URI is not set.');
+    failure.name = 'MongoNotificationStoreError';
+    throw failure;
   }
 }
 

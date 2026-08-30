@@ -33,6 +33,7 @@ env:
 jobs:
   notify:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,6 +51,12 @@ jobs:
         run: |
           npm ci --silent
           node scripts/notifications/send-class-push.mjs
+          status=$?
+          if [ "$status" -eq 10 ]; then
+            echo "Notification sender completed with no work."
+            exit 0
+          fi
+          exit "$status"
 
       # No commit step any more. This job used to write its results into db/
       # and push them; that data now lives in MongoDB, written directly by the

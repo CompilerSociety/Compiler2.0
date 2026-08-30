@@ -26,6 +26,9 @@
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
+import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+
+const job = createNotificationJob('class-push');
 
 // These three paths and the file list below must track the actual db/ layout.
 // They previously pointed at a flat db/push-subscriptions.json and a
@@ -40,7 +43,10 @@ const STATE = 'db/metadata/notifications/class-notify-state.json';
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
 const subject = process.env.VAPID_SUBJECT || 'mailto:compilersociety@gmail.com';
-if (!priv || !pub) { console.log('VAPID keys not set — skipping class push.'); process.exit(0); }
+if (!priv || !pub) {
+  console.error('VAPID keys not set — cannot send class push.');
+  await job.finish({ outcome: 'vapid_keys_missing', code: EXIT.VAPID });
+} else {
 webpush.setVapidDetails(subject, pub, priv);
 
 const deptKeyOf = (dep) => String(dep || '').replace(/^BS\s+/i, '').trim().toUpperCase();
@@ -91,6 +97,9 @@ function fmtSlot(range) {
 const slots = []; // { slotKey, value, status, deptKey, batch, secLetter, section, course, day, time, venue }
 for (const f of TIMETABLES) {
   const doc = await loadDocument(f);
+  if (doc && (typeof doc !== 'object' || (doc.tt != null && (typeof doc.tt !== 'object' || Array.isArray(doc.tt))))) {
+    throw malformedDocument(`Timetable document "${f}" has an invalid tt object.`);
+  }
   const tt = doc && doc.tt ? doc.tt : null;
   if (!tt) continue;
   for (const dep of Object.keys(tt)) {
@@ -116,7 +125,10 @@ for (const f of TIMETABLES) {
   }
 }
 
-if (slots.length === 0) { console.log('No timetable data — nothing to do.'); process.exit(0); }
+if (slots.length === 0) {
+  console.log('No timetable data — nothing to do.');
+  await job.finish({ outcome: 'no_op', reason: 'no_timetable_data' });
+} else {
 
 const subs = await loadSubs();
 const state = await loadState(STATE); // { endpoint: { slotKey: value } }
@@ -128,7 +140,7 @@ const liveEndpoints = new Set();
 const currentBySlotKey = new Map();
 for (const s of slots) currentBySlotKey.set(s.slotKey, s);
 
-let sent = 0, skipped = 0, pruned = 0;
+let sent = 0, skipped = 0, pruned = 0, failed = 0;
 
 // Wrap in async IIFE to support await
 (async () => {
@@ -199,7 +211,10 @@ let sent = 0, skipped = 0, pruned = 0;
           sent++;
         } catch (err) {
           const code = err?.statusCode;
-          if (code !== 404 && code !== 410) console.warn(`class push failed (${code || 'err'}): ${err?.message || err}`);
+          if (code !== 404 && code !== 410) {
+            failed++;
+            console.warn(`class push failed (${code || 'err'}): ${err?.message || err}`);
+          }
         }
       }
     }
@@ -210,4 +225,7 @@ let sent = 0, skipped = 0, pruned = 0;
 
   await saveState(STATE, state);
   console.log(`Class push summary — sent: ${sent}, skipped: ${skipped}, recovered/pruned: ${pruned}`);
-})();
+  await job.finish({ outcome: failed > 0 ? 'partial_push_failure' : sent > 0 ? 'sent' : 'no_op', counts: { sent, skipped, pruned, failed } });
+})().catch(job.fail);
+}
+}

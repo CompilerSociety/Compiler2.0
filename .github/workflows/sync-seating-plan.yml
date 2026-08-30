@@ -38,6 +38,7 @@ env:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Validate repository_dispatch trigger
         # Only repository_dispatch can be forged on a public repo (schedule and
@@ -105,6 +106,12 @@ jobs:
         run: |
           npm ci --silent
           node scripts/notifications/send-seating-push.mjs
+          status=$?
+          if [ "$status" -eq 10 ]; then
+            echo "Notification sender completed with no work."
+            exit 0
+          fi
+          exit "$status"
 
       # No commit step any more. This job used to write its results into db/
       # and push them; that data now lives in MongoDB, written directly by the

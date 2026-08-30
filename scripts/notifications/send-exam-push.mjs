@@ -11,6 +11,9 @@
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
+import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+
+const job = createNotificationJob('exam-push');
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists.
@@ -21,17 +24,32 @@ const STATE = 'db/metadata/notifications/push-exam-state.json';
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
 const subject = process.env.VAPID_SUBJECT || 'mailto:compilersociety@gmail.com';
-if (!priv || !pub) { console.log('VAPID keys not set — skipping exam push.'); process.exit(0); }
+if (!priv || !pub) {
+  console.error('VAPID keys not set — cannot send exam push.');
+  await job.finish({ outcome: 'vapid_keys_missing', code: EXIT.VAPID });
+} else {
 webpush.setVapidDetails(subject, pub, priv);
 
 // Load every exam schedule (computing / business / engineering) from Mongo.
-const examDocs = (await Promise.all(EXAM_DOCS.map((id) => loadDocument(id))))
-  .filter((d) => d && Array.isArray(d.exams));
+const loadedExamDocs = await Promise.all(EXAM_DOCS.map((id) => loadDocument(id)));
+for (let i = 0; i < loadedExamDocs.length; i++) {
+  const doc = loadedExamDocs[i];
+  if (doc && (typeof doc !== 'object' || !Array.isArray(doc.exams))) {
+    throw malformedDocument(`Exam document "${EXAM_DOCS[i]}" has no exams array.`);
+  }
+}
+const examDocs = loadedExamDocs.filter((d) => d && Array.isArray(d.exams));
 
-if (examDocs.length === 0) { console.log('No exam schedules present — nothing to send.'); process.exit(0); }
+if (examDocs.length === 0) {
+  console.log('No exam schedules present — nothing to send.');
+  await job.finish({ outcome: 'no_op', reason: 'no_exam_schedules' });
+} else {
 
 const subs = await loadSubs();
-if (!Array.isArray(subs) || subs.length === 0) { console.log('No subscriptions.'); process.exit(0); }
+if (!Array.isArray(subs) || subs.length === 0) {
+  console.log('No subscriptions.');
+  await job.finish({ outcome: 'no_op', reason: 'no_subscriptions' });
+} else {
 const state = await loadState(STATE);
 
 const deptCode = (dep) => String(dep || '').replace(/^BS\s+/i, '').trim().toUpperCase();
@@ -61,7 +79,7 @@ function userMatches(doc, dep, batch, secLetter) {
   });
 }
 
-let sent = 0, skipped = 0;
+let sent = 0, skipped = 0, failed = 0;
 for (const entry of subs) {
   const subscription = entry?.subscription;
   if (!subscription?.endpoint) { continue; }
@@ -93,9 +111,16 @@ for (const entry of subs) {
   } catch (err) {
     const code = err?.statusCode;
     if (code === 404 || code === 410) { delete state[endpoint]; } // expired; seating sender prunes it
-    else console.warn(`exam push failed (${code || 'err'}): ${err?.message || err}`);
+    else {
+      failed++;
+      console.warn(`exam push failed (${code || 'err'}): ${err?.message || err}`);
+    }
   }
 }
 
 await saveState(STATE, state);
 console.log(`Exam push summary — sent: ${sent}, skipped: ${skipped}`);
+await job.finish({ outcome: failed > 0 ? 'partial_push_failure' : sent > 0 ? 'sent' : 'no_op', counts: { sent, skipped, pruned: 0, failed } });
+}
+}
+}

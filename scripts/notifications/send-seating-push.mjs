@@ -14,6 +14,9 @@ import crypto from 'node:crypto';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, pruneSubs, loadDocument } from './store.mjs';
+import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+
+const job = createNotificationJob('seating-push');
 
 const SEATING = 'seating/plan';
 const STATE = 'db/metadata/notifications/push-state.json';
@@ -23,12 +26,15 @@ const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
 const subject = process.env.VAPID_SUBJECT || 'mailto:compilersociety@gmail.com';
 if (!priv || !pub) {
-  console.log('VAPID keys not set — skipping push send.');
-  process.exit(0);
-}
+  console.error('VAPID keys not set — cannot send seating push.');
+  await job.finish({ outcome: 'vapid_keys_missing', code: EXIT.VAPID });
+} else {
 webpush.setVapidDetails(subject, pub, priv);
 
 const seating = (await loadDocument(SEATING)) || { students: [] };
+if (typeof seating !== 'object' || !Array.isArray(seating.students)) {
+  throw malformedDocument(`Seating document "${SEATING}" has no students array.`);
+}
 const students = Array.isArray(seating.students) ? seating.students : [];
 const byNuid = new Map();
 for (const s of students) {
@@ -41,8 +47,8 @@ const state = await loadState(STATE);
 
 if (!Array.isArray(subs) || subs.length === 0) {
   console.log('No subscriptions — nothing to send.');
-  process.exit(0);
-}
+  await job.finish({ outcome: 'no_op', reason: 'no_subscriptions' });
+} else {
 
 const seatHash = (s) =>
   crypto.createHash('sha1')
@@ -65,7 +71,7 @@ function buildMessage(student) {
 }
 
 const keptSubs = [];
-let sent = 0, skipped = 0, pruned = 0;
+let sent = 0, skipped = 0, pruned = 0, failed = 0;
 
 for (const entry of subs) {
   const nuid = String(entry?.nuid || '').trim().toUpperCase();
@@ -98,6 +104,7 @@ for (const entry of subs) {
       delete state[endpoint];
       pruned++;
     } else {
+      failed++;
       console.warn(`push failed for ${nuid} (${code || 'err'}): ${err?.message || err}`);
       keptSubs.push(entry); // keep and retry next time
     }
@@ -107,3 +114,6 @@ for (const entry of subs) {
 await pruneSubs(keptSubs);
 await saveState(STATE, state);
 console.log(`Push summary — sent: ${sent}, skipped: ${skipped}, pruned: ${pruned}`);
+await job.finish({ outcome: failed > 0 ? 'partial_push_failure' : sent > 0 ? 'sent' : 'no_op', counts: { sent, skipped, pruned, failed } });
+}
+}

@@ -19,7 +19,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getDb, closeMongo, isEnabled } from '../../lib/db/mongo.mjs';
+import { getDb, isEnabled } from '../../lib/db/mongo.mjs';
+import { createNotificationJob, EXIT } from '../notifications/job.mjs';
 import {
   COLLECTIONS, DOCUMENT_FILES, NOTIFY_STATE_FILES, LEADERBOARD_FILES,
 } from '../../lib/db/collections.mjs';
@@ -39,6 +40,7 @@ const MAX_ENTRIES = 10; // top-N cached into each leaderboard file
 
 let changed = 0;
 let unchanged = 0;
+const job = createNotificationJob('mongo-export');
 
 // Matches the indentation these files were committed with, so one backup
 // diffs cleanly against an older one.
@@ -163,8 +165,9 @@ async function exportDocuments(db) {
 
 async function main() {
   if (!isEnabled()) {
-    console.error('MONGODB_URI is not set - cannot export.');
-    process.exit(1);
+    const err = new Error('MONGODB_URI is not set - cannot export.');
+    err.name = 'MongoExportError';
+    throw err;
   }
   const db = await getDb();
   console.log(CHECK_ONLY ? 'Checking db/ mirror against Mongo...' : 'Exporting Mongo to db/...');
@@ -179,5 +182,8 @@ async function main() {
 }
 
 main()
-  .catch((err) => { console.error('Export failed:', err); process.exitCode = 1; })
-  .finally(() => closeMongo());
+  .then(() => job.finish({
+    outcome: 'exported', code: EXIT.SENT,
+    counts: { sent: changed, skipped: unchanged, pruned: 0, failed: 0 },
+  }))
+  .catch(job.fail);

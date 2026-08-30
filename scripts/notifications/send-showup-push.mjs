@@ -14,6 +14,9 @@
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
+import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
+
+const job = createNotificationJob('showup-push');
 
 // See send-class-push.mjs for why these must be the nested paths, not a flat
 // db/ layout that no longer exists. Only computing has a show-up sheet today,
@@ -29,7 +32,10 @@ const STATE = 'db/metadata/notifications/showup-notify-state.json';
 const priv = process.env.VAPID_PRIVATE_KEY;
 const pub = process.env.VAPID_PUBLIC_KEY;
 const subject = process.env.VAPID_SUBJECT || 'mailto:compilersociety@gmail.com';
-if (!priv || !pub) { console.log('VAPID keys not set — skipping show-up push.'); process.exit(0); }
+if (!priv || !pub) {
+  console.error('VAPID keys not set — cannot send show-up push.');
+  await job.finish({ outcome: 'vapid_keys_missing', code: EXIT.VAPID });
+} else {
 webpush.setVapidDetails(subject, pub, priv);
 
 const deptCode = (dep) => String(dep || '').replace(/^BS\s+/i, '').trim().toUpperCase();
@@ -41,6 +47,9 @@ const slotKey = (dep, sec, batch, code, date) => [dep, sec, batch, code, date].j
 const current = new Map(); // slotKey -> { value, info }
 for (const f of SHOWUP_DOCS) {
   const doc = await loadDocument(f);
+  if (doc && (typeof doc !== 'object' || !Array.isArray(doc.exams))) {
+    throw malformedDocument(`Show-up document "${f}" has no exams array.`);
+  }
   const exams = doc && Array.isArray(doc.exams) ? doc.exams : [];
   for (const e of exams) {
     const secs = e.sections || {};
@@ -56,7 +65,10 @@ for (const f of SHOWUP_DOCS) {
   }
 }
 
-if (current.size === 0) { console.log('No show-up data — nothing to do.'); process.exit(0); }
+if (current.size === 0) {
+  console.log('No show-up data — nothing to do.');
+  await job.finish({ outcome: 'no_op', reason: 'no_showup_data' });
+} else {
 
 const prevState = await loadState(STATE);
 const firstRun = Object.keys(prevState).length === 0;
@@ -76,13 +88,21 @@ const newState = {};
 for (const [key, { value }] of current) newState[key] = value;
 await saveState(STATE, newState);
 
-if (firstRun) { console.log('First run — recorded show-up snapshot, no notifications sent.'); process.exit(0); }
-if (changed.size === 0) { console.log('No show-up time/venue changes.'); process.exit(0); }
+if (firstRun) {
+  console.log('First run — recorded show-up snapshot, no notifications sent.');
+  await job.finish({ outcome: 'no_op', reason: 'first_snapshot_recorded' });
+} else if (changed.size === 0) {
+  console.log('No show-up time/venue changes.');
+  await job.finish({ outcome: 'no_op', reason: 'no_changes' });
+} else {
 
 const subs = await loadSubs();
-if (!Array.isArray(subs) || subs.length === 0) { console.log('Slots changed but no subscriptions.'); process.exit(0); }
+if (!Array.isArray(subs) || subs.length === 0) {
+  console.log('Slots changed but no subscriptions.');
+  await job.finish({ outcome: 'no_op', reason: 'no_subscriptions' });
+} else {
 
-let sent = 0, skipped = 0;
+let sent = 0, skipped = 0, failed = 0;
 for (const entry of subs) {
   const subscription = entry?.subscription;
   if (!subscription?.endpoint) continue;
@@ -110,9 +130,17 @@ for (const entry of subs) {
       sent++;
     } catch (err) {
       const code = err?.statusCode;
-      if (code !== 404 && code !== 410) console.warn(`showup push failed (${code || 'err'}): ${err?.message || err}`);
+      if (code !== 404 && code !== 410) {
+        failed++;
+        console.warn(`showup push failed (${code || 'err'}): ${err?.message || err}`);
+      }
     }
   }
 }
 
 console.log(`Show-up push summary — sent: ${sent}, skipped: ${skipped}, changed slots: ${changed.size}`);
+await job.finish({ outcome: failed > 0 ? 'partial_push_failure' : sent > 0 ? 'sent' : 'no_op', counts: { sent, skipped, pruned: 0, failed } });
+}
+}
+}
+}
