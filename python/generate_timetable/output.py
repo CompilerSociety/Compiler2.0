@@ -15,7 +15,7 @@ except Exception:  # noqa: BLE001
     _store = None
 
 def convert_to_reference_format(tt):
-    """Convert internal {c,l,t} entries to {name,location,time}."""
+    """Convert internal entries, preserving an optional class-change note."""
     out = {}
     for dept, batches in tt.items():
         out[dept] = {}
@@ -25,7 +25,10 @@ def convert_to_reference_format(tt):
                 out[dept][batch][sec] = {}
                 for day, entries in days.items():
                     out[dept][batch][sec][day] = [
-                        {"name": e["c"], "location": e["l"], "time": e["t"]}
+                        {
+                            "name": e["c"], "location": e["l"], "time": e["t"],
+                            **({"note": e["n"]} if e.get("n") else {}),
+                        }
                         for e in entries
                     ]
     return out

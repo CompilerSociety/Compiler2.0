@@ -53,11 +53,17 @@ const deptKeyOf = (dep) => String(dep || '').replace(/^BS\s+/i, '').trim().toUpp
 const fullBatch = (b) => (/^\d{2}$/.test(String(b || '').trim()) ? '20' + String(b).trim() : String(b || '').trim());
 const sectionLetter = (s) => String(s || '').replace(/[^A-Za-z]/g, '').toUpperCase();
 
-function classStatus(name) {
-  const t = String(name || '');
+function statusFromText(value) {
+  const t = String(value || '');
   if (/cancel/i.test(t)) return 'Cancelled';
   if (/\bresch\b|reschedul/i.test(t)) return 'Rescheduled';
   return 'Normal';
+}
+function classStatus(note, legacyName) {
+  // `note` is the durable status emitted by the timetable generator. Keep the
+  // name check as a compatibility fallback for documents produced before that
+  // field existed and for a manually entered legacy document.
+  return statusFromText(note) !== 'Normal' ? statusFromText(note) : statusFromText(legacyName);
 }
 function cleanCourseName(name) {
   return String(name || '').replace(/\s*(ReSch(eduled)?|Cancelled|Cancel)\b.*$/i, '').trim() || 'your class';
@@ -107,7 +113,7 @@ for (const f of TIMETABLES) {
       for (const section of Object.keys(tt[dep][batch] || {})) {
         for (const day of Object.keys(tt[dep][batch][section] || {})) {
           (tt[dep][batch][section][day] || []).forEach((c) => {
-            const status = classStatus(c.name);
+            const status = classStatus(c.note, c.name);
             const course = cleanCourseName(c.name);
             slots.push({
               // No array index in the key: stable identity of a class so a

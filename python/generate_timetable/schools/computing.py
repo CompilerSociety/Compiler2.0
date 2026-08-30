@@ -48,6 +48,14 @@ NOT_A_CLASS_RE = re.compile(
 # The sheet writes its banners letter-spaced ("P R A Y E R  B R E A K"), so
 # these are matched against the text with whitespace removed.
 BANNER_RE = re.compile(r"prayer|break", re.IGNORECASE)
+def status_note(text):
+    """Return the only two timetable-change notes supported by the UI."""
+    value = one_line(text)
+    if re.search(r"\bcancel", value, re.IGNORECASE):
+        return "Cancelled"
+    if re.search(r"\bresch\b|reschedul", value, re.IGNORECASE):
+        return "Rescheduled"
+    return ""
 
 
 def parse_bare_course_cell(text):
@@ -58,6 +66,7 @@ def parse_bare_course_cell(text):
         return None
     return {
         "course": text,
+        "note": status_note(text),
         "depts": [],
         "section": None,
         "has_section": False,
@@ -111,6 +120,10 @@ def parse_timetable_cell(text):
         course = f"{course} ({sub_label})"
     return {
         "course": course,
+        # Keep this separate from the title. The API already uses the same
+        # trailing-cell convention; persisting it lets notification jobs read
+        # the durable snapshot rather than relying on a live API response.
+        "note": status_note(tail),
         "depts": depts,
         "section": section,
         "has_section": bool(section),
@@ -272,7 +285,7 @@ def normalise_room(room):
 # Timetable accumulator
 # ---------------------------------------------------------------------------
 
-def add_course(tt, dept, batch, section, day, course, room, time):
+def add_course(tt, dept, batch, section, day, course, room, time, note=""):
     if not all([dept, batch, section, day, course, room, time]):
         return False
     depts = dept if isinstance(dept, list) else [dept]
@@ -283,9 +296,19 @@ def add_course(tt, dept, batch, section, day, course, room, time):
         tt[d][batch].setdefault(section, {})
         tt[d][batch][section].setdefault(day, [])
         arr = tt[d][batch][section][day]
-        if not any(x["c"] == course and x["l"] == room and x["t"] == time for x in arr):
-            arr.append({"c": course, "l": room, "t": time})
+        existing = next((x for x in arr
+                         if x["c"] == course and x["l"] == room and x["t"] == time), None)
+        if existing is None:
+            entry = {"c": course, "l": room, "t": time}
+            if note:
+                entry["n"] = note
+            arr.append(entry)
             added = True
+        elif note and existing.get("n") != note:
+            # Duplicate cells occasionally occur in a slot band. Preserve the
+            # class count, but never discard a change note found in a later
+            # copy of the same class.
+            existing["n"] = note
     return added
 
 # ---------------------------------------------------------------------------
@@ -548,6 +571,7 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                             "row_key": (day, block["name"], r),
                             "course": parsed["course"], "day": day,
                             "room": room, "time": slot_time, "colour": cell_colour,
+                            "note": parsed.get("note", ""),
                         })
                     continue
 
@@ -587,12 +611,14 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                     pending.append({
                         "depts": depts_to_add, "batch": store_batch, "day": day,
                         "course": parsed["course"], "room": room, "time": slot_time,
+                        "note": parsed.get("note", ""),
                     })
                     continue
 
                 for dept_key in depts_to_add:
                     if add_course(tt, dept_key, store_batch, section,
-                                  day, parsed["course"], room, slot_time):
+                                  day, parsed["course"], room, slot_time,
+                                  parsed.get("note", "")):
                         added += 1
                 # Keep scanning: a slot band can hold more than one class.
                 # Stopping at the first cell lost every second class in a
@@ -639,7 +665,7 @@ def flush_sectionless(tt, pending):
     for item in pending:
         for dept in item["depts"]:
             if add_course(tt, dept, item["batch"], ALL_SECTIONS, item["day"],
-                          item["course"], item["room"], item["time"]):
+                          item["course"], item["room"], item["time"], item.get("note", "")):
                 added += 1
     return added
 
@@ -717,7 +743,7 @@ def flush_bare(tt, bare):
                 bare["course"].setdefault(
                     course_key(cell["course"]), []).append((dept, batch))
                 if add_course(tt, dept, batch, ALL_SECTIONS, cell["day"],
-                              cell["course"], cell["room"], cell["time"]):
+                              cell["course"], cell["room"], cell["time"], cell.get("note", "")):
                     added += 1
 
     for cell in bare["cells"]:
@@ -729,7 +755,7 @@ def flush_bare(tt, bare):
         # as free. The fill still supplies the batch where available.
         batch = resolve_batch(cell["colour"], "", cell["course"], []) or "Unknown"
         if add_course(tt, "Unassigned", batch, ALL_SECTIONS, cell["day"],
-                      cell["course"], cell["room"], cell["time"]):
+                      cell["course"], cell["room"], cell["time"], cell.get("note", "")):
             added += 1
         dlog_warn(f"  {cell['day']}: preserved unassigned class '{cell['course']}' "
                   f"in {cell['room']} at {cell['time']}")
