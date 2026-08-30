@@ -46,7 +46,7 @@ jobs:
       - name: Dump MongoDB
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          MONGODB_DB: ${{ secrets.MONGODB_DB }}
+          MONGODB_DB: compiler2
         run: |
           if [ -z "$MONGODB_URI" ]; then
             echo "::error::MONGODB_URI secret is not set - there is nothing backing up this data."

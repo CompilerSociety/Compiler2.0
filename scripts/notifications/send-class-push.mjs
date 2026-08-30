@@ -132,6 +132,14 @@ if (slots.length === 0) {
 
 const subs = await loadSubs();
 const state = await loadState(STATE); // { endpoint: { slotKey: value } }
+const subscriptionInventory = {
+  total: Array.isArray(subs) ? subs.length : 0,
+  valid_endpoint: Array.isArray(subs) ? subs.filter((entry) => entry?.subscription?.endpoint).length : 0,
+  class_enabled: Array.isArray(subs)
+    ? subs.filter((entry) => entry?.subscription?.endpoint && wants(entry, 'cls')).length : 0,
+  prefs_null: Array.isArray(subs) ? subs.filter((entry) => entry?.prefs === null).length : 0,
+};
+console.log(JSON.stringify({ event: 'class_push_subscription_inventory', ...subscriptionInventory }));
 const liveEndpoints = new Set();
 
 // Pre-index every class currently in the timetable by its stable slotKey.
