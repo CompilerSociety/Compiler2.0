@@ -32,6 +32,7 @@ env:
 
 jobs:
   notify:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     concurrency:
@@ -45,6 +46,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Verify required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in MONGODB_URI MONGODB_DB VAPID_PUBLIC_KEY VAPID_PRIVATE_KEY; do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name"
+              exit 1
+            fi
+          done
 
       - name: Send class cancel/reschedule push notifications
         env:
