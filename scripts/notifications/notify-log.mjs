@@ -6,7 +6,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ENABLE_NOTIFY_LOG = true;
+// Repository writes are intentionally disabled here: notification jobs should not
+// mutate main by committing an audit file back to GitHub. The workflow now treats
+// delivery auditing as a side effect to avoid push/rebase loops and branch churn.
+const ENABLE_NOTIFY_LOG = false;
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const LOG_FILE = path.join(REPO_ROOT, 'notifylog.jsonl');
 

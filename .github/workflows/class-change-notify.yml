@@ -28,6 +28,8 @@ permissions:
 env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
   MONGODB_DB: compiler2
+  VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+  VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
 
 
 jobs:
@@ -60,28 +62,10 @@ jobs:
 
       - name: Send class cancel/reschedule push notifications
         env:
-          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
-          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           VAPID_SUBJECT: mailto:compilersociety@gmail.com
         run: |
           npm ci --silent
-          set +e
           node scripts/notifications/send-class-push.mjs
-          status=$?
-          set -e
-          if [ -f notifylog.jsonl ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git pull --rebase origin main
-            git add notifylog.jsonl
-            git diff --cached --quiet || git commit -m "audit: record notification deliveries"
-            git push origin HEAD:main
-          fi
-          if [ "$status" -eq 10 ]; then
-            echo "Notification sender completed with no work."
-            exit 0
-          fi
-          exit "$status"
 
       # notifylog.jsonl is a temporary, explicit exception: successful sends
       # are committed above so delivery recipients can be audited.
