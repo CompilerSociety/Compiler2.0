@@ -1,8 +1,8 @@
 {
  "counts": {
-  "json_entries": 1136,
-  "sheet_cells": 1136,
-  "sheet_cells_parsed": 1102
+  "json_entries": 1277,
+  "sheet_cells": 1306,
+  "sheet_cells_parsed": 1252
  },
  "geometry_problems": [],
  "geometry_variants": [
@@ -11,7 +11,56 @@
   "Friday/lab: room column 0, time columns [1, 19] (the common layout is 0 / [1, 11, 21, 31])"
  ],
  "A_no_cell_at_coord": [],
- "A_course_mismatch": [],
+ "A_course_mismatch": [
+  {
+   "dept": "BS AUDI",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "PPIT Seminar",
+   "room": "D-405",
+   "time": "11:30-12:50",
+   "cells_at_coord": [
+    "PPIT Seminar (Audi, Block-A)"
+   ]
+  },
+  {
+   "dept": "BS AUDI",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "PPIT Seminar",
+   "room": "D-504",
+   "time": "11:30-12:50",
+   "cells_at_coord": [
+    "PPIT Seminar (Audi, Block-A)"
+   ]
+  },
+  {
+   "dept": "BS BLOCK",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "PPIT Seminar",
+   "room": "D-405",
+   "time": "11:30-12:50",
+   "cells_at_coord": [
+    "PPIT Seminar (Audi, Block-A)"
+   ]
+  },
+  {
+   "dept": "BS BLOCK",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "PPIT Seminar",
+   "room": "D-504",
+   "time": "11:30-12:50",
+   "cells_at_coord": [
+    "PPIT Seminar (Audi, Block-A)"
+   ]
+  }
+ ],
  "A_wrong_time": [],
  "B_unmatched_cells": [
   {
@@ -73,7 +122,64 @@
   },
   {
    "day": "Monday",
-   "room": "C-CALL-1",
+   "room": "C-110",
+   "time": "01:00-02:20",
+   "block": "classroom-left",
+   "text": "Reserved For FDC",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 61,
+   "col": 16
+  },
+  {
+   "day": "Monday",
+   "room": "C-110",
+   "time": "02:30-03:50",
+   "block": "classroom-left",
+   "text": "Reserved For FDC",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 61,
+   "col": 21
+  },
+  {
+   "day": "Monday",
+   "room": "D-304",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "Reserved for Adv Comp Vision",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 8,
+   "col": 31
+  },
+  {
+   "day": "Monday",
+   "room": "CALL-1 (A-213)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -92,7 +198,7 @@
   },
   {
    "day": "Monday",
-   "room": "C-CALL-1",
+   "room": "CALL-1 (A-213)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -111,7 +217,7 @@
   },
   {
    "day": "Monday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -130,7 +236,7 @@
   },
   {
    "day": "Monday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -149,7 +255,7 @@
   },
   {
    "day": "Monday",
-   "room": "MEHRAN-2",
+   "room": "MEHRAN-2 (A-306)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -168,7 +274,7 @@
   },
   {
    "day": "Monday",
-   "room": "C-RAWAL 3",
+   "room": "B-COMPUTING-3",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "EE",
@@ -187,7 +293,7 @@
   },
   {
    "day": "Monday",
-   "room": "C-RAWAL 3",
+   "room": "B-COMPUTING-3",
    "time": "02:30-05:15",
    "block": "lab",
    "text": "EE",
@@ -244,7 +350,26 @@
   },
   {
    "day": "Tuesday",
-   "room": "A-KHYBER 3",
+   "room": "D-406",
+   "time": "02:30-03:50",
+   "block": "classroom-left",
+   "text": "Reserved by FSA",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 48,
+   "col": 21
+  },
+  {
+   "day": "Tuesday",
+   "room": "KYBHER-2",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -263,7 +388,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "A-KHYBER 3",
+   "room": "KYBHER-2",
    "time": "02:30-05:15",
    "block": "lab",
    "text": "FSM",
@@ -282,7 +407,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "A-KHYBER 4",
+   "room": "KYBHER-3",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -301,7 +426,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "A-KHYBER 4",
+   "room": "KYBHER-3",
    "time": "02:30-05:15",
    "block": "lab",
    "text": "FSM",
@@ -320,7 +445,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "C-CALL-1",
+   "room": "CALL-1 (A-213)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -339,7 +464,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "C-CALL-1",
+   "room": "CALL-1 (A-213)",
    "time": "02:30-05:15",
    "block": "lab",
    "text": "FSM",
@@ -358,7 +483,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -377,7 +502,7 @@
   },
   {
    "day": "Tuesday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "02:30-05:15",
    "block": "lab",
    "text": "FSM",
@@ -396,7 +521,94 @@
   },
   {
    "day": "Wednesday",
-   "room": "C-CALL-1",
+   "room": "D-405",
+   "time": "11:30-12:50",
+   "block": "classroom-left",
+   "text": "PPIT Seminar (Audi, Block-A)",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": null,
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 47,
+   "col": 11
+  },
+  {
+   "day": "Wednesday",
+   "room": "D-504",
+   "time": "11:30-12:50",
+   "block": "classroom-left",
+   "text": "PPIT Seminar (Audi, Block-A)",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": null,
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 58,
+   "col": 11
+  },
+  {
+   "day": "Wednesday",
+   "room": "C-110",
+   "time": "08:30-09:50",
+   "block": "classroom-left",
+   "text": "REserved for Mr. Shams Farooq",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 61,
+   "col": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "C-110",
+   "time": "10:00-11:20",
+   "block": "classroom-left",
+   "text": "REserved for Mr. Shams Farooq",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 61,
+   "col": 6
+  },
+  {
+   "day": "Wednesday",
+   "room": "D-403",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "UHQ-I & II (MS-CY Fall-2025 batch 05:20-07:10",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    0.77,
+    0.88,
+    0.7
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 19,
+   "col": 31
+  },
+  {
+   "day": "Wednesday",
+   "room": "CALL-1 (A-213)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -415,7 +627,7 @@
   },
   {
    "day": "Wednesday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -434,7 +646,7 @@
   },
   {
    "day": "Wednesday",
-   "room": "MEHRAN-2",
+   "room": "MEHRAN-2 (A-306)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -491,7 +703,121 @@
   },
   {
    "day": "Thursday",
-   "room": "C-CALL-1",
+   "room": "C-407",
+   "time": "02:30-03:50",
+   "block": "classroom-left",
+   "text": "Reserved by Mr. Bilal Khalid Dar",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 21,
+   "col": 21
+  },
+  {
+   "day": "Thursday",
+   "room": "C-407",
+   "time": "03:55-05:15",
+   "block": "classroom-left",
+   "text": "Reserved by Mr. Bilal Khalid Dar",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 21,
+   "col": 26
+  },
+  {
+   "day": "Thursday",
+   "room": "D-402",
+   "time": "01:00-02:20",
+   "block": "classroom-left",
+   "text": "Reserved",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 44,
+   "col": 16
+  },
+  {
+   "day": "Thursday",
+   "room": "D-402",
+   "time": "02:30-03:50",
+   "block": "classroom-left",
+   "text": "Reserved",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 44,
+   "col": 21
+  },
+  {
+   "day": "Thursday",
+   "room": "D-405",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "Reserved by Mr. Bilal Khalid Dar",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 21,
+   "col": 31
+  },
+  {
+   "day": "Thursday",
+   "room": "D-405",
+   "time": "06:45-08:05",
+   "block": "classroom-right",
+   "text": "Reserved by Mr. Bilal Khalid Dar",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 21,
+   "col": 36
+  },
+  {
+   "day": "Thursday",
+   "room": "CALL-1 (A-213)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -510,7 +836,7 @@
   },
   {
    "day": "Thursday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -529,7 +855,26 @@
   },
   {
    "day": "Thursday",
-   "room": "MEHRAN-2",
+   "room": "CALL-3 (A-308)",
+   "time": "11:30-02:15",
+   "block": "lab",
+   "text": "FSM",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    0.6,
+    0.6,
+    0.6
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 75,
+   "col": 11
+  },
+  {
+   "day": "Thursday",
+   "room": "MEHRAN-2 (A-306)",
    "time": "11:30-02:15",
    "block": "lab",
    "text": "FSM",
@@ -567,7 +912,83 @@
   },
   {
    "day": "Friday",
-   "room": "D-IT LAB 1",
+   "room": "C-310",
+   "time": "11:30-12:50",
+   "block": "classroom-left",
+   "text": "UHQ 12:00-12:55",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    1,
+    0.0
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 13,
+   "col": 12
+  },
+  {
+   "day": "Friday",
+   "room": "D-303",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "Research Methodology (Cyber &SE)",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    0.77,
+    0.88,
+    0.7
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 7,
+   "col": 29
+  },
+  {
+   "day": "Friday",
+   "room": "D-304",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "UHQ-I & II (MS-CY, MS CS and MS SE) 05:20-07:10 Sp-2026 & fall-2025",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    0.77,
+    0.88,
+    0.7
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 8,
+   "col": 29
+  },
+  {
+   "day": "Friday",
+   "room": "D-305",
+   "time": "05:20-06:40",
+   "block": "classroom-right",
+   "text": "App Prog (AI &DS)",
+   "parsed": false,
+   "depts": [],
+   "section": "",
+   "colour": [
+    1,
+    0.9,
+    0.6
+   ],
+   "band_pos": 0,
+   "band_size": 1,
+   "row": 9,
+   "col": 29
+  },
+  {
+   "day": "Friday",
+   "room": "IT LAB 1 (D-210)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "P R A Y E R B R E A K",
@@ -581,12 +1002,12 @@
    ],
    "band_pos": 1,
    "band_size": 2,
-   "row": 63,
+   "row": 64,
    "col": 16
   },
   {
    "day": "Friday",
-   "room": "C-CALL-1",
+   "room": "CALL-1 (A-213)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -605,7 +1026,7 @@
   },
   {
    "day": "Friday",
-   "room": "C-CALL-2",
+   "room": "CALL-2 (A-214)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -624,7 +1045,7 @@
   },
   {
    "day": "Friday",
-   "room": "A-CALL-3",
+   "room": "CALL-3 (A-308)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -643,7 +1064,7 @@
   },
   {
    "day": "Friday",
-   "room": "MEHRAN-2",
+   "room": "MEHRAN-2 (A-306)",
    "time": "08:30-11:15",
    "block": "lab",
    "text": "FSM",
@@ -669,25 +1090,2049 @@
    "dept": "BS CS",
    "batch": "2023",
    "section": "ALL",
-   "day": "Wednesday",
-   "course": "PPIT Seminar",
-   "room": "D-405",
-   "time": "11:30-12:50",
-   "cell": "PPIT Seminar",
-   "colour": null,
+   "day": "Monday",
+   "course": "FCS",
+   "room": "D-313",
+   "time": "02:30-03:50",
+   "cell": "FCS",
+   "colour": [
+    1,
+    1,
+    1
+   ],
    "why": "unpainted"
   },
   {
-   "dept": "BS CY",
+   "dept": "BS CS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Monday",
+   "course": "FCS",
+   "room": "D-313",
+   "time": "03:55-05:15",
+   "cell": "FCS",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS CS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "HoD",
+   "room": "C-302",
+   "time": "02:30-03:50",
+   "cell": "HoD (CS)",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS CS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "HoD",
+   "room": "C-302",
+   "time": "03:55-05:15",
+   "cell": "HoD (CS)",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS CS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "FCS",
+   "room": "C-303",
+   "time": "02:30-03:50",
+   "cell": "FCS",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS CS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Thursday",
+   "course": "Info Ret & Text Mining",
+   "room": "C-402",
+   "time": "02:30-03:50",
+   "cell": "Info Ret & Text Mining",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-401",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-401",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-402",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-402",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-402",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-402",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-402",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-403",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-403",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-403",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-403",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-403",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-404",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-404",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-404",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-404",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-404",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-405",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-405",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-405",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-405",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-405",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-406",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-406",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-406",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-406",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-406",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-407",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-407",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-407",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-407",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-407",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-408",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-408",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-408",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-408",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-408",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-409",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-409",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-409",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-409",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "C-409",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-401",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-401",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-401",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-401",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-401",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-402",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-402",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-402",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-402",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-402",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-403",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-403",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-403",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-403",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-403",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-404",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-404",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-404",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-404",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-404",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-405",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-405",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-405",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-405",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-405",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-406",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-406",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-406",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-406",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-406",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-411",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-411",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-411",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-411",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-411",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-412",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-412",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-412",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-412",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-412",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-413",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-413",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-413",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-413",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-413",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-414",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-414",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-414",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-414",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-414",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-415",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-415",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-415",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-415",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-415",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-416",
+   "time": "08:30-09:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-416",
+   "time": "10:00-11:20",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-416",
+   "time": "11:30-12:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-416",
+   "time": "02:30-03:50",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS SE",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "FYP/Thesis Evaluations",
+   "room": "D-416",
+   "time": "03:55-05:15",
+   "cell": "FYP/Thesis Evaluations",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "A",
+   "day": "Monday",
+   "course": "CY & Net Security",
+   "room": "D-401",
+   "time": "06:45-08:05",
+   "cell": "CY & Net Security (PCS-A)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "CY & Net Security",
+   "room": "D-404",
+   "time": "06:45-08:05",
+   "cell": "CY & Net Security (PCS-A)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "B",
+   "day": "Tuesday",
+   "course": "CY & Net Security",
+   "room": "C-402",
+   "time": "04:30-07:30",
+   "cell": "CY & Net Security (PCS-B) 04:30-07:30",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "B",
+   "day": "Tuesday",
+   "course": "CY & Net Security",
+   "room": "D-316",
+   "time": "04:30-07:30",
+   "cell": "CY & Net Security (PCS-B) 04:30-07:30",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Monday",
+   "course": "Recent Adv in Deep Learn",
+   "room": "C-403",
+   "time": "03:55-05:15",
+   "cell": "Recent Adv in Deep Learn (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Monday",
+   "course": "Vision Based AI Agent",
+   "room": "D-301",
+   "time": "06:45-08:05",
+   "cell": "Vision Based AI Agent (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Monday",
+   "course": "Adv Topics in Empirical SE",
+   "room": "D-401",
+   "time": "05:20-06:40",
+   "cell": "Adv Topics in Empirical SE (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "Adv Parallel Dist Sys",
+   "room": "C-406",
+   "time": "01:15-04:15",
+   "cell": "Adv Parallel Dist Sys (PCS) 01:15-04:15",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "Adv Topics in CS",
+   "room": "D-303",
+   "time": "02:00-05:00",
+   "cell": "Adv Topics in CS (PCS) 02:00-05:00",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
    "batch": "2023",
    "section": "ALL",
    "day": "Wednesday",
-   "course": "PPIT Seminar",
-   "room": "D-504",
-   "time": "11:30-12:50",
-   "cell": "PPIT Seminar",
-   "colour": null,
-   "why": "unpainted"
+   "course": "Recent Adv in Deep Learn",
+   "room": "C-405",
+   "time": "03:55-05:15",
+   "cell": "Recent Adv in Deep Learn (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Wednesday",
+   "course": "Advanced Topics in NLP",
+   "room": "D-405",
+   "time": "03:55-06:40",
+   "cell": "Advanced Topics in NLP (PCS) 03:55-06:40",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Wednesday",
+   "course": "Vision Based AI Agent",
+   "room": "D-301",
+   "time": "06:45-08:05",
+   "cell": "Vision Based AI Agent (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Wednesday",
+   "course": "Adv Topics in Empirical SE",
+   "room": "D-404",
+   "time": "05:20-06:40",
+   "cell": "Adv Topics in Empirical SE (PCS)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Wednesday",
+   "course": "Adv Topics in NLP",
+   "room": "D-405",
+   "time": "03:55-06:40",
+   "cell": "Adv Topics in NLP (PCS) 03:55-06:40",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "Research Topics in Cloud Comp",
+   "room": "C-303",
+   "time": "02:00-04:45",
+   "cell": "Research Topics in Cloud Comp (PCS) 02:00-04:45",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "Research Topics in Gen AI",
+   "room": "C-304",
+   "time": "02:00-04:45",
+   "cell": "Research Topics in Gen AI (PCS) 02:00-04:45",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "Software Process Mining and Intelligence",
+   "room": "C-308",
+   "time": "09:00-12:00",
+   "cell": "Software Process Mining and Intelligence (PCS) 09:00-12:00",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Friday",
+   "course": "Adv Readings",
+   "room": "C-311",
+   "time": "09:00-12:00",
+   "cell": "Adv Readings (PCS) 09:00-12:00",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "BS PCS",
+   "batch": "2022",
+   "section": "ALL",
+   "day": "Monday",
+   "course": "Adv Computer Vision",
+   "room": "D-304",
+   "time": "03:00-06:00",
+   "cell": "Adv Computer Vision (PCS) 03:00-06:00",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "PhD",
+   "batch": "PhD",
+   "section": "C",
+   "day": "Tuesday",
+   "course": "UHQ-I & II",
+   "room": "D-315",
+   "time": "05:20-07:10",
+   "cell": "UHQ-I & II (PHD-C) 05:20-07:10",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
   },
   {
    "dept": "PhD",
@@ -708,12 +3153,92 @@
   {
    "dept": "PhD",
    "batch": "PhD",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "UHQ-I & II",
+   "room": "D-402",
+   "time": "05:20-06:40",
+   "cell": "UHQ-I & II (PHD-A)",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "PhD",
+   "batch": "PhD",
    "section": "B",
    "day": "Wednesday",
    "course": "UHQ-I & II",
-   "room": "TBA",
+   "room": "D-402",
    "time": "06:00-07:50",
    "cell": "UHQ-I & II (PHD-B) 06:00-07:50",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "Unassigned",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Tuesday",
+   "course": "Adv Topics in Req Engg",
+   "room": "D-402",
+   "time": "05:20-06:40",
+   "cell": "Adv Topics in Req Engg",
+   "colour": [
+    0.27,
+    0.74,
+    0.78
+   ],
+   "why": "unmapped"
+  },
+  {
+   "dept": "Unassigned",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Thursday",
+   "course": "EE Seminar",
+   "room": "C-110",
+   "time": "08:30-09:50",
+   "cell": "EE Seminar",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "Unassigned",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Thursday",
+   "course": "EE Seminar",
+   "room": "C-110",
+   "time": "10:00-11:20",
+   "cell": "EE Seminar",
+   "colour": [
+    1,
+    1,
+    1
+   ],
+   "why": "unpainted"
+  },
+  {
+   "dept": "Unassigned",
+   "batch": "2023",
+   "section": "ALL",
+   "day": "Thursday",
+   "course": "Adv Topics in Req Engg",
+   "room": "D-316",
+   "time": "05:20-06:40",
+   "cell": "Adv Topics in Req Engg",
    "colour": [
     0.27,
     0.74,
@@ -820,7 +3345,7 @@
    ],
    [
     null,
-    "MS"
+    "2026"
    ]
   ],
   "(0.76, 0.58, 0.0)": [

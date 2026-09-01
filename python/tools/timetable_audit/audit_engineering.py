@@ -64,6 +64,15 @@ def one_line(v):
     return re.sub(r"\s+", " ", str(v or "").replace(" ", " ")).strip()
 
 
+def norm_time(v):
+    """Canonical HH:MM-HH:MM form, regardless of the sheet's zero padding."""
+    m = TIME_RE.search(one_line(v))
+    if not m:
+        return one_line(v)
+    return (f"{int(m.group(1).split(':')[0]):02d}:{m.group(1).split(':')[1]}-"
+            f"{int(m.group(2).split(':')[0]):02d}:{m.group(2).split(':')[1]}")
+
+
 def tokens(name):
     n = str(name or "").lower().replace("&", " and ")
     return [t for t in re.split(r"[^a-z0-9]+", n) if t and t != "and"]
@@ -223,7 +232,7 @@ def parse_schedule(text, problems):
             for c in range(3, len(row)):
                 m = TIME_RE.match(one_line(row[c]))
                 if m:
-                    slots[c] = f"{m.group(1)}-{m.group(2)}"
+                    slots[c] = norm_time(m.group(0))
             if len(slots) >= 3:
                 headers.append((r, one_line(row[2]).upper() == "LABS", slots))
 
@@ -264,7 +273,7 @@ def parse_schedule(text, problems):
                     cells.append({
                         "day": row_day[r], "room": norm_room(room_raw), "row": r, "col": c,
                         "slot_time": slots[sc],
-                        "sheet_time": f"{ov.group(1)}-{ov.group(2)}" if ov else slots[sc],
+                        "sheet_time": norm_time(ov.group(0)) if ov else slots[sc],
                         "has_override": bool(ov),
                         "text": txt, "instructor": it, "is_lab": is_lab,
                         "course": p["course"] if p else None,

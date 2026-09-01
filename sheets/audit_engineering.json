@@ -1,19 +1,60 @@
 {
  "counts": {
-  "json": 212,
-  "cells": 228,
-  "cells_parsed": 200,
-  "alloc_rows": 81,
-  "alloc_titles": 68
+  "json": 218,
+  "cells": 246,
+  "cells_parsed": 208,
+  "alloc_rows": 82,
+  "alloc_titles": 69
  },
  "problems": [],
- "A_no_cell": [],
+ "A_no_cell": [
+  {
+   "dept": "BS EE",
+   "batch": "2023",
+   "section": "A",
+   "day": "Monday",
+   "course": "Applied Machine Learning Lab",
+   "room": "MEHRAN-1 A- BLOCK",
+   "time": "02:20-03:40",
+   "cells_here": []
+  },
+  {
+   "dept": "BS EE",
+   "batch": "2024",
+   "section": "B",
+   "day": "Thursday",
+   "course": "Data Communication and Networks - Lab",
+   "room": "COMP-III B- 232",
+   "time": "12:50-02:10",
+   "cells_here": []
+  },
+  {
+   "dept": "BS CE",
+   "batch": "2024",
+   "section": "B",
+   "day": "Thursday",
+   "course": "Data Communication and Networks - Lab",
+   "room": "COMP-III B- 232",
+   "time": "09:55-11:15",
+   "cells_here": []
+  },
+  {
+   "dept": "BS CE",
+   "batch": "2024",
+   "section": "B",
+   "day": "Thursday",
+   "course": "Data Communication and Networks - Lab",
+   "room": "COMP-III B- 232",
+   "time": "12:50-02:10",
+   "cells_here": []
+  }
+ ],
  "A_wrong_time": [],
  "B_unmatched_cells": [
   {
    "day": "Monday",
    "room": "B-127",
-   "time": "8:30-09:50",
+   "time": "08:30-09:50",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -37,7 +78,7 @@
   {
    "day": "Monday",
    "room": "B-127",
-   "time": "11:20-12:40",
+   "time": "11:25-12:45",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -49,7 +90,7 @@
   {
    "day": "Monday",
    "room": "B-127",
-   "time": "12:45-02:05",
+   "time": "12:50-02:10",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -84,8 +125,94 @@
   },
   {
    "day": "Monday",
-   "room": "COMP-III",
-   "time": "8:30-09:50",
+   "room": "B-227",
+   "time": "08:30-09:50",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-227",
+   "time": "09:55-11:15",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-227",
+   "time": "11:25-12:45",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-227",
+   "time": "12:50-02:10",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-227",
+   "time": "02:20-03:40",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "B-227",
+   "time": "03:45-05:05",
+   "text": "Reseved for FSM",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "MEHRAN-1 A-BLOCK",
+   "time": "02:20-03:40",
+   "text": "Applied Machine Learning Lab A",
+   "parsed": true,
+   "is_lab": true,
+   "sections": [
+    "A"
+   ],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Monday",
+   "room": "COMP-III/ COMM",
+   "time": "08:30-09:50",
    "text": "Reseved For CS",
    "parsed": false,
    "is_lab": true,
@@ -97,7 +224,7 @@
   {
    "day": "Tuesday",
    "room": "B-127",
-   "time": "8:30-09:50",
+   "time": "08:30-09:50",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -159,6 +286,18 @@
    "room": "B-127",
    "time": "03:45-05:05",
    "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Wednesday",
+   "room": "B-030",
+   "time": "11:25-12:45",
+   "text": "Comp. Variables & Trans.3C/5C/7C",
    "parsed": false,
    "is_lab": false,
    "sections": [],
@@ -181,7 +320,7 @@
   {
    "day": "Wednesday",
    "room": "B-127",
-   "time": "8:30-09:50",
+   "time": "08:30-09:50",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -240,8 +379,20 @@
   },
   {
    "day": "Thursday",
+   "room": "B-030",
+   "time": "03:45-05:05",
+   "text": "Comp. Variables & Trans.3C/5C/7C",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
    "room": "B-127",
-   "time": "8:30-09:50",
+   "time": "08:30-09:50",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -311,9 +462,39 @@
    "band_size": 1
   },
   {
+   "day": "Thursday",
+   "room": "COMP-III B-232",
+   "time": "09:55-11:15",
+   "text": "Data Communication and Networks - Lab CE-B",
+   "parsed": true,
+   "is_lab": true,
+   "sections": [
+    "B"
+   ],
+   "programs": [
+    "CE"
+   ],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Thursday",
+   "room": "COMP-III B-232",
+   "time": "12:50-02:10",
+   "text": "Data Communication and Networks - Lab B",
+   "parsed": true,
+   "is_lab": true,
+   "sections": [
+    "B"
+   ],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
    "day": "Friday",
    "room": "B-127",
-   "time": "8:30-09:50",
+   "time": "08:30-09:50",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -338,6 +519,30 @@
    "day": "Friday",
    "room": "B-127",
    "time": "11:25-12:45",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Friday",
+   "room": "B-127",
+   "time": "02:00-03:20",
+   "text": "Resrved for IC Design",
+   "parsed": false,
+   "is_lab": false,
+   "sections": [],
+   "programs": [],
+   "band_pos": 0,
+   "band_size": 1
+  },
+  {
+   "day": "Friday",
+   "room": "B-127",
+   "time": "03:25-04:55",
    "text": "Resrved for IC Design",
    "parsed": false,
    "is_lab": false,
@@ -347,91 +552,71 @@
    "band_size": 1
   }
  ],
- "C_not_a_real_course": [],
+ "C_not_a_real_course": [
+  {
+   "dept": "BS EE",
+   "batch": "2023",
+   "section": "A",
+   "day": "Monday",
+   "course": "Industrial Processes Control",
+   "room": "B-027",
+   "time": "03:45-05:05",
+   "cell": "Industrial Processes Control A"
+  },
+  {
+   "dept": "BS EE",
+   "batch": "2023",
+   "section": "A",
+   "day": "Tuesday",
+   "course": "Industrial Processes Control",
+   "room": "B-030",
+   "time": "12:50-02:10",
+   "cell": "Industrial Processes Control A"
+  },
+  {
+   "dept": "BS EE",
+   "batch": "2023",
+   "section": "A",
+   "day": "Wednesday",
+   "course": "Industrial Processes Control - Lab",
+   "room": "COMP-III",
+   "time": "08:30-09:50",
+   "cell": "Industrial Processes Control - Lab A"
+  }
+ ],
  "C_ambiguous": [],
  "D_dept_mismatch": [],
  "D_batch_mismatch": [],
  "D_section_not_offered": [
   {
    "dept": "BS EE",
-   "batch": "2026",
+   "batch": "2023",
    "section": "B",
-   "day": "Tuesday",
-   "course": "Engineering Drawing",
-   "room": "KOH",
+   "day": "Monday",
+   "course": "Fund. Database Systems Lab",
+   "room": "POTH",
+   "time": "08:30-09:50",
+   "alloc_sections": [
+    "A"
+   ],
+   "codes": [
+    "CL3020"
+   ]
+  },
+  {
+   "dept": "BS EE",
+   "batch": "2023",
+   "section": "C",
+   "day": "Thursday",
+   "course": "Applied Machine Learning Lab",
+   "room": "COMP-I",
    "time": "02:20-03:40",
    "alloc_sections": [
     "A",
-    "C",
-    "D",
-    "E"
-   ],
-   "codes": [
-    "ME1001"
-   ]
-  },
-  {
-   "dept": "BS EE",
-   "batch": "2025",
-   "section": "C",
-   "day": "Wednesday",
-   "course": "Comp. Variables & Trans.",
-   "room": "B-030",
-   "time": "11:25-12:45",
-   "alloc_sections": [
-    "A",
     "B"
    ],
    "codes": [
-    "MT2003"
-   ]
-  },
-  {
-   "dept": "BS EE",
-   "batch": "2025",
-   "section": "C",
-   "day": "Thursday",
-   "course": "Comp. Variables & Trans.",
-   "room": "B-028",
-   "time": "03:45-05:05",
-   "alloc_sections": [
-    "A",
-    "B"
-   ],
-   "codes": [
-    "MT2003"
-   ]
-  },
-  {
-   "dept": "BS CE",
-   "batch": "2025",
-   "section": "C",
-   "day": "Wednesday",
-   "course": "Comp. Variables & Trans.",
-   "room": "B-030",
-   "time": "11:25-12:45",
-   "alloc_sections": [
-    "A",
-    "B"
-   ],
-   "codes": [
-    "MT2003"
-   ]
-  },
-  {
-   "dept": "BS CE",
-   "batch": "2025",
-   "section": "C",
-   "day": "Thursday",
-   "course": "Comp. Variables & Trans.",
-   "room": "B-028",
-   "time": "03:45-05:05",
-   "alloc_sections": [
-    "A",
-    "B"
-   ],
-   "codes": [
-    "MT2003"
+    "AL4003"
    ]
   }
  ],
@@ -442,6 +627,7 @@
   "Final Year Project \u2013 I [EE 2023 EE4091]",
   "Digital Integrated Circuits [EE MS EE5036]",
   "Analog and Discrete Electronics [EE MS EE5013]",
-  "Digital ICs: Synthesis and Physical Design [EE MS EE5037]"
+  "Digital ICs: Synthesis and Physical Design [EE MS EE5037]",
+  "RF Devices and Circuits [EE MS EE5044]"
  ]
 }
