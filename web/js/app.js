@@ -1962,8 +1962,24 @@ function refreshTTFilters(){
   setTimetableDependencyHelp('tt-section-help',bat ? (secs.length ? 'Select a section to view the timetable.' : 'No sections available for this batch.') : 'Select a batch first to load sections.',true);
   if(prefs.sec&&secs.includes(prefs.sec)) secSel.value=prefs.sec;
   else if(secs.length===1) secSel.value=secs[0];
-  if(daySel&&prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) daySel.value=prefs.day;
-  else setDefaultDay();
+  // Populate available days based on the selected section
+  if(daySel){
+    const sec=secSel.value;
+    const availableDays=sec?(Object.keys(((TT[dep]||{})[bat]||{})[sec]||{}).sort((a,b)=>DAYS.indexOf(a)-DAYS.indexOf(b))):[];
+    fillSelectOptions(daySel,availableDays,null,sec ? '-- Day --' : 'Select section first');
+    daySel.disabled=!sec || !bat || !dep;
+    if(prefs.day&&availableDays.includes(prefs.day)){
+      daySel.value=prefs.day;
+    }else if(availableDays.length){
+      // Try to select today's day if available, otherwise select the first available
+      const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const todayName=dayNames[new Date().getDay()];
+      if(todayName&&availableDays.includes(todayName)) daySel.value=todayName;
+      else daySel.value=availableDays[0];
+    }else{
+      daySel.value='';
+    }
+  }
   refreshMyCoursePicker();
 }
 function onSchoolChange(){
