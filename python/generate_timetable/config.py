@@ -10,7 +10,7 @@ DEBUG_LOG_FILE = "python/generate_timetable/runtime/debug.log"
 SCHOOLS = OrderedDict([
     ("computing", OrderedDict([
         ("id", "1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q"),
-        ("tabs", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]),
+        ("tabs", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Saturday (Sep. 05, 2026)"]),
     ])),
     ("business", OrderedDict([
         ("id", "1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw"),
