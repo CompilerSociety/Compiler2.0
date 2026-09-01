@@ -1786,12 +1786,12 @@ function setDefaultDay(){
   const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const currentDayIndex=new Date().getDay();
   const currentDayName=dayNames[currentDayIndex];
-  if(!["Monday","Tuesday","Wednesday","Thursday","Friday"].includes(currentDayName)){
+  if(!["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].includes(currentDayName)){
     daySel.value='';
     return;
   }
   if(prefs.day&&[...daySel.options].some(opt=>opt.value===prefs.day)) return;
-  if([..."Monday Tuesday Wednesday Thursday Friday".split(' ')].includes(currentDayName)){
+  if([..."Monday Tuesday Wednesday Thursday Friday Saturday".split(' ')].includes(currentDayName)){
     daySel.value=currentDayName;
   }
 }
