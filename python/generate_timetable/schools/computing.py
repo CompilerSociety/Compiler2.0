@@ -778,21 +778,19 @@ def generate(service):
     configured_tabs = school_info["tabs"]
     dlog(f"  Configured tabs    : {configured_tabs}")
 
-    missing = [t for t in configured_tabs if t not in actual_tabs]
+    missing = [
+        day for day in DAYS
+        if not any(t.strip().lower().startswith(day.lower()) for t in actual_tabs)
+    ]
     if missing:
         dlog_error(
-            f"  MISMATCH: tabs {missing} not found in sheet. Available: {actual_tabs}"
+            f"  MISMATCH: day tabs {missing} not found in sheet. Available: {actual_tabs}"
         )
         dlog_warn(
-            f"  Fix: update SCHOOLS['{school_name}']['tabs'] to match one of: {actual_tabs}"
+            f"  Fix: add a tab named like one of the missing weekdays: {missing}"
         )
 
-    for tab in configured_tabs:
-        day = tab.strip().capitalize()
-        if day not in DAYS:
-            dlog_warn(f"  Tab '{tab}' does not map to a valid day ??? skipping")
-            continue
-
+    for day in DAYS:
         # The day tabs are often renamed by the sheet's owner, e.g. the generic
         # "Saturday" tab becoming "Saturday (Sep. 05,2026)". Insisting on an
         # exact tab name makes the whole weekday silently disappear. Instead,
@@ -812,14 +810,14 @@ def generate(service):
             actual_tab = (suffixed or bare)[0]
         if actual_tab is None:
             dlog_warn(
-                f"  No sheet tab found for day '{day}' (looked for tab '{tab}' "
+                f"  No sheet tab found for day '{day}' (looked for tab '{day}' "
                 f"or any tab starting with it). Available: {actual_tabs}"
             )
             continue
-        if actual_tab != tab:
+        if actual_tab != day:
             dlog(
                 f"  Resolved day '{day}' to actual tab '{actual_tab}' "
-                f"(configured '{tab}')"
+                f"(configured '{day}')"
             )
 
         print(f"  Fetching {school_name}/{actual_tab}...", end=" ", flush=True)

@@ -239,7 +239,7 @@ def build_colour_map(service):
     Each legend is stored with the programme code it names, so a fill used
     by two cohorts keeps both and can be resolved per-cell later.
     """
-    from .google_sheets import fetch_sheet_with_colours
+    from .google_sheets import fetch_sheet_with_colours, get_sheet_tab_names
 
     year_re = re.compile(r'\b(20\d{2})\b')
     ms_re   = re.compile(r'\bMS\b', re.IGNORECASE)
@@ -250,10 +250,21 @@ def build_colour_map(service):
     cohort_re = re.compile(r'\b(?:BS|MS)\b', re.IGNORECASE)
 
     for school_name, school_info in SCHOOLS.items():
+        actual_tabs = get_sheet_tab_names(service, school_info["id"])
         for tab in school_info["tabs"]:
+            actual_tab = tab
+            if school_name == "computing":
+                day_candidates = [
+                    t for t in actual_tabs
+                    if t.strip().lower().startswith(tab.lower())
+                ]
+                if day_candidates:
+                    bare = [t for t in day_candidates
+                            if t.strip().lower() == tab.lower()]
+                    actual_tab = ([(t) for t in day_candidates if t not in bare] or bare)[0]
             try:
                 text_grid, colour_grid = fetch_sheet_with_colours(
-                    service, school_info["id"], tab)
+                    service, school_info["id"], actual_tab)
             except Exception:
                 continue
 
