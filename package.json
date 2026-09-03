@@ -10,7 +10,7 @@
     "db:stats": "node scripts/db/stats.mjs"
   },
   "dependencies": {
-    "mongodb": "^7.5.0",
+    "mongodb": "^7.6.0",
     "web-push": "^3.6.7"
   }
 }
