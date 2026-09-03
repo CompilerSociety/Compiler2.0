@@ -793,26 +793,55 @@ def generate(service):
             dlog_warn(f"  Tab '{tab}' does not map to a valid day ??? skipping")
             continue
 
-        print(f"  Fetching {school_name}/{tab}...", end=" ", flush=True)
+        # The day tabs are often renamed by the sheet's owner, e.g. the generic
+        # "Saturday" tab becoming "Saturday (Sep. 05,2026)". Insisting on an
+        # exact tab name makes the whole weekday silently disappear. Instead,
+        # auto-discover the ACTUAL sheet tab for this day by prefix match.
+        # Multiple tabs can match a day (a bare "Saturday" plus dated variants
+        # like "Saturday (Sep. 05,2026)"). Prefer the newer dated/suffixed tab
+        # over a stale bare weekday tab, since those mark the current schedule.
+        day_candidates = [
+            t for t in actual_tabs
+            if t.strip().lower().startswith(day.lower())
+        ]
+        actual_tab = None
+        if day_candidates:
+            # Exact bare weekday name is the LEAST preferred (snapshot/stale).
+            bare = [t for t in day_candidates if t.strip().lower() == day.lower()]
+            suffixed = [t for t in day_candidates if t not in bare]
+            actual_tab = (suffixed or bare)[0]
+        if actual_tab is None:
+            dlog_warn(
+                f"  No sheet tab found for day '{day}' (looked for tab '{tab}' "
+                f"or any tab starting with it). Available: {actual_tabs}"
+            )
+            continue
+        if actual_tab != tab:
+            dlog(
+                f"  Resolved day '{day}' to actual tab '{actual_tab}' "
+                f"(configured '{tab}')"
+            )
+
+        print(f"  Fetching {school_name}/{actual_tab}...", end=" ", flush=True)
 
         try:
             text_grid, colour_grid = fetch_sheet_with_colours(
-                service, school_info["id"], tab
+                service, school_info["id"], actual_tab
             )
         except Exception as e:
             print(f"ERROR: {e}")
-            dlog_error(f"  fetch failed for {school_name}/{tab}: {e}")
+            dlog_error(f"  fetch failed for {school_name}/{actual_tab}: {e}")
             continue
 
         if not text_grid:
             print("empty ??? skipped")
-            dlog_warn(f"  {school_name}/{tab} returned empty grid")
+            dlog_warn(f"  {school_name}/{actual_tab} returned empty grid")
             continue
 
         added = parse_grid_to_tt(text_grid, colour_grid, day, tt, pending, bare)
         total += added
         print(f"{added} entries")
-        dlog(f"  {school_name}/{tab}: {added} entries parsed")
+        dlog(f"  {school_name}/{actual_tab}: {added} entries parsed")
 
     if pending:
         fanned = flush_sectionless(tt, pending)
