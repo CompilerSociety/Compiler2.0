@@ -805,9 +805,11 @@ def generate(service):
         actual_tab = None
         if day_candidates:
             # Exact bare weekday name is the LEAST preferred (snapshot/stale).
-            bare = [t for t in day_candidates if t.strip().lower() == day.lower()]
-            suffixed = [t for t in day_candidates if t not in bare]
-            actual_tab = (suffixed or bare)[0]
+            bare_candidates = [
+                t for t in day_candidates if t.strip().lower() == day.lower()
+            ]
+            suffixed = [t for t in day_candidates if t not in bare_candidates]
+            actual_tab = (suffixed or bare_candidates)[0]
         if actual_tab is None:
             dlog_warn(
                 f"  No sheet tab found for day '{day}' (looked for tab '{day}' "
