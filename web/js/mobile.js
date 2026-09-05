@@ -1910,17 +1910,7 @@
           <div class="m-pcard-sub">${esc(sub)}</div>
         </div>
       </div>
-      <div class="m-section-label">Your section</div>
-      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
-        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
-      ${sectionPickerHTML(p,'m-profile-sec-chips')}
       ${myCoursesSectionHTML()}
-      <div class="m-section-label">Appearance</div>
-      <label class="m-toggle-row" for="m-dark-mode">
-        <span class="m-toggle-text"><span class="m-toggle-label">Dark mode</span>
-          <span class="m-toggle-help">Dark backgrounds with orange accents.</span></span>
-        <input class="m-toggle" id="m-dark-mode" type="checkbox" role="switch" ${document.documentElement.dataset.mobileTheme==='dark'?'checked':''}>
-      </label>
       <div class="m-section-label">Notifications</div>
       <!-- One master switch, then the categories it governs. The categories are
            inert until it is on: a per-category choice is meaningless while
@@ -1948,6 +1938,21 @@
         </label>`;
         }).join('')}
       </div>
+      <section class="m-customization" aria-labelledby="m-customization-title">
+        <h2 class="m-section-label" id="m-customization-title">Course customization</h2>
+        <div class="m-customization-fields">
+          <div class="m-customization-section">
+      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
+        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
+      ${sectionPickerHTML(p,'m-profile-sec-chips')}
+          </div>
+      <label class="m-toggle-row" for="m-dark-mode">
+        <span class="m-toggle-text"><span class="m-toggle-label">Dark mode</span>
+          <span class="m-toggle-help">Dark backgrounds with orange accents.</span></span>
+        <input class="m-toggle" id="m-dark-mode" type="checkbox" role="switch" ${document.documentElement.dataset.mobileTheme==='dark'?'checked':''}>
+      </label>
+        </div>
+      </section>
       <button class="m-btn-ghost" id="m-signout" type="button" style="margin-top:18px">Sign out</button>`;
 
     // app.js writes every push status line through this hook; point it at the

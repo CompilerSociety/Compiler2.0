@@ -495,10 +495,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 
 html[data-mobile-theme="dark"] .m-app{
   color-scheme:dark; --base:#141414; --solid:#34302b; --on-accent:#211307;
-  --ink:#f5eee8; --green:#ff963f; --green-deep:#ffb477; --green-bright:#ffc18e;
-  --accent-rgb:255,150,63; --bright-rgb:255,193,142;
-  --tint:#33261d; --tint-hover:#453021; --surface:#202020; --page:#191919;
-  --neutral:#292929; --slot-free:#ff963f; --slot-busy:#484441; --seat-section:#664022;
+  --ink:#f5eee8; --green:#c47d46; --green-deep:#d69a6b; --green-bright:#d9ac87;
+  --accent-rgb:196,125,70; --bright-rgb:217,172,135;
+  --tint:#30261f; --tint-hover:#3d2f25; --surface:#202020; --page:#191919;
+  --neutral:#292929; --slot-free:#c47d46; --slot-busy:#484441; --seat-section:#59402e;
   --red:#a73d32; --red-deep:#ffb0a7; --red-bright:#ffaaa0; --red-soft:#ad4638;
   --line:rgba(255,238,224,.1); --line-strong:rgba(255,238,224,.2);
   --mute:#aaa19a; --mute-2:#c4b9b0; --mute-3:#a69b92;
@@ -506,11 +506,22 @@ html[data-mobile-theme="dark"] .m-app{
 html[data-mobile-theme="dark"] .m-app :is(.m-toast,.m-rooms-bar,.m-hero-dark,.m-daycard.is-today .m-daycard-head,.m-block.is-on,.m-chip.is-ink.is-on,.m-now.is-live,.m-room.is-busy){color:#f5eee8}
 html[data-mobile-theme="dark"] .m-room.is-busy :is(.m-room-status,.m-room-chev){color:#fff}
 html[data-mobile-theme="dark"] .m-app :is(.m-signin-status.is-error,.m-course-status.is-error,.m-course-remove,.m-note.cancel){color:#ffaaa0}
-html[data-mobile-theme="dark"] .m-app :is(.m-soon,.m-soon-note,.m-note.resch,.m-course-tag.is-added){color:#ffc18e}
+html[data-mobile-theme="dark"] .m-app :is(.m-soon,.m-soon-note,.m-note.resch,.m-course-tag.is-added){color:#d9ac87}
 html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20,20,20,.95)}
 .m-settings-dropdown{margin:18px 0;border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);overflow:hidden}
 .m-settings-dropdown summary{padding:16px;min-height:48px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
 .m-settings-dropdown summary::marker{color:var(--green)}
 .m-settings-dropdown .m-course-list{padding:0 12px 12px}
 .m-settings-select{display:block;width:100%;min-height:48px;padding:12px 14px;border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);color:var(--ink);font:inherit}
+/* Keep customization separate from disabled notification preferences. */
+.m-customization{margin-top:24px}
+.m-customization .m-section-label{margin:0 2px 12px;line-height:1.5}
+.m-customization-fields{display:grid;gap:12px;min-width:0}
+.m-customization-section{padding:13px 16px;border:1px solid var(--line);border-radius:22px;background:var(--surface);min-width:0}
+.m-customization .m-drow{display:flex;flex-wrap:wrap;gap:8px 12px;padding:0 0 12px;margin:0 0 12px}
+.m-customization .m-drow-value{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.m-customization .m-toggle-row{margin:0}
+.m-customization .m-toggle-text{flex:1;overflow-wrap:anywhere}
+.m-customization .m-toggle-label{line-height:1.4}
+.m-customization .m-settings-select{min-width:0;max-width:100%}
 } /* end mobile breakpoint */
