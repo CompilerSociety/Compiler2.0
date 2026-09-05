@@ -28,13 +28,13 @@
        file under /css or /js. Browsers (especially installed PWAs, which
        revalidate far less eagerly than a normal tab) otherwise keep serving
        an old cached bundle indefinitely, silently masking bug fixes. -->
-  <link rel="stylesheet" href="/css/main.css?v=15">
+  <link rel="stylesheet" href="/css/main.css?v=17">
   <!-- Phone layout. Additive: everything inside is scoped to the mobile
        breakpoint, so the desktop look is unchanged. See css/mobile.css. -->
-  <link rel="stylesheet" href="/css/mobile.css?v=15">
+  <link rel="stylesheet" href="/css/mobile.css?v=17">
   <!-- Launch switch. Plain script so it runs before the deferred /js/main.js
        module and can gate the whole app. See js/status.js. -->
-  <script src="/js/status.js?v=15"></script>
+  <script src="/js/status.js?v=17"></script>
   <script>
     (function () {
       try {
@@ -56,6 +56,11 @@
   <script>
     (function () {
       try {
+        var mobileTheme = localStorage.getItem('vtable_mobile_theme') === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-mobile-theme', mobileTheme);
+        if (mobileTheme === 'dark' && window.matchMedia('(max-width:767px)').matches) {
+          document.querySelector('meta[name="theme-color"]').content = '#141414';
+        }
         var stored = localStorage.getItem('theme');
         var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
@@ -72,6 +77,6 @@
     <div id="mobile-container"></div>
     <div id="mascot" class="mascot" aria-hidden="true"><span class="mascot-emoji">🐰</span></div>
   </div>
-  <script type="module" src="/js/main.js?v=15"></script>
+  <script type="module" src="/js/main.js?v=17"></script>
 </body>
 </html>

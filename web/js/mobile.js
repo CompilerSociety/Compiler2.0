@@ -17,6 +17,17 @@
   'use strict';
 
   const MQ=window.matchMedia('(max-width:767px)');
+  const MOBILE_THEME_KEY='vtable_mobile_theme';
+  let coursesExpanded=false;
+  function setMobileTheme(dark){
+    document.documentElement.setAttribute('data-mobile-theme',dark?'dark':'light');
+    try{ localStorage.setItem(MOBILE_THEME_KEY,dark?'dark':'light'); }catch(e){}
+    syncMobileThemeChrome();
+  }
+  function syncMobileThemeChrome(){
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#141414':'#ffffff';
+  }
   const SKIP_KEY='vtable_skipped_login';
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1807,10 +1818,12 @@
             +'" aria-label="Remove '+esc(c.name)+'">&times;</button></div>';
         }).join('')
       : '<div class="m-empty" style="margin:0">No courses saved. Add them from Lookup.</div>';
-    return '<div class="m-section-label">My courses ('+list.length+')</div>'
-      +'<div class="m-course-list" id="m-course-list">'+rows+'</div>';
+    return '<details class="m-settings-dropdown" id="m-settings-courses"'+(coursesExpanded?' open':'')+'><summary>My courses ('+list.length+')</summary>'
+      +'<div class="m-course-list" id="m-course-list">'+rows+'</div></details>';
   }
   function wireMyCourses(){
+    const dropdown=$('m-settings-courses');
+    if(dropdown) dropdown.addEventListener('toggle',()=>{ coursesExpanded=dropdown.open; });
     document.querySelectorAll('#m-course-list .m-course-remove').forEach(btn=>{
       btn.addEventListener('click',()=>{
         if(typeof removeMyCourse==='function') removeMyCourse(btn.dataset.key);
@@ -1838,6 +1851,14 @@
     const secs=availableSectionsForProfile(p);
     if(!secs.length){
       return '<div class="m-caption" style="margin:8px 2px 0">Sections aren’t available to change right now.</div>';
+    }
+    if(chipsId==='m-profile-sec-chips'){
+      const current=String(p.section||'');
+      return '<label class="m-field-label" for="m-profile-section">Section</label>'
+        +'<select class="m-settings-select" id="m-profile-section">'
+        +(!secs.includes(current)?'<option value="" selected disabled>Choose section</option>':'')
+        +secs.map(s=>'<option value="'+esc(s)+'"'+(s===current?' selected':'')+'>'+esc(s)+'</option>').join('')
+        +'</select>';
     }
     const chips=secs.map(s=>
       `<button class="m-chip${s===p.section?' is-on':''}" data-sec="${esc(s)}" type="button">${esc(s)}</button>`
@@ -1894,6 +1915,12 @@
         <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
       ${sectionPickerHTML(p,'m-profile-sec-chips')}
       ${myCoursesSectionHTML()}
+      <div class="m-section-label">Appearance</div>
+      <label class="m-toggle-row" for="m-dark-mode">
+        <span class="m-toggle-text"><span class="m-toggle-label">Dark mode</span>
+          <span class="m-toggle-help">Dark backgrounds with orange accents.</span></span>
+        <input class="m-toggle" id="m-dark-mode" type="checkbox" role="switch" ${document.documentElement.dataset.mobileTheme==='dark'?'checked':''}>
+      </label>
       <div class="m-section-label">Notifications</div>
       <!-- One master switch, then the categories it governs. The categories are
            inert until it is on: a per-category choice is meaningless while
@@ -1991,11 +2018,10 @@
     // subscription was dropped since the last time this screen was open.
     refreshPushState();
 
+    $('m-dark-mode').addEventListener('change',e=>setMobileTheme(e.target.checked));
+    const sectionSelect=$('m-profile-section');
+    if(sectionSelect) sectionSelect.addEventListener('change',e=>changeProfileSection(e.target.value));
     wireMyCourses();
-
-    document.querySelectorAll('#m-profile-sec-chips .m-chip').forEach(chip=>{
-      chip.addEventListener('click',()=>changeProfileSection(chip.dataset.sec));
-    });
 
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{
@@ -2061,6 +2087,8 @@
 
   function start(){
     if(!$('m-app')) return;
+    syncMobileThemeChrome();
+    MQ.addEventListener('change',syncMobileThemeChrome);
     wire();
     render(); // paint the splash immediately
     const r=readHash();

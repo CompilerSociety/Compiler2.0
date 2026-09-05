@@ -106,7 +106,7 @@ if (navigator.serviceWorker) {
 
 async function fetchComponent(path) {
   let response;
-  try { response = await fetch(path); }
+  try { response = await fetch(versioned(path), { cache: 'no-cache' }); }
   catch (cause) { throw new Error(`Failed to load component "${path}": ${cause.message}`); }
   if (!response.ok) throw new Error(`Failed to load component "${path}": HTTP ${response.status}`);
   return response.text();
