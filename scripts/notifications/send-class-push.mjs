@@ -47,7 +47,7 @@ const sectionLetter = (s) => String(s || '').replace(/[^A-Za-z]/g, '').toUpperCa
 function statusFromText(value) {
   const t = String(value || '');
   if (/cancel/i.test(t)) return 'Cancelled';
-  if (/\bresch\b|reschedul/i.test(t)) return 'Rescheduled';
+  if (/\bre[\s-]*schedul/i.test(t)) return 'Rescheduled';
   return 'Normal';
 }
 function classStatus(note, legacyName) {
@@ -57,7 +57,7 @@ function classStatus(note, legacyName) {
   return statusFromText(note) !== 'Normal' ? statusFromText(note) : statusFromText(legacyName);
 }
 function cleanCourseName(name) {
-  return String(name || '').replace(/\s*(ReSch(eduled)?|Cancelled|Cancel)\b.*$/i, '').trim() || 'your class';
+  return String(name || '').replace(/\s*(?:ReSch(?:eduled)?|Re[\s-]*Sched(?:ul(?:e|ed)?)?|Cancelled|Cancel)\b.*$/i, '').trim() || 'your class';
 }
 
 // Format a "HH:MM-HH:MM" slot as "H:MM AM–H:MM PM" for a human-readable
