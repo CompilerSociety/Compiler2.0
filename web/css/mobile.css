@@ -214,9 +214,9 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-daycard-day{font-family:var(--mono);font-weight:500;font-size:15px}
 .m-daycard-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
 .m-daycard-body{padding:4px 17px}
-.m-dayrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.m-dayrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;padding:12px 0;border-top:1px solid var(--line)}
 .m-daycard-body>.m-dayrow:first-child{border-top:none}
-.m-dayrow-time{font-family:var(--mono);font-size:12px;color:var(--mute-2);width:56px;flex-shrink:0}
+.m-dayrow-time{font-family:var(--mono);font-size:12px;color:var(--mute-2);grid-column:1/-1;line-height:1.5;overflow-wrap:anywhere}
 .m-dayrow-name{flex:1;min-width:0;font-size:14px;font-weight:600;word-break:break-word}
 
 /* ── Free rooms ──────────────────────────────────────────────────────── */

@@ -697,7 +697,7 @@
         ? list.map(e=>{
             const time=e.time||e.t||'';
             return `<div class="m-dayrow">
-              <div class="m-dayrow-time">${esc(toAmPm(time.split('-')[0]||''))}</div>
+              <div class="m-dayrow-time">${esc(time.split(/[-\u2013\u2014]/).map(part=>toAmPm(part.trim())).filter(Boolean).join(' - '))}</div>
               <div class="m-dayrow-name">${esc(cleanName(e.name||e.c||''))}</div>
               <span class="m-pill">${esc(e.location||e.l||'—')}</span>
             </div>`;
