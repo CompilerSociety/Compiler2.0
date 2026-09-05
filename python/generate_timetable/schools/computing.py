@@ -53,7 +53,7 @@ def status_note(text):
     value = one_line(text)
     if re.search(r"\bcancel", value, re.IGNORECASE):
         return "Cancelled"
-    if re.search(r"\bre[\s-]*schedul", value, re.IGNORECASE):
+    if re.search(r"\bresch\b|\bre[\s-]*schedul", value, re.IGNORECASE):
         return "Rescheduled"
     return ""
 

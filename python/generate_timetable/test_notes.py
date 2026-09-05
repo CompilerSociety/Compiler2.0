@@ -21,6 +21,11 @@ class TimetableNoteTests(unittest.TestCase):
         self.assertEqual(parsed["course"], "Data St")
         self.assertEqual(parsed["note"], "Rescheduled")
 
+    def test_parser_accepts_sheet_resch_abbreviation(self):
+        parsed = parse_timetable_cell("Data St (CS-G) ReSch")
+        self.assertEqual(parsed["course"], "Data St")
+        self.assertEqual(parsed["note"], "Rescheduled")
+
     def test_output_keeps_note_optional_and_backward_compatible(self):
         tt = {"BS CS": {"2025": {"G": {"Monday": [
             {"c": "Data St", "l": "C-401", "t": "11:30-12:50", "n": "Rescheduled"},

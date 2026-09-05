@@ -47,7 +47,7 @@ const sectionLetter = (s) => String(s || '').replace(/[^A-Za-z]/g, '').toUpperCa
 function statusFromText(value) {
   const t = String(value || '');
   if (/cancel/i.test(t)) return 'Cancelled';
-  if (/\bre[\s-]*schedul/i.test(t)) return 'Rescheduled';
+  if (/\bresch\b|\bre[\s-]*schedul/i.test(t)) return 'Rescheduled';
   return 'Normal';
 }
 function classStatus(note, legacyName) {
