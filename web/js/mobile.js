@@ -70,7 +70,7 @@
     return `${get('weekday')} · ${get('day')} ${get('month')} ${get('year')}`.toUpperCase();
   }
   function todayName(){
-    return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+    return new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',weekday:'long'}).format(new Date());
   }
   // Start/end of a "08:30-09:50" slot in minutes, using the app's own
   // 12-hour-ambiguity rule (timeToNumber) so "01:00" reads as 1 PM.

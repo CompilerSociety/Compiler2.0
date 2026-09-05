@@ -254,7 +254,7 @@ function profileIsComputing(profile){
   return COMPUTING_DEPTS.includes(profileDeptCode(profile));
 }
 function currentWeekdayName(){
-  const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+  const d=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE,weekday:'long'}).format(new Date());
   return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].includes(d)?d:'';
 }
 function _readPref(key){ try{ const r=localStorage.getItem(key); return r?JSON.parse(r):null; }catch(e){ return null; } }
@@ -1789,9 +1789,7 @@ function setDefaultDay(){
   const daySel=document.getElementById('day');
   if(!daySel) return;
   const prefs=readTTPrefs();
-  const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const currentDayIndex=new Date().getDay();
-  const currentDayName=dayNames[currentDayIndex];
+  const currentDayName=currentWeekdayName();
   if(!["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].includes(currentDayName)){
     daySel.value='';
     return;
