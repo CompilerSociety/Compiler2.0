@@ -17,6 +17,7 @@ import {
   rosterHas as dbRosterHas, enrolStudent, getSubscription, upsertSubscription,
   removeSubscription, countSubscriptions, rateLimitCheck, rateLimitNote,
 } from '../lib/db/repos.mjs';
+import { sanitizeCoursePrefs } from '../lib/notification-courses.mjs';
 import { isComputingDept } from '../lib/schools.mjs';
 
 /* ── Security: input validation, identity check, rate limiting ──────────
@@ -207,6 +208,11 @@ export default async function handler(req, res) {
     const section = String(payload.section || '').trim();
     const subscription = payload.subscription;
     const prefs = sanitizePrefs(payload.prefs);
+    let coursePrefs;
+    if (payload.coursePrefs !== undefined) {
+      try { coursePrefs = sanitizeCoursePrefs(payload.coursePrefs); }
+      catch { return res.status(400).json({ ok: false, error: 'invalid_course_preferences' }); }
+    }
     if (!nuid || !subscription || !subscription.endpoint) {
       return res.status(400).json({ ok: false, error: 'nuid and a valid subscription are required' });
     }
@@ -333,6 +339,8 @@ export default async function handler(req, res) {
     // the profile re-subscribes on plain "enable notifications" too, and that
     // path should leave an existing choice alone.
     const existing = await getSubscription(subscription.endpoint);
+    if (coursePrefs && (!existing?.coursePrefs || coursePrefs.revision >= (existing.coursePrefs.revision || 0))) record.coursePrefs = coursePrefs;
+    else if (existing?.coursePrefs) record.coursePrefs = existing.coursePrefs;
     const merged = { ...(existing?.prefs || {}), ...(prefs || {}) };
     if (Object.keys(merged).length) record.prefs = merged;
 

@@ -13,6 +13,8 @@
 
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { deliverOnce, recipientKey } from './delivery.mjs';
+import { wantsCourse, wantsPaper } from '../../lib/notification-courses.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
 import { recordNotificationDelivery } from './notify-log.mjs';
@@ -59,7 +61,7 @@ for (const f of SHOWUP_DOCS) {
         const key = slotKey(dep, sectionLetter(tok), fullBatch(e.batch), e.code || '', e.date || '');
         current.set(key, {
           value: `${e.time || ''}@${e.venue || ''}`,
-          info: { course: e.course || e.code || 'your exam', day: e.day || '', date: e.date || '', time: e.time || '—', venue: e.venue || '—' },
+          info: { school: f.split('/')[1], dept: dep, batch: e.batch, section: tok, code: e.code, course: e.course || e.code || 'your exam', day: e.day || '', date: e.date || '', time: e.time || '—', venue: e.venue || '—' },
         });
       }
     }
@@ -87,19 +89,21 @@ if (!firstRun) {
 // Persist the new snapshot for next time (covers additions and removals).
 const newState = {};
 for (const [key, { value }] of current) newState[key] = value;
-await saveState(STATE, newState);
 
 if (firstRun) {
   console.log('First run — recorded show-up snapshot, no notifications sent.');
+  await saveState(STATE, newState);
   await job.finish({ outcome: 'no_op', reason: 'first_snapshot_recorded' });
 } else if (changed.size === 0) {
   console.log('No show-up time/venue changes.');
+  await saveState(STATE, newState);
   await job.finish({ outcome: 'no_op', reason: 'no_changes' });
 } else {
 
 const subs = await loadSubs();
 if (!Array.isArray(subs) || subs.length === 0) {
   console.log('Slots changed but no subscriptions.');
+  await saveState(STATE, newState);
   await job.finish({ outcome: 'no_op', reason: 'no_subscriptions' });
 } else {
 
@@ -114,7 +118,7 @@ for (const entry of subs) {
   if (!dep || !batch || !secLetter) { skipped++; continue; }
 
   const prefix = `${dep}|${secLetter}|${batch}|`;
-  const mine = [...changed.entries()].filter(([key]) => key.startsWith(prefix));
+  const mine = [...changed.entries()].filter(([, info]) => wantsCourse(entry, info));
   if (mine.length === 0) { skipped++; continue; }
 
   const name = String(entry.name || '').trim() || 'Student';
@@ -127,7 +131,7 @@ for (const entry of subs) {
       tag: `showup-${key}`,
     });
     try {
-      await webpush.sendNotification(subscription, payload);
+      if (!await deliverOnce(entry, 'showup', [key, info.time, info.venue], payload)) { skipped++; continue; }
       recordNotificationDelivery({
         kind: 'showup', recipient: { name, nuid: entry.nuid || null, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
         change: { course: info.course, day: info.day || null, date: info.date || null, time: info.time, venue: info.venue },
@@ -143,6 +147,9 @@ for (const entry of subs) {
   }
 }
 
+// Keep the old snapshot on failure so rejected deliveries can retry.
+// Successful recipients are protected by the delivery ledger on that retry.
+if (failed === 0) await saveState(STATE, newState);
 console.log(`Show-up push summary — sent: ${sent}, skipped: ${skipped}, changed slots: ${changed.size}`);
 await job.finish({ outcome: failed > 0 ? 'partial_push_failure' : sent > 0 ? 'sent' : 'no_op', counts: { sent, skipped, pruned: 0, failed } });
 }

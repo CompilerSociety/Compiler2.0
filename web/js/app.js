@@ -761,6 +761,7 @@ async function postPushSubscription(profile,sub,prefs){
       batch:profile.batch||'',
       section:profile.section||'',
       prefs,
+      coursePrefs:{removed:profile.courseRemoved||[],added:profile.courses||[],revision:profile.coursePrefsRevision||0},
       subscription:sub
     })
   });
@@ -777,7 +778,12 @@ async function postPushSubscription(profile,sub,prefs){
 // Push the current choices at the server's copy of this subscription. Silent
 // when notifications were never enabled: there is nothing to update, and
 // changing a toggle must never raise a permission prompt by itself.
-async function syncNotificationPrefs(){
+let notificationSyncQueue=Promise.resolve();
+function syncNotificationPrefs(){
+  notificationSyncQueue=notificationSyncQueue.then(syncNotificationPrefsNow,syncNotificationPrefsNow);
+  return notificationSyncQueue;
+}
+async function syncNotificationPrefsNow(){
   const profile=getProfileCookie();
   if(!profile||!profile.nuid) return;
   if(!('serviceWorker' in navigator)||!('PushManager' in window)) return;
@@ -2919,7 +2925,9 @@ function setAddedCourses(list){
   const profile=getProfileCookie();
   if(!profile) return false;
   profile.courses=list.slice(0,MYCOURSES_MAX);
+  profile.coursePrefsRevision=Date.now();
   setProfileCookie(profile);
+  syncNotificationPrefs();
   return true;
 }
 function getRemovedCourseNames(){
@@ -2931,7 +2939,9 @@ function setRemovedCourseNames(list){
   const profile=getProfileCookie();
   if(!profile) return false;
   profile.courseRemoved=[...new Set(list)].slice(0,MYCOURSES_MAX);
+  profile.coursePrefsRevision=Date.now();
   setProfileCookie(profile);
+  syncNotificationPrefs();
   return true;
 }
 
@@ -5409,3 +5419,7 @@ window.setGameField=function(canvasId,w,h){
   };
   window.closeFlappy=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };
 })();
+
+// Sync existing installs and retry local choices after reconnecting.
+queueMicrotask(()=>syncNotificationPrefs());
+window.addEventListener('online',()=>syncNotificationPrefs());

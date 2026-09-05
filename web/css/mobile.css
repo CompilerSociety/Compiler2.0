@@ -517,9 +517,12 @@ html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20
 .m-customization{margin-top:24px}
 .m-customization .m-section-label{margin:0 2px 12px;line-height:1.5}
 .m-customization-fields{display:grid;gap:12px;min-width:0}
-.m-customization-section{padding:13px 16px;border:1px solid var(--line);border-radius:22px;background:var(--surface);min-width:0}
-.m-customization .m-drow{display:flex;flex-wrap:wrap;gap:8px 12px;padding:0 0 12px;margin:0 0 12px}
-.m-customization .m-drow-value{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.m-profile-program{display:grid;gap:12px;padding:16px;margin:18px 0;border:1px solid var(--line);border-radius:22px;background:var(--surface);min-width:0}
+.m-profile-program .m-drow{display:grid;gap:6px;padding:0;border:0;border-radius:0;background:none;min-width:0}
+.m-profile-program .m-drow-label{margin:0;line-height:1.5}
+.m-profile-program .m-drow-value{min-width:0;line-height:1.5;overflow-wrap:anywhere}
+.m-profile-program .m-field-label{margin:0;line-height:1.5}
+.m-customization .m-settings-dropdown{margin:0}
 .m-customization .m-toggle-row{margin:0}
 .m-customization .m-toggle-text{flex:1;overflow-wrap:anywhere}
 .m-customization .m-toggle-label{line-height:1.4}

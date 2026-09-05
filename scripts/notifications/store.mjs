@@ -18,6 +18,7 @@ import { isEnabled } from '../../lib/db/mongo.mjs';
 import {
   listSubscriptions, getNotifyState, setNotifyState, removeSubscription,
   getDocument,
+  claimNotificationDelivery, releaseNotificationDelivery,
 } from '../../lib/db/repos.mjs';
 
 // Maps a sender's state name to the `kind` tag its rows carry in the
@@ -46,11 +47,25 @@ function requireMongo() {
 export async function loadSubs() {
   requireMongo();
   try {
-    return await listSubscriptions();
+    const entries = await listSubscriptions();
+    // The latest edited course overlay applies to all of a student's devices.
+    const latest = new Map();
+    for (const entry of entries) {
+      const key = String(entry.nuid || '').trim().toUpperCase();
+      if (!key || !entry.coursePrefs) continue;
+      if (!latest.has(key) || (entry.coursePrefs.revision || 0) > (latest.get(key).revision || 0)) latest.set(key, entry.coursePrefs);
+    }
+    return entries.sort((a, b) => (b.updated_at || 0) - (a.updated_at || 0)).map(entry => {
+      const prefs = latest.get(String(entry.nuid || '').trim().toUpperCase());
+      return prefs ? { ...entry, coursePrefs: prefs } : entry;
+    });
   } catch (err) {
     return abortOnFailure('the subscription list', err);
   }
 }
+
+export const claimDelivery = claimNotificationDelivery;
+export const releaseDelivery = releaseNotificationDelivery;
 
 // One generated document (a timetable, exam schedule, seating plan...) by the
 // id it carries in the `documents` collection, e.g. "timetables/computing".

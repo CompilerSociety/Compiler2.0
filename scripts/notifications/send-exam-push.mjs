@@ -10,6 +10,8 @@
 
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { deliverOnce, recipientKey } from './delivery.mjs';
+import { wantsCourse, wantsPaper } from '../../lib/notification-courses.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
 import { recordNotificationDelivery } from './notify-log.mjs';
@@ -39,7 +41,7 @@ for (let i = 0; i < loadedExamDocs.length; i++) {
     throw malformedDocument(`Exam document "${EXAM_DOCS[i]}" has no exams array.`);
   }
 }
-const examDocs = loadedExamDocs.filter((d) => d && Array.isArray(d.exams));
+const examDocs = loadedExamDocs.map((doc, i) => doc ? { ...doc, school: EXAM_DOCS[i].split('/')[1] } : null).filter(d => d && Array.isArray(d.exams));
 
 if (examDocs.length === 0) {
   console.log('No exam schedules present — nothing to send.');
@@ -72,11 +74,10 @@ function examType(doc) {
 // Stable id for a given exam document — changes when a new schedule arrives.
 const docId = (doc) => String(doc.source_filename || doc.updated_at || 'exam');
 
-function userMatches(doc, dep, batch, secLetter) {
+function userMatches(doc, dep, batch, secLetter, entry) {
   return doc.exams.some((e) => {
-    if (String(e.batch || '').trim() !== batch) return false;
-    const secs = (e.sections && e.sections[dep]) || [];
-    return secs.some((tok) => sectionLetter(tok) === secLetter);
+    return Object.entries(e.sections || {}).some(([dept, sections]) => sections.some(section =>
+      wantsCourse(entry, { school: doc.school || 'computing', dept, batch: e.batch, section, name: e.course, code: e.code })));
   });
 }
 
@@ -91,7 +92,7 @@ for (const entry of subs) {
   if (!dep || !batch || !secLetter) { skipped++; continue; } // pre-exam subscriptions lack these
 
   // Find the first exam document this user appears in.
-  const doc = examDocs.find((d) => userMatches(d, dep, batch, secLetter));
+  const doc = examDocs.find((d) => userMatches(d, dep, batch, secLetter, entry));
   if (!doc) { skipped++; continue; }
 
   const id = docId(doc);
@@ -106,7 +107,8 @@ for (const entry of subs) {
     tag: `exam-${id}`,
   });
   try {
-    await webpush.sendNotification(subscription, payload);
+    const alreadyDelivered = subs.some(other => recipientKey(other) === recipientKey(entry) && state[other.subscription?.endpoint] === id);
+    if (!await deliverOnce(entry, 'exam', id, payload, alreadyDelivered)) { skipped++; continue; }
     recordNotificationDelivery({
       kind: 'exam', recipient: { name, nuid: entry.nuid || null, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
       change: { exam_type: examType(doc), schedule_id: id },

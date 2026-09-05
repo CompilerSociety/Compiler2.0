@@ -24,7 +24,9 @@ const documents = {
 };
 
 const subscriptions = [
-  { name: 'Test Student', department: 'BS CS', batch: '2025', section: 'G', subscription: { endpoint: 'https://test.invalid/matching' } },
+  { nuid: '25I-1234', name: 'Test Student', department: 'BS CS', batch: '2025', section: 'G', subscription: { endpoint: 'https://test.invalid/matching' } },
+  { nuid: '25i-1234', name: 'Second Device', department: 'BS CS', batch: '2025', section: 'G', subscription: { endpoint: 'https://test.invalid/second-device' } },
+  { nuid: '25I-9999', name: 'Removed Course', department: 'BS CS', batch: '2025', section: 'G', coursePrefs: { removed: ['Data St'], added: [] }, subscription: { endpoint: 'https://test.invalid/removed-course' } },
   { name: 'Opted Out', department: 'BS CS', batch: '2025', section: 'G', prefs: { cls: false }, subscription: { endpoint: 'https://test.invalid/opted-out' } },
   { name: 'Other Section', department: 'BS CS', batch: '2025', section: 'A', subscription: { endpoint: 'https://test.invalid/other-section' } },
 ];
@@ -38,3 +40,10 @@ export async function saveState(_name, state) {
   fs.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
 }
 export async function pruneSubs() {}
+
+// Exclusive creation emulates Mongo's unique _id across concurrent processes.
+export async function claimDelivery(id) {
+  try { fs.writeFileSync(stateFile + '.' + id, '', { flag: 'wx' }); return true; }
+  catch (error) { if (error.code === 'EEXIST') return false; throw error; }
+}
+export async function releaseDelivery(id) { fs.unlinkSync(stateFile + '.' + id); }

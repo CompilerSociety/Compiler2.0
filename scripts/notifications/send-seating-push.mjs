@@ -13,6 +13,8 @@
 import crypto from 'node:crypto';
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { deliverOnce, recipientKey } from './delivery.mjs';
+import { wantsCourse, wantsPaper } from '../../lib/notification-courses.mjs';
 import { loadSubs, loadState, saveState, pruneSubs, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
 import { recordNotificationDelivery } from './notify-log.mjs';
@@ -88,13 +90,17 @@ for (const entry of subs) {
   const student = byNuid.get(nuid);
   if (!student) { keptSubs.push(entry); skipped++; continue; } // NU ID not in this plan yet
 
+  if (!wantsPaper(entry, student.paper)) { keptSubs.push(entry); skipped++; continue; }
   const endpoint = subscription.endpoint;
   const hash = seatHash(student);
   if (state[endpoint] === hash) { keptSubs.push(entry); skipped++; continue; } // unchanged -> no spam
 
   const payload = JSON.stringify(buildMessage(student));
   try {
-    await webpush.sendNotification(subscription, payload);
+    const alreadyDelivered = subs.some(other => recipientKey(other) === recipientKey(entry) && state[other.subscription?.endpoint] === hash);
+    if (!await deliverOnce(entry, 'seating', [seating.source_filename || '', student.date || '', hash], payload, alreadyDelivered)) {
+      keptSubs.push(entry); skipped++; continue;
+    }
     recordNotificationDelivery({
       kind: 'seating', recipient: { name: student.name || entry.name || null, nuid, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
       change: { paper: student.paper || null, time: student.time || null, venue: student.class || null, seat: student.seat || null },

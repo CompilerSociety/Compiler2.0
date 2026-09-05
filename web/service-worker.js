@@ -55,8 +55,9 @@ self.addEventListener('push', event => {
   const title = data.title || 'FAST Compiler';
   const options = {
     body: data.body || '',
-    tag: data.tag || 'seating-update',
-    renotify: true,
+    // A repeated provider delivery replaces the same visible notification quietly.
+    tag: data.notificationId || data.tag || 'seating-update',
+    renotify: false,
     requireInteraction: false,
     // Without an icon Chrome falls back to a coloured circle with the first
     // letter of the domain (a "W" for www.vtable.site) in the corner of

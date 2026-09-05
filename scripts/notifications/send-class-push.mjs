@@ -1,23 +1,11 @@
 // Runs when a timetable JSON changes. Notifies affected users (matched by
 // department + batch + section) when a class becomes Cancelled or Rescheduled.
 //
-// De-dup is PER DEVICE and RECOVERABLE. class-notify-state.json maps each
-// subscription endpoint -> { <slotKey>: "<status|time|venue>" }, keyed by the
-// CLASS's stable identity (dept|batch|section|day|course), not by a composite
-// that includes the disturbance details. On each run:
-//
-//   - a cancelled/rescheduled class whose slotKey is NOT in this device's
-//     state, or whose stored value differs (new time/venue), sends and stores
-//   - a cancelled/rescheduled class whose stored value matches exactly is
-//     silently skipped (already told)
-//   - a class that reappears as Normal has its slotKey pruned from the state,
-//     WITHOUT any "recovery" notification — so if it is cancelled again later,
-//     it will notify fresh
-//
-// This replaces the old permanent-composite behaviour, where the entry
-// "<slotKey>||<value>" was written once and never cleared, meaning a class
-// that got cancelled, recovered, then cancelled again would only ever notify
-// on the first cancellation.
+// Legacy per-device history is retained for migration and change detection.
+// delivery.mjs adds a durable, atomic claim per student and event before send.
+// An identical event is never re-sent, even after recovery, endpoint changes,
+// overlapping jobs or a failed legacy state save. Changed details are new events.
+// Course eligibility follows the student's synchronized My courses overlay.
 //
 // Env: VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY (required), VAPID_SUBJECT (optional)
 // Reads:  the `documents` and `push_subscriptions` collections in MongoDB
@@ -25,6 +13,8 @@
 
 import webpush from 'web-push';
 import { wants } from './prefs.mjs';
+import { deliverOnce, recipientKey } from './delivery.mjs';
+import { wantsCourse, wantsPaper } from '../../lib/notification-courses.mjs';
 import { loadSubs, loadState, saveState, loadDocument } from './store.mjs';
 import { createNotificationJob, EXIT, malformedDocument } from './job.mjs';
 import { recordNotificationDelivery } from './notify-log.mjs';
@@ -121,7 +111,7 @@ for (const f of TIMETABLES) {
               // reordered JSON does not look like a brand-new class.
               slotKey: [dep, batch, section, day, course].join('|'),
               value: `${status}|${c.time || ''}|${c.location || ''}`,
-              status,
+              status, school: f.split('/')[1], dept: dep,
               deptKey: deptKeyOf(dep), batch: fullBatch(batch), secLetter: sectionLetter(section),
               section, course, day, time: c.time || '—', venue: c.location || '—',
             });
@@ -179,11 +169,11 @@ let sent = 0, skipped = 0, pruned = 0, failed = 0;
       const seen = state[endpoint] || (state[endpoint] = {});
       const name = String(entry.name || '').trim() || 'Student';
 
-      // Recovery pruning, per device. For each class this device has been
+      // Recovery pruning for the legacy per-device cache. For each class this device has been
       // told about, check its current state: if it is no longer cancelled/
       // rescheduled — either back to Normal, or gone from the timetable
       // entirely (e.g. renamed) — drop the entry so a future re-cancellation
-      // is treated as new and notifies again. No "class recovered"
+      // can be evaluated again; the permanent ledger still suppresses identical events. No "class recovered"
       // notification is sent, by request.
       for (const storedSlotKey of Object.keys(seen)) {
         const cur = currentBySlotKey.get(storedSlotKey);
@@ -194,7 +184,7 @@ let sent = 0, skipped = 0, pruned = 0, failed = 0;
       }
 
       // Only this device's matching, currently cancelled/rescheduled classes.
-      const mine = slots.filter((s) => s.status !== 'Normal' && s.deptKey === dep && s.batch === batch && s.secLetter === secLetter);
+      const mine = slots.filter(s => s.status !== 'Normal' && wantsCourse(entry, s));
 
       for (const s of mine) {
         // Skip if this device was already told about this exact
@@ -221,7 +211,12 @@ let sent = 0, skipped = 0, pruned = 0, failed = 0;
           body, url: '/', tag: `class-${s.deptKey}-${s.batch}-${s.secLetter}-${s.course}-${s.day}`,
         });
         try {
-          await webpush.sendNotification(subscription, payload);
+          const alreadyDelivered = subs.some(other => recipientKey(other) === recipientKey(entry)
+            && state[other.subscription?.endpoint]?.[s.slotKey] === s.value);
+          if (!await deliverOnce(entry, 'class', [s.school, s.deptKey, s.batch, s.course, s.day, s.value], payload, alreadyDelivered)) {
+            // Another job may only be in flight; do not mark it delivered locally.
+            continue;
+          }
           recordNotificationDelivery({
             kind: 'class', recipient: { name, nuid: entry.nuid || null, department: entry.department || null, batch: entry.batch || null, section: entry.section || null },
             change: { status: s.status, course: s.course, day: s.day, time: s.time, venue: s.venue },

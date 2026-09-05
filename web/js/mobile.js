@@ -1826,7 +1826,8 @@
     if(dropdown) dropdown.addEventListener('toggle',()=>{ coursesExpanded=dropdown.open; });
     document.querySelectorAll('#m-course-list .m-course-remove').forEach(btn=>{
       btn.addEventListener('click',()=>{
-        if(typeof removeMyCourse==='function') removeMyCourse(btn.dataset.key);
+        const course=getMyCourses().find(c=>myCourseKey(c)===btn.dataset.key);
+        if(course) removeMyCourse(course);
         renderProfile();
         toast('Course removed');
       });
@@ -1910,7 +1911,11 @@
           <div class="m-pcard-sub">${esc(sub)}</div>
         </div>
       </div>
-      ${myCoursesSectionHTML()}
+          <div class="m-profile-program">
+      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
+        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
+      ${sectionPickerHTML(p,'m-profile-sec-chips')}
+          </div>
       <div class="m-section-label">Notifications</div>
       <!-- One master switch, then the categories it governs. The categories are
            inert until it is on: a per-category choice is meaningless while
@@ -1941,11 +1946,7 @@
       <section class="m-customization" aria-labelledby="m-customization-title">
         <h2 class="m-section-label" id="m-customization-title">Course customization</h2>
         <div class="m-customization-fields">
-          <div class="m-customization-section">
-      <div class="m-drow"><div class="m-drow-label">Program · batch</div>
-        <div class="m-drow-value">${esc(p.department||'—')} · ${esc(batch||'—')}</div></div>
-      ${sectionPickerHTML(p,'m-profile-sec-chips')}
-          </div>
+          ${myCoursesSectionHTML()}
       <label class="m-toggle-row" for="m-dark-mode">
         <span class="m-toggle-text"><span class="m-toggle-label">Dark mode</span>
           <span class="m-toggle-help">Dark backgrounds with orange accents.</span></span>
