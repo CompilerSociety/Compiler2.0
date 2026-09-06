@@ -27,6 +27,9 @@ from db import store as _store  # noqa: E402
 
 
 def _load_timetable(doc_id: str):
+    if "--local" in sys.argv:
+        with open(os.path.join(REPO, doc_id), encoding="utf-8") as source:
+            return json.load(source)["tt"]
     doc = _store.load_document(doc_id)
     if doc is None:
         raise SystemExit(
@@ -84,10 +87,16 @@ def read_cell(t):
     blank = {"course": None, "depts": [], "section": "", "sub": None,
              "group": "", "year": None, "parsed": False}
 
+    venue = re.search(r"\(Audi,\s*Block-([A-D])\)", t, re.I)
+    if venue:
+        return {**blank, "course": t[:venue.start()].strip(), "parsed": True,
+                "room": f"{venue.group(1).upper()}-AUDITORIUM"}
+
     m = CELL_RE.match(t)
     if m:
         depts = [d.strip().upper() for d in
                  re.split(r"[/,]", m.group("depts")) if d.strip()]
+        depts = ["PHD" if d in {"PCS", "PHDCS", "PHDSE"} else d for d in depts]
         section = (m.group("section") or "").upper()
         # "UHQ-I & II (MS-SE)" names the degree first and the programme where
         # a section letter would go. The programme is the department, and the

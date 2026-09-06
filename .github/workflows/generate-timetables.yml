@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Timetable regression checks
+        run: python -m unittest discover -s python/generate_timetable -t .
+
       - name: Restore Google service-account credential
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -46,7 +49,9 @@ jobs:
           printf '%s' "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
 
       - name: Generate timetables
-        run: python python/scripts/Script.py
+        run: |
+          test -n "$MONGODB_URI" || { echo "Missing required MONGODB_URI repository secret"; exit 1; }
+          python python/scripts/Script.py
 
       # No commit step any more. This job used to write its results into db/
       # and push them; that data now lives in MongoDB, written directly by the

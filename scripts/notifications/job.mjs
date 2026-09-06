@@ -5,7 +5,8 @@ import { closeMongo } from '../../lib/db/mongo.mjs';
 
 export const EXIT = Object.freeze({
   SENT: 0,
-  NOOP: 10,
+  // No pending deliveries is a successful scheduled run, not a CI failure.
+  NOOP: 0,
   MONGO: 20,
   VAPID: 21,
   MALFORMED_DOCUMENT: 22,

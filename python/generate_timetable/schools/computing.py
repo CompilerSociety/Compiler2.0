@@ -2,6 +2,8 @@
 
 import re
 
+from ..day_tabs import resolve_day_tab
+
 from ..colour_mapper import colour_dept_label, colour_to_batch, is_yellow
 from ..config import (
     ALL_SECTIONS,
@@ -79,6 +81,15 @@ def parse_timetable_cell(text):
     if not text:
         return None
     t = one_line(text)
+    # Venue annotations are not programme/section codes. Preserve the course
+    # through the existing sectionless inference path and honour its venue.
+    venue = re.search(r"\(\s*Audi\s*,\s*Block\s*-\s*([A-D])\s*\)", t, re.I)
+    if venue:
+        parsed = parse_bare_course_cell(t[:venue.start()].strip())
+        if parsed:
+            parsed["location_override"] = f"{venue.group(1).upper()}-AUDITORIUM"
+            parsed["note"] = status_note(t[venue.end():])
+        return parsed
     paren = t.find(")")
     core = t[:paren + 1] if paren >= 0 else t
     tail = t[paren + 1:] if paren >= 0 else ""
@@ -570,7 +581,7 @@ def parse_matrix_block(text_grid, colour_grid, start_row, end_row, block, day, t
                         bare["cells"].append({
                             "row_key": (day, block["name"], r),
                             "course": parsed["course"], "day": day,
-                            "room": room, "time": slot_time, "colour": cell_colour,
+                            "room": parsed.get("location_override", room), "time": slot_time, "colour": cell_colour,
                             "note": parsed.get("note", ""),
                         })
                     continue
@@ -791,31 +802,13 @@ def generate(service):
         )
 
     for day in DAYS:
-        # The day tabs are often renamed by the sheet's owner, e.g. the generic
-        # "Saturday" tab becoming "Saturday (Sep. 05,2026)". Insisting on an
-        # exact tab name makes the whole weekday silently disappear. Instead,
-        # auto-discover the ACTUAL sheet tab for this day by prefix match.
-        # Multiple tabs can match a day (a bare "Saturday" plus dated variants
-        # like "Saturday (Sep. 05,2026)"). Prefer the newer dated/suffixed tab
-        # over a stale bare weekday tab, since those mark the current schedule.
-        day_candidates = [
-            t for t in actual_tabs
-            if t.strip().lower().startswith(day.lower())
-        ]
-        actual_tab = None
-        if day_candidates:
-            # Exact bare weekday name is the LEAST preferred (snapshot/stale).
-            bare_candidates = [
-                t for t in day_candidates if t.strip().lower() == day.lower()
-            ]
-            suffixed = [t for t in day_candidates if t not in bare_candidates]
-            actual_tab = (suffixed or bare_candidates)[0]
+        actual_tab = resolve_day_tab(actual_tabs, day)
         if actual_tab is None:
             dlog_warn(
                 f"  No sheet tab found for day '{day}' (looked for tab '{day}' "
                 f"or any tab starting with it). Available: {actual_tabs}"
             )
-            continue
+            raise RuntimeError(f"No active computing tab for {day}; refusing publication")
         if actual_tab != day:
             dlog(
                 f"  Resolved day '{day}' to actual tab '{actual_tab}' "
@@ -831,12 +824,12 @@ def generate(service):
         except Exception as e:
             print(f"ERROR: {e}")
             dlog_error(f"  fetch failed for {school_name}/{actual_tab}: {e}")
-            continue
+            raise RuntimeError(f"{school_name}: source fetch failed; refusing publication") from e
 
         if not text_grid:
-            print("empty ??? skipped")
+            print("ERROR: empty source grid")
             dlog_warn(f"  {school_name}/{actual_tab} returned empty grid")
-            continue
+            raise RuntimeError(f"{school_name}: empty source grid; refusing publication")
 
         added = parse_grid_to_tt(text_grid, colour_grid, day, tt, pending, bare)
         total += added
@@ -853,6 +846,12 @@ def generate(service):
         total += placed
         dlog(f"  {school_name}: {len(bare['cells'])} department-less cells "
              f"-> {placed} entries")
+
+    for day in DAYS:
+        day_count = sum(len(days.get(day, [])) for batches in tt.values()
+                        for sections in batches.values() for days in sections.values())
+        if day_count == 0:
+            raise RuntimeError(f"computing/{day}: zero parsed classes; source requires review before publication")
 
     dlog(f"  {school_name} total: {total} entries, {len(tt)} depts")
     return tt, total

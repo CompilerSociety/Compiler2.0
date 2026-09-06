@@ -357,12 +357,12 @@ def generate(service):
         except Exception as e:
             print(f"ERROR: {e}")
             dlog_error(f"  fetch failed for {school_name}/{tab}: {e}")
-            continue
+            raise RuntimeError(f"{school_name}: source fetch failed; refusing publication") from e
 
         if not text_grid:
-            print("empty ??? skipped")
+            print("ERROR: empty source grid")
             dlog_warn(f"  {school_name}/{tab} returned empty grid")
-            continue
+            raise RuntimeError(f"{school_name}: empty source grid; refusing publication")
 
         added = parse_business_grid(text_grid, day, tt)
         total += added

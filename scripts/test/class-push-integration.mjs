@@ -35,9 +35,9 @@ function run(label, expectedExitCode) {
 
 try {
   assert.deepEqual(run('first run', 0), [1, 1, 0]);
-  assert.deepEqual(run('second run', 10), [0, 1, 0]);
+  assert.deepEqual(run('second run', 0), [0, 1, 0]);
   fs.unlinkSync(stateFile); // Simulate a lost/failed legacy state save.
-  assert.deepEqual(run('lost legacy state', 10), [0, 1, 0]);
+  assert.deepEqual(run('lost legacy state', 0), [0, 1, 0]);
   const sends = fs.readFileSync(sendLog, 'utf8').trim().split(/\r?\n/).filter(Boolean).map(JSON.parse);
   assert.equal(sends.length, 1);
   assert.equal(sends[0].endpoint, 'https://test.invalid/matching');

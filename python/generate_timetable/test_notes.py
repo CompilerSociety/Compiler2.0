@@ -11,6 +11,17 @@ from python.generate_timetable.schools.computing import add_course, parse_timeta
 
 
 class TimetableNoteTests(unittest.TestCase):
+    def test_auditorium_annotation_is_a_venue_not_two_departments(self):
+        parsed = parse_timetable_cell("PPIT Seminar (Audi, Block-A)")
+        self.assertTrue(parsed["bare"])
+        self.assertEqual(parsed["depts"], [])
+        self.assertEqual(parsed["location_override"], "A-AUDITORIUM")
+
+    def test_pcs_is_a_doctoral_programme(self):
+        from python.generate_timetable.schools.computing import resolve_departments_for_cell
+        self.assertEqual(resolve_departments_for_cell(
+            parse_timetable_cell("Adv Topics in NLP (PCS)"), None, "2023"), ["PhD"])
+
     def test_parser_extracts_trailing_status_without_polluting_course_name(self):
         parsed = parse_timetable_cell("Data St (CS-G) Rescheduled")
         self.assertEqual(parsed["course"], "Data St")

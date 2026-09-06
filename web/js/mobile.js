@@ -508,6 +508,7 @@
   }
 
   function renderToday(){
+    updateFriendsButton();
     const todayPane=$('m-today-pane');
     const weekPane=$('m-week-pane');
     $('m-seg-today').classList.toggle('is-active',!weekMode);
@@ -688,11 +689,11 @@
     return null;
   }
 
-  function renderWeek(keys,pane){
-    if(!Object.keys(keys.tt||{}).length&&!hasOwnCourses()){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
+  function renderWeek(keys,pane,rowsForDay=null){
+    if(!Object.keys(keys.tt||{}).length&&(rowsForDay||!hasOwnCourses())){ pane.innerHTML='<div class="m-empty">Loading your timetable…</div>'; return; }
     const today=todayName();
     const cards=DAYS.map(day=>{
-      const list=myClassesFor(keys,day);
+      const list=rowsForDay?rowsForDay(day):myClassesFor(keys,day);
       const body=list.length
         ? list.map(e=>{
             const time=e.time||e.t||'';
@@ -702,7 +703,7 @@
               <span class="m-pill">${esc(e.location||e.l||'—')}</span>
             </div>`;
           }).join('')
-        : '<div class="m-dayrow"><div class="m-dayrow-name" style="color:rgba(22,33,15,.45);font-weight:500">No classes</div></div>';
+        : '<div class="m-dayrow"><div class="m-dayrow-name" style="color:var(--mute);font-weight:500">No classes</div></div>';
       return `<div class="m-daycard${day===today?' is-today':''}">
         <div class="m-daycard-head"><span class="m-daycard-day">${esc(day)}</span>
           <span class="m-daycard-meta">${list.length} class${list.length===1?'':'es'}</span></div>
@@ -1714,6 +1715,229 @@
     renderCoursesList(); // populate the header badge on load
   }
 
+
+  /* Friends are a separate device-local address book, never profile/roster writes. */
+  const FRIENDS_KEY='vtable_friends_v1';
+  const friendView={mode:'list',selected:null,request:0,opener:null};
+  function readFriends(){
+    const raw=JSON.parse(localStorage.getItem(FRIENDS_KEY)||'[]');
+    if(!Array.isArray(raw)) throw new Error('Saved friends could not be read.');
+    return raw.filter(f=>f&&typeof f.nuid==='string'&&typeof f.name==='string');
+  }
+  function writeFriends(list){
+    localStorage.setItem(FRIENDS_KEY,JSON.stringify(list));
+    updateFriendsButton();
+  }
+  function updateFriendsButton(){
+    const btn=$('m-friends-btn');
+    if(!btn) return;
+    try{
+      const count=readFriends().length;
+      btn.hidden=count===0;
+      $('m-friends-count').textContent=String(count);
+    }catch(e){ btn.hidden=false; $('m-friends-count').textContent='!'; }
+  }
+  function openFriends(mode='list'){
+    friendView.opener=document.activeElement;
+    $('m-friends-sheet').hidden=false;
+    $('m-main').inert=true;
+    if(mode==='add') renderFriendLookup(); else renderFriendsList();
+    $('m-friends-close').focus();
+  }
+  function closeFriends(){
+    const sheet=$('m-friends-sheet');
+    if(!sheet||sheet.hidden) return;
+    friendView.request++;
+    sheet.hidden=true;
+    $('m-main').inert=false;
+    if(friendView.opener?.isConnected) friendView.opener.focus();
+  }
+  function friendStatus(message){
+    const status=$('m-friend-status');
+    if(status) status.textContent=message;
+  }
+  function renderFriendsList(){
+    friendView.request++;
+    friendView.mode='list';
+    $('m-friends-title').textContent='My Friends';
+    const host=$('m-friends-body');
+    let friends;
+    try{ friends=readFriends(); }
+    catch(e){ host.innerHTML='<div class="m-empty">Saved friends could not be read on this device.</div>'; return; }
+    host.innerHTML='<p class="m-friends-copy">Choose a friend to view their published weekly timetable.</p>'
+      +'<div class="m-friend-list">'+(friends.length?friends.map(f=>`<div class="m-friend-row">
+        <button class="m-friend-open" type="button" data-friend="${esc(f.nuid)}">
+          <span class="m-course-name">${esc(f.name)}</span>
+          <span class="m-course-origin">${esc(f.nuid)} &middot; ${esc(f.department)} ${esc(f.batch)}-${esc(f.section)}</span>
+        </button>
+        <button class="m-course-remove" type="button" data-remove-friend="${esc(f.nuid)}" aria-label="Remove ${esc(f.name)}">&times;</button>
+      </div>`).join(''):'<div class="m-empty">No friends added yet.</div>')+'</div>'
+      +'<button class="m-btn-primary" id="m-friend-new" type="button">Add Friends</button>'
+      +'<div class="m-signin-status" id="m-friend-status" role="status" aria-live="polite"></div>';
+    $('m-friend-new').addEventListener('click',renderFriendLookup);
+    host.querySelectorAll('[data-friend]').forEach(btn=>btn.addEventListener('click',()=>{
+      friendView.selected=friends.find(f=>f.nuid===btn.dataset.friend);
+      renderFriendWeek();
+    }));
+    host.querySelectorAll('[data-remove-friend]').forEach(btn=>btn.addEventListener('click',()=>{
+      try{ writeFriends(readFriends().filter(f=>f.nuid!==btn.dataset.removeFriend)); renderFriendsList(); toast('Friend removed'); }
+      catch(e){ friendStatus('Could not save the change on this device.'); }
+    }));
+  }
+  function renderFriendLookup(){
+    friendView.request++;
+    friendView.mode='add';
+    $('m-friends-title').textContent='Add Friends';
+    $('m-friends-body').innerHTML=`<button class="m-back" id="m-friend-back" type="button">&lsaquo; My Friends</button>
+      <p class="m-friends-copy">Enter your friend's NU ID to look up their details. Your friends list stays on this device.</p>
+      <form id="m-friend-lookup" class="m-friend-form">
+        <label class="m-field-label" for="m-friend-nuid">NU ID</label>
+        <input class="m-settings-select" id="m-friend-nuid" placeholder="25I-0632" maxlength="20" autocomplete="off" required>
+        <button class="m-btn-primary" id="m-friend-find" type="submit">Find friend</button>
+      </form>
+      <div class="m-signin-status" id="m-friend-status" role="status" aria-live="polite"></div>
+      <div id="m-friend-details"></div>`;
+    $('m-friend-back').addEventListener('click',renderFriendsList);
+    $('m-friend-lookup').addEventListener('submit',lookupFriend);
+    $('m-friend-nuid').addEventListener('input',()=>{
+      friendView.request++;
+      $('m-friend-details').innerHTML='';
+      friendStatus('');
+    });
+  }
+  async function lookupFriend(ev){
+    ev.preventDefault();
+    const input=$('m-friend-nuid');
+    const error=validateNuid(input.value);
+    if(error){ friendStatus(error); return; }
+    const nuid=formatNuid(input.value);
+    input.value=nuid;
+    try{
+      if(readFriends().some(f=>f.nuid===nuid)){ friendStatus('This friend is already in your list.'); return; }
+    }catch(e){ friendStatus('Local storage is unavailable. Friends cannot be saved.'); return; }
+    const request=++friendView.request;
+    const btn=$('m-friend-find');
+    btn.disabled=true; input.disabled=true;
+    $('m-friend-details').innerHTML='';
+    friendStatus('Looking up your friend...');
+    let match=null,unavailable=false;
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),15000);
+    try{
+      const response=await fetch(getProfileDataFileForNuid(nuid),{cache:'no-store',signal:controller.signal});
+      if(!response.ok) throw new Error('Roster unavailable');
+      const data=await response.json();
+      if(!Array.isArray(data.students)) throw new Error('Roster unavailable');
+      match=data.students.find(f=>formatNuid(f.nuid)===nuid)||null;
+    }catch(e){ unavailable=true; }
+    finally{ clearTimeout(timeout); }
+    if(request!==friendView.request||$('m-friends-sheet').hidden) return;
+    btn.disabled=false; input.disabled=false;
+    const p=match?parseProfileFromStudent(match):{};
+    const draft={nuid,name:p.name||'',school:match?.school||'computing',department:p.department||'',
+      batch:p.batch?profileFullBatch(p):'20'+nuid.slice(0,2),section:p.section||''};
+    friendStatus(match?'Found in the roster. Check the details, then save your friend.'
+      :unavailable?'The roster is unavailable. Try again, or enter their details below.'
+      :'This NU ID is not in the roster yet. Enter their details below.');
+    renderFriendDetails(draft);
+  }
+  function friendSource(school){
+    return typeof myCourseSource==='function'?myCourseSource(school):{};
+  }
+  function renderFriendDetails(draft){
+    const host=$('m-friend-details');
+    const schools={computing:'School of Computing (FSC)',engineering:'School of Engineering (FSE)',business:'School of Management (FSM)'};
+    host.innerHTML=`<form class="m-friend-form" id="m-friend-save-form">
+      <div class="m-section-label">Friend details &middot; ${esc(draft.nuid)}</div>
+      <label class="m-field-label" for="m-friend-name">Name</label>
+      <input class="m-settings-select" id="m-friend-name" value="${esc(draft.name)}" maxlength="60" autocomplete="off" required>
+      <label class="m-field-label" for="m-friend-school">School</label>
+      <select class="m-settings-select" id="m-friend-school">${Object.entries(schools).map(([key,label])=>`<option value="${key}"${key===draft.school?' selected':''}>${label}</option>`).join('')}</select>
+      <label class="m-field-label" for="m-friend-dept">Program</label>
+      <input class="m-settings-select" id="m-friend-dept" value="${esc(draft.department)}" list="m-friend-programs" placeholder="BS CS" maxlength="60" required>
+      <datalist id="m-friend-programs"></datalist>
+      <label class="m-field-label" for="m-friend-batch">Batch</label>
+      <input class="m-settings-select" id="m-friend-batch" value="${esc(draft.batch)}" inputmode="numeric" pattern="20[0-9]{2}" maxlength="4" placeholder="2025" required>
+      <label class="m-field-label" for="m-friend-section">Section</label>
+      <input class="m-settings-select" id="m-friend-section" value="${esc(draft.section)}" list="m-friend-sections" maxlength="10" placeholder="A" required>
+      <datalist id="m-friend-sections"></datalist>
+      <button class="m-btn-primary" type="submit">Save friend</button>
+    </form>`;
+    const suggestions=()=>{
+      const source=friendSource($('m-friend-school').value);
+      $('m-friend-programs').innerHTML=Object.keys(source).sort().map(d=>`<option value="${esc(d)}"></option>`).join('');
+      const sections=Object.keys(source[$('m-friend-dept').value]?.[$('m-friend-batch').value]||{}).filter(s=>s!==ALL_SECTIONS);
+      $('m-friend-sections').innerHTML=sections.map(s=>`<option value="${esc(s)}"></option>`).join('');
+    };
+    $('m-friend-school').addEventListener('change',()=>{
+      $('m-friend-dept').value=''; $('m-friend-section').value=''; suggestions();
+    });
+    ['m-friend-school','m-friend-dept','m-friend-batch'].forEach(id=>$(id).addEventListener('input',suggestions));
+    suggestions();
+    $('m-friend-save-form').addEventListener('submit',ev=>{
+      ev.preventDefault();
+      const school=$('m-friend-school').value;
+      let department=$('m-friend-dept').value.trim();
+      const source=friendSource(school);
+      const normalized=typeof deptCodeToLabel==='function'?deptCodeToLabel(department):department;
+      department=Object.keys(source).find(d=>d.toUpperCase()===department.toUpperCase()||d.toUpperCase()===normalized.toUpperCase())||normalized;
+      const friend={nuid:draft.nuid,name:$('m-friend-name').value.trim(),school,department,
+        batch:$('m-friend-batch').value.trim(),section:$('m-friend-section').value.trim().toUpperCase()};
+      if(!friend.name||!friend.department||!/^20\d{2}$/.test(friend.batch)||!/^\d*[A-Z]+\d*$/.test(friend.section)||friend.section==='ALL'){
+        friendStatus('Enter a name, program, four-digit batch and section (for example, A or 6A).'); return;
+      }
+      try{
+        const friends=readFriends();
+        if(friends.some(f=>f.nuid===friend.nuid)){ friendStatus('This friend is already in your list.'); return; }
+        if(friends.length>=100){ friendStatus('You can save up to 100 friends. Remove one before adding another.'); return; }
+        writeFriends([...friends,friend]);
+        renderFriendsList();
+        toast('Friend saved on this device');
+      }catch(e){ friendStatus('Could not save this friend. Check that local storage is available.'); }
+    });
+  }
+  function renderFriendWeek(){
+    const friend=friendView.selected;
+    if(!friend) return renderFriendsList();
+    friendView.mode='week';
+    $('m-friends-title').textContent=friend.name;
+    $('m-friends-body').innerHTML=`<button class="m-back" id="m-friend-back" type="button">&lsaquo; My Friends</button>
+      <p class="m-friends-copy">${esc(friend.nuid)} &middot; ${esc(friend.department)} ${esc(friend.batch)}-${esc(friend.section)}<br>Weekly section timetable</p>
+      <div id="m-friend-week"></div>`;
+    $('m-friend-back').addEventListener('click',renderFriendsList);
+    const source=friendSource(friend.school);
+    const keys={dept:friend.department,batch:friend.batch,sec:friend.section,tt:source};
+    const pane=$('m-friend-week');
+    if(!source[friend.department]?.[friend.batch]?.[friend.section]){
+      pane.innerHTML='<div class="m-empty">No timetable is available for this section right now. Check their details or try again after the timetable loads.</div>';
+      return;
+    }
+    renderWeek(keys,pane,day=>classesFor(keys.dept,keys.batch,keys.sec,day,source));
+  }
+  function wireFriends(){
+    $('m-friends-btn').addEventListener('click',()=>openFriends());
+    $('m-friends-close').addEventListener('click',closeFriends);
+    document.addEventListener('keydown',ev=>{
+      if($('m-friends-sheet').hidden) return;
+      if(ev.key==='Escape'){ ev.preventDefault(); closeFriends(); }
+      if(ev.key==='Tab'){
+        const fields=[...$('m-friends-sheet').querySelectorAll('button,input,select,[tabindex="0"]')].filter(el=>!el.disabled&&!el.hidden);
+        const first=fields[0],last=fields[fields.length-1];
+        if(ev.shiftKey&&document.activeElement===first){ ev.preventDefault(); last?.focus(); }
+        else if(!ev.shiftKey&&document.activeElement===last){ ev.preventDefault(); first?.focus(); }
+      }
+    });
+    window.addEventListener('storage',ev=>{
+      if(ev.key!==FRIENDS_KEY) return;
+      updateFriendsButton();
+      if(!$('m-friends-sheet').hidden&&friendView.mode==='list') renderFriendsList();
+    });
+    document.addEventListener('vtable:data',()=>{
+      if(!$('m-friends-sheet').hidden&&friendView.mode==='week') renderFriendWeek();
+    });
+    updateFriendsButton();
+  }
+
   function wireArcade(){
     const wrap=$('m-arcade');
     if(!wrap) return;
@@ -1947,6 +2171,7 @@
         <h2 class="m-section-label" id="m-customization-title">Course customization</h2>
         <div class="m-customization-fields">
           ${myCoursesSectionHTML()}
+          <button class="m-btn-ghost m-add-friend" id="m-add-friend" type="button">Add Friends</button>
       <label class="m-toggle-row" for="m-dark-mode">
         <span class="m-toggle-text"><span class="m-toggle-label">Dark mode</span>
           <span class="m-toggle-help">Dark backgrounds with orange accents.</span></span>
@@ -2024,6 +2249,7 @@
     // subscription was dropped since the last time this screen was open.
     refreshPushState();
 
+    $('m-add-friend').addEventListener('click',()=>openFriends('add'));
     $('m-dark-mode').addEventListener('change',e=>setMobileTheme(e.target.checked));
     const sectionSelect=$('m-profile-section');
     if(sectionSelect) sectionSelect.addEventListener('change',e=>changeProfileSection(e.target.value));
@@ -2067,6 +2293,7 @@
     $('m-bell-btn').addEventListener('click',()=>go('profile'));
     wireArcade();
     wireCoursesSheet();
+    wireFriends();
 
     $('m-seg-today').addEventListener('click',()=>{ weekMode=false; renderToday(); });
     $('m-seg-week').addEventListener('click',()=>{ weekMode=true; renderToday(); });
@@ -2082,6 +2309,7 @@
       // of whatever the back button navigated to. Closing it here also stops
       // the running game, which is what "back" should mean here.
       closeArcade();
+      closeFriends();
       const r=readHash();
       if(r&&r!==route){ route=r; render(); }
     });

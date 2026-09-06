@@ -37,7 +37,7 @@ def main():
         dlog_error(f"'{SERVICE_ACCOUNT_FILE}' not found \u2014 cannot authenticate")
         print(f"ERROR: '{SERVICE_ACCOUNT_FILE}' not found.")
         flush_debug_log()
-        return
+        raise RuntimeError(f"Missing credential file: {SERVICE_ACCOUNT_FILE}")
 
     dlog(f"Loading credentials from {SERVICE_ACCOUNT_FILE}")
     service = authenticate()
@@ -54,7 +54,7 @@ def main():
     if not COLOUR_BATCH_MAP:
         dlog_error("Could not auto-detect any colour mappings \u2014 aborting")
         flush_debug_log()
-        return
+        raise RuntimeError("Could not detect any cohort colour mappings")
 
     dlog(f"Colour map: {COLOUR_BATCH_MAP}")
 
@@ -62,32 +62,24 @@ def main():
     total_entries = 0
     all_depts = set()
 
-    print(f"\nProcessing computing...")
-    tt, count = computing.generate(service)
-    total_entries += count
-    out_path = os.path.join("db", "timetables", "computing.json")
-    ref_tt, written_count = write_json(tt, out_path)
-    all_depts.update(ref_tt.keys())
-    dlog(f"Wrote {out_path} ({written_count} entries, {len(ref_tt)} depts)")
-    print(f"  \u2192 computing: {count} entries, {len(tt)} depts \u2192 {out_path}")
+    # Parse and validate every school before the first write. A source failure
+    # must not publish a partial timetable or update only the first school.
+    generated = {}
+    for school, parser in (("computing", computing), ("business", business),
+                           ("engineering", engineering)):
+        print(f"\nProcessing {school}...")
+        tt, count = parser.generate(service)
+        if not tt or count <= 0:
+            raise RuntimeError(f"{school}: empty generated timetable; refusing publication")
+        generated[school] = tt
+        total_entries += count
 
-    print(f"\nProcessing business...")
-    tt, count = business.generate(service)
-    total_entries += count
-    out_path = os.path.join("db", "timetables", "business.json")
-    ref_tt, written_count = write_json(tt, out_path)
-    all_depts.update(ref_tt.keys())
-    dlog(f"Wrote {out_path} ({written_count} entries, {len(ref_tt)} depts)")
-    print(f"  \u2192 business: {count} entries, {len(tt)} depts \u2192 {out_path}")
-
-    print(f"\nProcessing engineering...")
-    tt, count = engineering.generate(service)
-    total_entries += count
-    out_path = os.path.join("db", "timetables", "engineering.json")
-    ref_tt, written_count = write_json(tt, out_path)
-    all_depts.update(ref_tt.keys())
-    dlog(f"Wrote {out_path} ({written_count} entries, {len(ref_tt)} depts)")
-    print(f"  \u2192 engineering: {count} entries, {len(tt)} depts \u2192 {out_path}")
+    for school, tt in generated.items():
+        out_path = os.path.join("db", "timetables", f"{school}.json")
+        ref_tt, written_count = write_json(tt, out_path)
+        all_depts.update(ref_tt.keys())
+        dlog(f"Wrote {out_path} ({written_count} entries, {len(ref_tt)} depts)")
+        print(f"  {school}: {written_count} entries -> {out_path}")
 
     print(f"\n{'=' * 50}")
     print(f"Done. {len(SCHOOLS)} school files written to db/timetables/")

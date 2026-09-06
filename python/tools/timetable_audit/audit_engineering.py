@@ -29,6 +29,9 @@ from db import store as _store  # noqa: E402
 
 
 def _load_timetable(doc_id: str):
+    if "--local" in sys.argv:
+        with open(os.path.join(REPO, doc_id), encoding="utf-8") as source:
+            return json.load(source)["tt"]
     doc = _store.load_document(doc_id)
     if doc is None:
         raise SystemExit(
@@ -395,7 +398,7 @@ def main():
                     for it in items:
                         entries.append({"dept": dept, "batch": batch, "section": sec,
                                         "day": day, "course": it["name"],
-                                        "room": it["location"], "time": it["time"]})
+                                        "room": norm_room(it["location"]), "time": it["time"]})
 
     by_coord = defaultdict(list)
     by_room = defaultdict(list)

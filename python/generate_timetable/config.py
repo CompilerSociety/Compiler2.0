@@ -67,7 +67,7 @@ ALL_SECTIONS = "ALL"
 # batch key, the way the MS programmes have theirs.
 PHD_DEPT_KEY = "PhD"
 PHD_BATCH_KEY = "PhD"
-PHD_CODES = {"PHD", "PHDCS", "PHDSE"}
+PHD_CODES = {"PHD", "PHDCS", "PHDSE", "PCS"}
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -135,7 +135,7 @@ FSM_SLOT_STARTS = [3, 12, 21, 30, 39, 48]
 FSM_COURSE_RE = re.compile(r'^([A-Za-z]{2,4}\s?\d{4,5})\s*')
 
 FSM_TIME_OVERRIDE_RE = re.compile(
-    r'\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s*-\s*\d{1,2}:\d{2}\s*(?:AM|PM)?)\)\s*$', re.IGNORECASE)
+    r'\(?(\d{1,2}:\d{2}\s*(?:AM|PM)?\s*-\s*\d{1,2}:\d{2}\s*(?:AM|PM)?)\)*\s*$', re.IGNORECASE)
 
 # Business timetable section identifiers use both zero-padded semesters
 # (`FT03A`) and single-digit semesters (`FT3A` / `BBA7A`).

@@ -527,4 +527,15 @@ html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20
 .m-customization .m-toggle-text{flex:1;overflow-wrap:anywhere}
 .m-customization .m-toggle-label{line-height:1.4}
 .m-customization .m-settings-select{min-width:0;max-width:100%}
+.m-customization .m-add-friend{margin:0}
+.m-friends-copy{font-size:13px;line-height:1.6;color:var(--mute-2);margin:10px 0 18px;overflow-wrap:anywhere}
+.m-friend-list{display:grid;gap:12px}
+.m-friend-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:22px;background:var(--surface)}
+.m-friend-open{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px;min-height:48px;text-align:left;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.m-friend-form{display:grid;gap:10px;min-width:0}
+.m-friend-form .m-field-label{margin:6px 0 0;line-height:1.5}
+.m-friend-form .m-settings-select{min-width:0}
+.m-friend-form .m-section-label{margin:18px 0 0;line-height:1.5}
+#m-friends-title{line-height:1.3;overflow-wrap:anywhere}
+#m-friends-close{font-size:26px;flex-shrink:0}
 } /* end mobile breakpoint */

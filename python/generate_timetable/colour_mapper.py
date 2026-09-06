@@ -254,14 +254,10 @@ def build_colour_map(service):
         for tab in school_info["tabs"]:
             actual_tab = tab
             if school_name == "computing":
-                day_candidates = [
-                    t for t in actual_tabs
-                    if t.strip().lower().startswith(tab.lower())
-                ]
-                if day_candidates:
-                    bare = [t for t in day_candidates
-                            if t.strip().lower() == tab.lower()]
-                    actual_tab = ([(t) for t in day_candidates if t not in bare] or bare)[0]
+                from .day_tabs import resolve_day_tab
+                actual_tab = resolve_day_tab(actual_tabs, tab)
+                if actual_tab is None:
+                    continue
             try:
                 text_grid, colour_grid = fetch_sheet_with_colours(
                     service, school_info["id"], actual_tab)

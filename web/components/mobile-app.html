@@ -4,6 +4,14 @@
      Lists are filled by js/mobile.js — this is the skeleton only. -->
 <div class="m-app" id="m-app">
 
+  <section class="m-arcade" id="m-friends-sheet" role="dialog" aria-modal="true" aria-labelledby="m-friends-title" hidden>
+    <header class="m-arcade-head">
+      <div class="m-arcade-head-text"><div class="m-kicker">SAVED ON THIS DEVICE</div><h2 class="m-head-title" id="m-friends-title">My Friends</h2></div>
+      <button class="m-icon-btn" id="m-friends-close" type="button" aria-label="Close friends">&times;</button>
+    </header>
+    <div class="m-arcade-body" id="m-friends-body"></div>
+  </section>
+
   <!-- ── Boot splash ─────────────────────────────────────────────────────
        The screen that is `on` in this markup is whatever the user sees between
        the component being injected and js/mobile.js deciding where to route.
@@ -122,6 +130,10 @@
             <small>Add or remove repeat courses</small>
           </span>
           <span class="m-courses-btn-count" id="m-courses-btn-count" hidden></span>
+        </button>
+        <button class="m-courses-btn" id="m-friends-btn" type="button" hidden>
+          <span class="m-courses-btn-copy"><span>My Friends</span><small>View your friends' weekly timetables</small></span>
+          <span class="m-courses-btn-count" id="m-friends-count"></span>
         </button>
         <div id="m-today-pane" role="status" aria-live="polite"></div>
         <div id="m-week-pane" hidden></div>

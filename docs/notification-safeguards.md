@@ -1,5 +1,10 @@
 # Notification delivery safeguards
 
+Successful sends and runs with no pending deliveries both exit with code 0.
+The structured `notification_job_exit` log distinguishes `sent` from `no_op`.
+Previously, no-op runs exited with 10, causing GitHub Actions to report normal
+scheduled checks as failures. Actual failures retain their nonzero exit codes.
+
 All four senders (class changes, exam schedules, show-up changes, seating plans)
 use `scripts/notifications/delivery.mjs`. Before contacting a push provider, they
 insert an event claim into MongoDB's `notification_deliveries` collection. Its
