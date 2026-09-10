@@ -813,13 +813,42 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
     m = EXAM_CODE_RE.match(lines[0])
     code = m.group(1) if m else None
     course = m.group(2).strip() if m else lines[0]
+    metadata_lines = lines[1:]
+    # Some spreadsheet cells keep the department, sections and batch on the
+    # same line as the course title (for example:
+    # "AI3001 Knowledge Rep. and Reasoning BS(AI) A,B,C 2024"). Split that
+    # inline metadata before parsing so the row remains filterable by its real
+    # department and batch instead of being stranded with an empty scope.
+    inline_dept = re.search(r"\bBS\([A-Z]+\)", course, re.I)
+    if inline_dept:
+        metadata_lines = [course[inline_dept.start():].strip(), *metadata_lines]
+        course = course[:inline_dept.start()].strip()
     year: str | None = None
     notes: list[str] = []
-    sections: dict[str, list[str]] = {}
+    pending_sections: dict[str, list[str]] = {}
+    scopes: list[dict[str, Any]] = []
 
-    for ln in lines[1:]:
+    def finish_scope(scope_year: str | None) -> None:
+        nonlocal pending_sections
+        if not pending_sections:
+            return
+        existing = next((scope for scope in scopes if scope["batch"] == scope_year), None)
+        if existing is None:
+            scopes.append({
+                "batch": scope_year,
+                "sections": {dept: list(secs) for dept, secs in pending_sections.items()},
+            })
+        else:
+            for dept, secs in pending_sections.items():
+                existing["sections"][dept] = sorted(
+                    set(existing["sections"].get(dept, [])) | set(secs)
+                )
+        pending_sections = {}
+
+    for ln in metadata_lines:
         if EXAM_YEAR_LINE_RE.match(ln):
             year = ln
+            finish_scope(year)
             continue
         if "BS(" in ln:
             for chunk in re.split(r"(?=BS\()", ln):
@@ -831,6 +860,11 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
                     continue
                 dept = dm.group(1)
                 remainder = dm.group(2).strip()
+                year_m = EXAM_YEAR_ANY_RE.search(remainder)
+                if year_m:
+                    if not year:
+                        year = year_m.group(1)
+                    remainder = (remainder[:year_m.start()] + remainder[year_m.end():]).strip()
                 note_m = EXAM_NOTE_RE.search(remainder)
                 if note_m:
                     notes.append(note_m.group(0))
@@ -847,19 +881,28 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
                 else:
                     secs = []
                 secs = sorted({s.strip().upper() for s in secs if s.strip()})
-                sections[dept] = sorted(set(sections.get(dept, [])) | set(secs))
+                pending_sections[dept] = sorted(set(pending_sections.get(dept, [])) | set(secs))
+                if year_m:
+                    finish_scope(year_m.group(1))
         else:
             ym = EXAM_YEAR_ANY_RE.search(ln)
-            if ym and not year:
+            if ym:
                 year = ym.group(1)
+                finish_scope(year)
             else:
                 notes.append(ln)
+
+    finish_scope(year)
+    if not scopes:
+        scopes = [{"batch": year, "sections": {}}]
+    primary_scope = scopes[0]
 
     return {
         "code": code,
         "course": course,
-        "batch": year,
-        "sections": sections,
+        "batch": primary_scope["batch"],
+        "sections": primary_scope["sections"],
+        "scopes": scopes,
         "notes": "; ".join(notes) if notes else None,
     }
 
@@ -899,18 +942,22 @@ def parse_exam_schedule_sheet(ws: Any) -> list[dict[str, Any]]:
             parsed = parse_exam_paper_cell(str(cell_value))
             if not parsed or not parsed.get("code"):
                 continue
-            entry: dict[str, Any] = {
-                "date": current_date or None,
-                "day": _iso_date_day_name(current_date) or None,
-                "time": slot_label,
-                "code": parsed["code"],
-                "course": parsed["course"],
-                "batch": parsed["batch"],
-                "sections": parsed["sections"],
-            }
-            if parsed.get("notes"):
-                entry["notes"] = parsed["notes"]
-            exams.append(entry)
+            scopes = parsed.get("scopes") or [{
+                "batch": parsed["batch"], "sections": parsed["sections"],
+            }]
+            for scope in scopes:
+                entry: dict[str, Any] = {
+                    "date": current_date or None,
+                    "day": _iso_date_day_name(current_date) or None,
+                    "time": slot_label,
+                    "code": parsed["code"],
+                    "course": parsed["course"],
+                    "batch": scope["batch"],
+                    "sections": scope["sections"],
+                }
+                if parsed.get("notes"):
+                    entry["notes"] = parsed["notes"]
+                exams.append(entry)
     return exams
 
 

@@ -2,7 +2,7 @@
   "updated_at": "2026-09-10T00:00:00+05:00",
   "source_subject": "1st Sessional Exams Schedule Fall 2026 (Draft Version)",
   "source_filename": "1st Sessional Exams Schedule Fall 2026 (Draft Version).xlsx",
-  "count": 107,
+  "count": 108,
   "exams": [
     {
       "date": "2026-09-19",
@@ -10,11 +10,11 @@
       "time": "9:00 to 10:00 AM",
       "code": "DS3004",
       "course": "Data Warehousing and Business Intellligence",
-      "batch": null,
+      "batch": "2023",
       "sections": {
         "DS": [
           "A",
-          "B)2023"
+          "B"
         ]
       }
     },
@@ -174,11 +174,11 @@
       "time": "9:00 to 10:00 AM",
       "code": "DS3003",
       "course": "Data Warehousing and Business Intellligence",
-      "batch": null,
+      "batch": "2022",
       "sections": {
         "DS": [
           "A",
-          "B)2022"
+          "B"
         ]
       }
     },
@@ -352,9 +352,15 @@
       "day": "Saturday",
       "time": "9:00 to 10:00 AM",
       "code": "AI3001",
-      "course": "Knowledge Rep. and Reasoning BS(AI) A,B,C 2024",
-      "batch": null,
-      "sections": {}
+      "course": "Knowledge Rep. and Reasoning",
+      "batch": "2024",
+      "sections": {
+        "AI": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
     },
     {
       "date": "2026-09-19",
@@ -616,11 +622,11 @@
       "time": "11:40 to 12:40 PM",
       "code": "DS3001",
       "course": "Data Analysis and Visualization",
-      "batch": null,
+      "batch": "2024",
       "sections": {
         "DS": [
           "A",
-          "B2024"
+          "B"
         ]
       }
     },
@@ -962,9 +968,25 @@
       "day": "Tuesday",
       "time": "11:40 to 12:40 PM",
       "code": "SS1007",
-      "course": "Islamic Studies/Ethics   BS(CS) (A,B,C,D,E,F,G,H,Z)      BS(AI) (A,B, C)",
+      "course": "Islamic Studies/Ethics",
       "batch": "2026",
       "sections": {
+        "CS": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "Z"
+        ],
+        "AI": [
+          "A",
+          "B",
+          "C"
+        ],
         "DS": [
           "A",
           "B",
@@ -1183,12 +1205,12 @@
       "time": "9:00 to 10:00 AM",
       "code": "AI3002",
       "course": "Machine Learning",
-      "batch": null,
+      "batch": "2024",
       "sections": {
         "AI": [
           "A",
           "B",
-          "C)2024"
+          "C"
         ]
       }
     },
@@ -1198,12 +1220,12 @@
       "time": "10:20 to 11:20 AM",
       "code": "CY2004",
       "course": "Cyber Security",
-      "batch": null,
+      "batch": "2025",
       "sections": {
         "CY": [
           "A",
           "B",
-          "C2025"
+          "C"
         ]
       }
     },
@@ -1268,9 +1290,14 @@
       "day": "Tuesday",
       "time": "11:40 to 12:40 PM",
       "code": "SE3001",
-      "course": "Software Construction and Development  BS(SE) A,B",
+      "course": "Software Construction and Development",
       "batch": null,
-      "sections": {}
+      "sections": {
+        "SE": [
+          "A",
+          "B"
+        ]
+      }
     },
     {
       "date": "2026-09-22",
@@ -1291,9 +1318,15 @@
       "day": "Tuesday",
       "time": "11:40 to 12:40 PM",
       "code": "SE3005",
-      "course": "Software Construction and Development   BS(SE)(A,B,C)",
+      "course": "Software Construction and Development",
       "batch": "2024",
-      "sections": {}
+      "sections": {
+        "SE": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
     },
     {
       "date": "2026-09-23",
@@ -1582,12 +1615,24 @@
       "time": "02:30 to 03:30 PM",
       "code": "CY4048",
       "course": "Security Operations and Administration",
-      "batch": null,
+      "batch": "2023",
       "sections": {
         "CY": [
           "A",
-          "A)2022",
-          "B)2023"
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "CY4048",
+      "course": "Security Operations and Administration",
+      "batch": "2022",
+      "sections": {
+        "CY": [
+          "A"
         ]
       }
     },
@@ -1649,9 +1694,13 @@
       "day": "Wednesday",
       "time": "11:40 to 12:40 PM",
       "code": "CS4095",
-      "course": "Embedded Control of Robotics  BS(CS) A 2023",
-      "batch": null,
-      "sections": {}
+      "course": "Embedded Control of Robotics",
+      "batch": "2023",
+      "sections": {
+        "CS": [
+          "A"
+        ]
+      }
     },
     {
       "date": "2026-09-23",
@@ -1711,9 +1760,15 @@
       "day": "Wednesday",
       "time": "03:40 to 04:40 PM",
       "code": "SE3002",
-      "course": "Software Quality Engineering   BS(SE)(A,B,C)",
+      "course": "Software Quality Engineering",
       "batch": "2024",
-      "sections": {}
+      "sections": {
+        "SE": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
     },
     {
       "date": "2026-09-23",
