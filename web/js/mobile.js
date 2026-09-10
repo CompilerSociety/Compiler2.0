@@ -1198,7 +1198,7 @@
         return;
       }
       const mine=examsForDeptBatch(ex.dept,ex.batch)
-        .slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+        .slice().sort(compareExamDateTime);
       if(!mine.length){ out.innerHTML='<div class="m-empty">No exams published for that department and batch.</div>'; return; }
 
       const today=new Date().toISOString().slice(0,10);
@@ -1251,7 +1251,7 @@
         const forMe=mine.filter(e=>(e.sections[ex.dept]||[]).some(t=>String(t).replace(/\d+$/,'').toUpperCase()===sec));
         if(forMe.length) mine=forMe;
       }
-      mine=mine.slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+      mine=mine.slice().sort(compareExamDateTime);
       if(!mine.length){ out.innerHTML='<div class="m-empty">No show-up slots published for that department and batch.</div>'; return; }
 
       out.innerHTML=`<div class="m-section-label">Show-up schedule</div><div class="m-rows m-reveal">`+mine.map(e=>{

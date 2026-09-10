@@ -3480,7 +3480,7 @@ function renderShowupSchedule(){
     return;
   }
 
-  const sorted=[...data].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const sorted=[...data].sort(compareExamDateTime);
   const rows=sorted.map(e=>{
     const d=e.date?new Date(e.date+'T00:00:00'):null;
     const cd=d?examCountdown(d):null;
@@ -3580,7 +3580,7 @@ function renderFlatExamSchedule(){
     });
     return;
   }
-  const sorted=[...flat].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||''));
+  const sorted=[...flat].sort(compareExamDateTime);
   const rows=sorted.map(e=>{
     const d=e.date?new Date(e.date+'T00:00:00'):null;
     const cd=d?examCountdown(d):null;
@@ -3613,6 +3613,16 @@ function renderFlatExamSchedule(){
 
 function examCourseName(e){
   return String(e?.course||e?.notes||e?.code||'').trim();
+}
+function examStartMinutes(time){
+  const match=String(time||'').match(/(\d{1,2})[:.](\d{2})\s*(AM|PM)?/i);
+  if(!match) return Number.POSITIVE_INFINITY;
+  return parseClock(match[1],match[2],match[3]);
+}
+function compareExamDateTime(a,b){
+  return String(a?.date||'').localeCompare(String(b?.date||''))
+    ||examStartMinutes(a?.time)-examStartMinutes(b?.time)
+    ||examCourseName(a).localeCompare(examCourseName(b));
 }
 function normalizeExamCourseName(name){
   return String(name||'')
@@ -3810,7 +3820,7 @@ function renderExamSchedule(){
     return;
   }
 
-  const sorted=[...data].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const sorted=[...data].sort(compareExamDateTime);
   const rows=sorted.map(e=>{
     const d=e.date?new Date(e.date+'T00:00:00'):null;
     const cd=d?examCountdown(d):null;
