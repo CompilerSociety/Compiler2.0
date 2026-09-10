@@ -141,7 +141,8 @@ const ASSET_VERSION = (() => {
   catch (e) { return ''; }
 })();
 const versioned = (path) => (ASSET_VERSION ? `${path}?v=${ASSET_VERSION}` : path);
-function loadCompatibilityRuntime() {
+async function loadCompatibilityRuntime() {
+  await loadScript(versioned('/js/exam-rooms.js'));
   return loadScript(versioned('/js/app.js'));
 }
 // The phone view reads app.js's globals directly, so it must load after it and

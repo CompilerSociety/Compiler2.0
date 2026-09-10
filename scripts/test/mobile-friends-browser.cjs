@@ -16,13 +16,14 @@ const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], ALL_
 const owner={name:'Owner',nuid:'25I-0001',department:'BS CS',batch:'25',section:'A'};
 const TT={'BS CS':{'2025':{A:{Monday:[]},B:{Monday:[{name:'Friend course',time:'08:30-11:15',location:'C-101'}]},ALL:{Tuesday:[{name:'Shared seminar',time:'01:00-02:20',location:'Auditorium'}]}}}};
 const engineering={'BS EE':{'2025':{C:{Wednesday:[{name:'Circuits',time:'08:30-11:15',location:'E-101'}]}}}};
+engineering['BS EE']['2024']={D:{Thursday:[]}};
 function getProfileCookie(){return owner;}
 function setProfileCookie(){throw Error('Friends must not change the owner profile');}
 function publishProfileToRoster(){throw Error('Friends must not publish profiles');}
 function getMyCourses(){return [];}
 function myCoursesRowsForDay(){return [{name:'Owner-only course',time:'08:30-09:50',location:'C-001'}];}
 function myScopeFromCookie(){return owner;}
-function myCourseSource(school){return school==='engineering'?engineering:TT;}
+function myCourseSource(school){return school==='engineering'?engineering:school==='business'?{}:TT;}
 function mergeSectionEntries(a,b){return [...a,...b];}
 function nowMinutes(){return 600;}
 function slotToMinutes(value){let [h,m]=value.split(':').map(Number);if(h<8)h+=12;return h*60+m;}
@@ -39,14 +40,29 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="vi
     const errors = [], writes = [];
     page.on('pageerror', error => { errors.push(error.message); console.error('Browser:',error.message); });
     page.setDefaultTimeout(10000);
+    let businessFails=true;
+    const business={'BS Business Administration':{'2025':{A:{Monday:[{name:'Management',time:'08:30-09:50',location:'A-101'}]}}}};
     await page.route('**/*', route => {
       const request = route.request();
       if (request.method() !== 'GET') writes.push(request.url());
+      if (request.url().includes('/api/timetable?school=business')) return businessFails
+        ? route.fulfill({status:503,json:{ok:false}}) : route.fulfill({json:{ok:true,tt:business}});
       if (request.url().includes('/db/students/')) return route.fulfill({ json: { students: [{ nuid: '25I-1234', name: 'Roster Friend', department: 'CS', batch: '25', section: 'B' }] } });
       return route.fulfill({ contentType: 'text/html', body: html });
     });
     await page.goto('http://vtable.test/#/profile');
+    assert.equal(await page.locator('#m-friend-sharing-setting').isVisible(),false);
+    const pick=async(field,value)=>{
+      await page.locator(`[data-picker="${field}"] summary`).click();
+      await page.locator(`[data-pick="${field}"]`).and(page.locator(`[data-value="${value}"]`)).click();
+    };
     await page.locator('#m-add-friend').click();
+    for(const ownId of ['25I-0001','25i0001']){
+      await page.locator('#m-friend-nuid').fill(ownId);
+      await page.locator('#m-friend-find').click();
+      assert.match(await page.locator('#m-friend-status').innerText(), /cannot add yourself/);
+      assert.equal(await page.locator('#m-friend-save-form').count(),0);
+    }
     await page.locator('#m-friend-nuid').fill('25i1234');
     await page.locator('#m-friend-find').click();
     await page.locator('#m-friend-name').waitFor();
@@ -73,9 +89,47 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="vi
     await page.locator('#m-friend-name').waitFor();
     assert.match(await page.locator('#m-friend-status').innerText(), /not in the roster/);
     await page.locator('#m-friend-name').fill('Manual Friend');
-    await page.locator('#m-friend-school').selectOption('engineering');
-    await page.locator('#m-friend-dept').fill('BS EE');
-    await page.locator('#m-friend-section').fill('C');
+    assert.equal(await page.locator('#m-friend-save').isDisabled(),true);
+    await pick('dept','BS CS');
+    await pick('section','B');
+    await pick('school','business');
+    await page.getByText('Could not load the timetable for this school. Please retry.',{exact:true}).waitFor();
+    assert.equal(await page.locator('#m-friend-save').isDisabled(),true);
+    assert.equal(await page.locator('#m-friend-section').inputValue(),'');
+    businessFails=false;
+    await page.locator('#m-friend-retry').click();
+    await pick('dept','BS Business Administration');
+    await pick('section','A');
+    assert.equal(await page.locator('#m-friend-save').isDisabled(),false);
+    await pick('school','engineering');
+    assert.equal(await page.locator('#m-friend-dept').inputValue(),'');
+    assert.equal(await page.locator('#m-friend-section').inputValue(),'');
+    await pick('dept','BS EE');
+    await pick('batch','2024');
+    await pick('section','D');
+    await pick('batch','2025');
+    assert.equal(await page.locator('#m-friend-section').inputValue(),'');
+    assert.equal(await page.locator('#m-friend-save').isDisabled(),true);
+    await pick('section','C');
+    await page.locator('[data-picker="section"] summary').focus();
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    assert.equal(await page.locator('[data-pick="section"][data-value="C"]').evaluate(el=>el===document.activeElement),true);
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('[data-picker="section"]').getAttribute('open'),null);
+    for(const theme of ['light','dark']){
+      await page.evaluate(theme=>document.documentElement.dataset.mobileTheme=theme,theme);
+      await page.locator('[data-picker="school"] summary').click();
+      await page.locator('[data-picker="section"] summary').click();
+      for(const width of [320,390]){
+        await page.setViewportSize({width,height:844});
+        assert.equal(await page.locator('#m-friends-body').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
+        assert.equal(await page.locator('[data-picker="section"] summary').evaluate(el=>getComputedStyle(el).borderRadius),'16px');
+        if(process.env.FRIENDS_SCREENSHOT) await page.screenshot({path:process.env.FRIENDS_SCREENSHOT.replace('.png',`-${theme}-${width}.png`)});
+      }
+      await page.locator('[data-picker="school"] summary').click();
+      await page.locator('[data-picker="section"] summary').click();
+    }
     await page.getByRole('button', { name: 'Save friend', exact: true }).click();
     await page.locator('[data-friend="25I-9999"]').click();
     assert.match(await page.locator('#m-friend-week').innerText(), /Circuits/);
@@ -93,6 +147,6 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="vi
     assert.deepEqual(JSON.parse(await page.evaluate(() => localStorage.getItem('vtable_friends_v1'))), []);
     assert.deepEqual(errors, []);
     assert.deepEqual(writes, []);
-    console.log('PASS: roster lookup, manual entry, duplicate prevention, persistence, removal, isolated weekly timetables and mobile widths; no server writes.');
+    console.log('PASS: self-add rejection; roster and fallback entry; cascading school/program/batch/section pickers; loading retry; keyboard selection; light/dark mobile widths; persistence, removal and isolated timetables; sharing toggle hidden; no server writes.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

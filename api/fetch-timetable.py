@@ -69,6 +69,7 @@ from urllib.request import Request, urlopen
 # every save below silently stays file-only and this job behaves exactly as it
 # did before Mongo existed.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "python"))
+from seating_rooms import parse_pdf as parse_exam_rooms
 try:
     from db import store as _store
 except Exception:  # noqa: BLE001 - never let storage wiring break the sync
@@ -504,6 +505,8 @@ def normalize_entry(entry: dict[str, str]) -> dict[str, str]:
         "time": entry.get("time", "").strip(),
         "class": entry.get("class", "").strip(),
         "seat": normalize_seat(entry.get("seat", "")),
+        "date": entry.get("date", "").strip(),
+        "room": entry.get("room", "").strip(),
     }
     return {k: v for k, v in normalized.items() if v}
 
@@ -713,9 +716,19 @@ def parse_fast_seating(text: str) -> tuple[list[dict[str, str]], str]:
 def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = None) -> dict[str, Any]:
     students: list[dict[str, str]] = []
     exam_date = ""
+    room_occupancy = None
+    if pdf_bytes:
+        try:
+            room_occupancy, attendance_students = parse_exam_rooms(pdf_bytes)
+        except Exception as exc:
+            room_occupancy = {'version': 1, 'complete': False, 'dates': [], 'bookings': [], 'errors': [{'reason': str(exc)}]}
+            attendance_students = []
+        if attendance_students:
+            students = attendance_students
+            exam_date = room_occupancy['dates'][0]
 
     # 1) Coordinate-based parse (most accurate: keeps seats aligned to rows).
-    if pdf_bytes:
+    if pdf_bytes and not students:
         try:
             students, exam_date = parse_pdf_coordinates(pdf_bytes)
         except Exception as exc:
@@ -735,7 +748,7 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
     seen: set[tuple] = set()
     deduped = []
     for s in cleaned:
-        key = (s.get("nuid", ""), s.get("seat", ""), s.get("class", ""), s.get("name", ""))
+        key = (s.get("nuid", ""), s.get("seat", ""), s.get("class", ""), s.get("name", ""), s.get("date", ""), s.get("time", ""))
         if key in seen:
             continue
         seen.add(key)
@@ -756,6 +769,8 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
     }
     if exam_date:
         document["exam_date"] = exam_date
+    if room_occupancy is not None:
+        document['room_occupancy'] = room_occupancy
     return document
 
 

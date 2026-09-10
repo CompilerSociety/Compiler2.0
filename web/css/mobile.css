@@ -535,6 +535,22 @@ html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20
 .m-friend-form{display:grid;gap:10px;min-width:0}
 .m-friend-form .m-field-label{margin:6px 0 0;line-height:1.5}
 .m-friend-form .m-settings-select{min-width:0}
+.m-friend-form .m-settings-select{font-size:16px}
+#m-friend-pickers{display:grid;gap:14px;min-width:0}
+.m-friend-field{display:grid;gap:8px;min-width:0;margin:0}
+.m-friend-picker{min-width:0}
+.m-friend-picker summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:12px 14px;border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;list-style:none;overflow-wrap:anywhere}
+.m-friend-picker summary::-webkit-details-marker{display:none}
+.m-friend-chevron{flex-shrink:0;width:8px;height:8px;margin:0 3px 4px;border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(45deg);transition:transform .15s}
+.m-friend-picker[open] .m-friend-chevron{transform:translateY(4px) rotate(225deg)}
+.m-friend-picker[open] summary{border-color:var(--green)}
+.m-friend-options{display:flex;flex-wrap:wrap;gap:8px;max-height:240px;overflow-y:auto;margin-top:8px;padding:4px;background:transparent}
+.m-friend-options .m-chip{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.m-friend-picker :is(summary,button):focus-visible,.m-friend-form .m-settings-select:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.m-friend-options .m-chip:hover{background:var(--tint-hover)}
+.m-friend-options .m-chip.is-on:hover{background:var(--green-deep)}
+#m-friend-save:disabled{opacity:.5;cursor:not-allowed}
+#m-friend-retry[hidden],#m-friend-sharing-setting[hidden]{display:none}
 .m-friend-form .m-section-label{margin:18px 0 0;line-height:1.5}
 #m-friends-title{line-height:1.3;overflow-wrap:anywhere}
 #m-friends-close{font-size:26px;flex-shrink:0}
