@@ -3689,9 +3689,25 @@ function examMatchesMyCourse(e){
   const candidates=[e?.course,e?.notes,e?.code].filter(Boolean);
   return [...selectedNames].some(selected=>candidates.some(candidate=>examCourseNamesMatch(selected,candidate)));
 }
+function examMatchesExplicitAddedCourse(e){
+  const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
+  const candidates=[e?.course,e?.notes,e?.code].filter(Boolean);
+  return (profile?.courses||[]).some(course=>{
+    const dept=String(course?.dept||'').replace(/^BS\s+/i,'').trim().toUpperCase();
+    const batch=String(course?.batch||'').replace(/^(\d{2})$/,'20$1');
+    const section=String(course?.section||'').replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+    const sections=e?.sections&&e.sections[dept];
+    return candidates.some(candidate=>examCourseNamesMatch(course?.name,candidate))
+      &&(!batch||e?.batch===batch)
+      &&(!dept||(Array.isArray(sections)&&(!section||sections.includes(section))));
+  });
+}
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
-  return exams.filter(e=>e.sections&&e.sections[dept]&&(!batch||e.batch===batch)&&examMatchesMyCourse(e));
+  return exams.filter(e=>{
+    const defaultScope=e.sections&&e.sections[dept]&&(!batch||e.batch===batch);
+    return examMatchesMyCourse(e)&&(defaultScope||examMatchesExplicitAddedCourse(e));
+  });
 }
 
 const EXAM_PREF_KEY='fast_exam_prefs';
