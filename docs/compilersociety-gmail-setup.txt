@@ -1,0 +1,114 @@
+COMPILER SOCIETY GMAIL SETUP FOR VTABLE OTP
+Date: 2026-09-06
+
+Purpose
+Send student verification codes from Compilersociety@gmail.com.
+Students receive codes at their university address; for example,
+25I-0816 maps to i250816@isb.nu.edu.pk.
+
+Status: This prepares the sender account. The OTP application code still
+needs to be implemented. Adding settings alone will not enable OTP today.
+
+1. SIGN INTO THE CORRECT GOOGLE ACCOUNT
+
+Open https://myaccount.google.com/ and confirm the account is
+Compilersociety@gmail.com. Check the profile icon if several accounts are
+signed in. Ensure the society can recover access to this account.
+
+2. ENABLE TWO-STEP VERIFICATION
+
+Open Google Account > Security > How you sign in to Google >
+2-Step Verification. Complete Google's setup and keep recovery codes
+in a secure place accessible to the responsible account owner.
+
+3. CREATE AN APP PASSWORD
+
+Open https://myaccount.google.com/apppasswords while signed into the
+society account. Sign in again if requested. Name the app "VTable OTP"
+and create the password. Save the generated value securely; Google only
+shows it once. Remove display spaces when entering it in the server setup.
+Use this App Password, not the normal Gmail account password.
+
+If the option is missing, confirm 2-Step Verification is enabled.
+Google lists security-key-only setups, organization accounts and Advanced
+Protection as possible reasons it is unavailable. Do not disable account
+protections to force access; use SMTP OAuth or another sender if needed.
+Google generally recommends OAuth where supported; this initial setup
+uses an App Password for the server's SMTP connection.
+Source: https://support.google.com/accounts/answer/185833
+
+4. ADD SERVER SETTINGS IN VERCEL
+
+Open the Vercel dashboard, select the VTable project, then Settings >
+Environment Variables. Add the following proposed implementation settings:
+
+SMTP_HOST    = smtp.gmail.com
+SMTP_PORT    = 465
+SMTP_SECURE  = true
+SMTP_USER    = Compilersociety@gmail.com
+SMTP_PASS    = [the generated App Password]
+SMTP_FROM    = Compiler Society <Compilersociety@gmail.com>
+APP_ORIGIN   = [your exact HTTPS VTable origin, without a trailing slash]
+OTP_PEPPER   = [a separate cryptographically random secret, at least 32 bytes]
+
+Do not include the square-bracket placeholders as actual values.
+OTP_PEPPER is not the Gmail password. Generate it with a trusted password
+manager or cryptographic random generator and store it as a server secret.
+Keep existing MONGODB_URI and MONGODB_DB configuration in place.
+
+Select Production for the production deployment. Add secrets to Preview
+only for trusted test deployments; use separate test credentials where
+possible. Keep SMTP_PASS and OTP_PEPPER sensitive/server-only. Never use
+public frontend environment-variable prefixes for these values.
+
+Deploy the compatible OTP code after configuration. Variable changes apply
+to subsequent deployments, so redeploy after changing production settings.
+Source: https://vercel.com/docs/environment-variables
+
+Port 465 uses TLS immediately. An alternative is port 587 with STARTTLS;
+do not mix the two configurations. The proposed implementation uses 465.
+Source: https://developers.google.com/workspace/gmail/imap/imap-smtp
+
+5. KEEP CREDENTIALS OUT OF THE REPOSITORY
+
+Do not paste the App Password into chat, browser JavaScript, documentation,
+screenshots or Git. Do not use service-account.json for this setup.
+Local development should use a mock sender until real delivery is needed.
+Before creating any local environment file, ensure its exact filename is
+ignored by Git; the repository currently does not have a general .env ignore
+rule. Merely naming a file .env does not keep it out of Git.
+
+6. TEST AFTER THE OTP FEATURE IS IMPLEMENTED
+
+Use an NU ID whose university mailbox you own. Request one code through
+VTable, check the inbox and spam folder, and enter it in the original
+browser. Confirm the sender is Compiler Society and verification succeeds.
+Check that a used code cannot work again and logout blocks protected writes.
+Never log or screenshot the code or SMTP credentials for troubleshooting.
+
+If sending fails:
+- Authentication error: check the selected Gmail account and App Password.
+- Connection error: check smtp.gmail.com, port 465 and TLS settings.
+- No email: check spam and delivery errors; SMTP acceptance does not prove
+  inbox delivery. Confirm the recipient matches the NU ID mapping.
+- Quota error: pause sends and show a temporary-unavailable message.
+
+7. UNDERSTAND THE SENDING LIMIT
+
+Google says sending more than 500 emails in a day can trigger restrictions.
+This is not a guaranteed allowance: other abuse checks may apply. OTP
+resends and the account's normal society mail also consume capacity.
+Recovery after a sending-limit error can take 1 to 24 hours. Start with a
+small rollout and move to a transactional email provider before broad use.
+Source: https://support.google.com/mail/answer/22839
+
+8. ROTATION AND HANDOVER
+
+If a credential is exposed, revoke the VTable App Password in Google,
+create a replacement, update SMTP_PASS and redeploy. Changing the main
+Google account password also revokes App Passwords. Keep ownership and
+recovery access documented securely when society maintainers change.
+
+Ready when: two-step verification is enabled, the App Password is stored
+securely in Vercel, the proposed settings match the implementation, and a
+real university-mailbox test passes after deployment.
