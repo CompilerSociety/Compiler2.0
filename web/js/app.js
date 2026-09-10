@@ -3621,11 +3621,41 @@ function normalizeExamCourseName(name){
     .trim()
     .toUpperCase();
 }
+function selectedExamCourseNames(){
+  const names=new Set();
+  if(typeof getMyCourses==='function'){
+    getMyCourses().forEach(c=>{
+      const name=normalizeExamCourseName(c.name);
+      if(name) names.add(name);
+    });
+  }
+
+  // getMyCourses() normally resolves defaults from the timetable. When the
+  // exam tab opens before that data has loaded, rebuild the default list from
+  // the saved profile and the exam rows themselves, then apply the same local
+  // removals/additions used by My Courses.
+  const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
+  const scope=typeof myScopeFromCookie==='function'?myScopeFromCookie():null;
+  if(profile&&scope){
+    const removed=new Set((profile.courseRemoved||[]).map(normalizeExamCourseName));
+    const exams=(_examData&&_examData.exams)||[];
+    exams.forEach(e=>{
+      const sections=e.sections&&e.sections[scope.dept];
+      if(e.batch===scope.batch&&Array.isArray(sections)&&sections.includes(scope.section)){
+        const name=normalizeExamCourseName(examCourseName(e));
+        if(name&&!removed.has(name)) names.add(name);
+      }
+    });
+    (profile.courses||[]).forEach(c=>{
+      const name=normalizeExamCourseName(c&&c.name);
+      if(name) names.add(name);
+    });
+  }
+  return names;
+}
 function examMatchesMyCourse(e){
-  if(typeof getMyCourses!=='function') return false;
-  const selected=getMyCourses();
-  if(!selected.length) return false;
-  const selectedNames=new Set(selected.map(c=>normalizeExamCourseName(c.name)).filter(Boolean));
+  const selectedNames=selectedExamCourseNames();
+  if(!selectedNames.size) return false;
   const candidates=[e?.course,e?.notes,e?.code].map(normalizeExamCourseName).filter(Boolean);
   return candidates.some(name=>selectedNames.has(name));
 }
@@ -3692,10 +3722,11 @@ function renderExamSchedule(){
   const data=examsForDeptBatch(dept,batch);
 
   if(!data.length){
+    const hasSelectedCourses=selectedExamCourseNames().size>0;
     out.innerHTML=renderUiState({
       kind:'empty',
-      title:typeof getMyCourses==='function'&&!getMyCourses().length?'No courses selected locally':'No selected-course papers found',
-      message:typeof getMyCourses==='function'&&!getMyCourses().length?'Add courses to My Courses to see their papers here.':'None of your locally selected courses match this department and batch year.',
+      title:!hasSelectedCourses?'No courses selected locally':'No selected-course papers found',
+      message:!hasSelectedCourses?'Your default courses will appear here, along with any courses added in My Courses.':'None of your locally selected courses match this department and batch year.',
       note:'Only courses saved in My Courses are shown.'
     });
     return;
