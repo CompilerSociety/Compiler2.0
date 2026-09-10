@@ -3626,7 +3626,7 @@ function examCourseNamesMatch(left,right){
   const b=normalizeExamCourseName(right).replace(/[^A-Z0-9]/g,'');
   if(!a||!b) return false;
   if(a===b) return true;
-  const isUhq=value=>value==='UHQ'||value.includes('UNDERSTANDINGOFHOLYQURAN');
+  const isUhq=value=>value.startsWith('UHQ')||value.includes('UNDERSTANDINGOFHOLYQURAN');
   if(isUhq(a)&&isUhq(b)) return true;
   const words=value=>normalizeExamCourseName(value)
     .replace(/[^A-Z0-9 ]/g,' ')
