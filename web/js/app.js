@@ -3702,11 +3702,27 @@ function examMatchesExplicitAddedCourse(e){
       &&(!dept||(Array.isArray(sections)&&(!section||sections.includes(section))));
   });
 }
+function examEntriesShareCourse(left,right){
+  const leftNames=[left?.course,left?.notes,left?.code].filter(Boolean);
+  const rightNames=[right?.course,right?.notes,right?.code].filter(Boolean);
+  return leftNames.some(a=>rightNames.some(b=>examCourseNamesMatch(a,b)));
+}
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
-  return exams.filter(e=>{
+  const selected=exams.filter(examMatchesMyCourse);
+  return selected.filter(e=>{
     const defaultScope=e.sections&&e.sections[dept]&&(!batch||e.batch===batch);
-    return examMatchesMyCourse(e)&&(defaultScope||examMatchesExplicitAddedCourse(e));
+    if(defaultScope||examMatchesExplicitAddedCourse(e)) return true;
+    if(!e.sections||!e.sections[dept]) return false;
+    // A default My Courses title can occasionally be published under a
+    // different cohort in the exam sheet (UHQ is currently such a case).
+    // Use that row only when the selected batch has no paper with the same
+    // course identity, so a common title never creates duplicate papers.
+    const sameBatchPaper=selected.some(candidate=>candidate!==e
+      &&candidate.batch===batch
+      &&candidate.sections&&candidate.sections[dept]
+      &&examEntriesShareCourse(candidate,e));
+    return !sameBatchPaper;
   });
 }
 
