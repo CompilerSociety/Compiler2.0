@@ -6,7 +6,12 @@
 // a class to its cohort.
 
 const MONGO_CACHE_KEY = Symbol.for("compiler2.mongo.client.cjs");
-const SCHOOLS = new Set(["computing", "engineering", "business"]);
+const SCHOOL_ALIASES = Object.freeze({
+  computing: "computing", fcs: "computing", fsc: "computing",
+  engineering: "engineering", fse: "engineering",
+  business: "business", fsm: "business",
+});
+const SCHOOLS = new Set(Object.values(SCHOOL_ALIASES));
 
 function getMongoDb() {
   const uri = process.env.MONGODB_URI;
@@ -121,9 +126,10 @@ module.exports = async (req, res) => {
       });
     }
 
-    const school = String(req.query?.school || "computing");
-    if (!SCHOOLS.has(school)) {
-      return res.status(400).json({ ok: false, error: `Unknown school '${school}'. Use: computing, engineering, business` });
+    const requestedSchool = String(req.query?.school || "computing").trim().toLowerCase();
+    const school = SCHOOL_ALIASES[requestedSchool];
+    if (!school) {
+      return res.status(400).json({ ok: false, error: `Unknown school '${requestedSchool}'. Use: computing/FCS, engineering/FSE, business/FSM` });
     }
 
     // This is intentionally a fresh database read on every request.  The

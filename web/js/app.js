@@ -1234,8 +1234,8 @@ function isLabFloor(floorName){
 ══════════════════════════════════════════ */
 const SCHOOLS={
   computing:{id:"1vlTuotLw34fedME3gNQj09cZw-todVomxAiu5P1wZ6Q",tabs:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],label:"Computing (FSC)"},
-  engineering:{id:"1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",tabs:["Monday"],label:"Engineering (FSE)"},
-  business:{id:"1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw",tabs:["Monday"],label:"Business (FSM)"},
+  engineering:{id:"1fL2TWhPgbPc2d66vm_KywTpdsGBIaBLqlmz4JLPudCw",tabs:["Classes Schedule FA26 "],coursesTab:"Course Allocation FA26",label:"Engineering (FSE)"},
+  business:{id:"1AnFQQhv9lu4grESE2ypbDG7E1QOPGgGCRiejem5ocPw",tabs:["Timetable"],label:"Business (FSM)"},
 };
 const GOOGLE_SHEET_ID=SCHOOLS.computing.id;
 const GOOGLE_SHEET_TABS=SCHOOLS.computing.tabs;
@@ -2213,7 +2213,7 @@ const LAB_BLOCK={
   slotMap:{1:"08:30-11:15",11:"11:30-02:15",21:"02:30-05:15",31:"05:20-08:05"}
 };
 
-/* ── Timetable sync: API only ── */
+/* ── Timetable sync: Mongo API with per-school snapshot fallback ── */
 
 async function refreshTimetableFromGoogleSheet(){
   // Which school TT actually holds. The #school select changes the instant it
@@ -2230,13 +2230,6 @@ async function refreshTimetableFromGoogleSheet(){
     applyTimetablePayload(apiData,'MONGODB: GENERATED TIMETABLE',requestedSchool);
   }catch(apiErr){
     console.warn('Mongo timetable source failed:',apiErr);
-    const message=(apiErr&&apiErr.message)?apiErr.message:String(apiErr);
-    setSheetStatus((_sheetHadSuccessfulLoad?'MONGODB: LAST DATA · ':'MONGODB ERROR · ')+message,false);
-    setTimetableLiveBadge(_sheetHadSuccessfulLoad
-      ? `Cached · Updated ${relativeTimeAgo(_timetableLastSyncMs)}`
-      : 'Sync failed · Retry',
-      _sheetHadSuccessfulLoad?'cached':'error');
-    return;
     // Fallback 1: the committed per-school snapshot (db/timetables/<school>.json),
     // same source fetchSchoolTT() uses for Free Rooms. This is what keeps FSE
     // selectable when the live sheet's tab is missing or returns nothing parseable.
@@ -2248,6 +2241,9 @@ async function refreshTimetableFromGoogleSheet(){
         return;
       }
       if(snapData&&snapData.tt&&Object.keys(snapData.tt).length) applyTimetablePayload(snapData,'SNAPSHOT: '+school.toUpperCase(),school);
+      setSheetStatus('SNAPSHOT: '+school.toUpperCase(),true);
+      setTimetableLiveBadge('Snapshot · '+school.toUpperCase(),'cached');
+      return;
     }catch(snapErr){
       console.warn('Snapshot timetable source failed:',snapErr);
     }
@@ -2299,6 +2295,12 @@ async function refreshTimetableFromGoogleSheet(){
         if(p0&&p0.classList.contains('on')) loadTT();
       }
     }
+    const message=(apiErr&&apiErr.message)?apiErr.message:String(apiErr);
+    setSheetStatus((_sheetHadSuccessfulLoad?'MONGODB: LAST DATA · ':'MONGODB ERROR · ')+message,false);
+    setTimetableLiveBadge(_sheetHadSuccessfulLoad
+      ? `Cached · Updated ${relativeTimeAgo(_timetableLastSyncMs)}`
+      : 'Sync failed · Retry',
+      _sheetHadSuccessfulLoad?'cached':'error');
   }
 }
 
@@ -2315,8 +2317,9 @@ function ttHasRealRooms(tt){
   return false;
 }
 
-// Fetch one school's timetable from the generated Mongo snapshot.  Do not
-// fall back to a file or Google Sheets: Mongo is the sole timetable source.
+// Fetch one school's timetable from Mongo, then use the matching generated
+// snapshot when the API is unavailable. This keeps Free Rooms school-aware
+// during local development and during a brief database outage.
 async function fetchSchoolTT(school){
   try{
     const res=await fetch(`/api/timetable?school=${school}&cachebust=${Date.now()}`,{cache:'no-store'});
@@ -2325,6 +2328,10 @@ async function fetchSchoolTT(school){
       if(data&&data.ok&&data.tt&&ttHasRealRooms(data.tt)) return data.tt;
     }
   }catch(err){console.warn(`Free Rooms: Mongo timetable load failed for ${school}`,err);}
+  try{
+    const snapshot=await fetchTimetableJSON(`/db/timetables/${school}.json?cachebust=${Date.now()}`);
+    if(snapshot?.ok&&snapshot.tt&&ttHasRealRooms(snapshot.tt)) return snapshot.tt;
+  }catch(err){console.warn(`Free Rooms: snapshot load failed for ${school}`,err);}
   return null;
 }
 
