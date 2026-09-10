@@ -3627,10 +3627,19 @@ function saveExamPrefs(){
   try{ localStorage.setItem(EXAM_PREF_KEY,JSON.stringify({dept,batch})); }catch(e){}
 }
 
+function examScheduleLabel(){
+  const source=String((_examData&&(_examData.source_filename||_examData.source_subject))||'').toLowerCase();
+  if(/(2nd|second|\bii\b)\s*sessional/.test(source)||source.includes('sessional 2')) return 'SESSIONAL II';
+  if(/(1st|first|\bi\b)\s*sessional/.test(source)||source.includes('sessional 1')) return 'SESSIONAL I';
+  if(source.includes('sessional')) return 'SESSIONAL';
+  if(source.includes('mid')) return 'MID-TERM';
+  return 'FINAL EXAM';
+}
+
 function refreshExamSourceBadge(){
   const badge=document.getElementById('exam-source-badge');
   if(!badge) return;
-  badge.textContent='FINAL EXAM SCHEDULE';
+  badge.textContent=examScheduleLabel()+' SCHEDULE';
 }
 
 function onExamDeptChange(){ saveExamPrefs(); renderExamSchedule(); }
@@ -3692,7 +3701,7 @@ function renderExamSchedule(){
   out.innerHTML=`
     <div class="exam-header-bar">
       <span class="exam-header-label">BS ${dept} &nbsp;·&nbsp; BATCH ${batch}</span>
-      <span class="exam-header-badge fin">FINAL EXAM</span>
+      <span class="exam-header-badge fin">${escHtml(examScheduleLabel())}</span>
     </div>
     <div class="exam-table-wrap">
       <table class="exam-tbl">

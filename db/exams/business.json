@@ -1,0 +1,1335 @@
+{
+  "updated_at": "2026-09-10T00:00:00+05:00",
+  "source_subject": "1st Sessional Exams Schedule Fall 2026 (Draft Version)",
+  "source_filename": "1st Sessional Exams Schedule Fall 2026 (Draft Version).xlsx",
+  "count": 97,
+  "exams": [
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "9:00 to 10:00 AM",
+      "code": "AF1003",
+      "course": "Introduction to Financial Accounting",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "10:20 to 11:20 AM",
+      "code": "SS1021",
+      "course": "- Understanding of Holy Quran I/Introduction to Major World Religions I",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "11:40 to 12:40 PM",
+      "code": "AF3001",
+      "course": "Financial Management",
+      "batch": "2024",
+      "sections": {
+        "AF": [
+          "A",
+          "B",
+          "C"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "01:00 to 02:00 PM",
+      "code": "AF1002",
+      "course": "Financial Accounting",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A"
+        ],
+        "AF": [
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "02:30 to 03:30 PM",
+      "code": "AF2003",
+      "course": "Management Accounting",
+      "batch": "2025",
+      "sections": {},
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS1007",
+      "course": "Islamic Studies/Ethics",
+      "batch": "2026",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG4066",
+      "course": "Managing Virtual Global Teams",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "6:20 to 7:20 PM",
+      "code": "BA5006",
+      "course": "Advanced Data Analysis",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "10:20 to 11:20 AM",
+      "code": "SS2041",
+      "course": "Critical Thinking",
+      "batch": "2025",
+      "sections": {},
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "01:00 to 02:00 PM",
+      "code": "AF1001",
+      "course": "Fundamentals of Accounting",
+      "batch": "2025",
+      "sections": {},
+      "notes": "BAF-A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "02:30 to 03:30 PM",
+      "code": "SS1018",
+      "course": "Understanding Holy Quran",
+      "batch": "2024",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS2019",
+      "course": "Psychology",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG5066",
+      "course": "Strategy for Virtual Global Teams",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MB-3A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "6:20 to 7:20 PM",
+      "code": "AF4001",
+      "course": "Accounting for Managers",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "10:20 to 11:20 AM",
+      "code": "SS2051",
+      "course": "Critical Thinking",
+      "batch": null,
+      "sections": {},
+      "notes": "BBA-9A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "11:40 to 12:40 PM",
+      "code": "AF2004",
+      "course": "Business Finance",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "01:00 to 02:00 PM",
+      "code": "FT4005",
+      "course": "Digital Banking and Payment Industry",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG4067",
+      "course": "Strategic Diversity, Equity and Inclusion",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS2019",
+      "course": "Psychology",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "5:00 to 6:00 PM",
+      "code": "AF4016",
+      "course": "Applied Financial Management",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG5015",
+      "course": "Strategic HR and Leadership",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG3012",
+      "course": "Blockchain Technology for Business",
+      "batch": "2024",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "11:40 to 12:40 PM",
+      "code": "AF4006",
+      "course": "Investment Anal. and Mgmt.",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS2019",
+      "course": "Psychology",
+      "batch": "2024",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "5:00 to 6:00 PM",
+      "code": "AF5007",
+      "course": "Advanced Financial Management",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MB-3A; MSBA-3A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "BA4009",
+      "course": "Design Thinking in Business Analytics",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG4009",
+      "course": "Managerial Economics",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "time": "03:40 to 04:40 PM",
+      "code": "BA5009",
+      "course": "Design Thinking, Analytics and Business",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MSBA-3A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "SS2042",
+      "course": "Community Service",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG1011",
+      "course": "Business Mathematics",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "11:40 to 12:40 PM",
+      "code": "MG4011",
+      "course": "Entrepreneurship",
+      "batch": "2024",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "01:00 to 02:00 PM",
+      "code": "MG1001",
+      "course": "Fundamentals of Management",
+      "batch": "2026",
+      "sections": {
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG2003",
+      "course": "Consumer Behaviour",
+      "batch": "2024",
+      "sections": {
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MG4523",
+      "course": "Conflict Resolution and Negotiation Skills",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MT2004",
+      "course": "Business Math � II",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG5011",
+      "course": "Advanced Research Methods",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "SS2043",
+      "course": "Civics and Community Engagement",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "11:40 to 12:40 PM",
+      "code": "MG4011",
+      "course": "Entrepreneurship",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "BA": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "01:00 to 02:00 PM",
+      "code": "MG4062",
+      "course": "Brand Management",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "02:30 to 03:30 PM",
+      "code": "SS2006",
+      "course": "Macro Economics",
+      "batch": "2024",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MG5103",
+      "course": "Negotiation and Conflict Management",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MB-3A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG1004",
+      "course": "Business Calculus II",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "6:20 to 7:20 PM",
+      "code": "CS4089",
+      "course": "Programming for Business Applications",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "MG2011",
+      "course": "Environmental Science and Sustainability for Business",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "11:40 to 12:40 PM",
+      "code": "MG2001",
+      "course": "Organizational Behaviour",
+      "batch": "2025",
+      "sections": {},
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG3002",
+      "course": "Business Law",
+      "batch": "2024",
+      "sections": {
+        "AF": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "BA4006",
+      "course": "Contextual Marketing and Product Analytics",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "11:40 to 12:40 PM",
+      "code": "AF2001",
+      "course": "Corporate Accounting � I",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "02:30 to 03:30 PM",
+      "code": "AF4017",
+      "course": "Digital Assets and Cryptocurrencies; Conventiontional and Shariah Persepectives",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "BA5011",
+      "course": "Context-Driven Marketing and Product Analytics",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MSBA-3A"
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "AF3006",
+      "course": "Financing New Ventures",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG4010",
+      "course": "Marketing",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "9:00 to 10:00 AM",
+      "code": "SS1016",
+      "course": "English - I",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "BA3002",
+      "course": "Business Data and Text Mining",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "11:40 to 12:40 PM",
+      "code": "MG2009",
+      "course": "Data Analysis for Business II",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "SS1015",
+      "course": "Pakistan Studies",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "SS1013",
+      "course": "Ideology and Constitution of Pakistan",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "CS2003",
+      "course": "Data Structures and Business Applications",
+      "batch": "2024",
+      "sections": {
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG4006",
+      "course": "Management and Org. Behaviour",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG5050",
+      "course": "Econometrics",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MSBA-3A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MT1002",
+      "course": "Business Math � I",
+      "batch": "2025",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "CS3011",
+      "course": "Enterprise Information System",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "CY4053",
+      "course": "Cybersecurity for FinTech",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "CS2016",
+      "course": "Programming for Business",
+      "batch": "2025",
+      "sections": {
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG4005",
+      "course": "Business Economics for Managers",
+      "batch": null,
+      "sections": {},
+      "notes": "MB-9A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "CS5059",
+      "course": "Database System",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "SS3001",
+      "course": "Business Communication�II",
+      "batch": null,
+      "sections": {},
+      "notes": "BBA-9A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "11:40 to 12:40 PM",
+      "code": "AF3003",
+      "course": "Financial Institutions and Markets",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A,B"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "CS3017",
+      "course": "Enterprise Systems and Applications",
+      "batch": "2024",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG3006",
+      "course": "Operations Management",
+      "batch": "2024",
+      "sections": {},
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "CS3003",
+      "course": "Management Information Systems",
+      "batch": "2024",
+      "sections": {
+        "AF": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG5017",
+      "course": "Strategic Marketing",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG3014",
+      "course": "Advanced Business Communications",
+      "batch": "2024",
+      "sections": {},
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "AF4005",
+      "course": "Audit and Assurance",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "CS2012",
+      "course": "Introduction to Object-Oriented Programming",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG2010",
+      "course": "Business Communication",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "9:00 to 10:00 AM",
+      "code": "CS1001",
+      "course": "IT in Business",
+      "batch": "2026",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG4522",
+      "course": "Islamic Banking and Finance",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "11:40 to 12:40 PM",
+      "code": "MG2012",
+      "course": "Business Economics",
+      "batch": "2025",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "notes": "BBA-A,B,C,D"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "MG4045",
+      "course": "Strategic Business Reporting",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG1002",
+      "course": "Marketing Management",
+      "batch": "2026",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MG3003",
+      "course": "Basic Econometrics",
+      "batch": "2024",
+      "sections": {
+        "AF": [
+          "A",
+          "B",
+          "C"
+        ],
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "5:00 to 6:00 PM",
+      "code": "BA5005",
+      "course": "Applied Calculus for Business",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG5055",
+      "course": "Ethics in Business Analytics",
+      "batch": "2025",
+      "sections": {},
+      "notes": "MSBA-3A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "10:20 to 11:20 AM",
+      "code": "SS2002",
+      "course": "Micro Economics",
+      "batch": "2024",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "AF2005",
+      "course": "Cost and Management Accounting",
+      "batch": "2024",
+      "sections": {
+        "AF": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "SS2018",
+      "course": "Sociology",
+      "batch": "2026",
+      "sections": {},
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "5:00 to 6:00 PM",
+      "code": "AF5003",
+      "course": "Financial Reporting and Analysis",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "AF4010",
+      "course": "Accounting and Finance for Managers",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "11:40 to 12:40 PM",
+      "code": "BA4007",
+      "course": "Empowering Organizations with Analytics and Data Visualization",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "AF4011",
+      "course": "Investment and Portfolio Analytics",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "SS2018",
+      "course": "Sociology",
+      "batch": "2024",
+      "sections": {},
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MG4003",
+      "course": "Strategic Management",
+      "batch": "2023",
+      "sections": {},
+      "notes": "BBA-A,B"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "6:20 to 7:20 PM",
+      "code": "MG4004",
+      "course": "Applied Statistics for Business",
+      "batch": "2026",
+      "sections": {},
+      "notes": "MB-1A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "01:00 to 02:00 PM",
+      "code": "MG3004",
+      "course": "Human Resource Mgmt.",
+      "batch": "2024",
+      "sections": {
+        "BA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "notes": "BBA-A,B,C"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG4521",
+      "course": "Digital Marketing",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      },
+      "notes": "BBA-A"
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "time": "02:30 to 03:30 PM",
+      "code": "AF3005",
+      "course": "Programming for Finance",
+      "batch": null,
+      "sections": {},
+      "notes": "BFT-9A"
+    }
+  ],
+  "flat_exams": []
+}
+
