@@ -3565,6 +3565,17 @@ function loadExamScheduleData(){
       _examData=data||{};
       if(!Array.isArray(_examData.exams)) _examData.exams=[];
       if(!Array.isArray(_examData.flat_exams)) _examData.flat_exams=[];
+      // FSE exam exports encode departments in notes (BEE-A / BCE-A), while
+      // FSC and FSM exports use the structured sections map. Normalize FSE
+      // rows so the same department filters work for every school.
+      _examData.exams.forEach(e=>{
+        if(e.sections&&Object.keys(e.sections).length) return;
+        const sections={};
+        for(const match of String(e.notes||'').matchAll(/\bB(EE|CE)\s*-\s*([A-E](?:\s*,\s*[A-E])*)/gi)){
+          sections[match[1].toUpperCase()]=match[2].split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
+        }
+        if(Object.keys(sections).length) e.sections=sections;
+      });
       return _examData;
     })
     .catch(err=>{ _examLoadPromise=null; throw err; });
