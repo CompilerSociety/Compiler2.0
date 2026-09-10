@@ -79,7 +79,27 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset=
         if(process.env.FRIENDS_SCREENSHOT) await page.screenshot({path:process.env.FRIENDS_SCREENSHOT.replace('.png',`-quote-${theme}.png`)});
       }
       assert.equal(await page.locator('#m-friend-save-form').count(),0);
+      const box=await page.locator('#m-toast').boundingBox();
+      assert.ok(Math.abs(box.y+box.height/2-422)<2,'Quote is vertically centered');
+      await page.locator('#m-toast p').first().click();
+      assert.equal(await page.locator('#m-toast').isVisible(),true,'Tapping the quote keeps it open');
+      await page.getByRole('button',{name:'Close quote',exact:true}).click();
+      assert.equal(await page.locator('#m-toast').isVisible(),false);
+      await page.locator('#m-friend-find').click();
+      await page.locator('#m-friend-nuid').click();
+      assert.equal(await page.locator('#m-toast').isVisible(),false,'Outside tap dismisses quote');
+      await page.locator('#m-friend-find').click();
+      const findBox=await page.locator('#m-friend-find').boundingBox();
+      await page.mouse.click(findBox.x+20,findBox.y+8);
+      assert.equal(await page.locator('#m-toast').isVisible(),false,'Outside tap must not re-submit the lookup');
+      await page.locator('#m-friend-find').click();
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#m-toast').isVisible(),false);
     }
+    await page.evaluate(()=>history.pushState(null,'',location.href));
+    await page.locator('#m-friend-find').click();
+    await page.goBack();
+    await page.locator('#m-toast').waitFor({state:'hidden'});
     await page.locator('#m-friend-nuid').fill('25i1234');
     await page.locator('#m-friend-find').click();
     await page.locator('#m-friend-name').waitFor();

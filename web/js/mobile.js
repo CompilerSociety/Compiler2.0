@@ -61,6 +61,7 @@
   /* ── Small helpers ─────────────────────────────────────────────────── */
   function toast(msg){
     const el=$('m-toast'); if(!el) return;
+    closeSelfFriendQuote();
     el.classList.remove('m-friend-quote');
     el.textContent=msg; el.hidden=false;
     clearTimeout(toastTimer);
@@ -1769,15 +1770,27 @@
   const FRIENDS_KEY='vtable_friends_v1';
   const SELF_FRIEND_MESSAGE='bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy';
   const SELF_FRIEND_URDU='بازیچۂ اطفال ہے دنیا مرے آگے\nہوتا ہے شب و روز تماشا مرے آگے';
+  let selfFriendQuoteOpener=null;
+  function closeSelfFriendQuote(){
+    const el=$('m-toast');
+    if(!el||el.hidden||!el.classList.contains('m-friend-quote')) return;
+    clearTimeout(toastTimer);
+    el.hidden=true;
+    if(el.contains(document.activeElement)&&selfFriendQuoteOpener?.isConnected) selfFriendQuoteOpener.focus();
+  }
   function showSelfFriendQuote(){
     friendStatus('');
     const el=$('m-toast');
     if(!el) return;
     clearTimeout(toastTimer);
     el.classList.add('m-friend-quote');
-    el.innerHTML=`<p lang="ur-Latn" dir="ltr">${esc(SELF_FRIEND_MESSAGE)}</p><p lang="ur" dir="rtl">${esc(SELF_FRIEND_URDU)}</p>`;
+    selfFriendQuoteOpener=document.activeElement;
+    el.innerHTML=`<button class="m-friend-quote-close" type="button" aria-label="Close quote">&times;</button><p lang="ur-Latn" dir="ltr">${esc(SELF_FRIEND_MESSAGE)}</p><p lang="ur" dir="rtl">${esc(SELF_FRIEND_URDU)}</p>`;
     el.hidden=false;
-    toastTimer=setTimeout(()=>{el.hidden=true;},10000);
+    const close=el.querySelector('.m-friend-quote-close');
+    close.addEventListener('click',closeSelfFriendQuote);
+    close.focus({preventScroll:true});
+    toastTimer=setTimeout(closeSelfFriendQuote,10000);
   }
   const friendView={mode:'list',selected:null,request:0,opener:null};
   function isOwnFriendId(nuid){
@@ -1810,6 +1823,7 @@
     $('m-friends-close').focus();
   }
   function closeFriends(){
+    closeSelfFriendQuote();
     const sheet=$('m-friends-sheet');
     if(!sheet||sheet.hidden) return;
     friendView.request++;
@@ -2040,6 +2054,30 @@
     renderWeek(keys,pane,day=>classesFor(keys.dept,keys.batch,keys.sec,day,source));
   }
   function wireFriends(){
+    let dismissedQuotePointer=false;
+    document.addEventListener('pointerdown',ev=>{
+      const quote=$('m-toast');
+      dismissedQuotePointer=!!quote&&!quote.hidden&&quote.classList.contains('m-friend-quote')&&!quote.contains(ev.target);
+      if(dismissedQuotePointer){
+        ev.preventDefault();ev.stopImmediatePropagation();closeSelfFriendQuote();
+      }
+    },true);
+    document.addEventListener('click',ev=>{
+      if(dismissedQuotePointer){
+        dismissedQuotePointer=false;
+        ev.preventDefault();ev.stopImmediatePropagation();
+      }
+    },true);
+    window.addEventListener('popstate',closeSelfFriendQuote);
+    document.addEventListener('keydown',ev=>{
+      const quote=$('m-toast');
+      if(!quote||quote.hidden||!quote.classList.contains('m-friend-quote')) return;
+      if(ev.key==='Escape'){
+        ev.preventDefault();ev.stopImmediatePropagation();closeSelfFriendQuote();
+      }else if(ev.key==='Tab'){
+        ev.preventDefault();ev.stopImmediatePropagation();quote.querySelector('.m-friend-quote-close').focus();
+      }
+    },true);
     $('m-friends-btn').addEventListener('click',()=>openFriends());
     $('m-friends-close').addEventListener('click',closeFriends);
     document.addEventListener('keydown',ev=>{
