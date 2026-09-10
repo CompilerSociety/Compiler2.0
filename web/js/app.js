@@ -3808,6 +3808,7 @@ function refreshExamDepartments(){
   if(!depts.length) return;
   sel.innerHTML='<option value="">Select Department</option>'+depts.map(d=>`<option value="${escHtml(d)}">${escHtml(d)}</option>`).join('');
   if(depts.includes(current)) sel.value=current;
+  else { sel.value=''; const batch=document.getElementById('ex-batch'); if(batch) batch.value=''; }
 }
 
 function examCountdown(date){

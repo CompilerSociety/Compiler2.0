@@ -1187,6 +1187,9 @@
       const exams=(doc&&doc.exams)||[];
       const selectedExams=exams.filter(e=>typeof examMatchesMyCourse==='function'&&examMatchesMyCourse(e));
       const depts=Array.from(new Set(exams.flatMap(e=>Object.keys(e.sections||{})))).sort();
+      // A profile may carry CS from FSC. Clear it when the selected school's
+      // data only contains another department set, such as EE/CE for FSE.
+      if(ex.dept&&!depts.includes(ex.dept)){ ex.dept=''; ex.batch=''; }
       const batches=Array.from(new Set(exams
         .filter(e=>!ex.dept||(e.sections&&e.sections[ex.dept]))
         .map(e=>String(e.batch||'')).filter(Boolean))).sort();
