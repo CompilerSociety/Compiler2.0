@@ -3621,14 +3621,33 @@ function normalizeExamCourseName(name){
     .trim()
     .toUpperCase();
 }
+function examCourseNamesMatch(left,right){
+  const a=normalizeExamCourseName(left).replace(/[^A-Z0-9]/g,'');
+  const b=normalizeExamCourseName(right).replace(/[^A-Z0-9]/g,'');
+  if(!a||!b) return false;
+  if(a===b) return true;
+  const words=value=>normalizeExamCourseName(value)
+    .replace(/[^A-Z0-9 ]/g,' ')
+    .split(/\s+/)
+    .filter(word=>word&&!['AND','OF','THE'].includes(word));
+  const aw=words(left),bw=words(right);
+  const hasLab=list=>list.some(word=>/^LAB(ORATORY)?$/.test(word));
+  if(hasLab(aw)!==hasLab(bw)) return false;
+  if(aw.length===1&&bw.length>1&&a.length>=2&&a===bw.map(word=>word[0]).join('')) return true;
+  if(bw.length===1&&aw.length>1&&b.length>=2&&b===aw.map(word=>word[0]).join('')) return true;
+  return aw.length>1&&aw.length===bw.length&&aw.every((word,index)=>{
+    const other=bw[index];
+    return word===other||(Math.min(word.length,other.length)>=2&&(word.startsWith(other)||other.startsWith(word)));
+  });
+}
 function selectedExamCourseNames(){
   const names=new Set();
   const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
-  const removed=new Set((profile?.courseRemoved||[]).map(normalizeExamCourseName));
-  const added=new Set((profile?.courses||[]).map(c=>normalizeExamCourseName(c&&c.name)).filter(Boolean));
+  const removed=(profile?.courseRemoved||[]).filter(Boolean);
+  const added=(profile?.courses||[]).map(c=>String(c?.name||'').trim()).filter(Boolean);
   if(typeof getMyCourses==='function'){
     getMyCourses().forEach(c=>{
-      const name=normalizeExamCourseName(c.name);
+      const name=String(c?.name||'').trim();
       if(name) names.add(name);
     });
   }
@@ -3645,8 +3664,8 @@ function selectedExamCourseNames(){
     exams.forEach(e=>{
       const sections=e.sections&&e.sections[examDept];
       if(e.batch===examBatch&&Array.isArray(sections)&&sections.includes(examSection)){
-        const name=normalizeExamCourseName(examCourseName(e));
-        if(name&&!removed.has(name)) names.add(name);
+        const name=examCourseName(e);
+        if(name&&!removed.some(removedName=>examCourseNamesMatch(removedName,name))) names.add(name);
       }
     });
   }
@@ -3654,15 +3673,19 @@ function selectedExamCourseNames(){
   // Apply removals after all default sources have been merged. Explicitly
   // added courses are applied last, so adding a previously removed course
   // intentionally puts it back in the exam list.
-  removed.forEach(name=>{ if(!added.has(name)) names.delete(name); });
+  [...names].forEach(name=>{
+    const wasRemoved=removed.some(removedName=>examCourseNamesMatch(removedName,name));
+    const wasAdded=added.some(addedName=>examCourseNamesMatch(addedName,name));
+    if(wasRemoved&&!wasAdded) names.delete(name);
+  });
   added.forEach(name=>names.add(name));
   return names;
 }
 function examMatchesMyCourse(e){
   const selectedNames=selectedExamCourseNames();
   if(!selectedNames.size) return false;
-  const candidates=[e?.course,e?.notes,e?.code].map(normalizeExamCourseName).filter(Boolean);
-  return candidates.some(name=>selectedNames.has(name));
+  const candidates=[e?.course,e?.notes,e?.code].filter(Boolean);
+  return [...selectedNames].some(selected=>candidates.some(candidate=>examCourseNamesMatch(selected,candidate)));
 }
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
