@@ -31,7 +31,7 @@ function timeToNumber(value){return slotToMinutes(value);}
 `;
 new (require('node:vm').Script)(shared+'\n'+fixtures+'\n'+read('web/js/mobile.js'));
 const css = ['web/css/main.css', 'web/css/mobile.css'].map(file => read(file).replace(/@import[^;]+;/g, '')).join('\n');
-const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#141414"><style>${css}</style></head><body>${read('web/components/mobile-app.html')}<script>${shared}\n${fixtures}\n${read('web/js/mobile.js')}</script></body></html>`;
+const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#141414"><style>${css}</style></head><body>${read('web/components/mobile-app.html')}<script>${shared}\n${fixtures}\n${read('web/js/mobile.js')}</script></body></html>`;
 
 (async () => {
   const browser = await chromium.launch({ channel: 'msedge', headless: true });
@@ -60,7 +60,16 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="vi
     for(const ownId of ['25I-0001','25i0001']){
       await page.locator('#m-friend-nuid').fill(ownId);
       await page.locator('#m-friend-find').click();
-      assert.equal(await page.locator('#m-friend-status').innerText(), 'bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy');
+      assert.equal(await page.locator('#m-toast').isVisible(),true);
+      assert.equal(await page.locator('#m-toast [lang="ur-Latn"]').innerText(), 'bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy');
+      assert.equal(await page.locator('#m-toast [lang="ur"]').innerText(), 'بازیچۂ اطفال ہے دنیا مرے آگے\nہوتا ہے شب و روز تماشا مرے آگے');
+      for(const theme of ['light','dark']){
+        await page.evaluate(theme=>document.documentElement.dataset.mobileTheme=theme,theme);
+        assert.equal(await page.locator('#m-toast').evaluate(el=>getComputedStyle(el).color),theme==='light'?'rgb(47, 107, 49)':'rgb(196, 125, 70)');
+        await page.setViewportSize({width:320,height:844});
+        assert.equal(await page.locator('#m-toast').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
+        if(process.env.FRIENDS_SCREENSHOT) await page.screenshot({path:process.env.FRIENDS_SCREENSHOT.replace('.png',`-quote-${theme}.png`)});
+      }
       assert.equal(await page.locator('#m-friend-save-form').count(),0);
     }
     await page.locator('#m-friend-nuid').fill('25i1234');

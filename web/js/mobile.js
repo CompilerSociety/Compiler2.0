@@ -47,6 +47,7 @@
   /* ── Small helpers ─────────────────────────────────────────────────── */
   function toast(msg){
     const el=$('m-toast'); if(!el) return;
+    el.classList.remove('m-friend-quote');
     el.textContent=msg; el.hidden=false;
     clearTimeout(toastTimer);
     toastTimer=setTimeout(()=>{ el.hidden=true; },2300);
@@ -1752,6 +1753,17 @@
   /* Friends are a separate device-local address book, never profile/roster writes. */
   const FRIENDS_KEY='vtable_friends_v1';
   const SELF_FRIEND_MESSAGE='bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy';
+  const SELF_FRIEND_URDU='بازیچۂ اطفال ہے دنیا مرے آگے\nہوتا ہے شب و روز تماشا مرے آگے';
+  function showSelfFriendQuote(){
+    friendStatus('');
+    const el=$('m-toast');
+    if(!el) return;
+    clearTimeout(toastTimer);
+    el.classList.add('m-friend-quote');
+    el.innerHTML=`<p lang="ur-Latn" dir="ltr">${esc(SELF_FRIEND_MESSAGE)}</p><p lang="ur" dir="rtl">${esc(SELF_FRIEND_URDU)}</p>`;
+    el.hidden=false;
+    toastTimer=setTimeout(()=>{el.hidden=true;},10000);
+  }
   const friendView={mode:'list',selected:null,request:0,opener:null};
   function isOwnFriendId(nuid){
     const owner=typeof getProfileCookie==='function'?getProfileCookie():null;
@@ -1852,7 +1864,7 @@
     input.value=nuid;
     if(isOwnFriendId(nuid)){
       $('m-friend-details').innerHTML='';
-      friendStatus(SELF_FRIEND_MESSAGE);
+      showSelfFriendQuote();
       return;
     }
     try{
@@ -1976,7 +1988,7 @@
     form.addEventListener('submit',ev=>{
       ev.preventDefault();
       if(isOwnFriendId(draft.nuid)){
-        friendStatus(SELF_FRIEND_MESSAGE);
+        showSelfFriendQuote();
         return;
       }
       const friend={nuid:draft.nuid,name:$('m-friend-name').value.trim(),school:choice.school,
