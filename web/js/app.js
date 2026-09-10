@@ -3570,13 +3570,13 @@ function loadExamScheduleData(){
 function renderFlatExamSchedule(){
   const out=document.getElementById('exam-flat-out');
   if(!out) return;
-  const flat=(_examData&&_examData.flat_exams)||[];
+  const flat=((_examData&&_examData.flat_exams)||[]).filter(examMatchesMyCourse);
   if(!flat.length){
     out.innerHTML=renderUiState({
       kind:'empty',
-      title:'No midterm schedule loaded',
-      message:'This section appears only when a midterm or sessional schedule is available.',
-      note:'Use the filters below to view the final exam schedule.'
+      title:'No selected-course papers found',
+      message:'Only papers for courses saved in My Courses are shown here.',
+      note:'Use the filters below to view the schedule.'
     });
     return;
   }
@@ -3611,9 +3611,27 @@ function renderFlatExamSchedule(){
     </div>`;
 }
 
+function examCourseName(e){
+  return String(e?.course||e?.notes||e?.code||'').trim();
+}
+function normalizeExamCourseName(name){
+  return String(name||'')
+    .replace(/^[A-Z]{2,4}\s*[-]?\s*\d{3,4}\s*/i,'')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toUpperCase();
+}
+function examMatchesMyCourse(e){
+  if(typeof getMyCourses!=='function') return false;
+  const selected=getMyCourses();
+  if(!selected.length) return false;
+  const selectedNames=new Set(selected.map(c=>normalizeExamCourseName(c.name)).filter(Boolean));
+  const candidates=[e?.course,e?.notes,e?.code].map(normalizeExamCourseName).filter(Boolean);
+  return candidates.some(name=>selectedNames.has(name));
+}
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
-  return exams.filter(e=>e.sections&&e.sections[dept]&&(!batch||e.batch===batch));
+  return exams.filter(e=>e.sections&&e.sections[dept]&&(!batch||e.batch===batch)&&examMatchesMyCourse(e));
 }
 
 const EXAM_PREF_KEY='fast_exam_prefs';
@@ -3676,9 +3694,9 @@ function renderExamSchedule(){
   if(!data.length){
     out.innerHTML=renderUiState({
       kind:'empty',
-      title:'No exam data found',
-      message:'No exam entries match this department and batch year.',
-      note:'Try a different batch year or another department.'
+      title:typeof getMyCourses==='function'&&!getMyCourses().length?'No courses selected locally':'No selected-course papers found',
+      message:typeof getMyCourses==='function'&&!getMyCourses().length?'Add courses to My Courses to see their papers here.':'None of your locally selected courses match this department and batch year.',
+      note:'Only courses saved in My Courses are shown.'
     });
     return;
   }
@@ -3689,7 +3707,7 @@ function renderExamSchedule(){
     const cd=d?examCountdown(d):null;
     const secsForDept=(e.sections[dept]||[]).join(', ');
     return `<tr>
-      <td><div class="exam-course-name">${escHtml(e.code||'')} ${escHtml(e.course||'')}</div><div class="exam-time-txt">SEC ${escHtml(secsForDept)}</div></td>
+      <td><div class="exam-course-name">${escHtml(e.code||'')} ${escHtml(examCourseName(e))}</div><div class="exam-time-txt">SEC ${escHtml(secsForDept)}</div></td>
       <td>
         <div class="exam-date-pill fin">${d?dDay(d)+', '+dFmt(d):'—'}</div>
         <div class="exam-time-txt">${escHtml(e.time||'')}${e.notes?' &middot; '+escHtml(e.notes):''}</div>

@@ -1176,12 +1176,17 @@
     loadExamScheduleData().then(doc=>{
       if(ex.tab!=='schedule') return;
       const exams=(doc&&doc.exams)||[];
-      const depts=Array.from(new Set(exams.flatMap(e=>Object.keys(e.sections||{})))).sort();
-      const batches=Array.from(new Set(exams.map(e=>String(e.batch||'')).filter(Boolean))).sort();
+      const selectedExams=exams.filter(e=>typeof examMatchesMyCourse==='function'&&examMatchesMyCourse(e));
+      const depts=Array.from(new Set(selectedExams.flatMap(e=>Object.keys(e.sections||{})))).sort();
+      const batches=Array.from(new Set(selectedExams.map(e=>String(e.batch||'')).filter(Boolean))).sort();
       $('m-exam-filters').innerHTML=filterChips(depts,batches);
       wireFilterChips();
 
       const out=$('m-exam-out');
+      if(!selectedExams.length){
+        out.innerHTML='<div class="m-empty">No courses selected locally. Add courses to My Courses to see their papers here.</div>';
+        return;
+      }
       if(!ex.dept||!ex.batch){
         out.innerHTML='<div class="m-empty">Pick a department and batch to see the exam schedule.</div>';
         return;
@@ -1207,7 +1212,7 @@
           <div class="m-exam-date"><span class="m-exam-day">${d?d.getDate():'—'}</span>
             <span class="m-exam-mon">${d?d.toLocaleDateString('en-GB',{month:'short'}):''}</span></div>
           <div class="m-exam-main">
-            <div class="m-exam-name">${esc(e.course||e.code||'Exam')}</div>
+            <div class="m-exam-name">${esc(typeof examCourseName==='function'?examCourseName(e):(e.course||e.code||'Exam'))}</div>
             <div class="m-exam-meta">${esc(e.day||'')} · ${esc(e.time||'—')}${e.code?' · '+esc(e.code):''}</div>
           </div>
         </div>`;
