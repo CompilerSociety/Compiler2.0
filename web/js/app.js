@@ -3573,6 +3573,9 @@ function loadExamScheduleData(){
 
 function onExamSchoolChange(){
   const school=document.getElementById('ex-school')?.value||'computing';
+  setExamSchool(school);
+}
+function setExamSchool(school){
   _examSchool=school;
   _examData=null;
   _examLoadPromise=null;

@@ -1125,7 +1125,7 @@
   }
 
   /* ══ EXAMS ═════════════════════════════════════════════════════════ */
-  const ex={tab:'schedule',dept:'',batch:'',seatQuery:''};
+  const ex={tab:'schedule',school:'computing',dept:'',batch:'',seatQuery:''};
 
   function examType(doc){
     const f=String((doc&&(doc.source_filename||doc.source_subject))||'').toLowerCase();
@@ -1158,7 +1158,8 @@
   }
 
   function filterChips(depts,batches){
-    return `<div class="m-meta-row"><span>Department</span><b style="${ex.dept?'':'color:rgba(22,33,15,.35)'}">${esc(ex.dept||'—')}</b></div>
+    const schools=ex.tab==='schedule'?`<div class="m-meta-row"><span>School</span><b>${esc(ex.school.toUpperCase())}</b></div><div class="m-chip-row">${[['computing','FSC'],['engineering','FSE'],['business','FSM']].map(([v,l])=>`<button class="m-chip${ex.school===v?' is-on':''}" data-ex="school" data-value="${v}" type="button">${l}</button>`).join('')}</div>`:'';
+    return schools+`<div class="m-meta-row"><span>Department</span><b style="${ex.dept?'':'color:rgba(22,33,15,.35)'}">${esc(ex.dept||'—')}</b></div>
       <div class="m-chip-row">${depts.map(d=>`<button class="m-chip${ex.dept===d?' is-on':''}" data-ex="dept" data-value="${esc(d)}" type="button">${esc(d)}</button>`).join('')}</div>
       <div class="m-meta-row"><span>Batch</span><b style="${ex.batch?'':'color:rgba(22,33,15,.35)'}">${esc(ex.batch||'—')}</b></div>
       <div class="m-chip-row">${batches.map(b=>`<button class="m-chip${ex.batch===b?' is-on':''}" data-ex="batch" data-value="${esc(b)}" type="button">${esc(b)}</button>`).join('')}</div>`;
@@ -1170,12 +1171,17 @@
         const value=ex[k]===btn.dataset.value?'':btn.dataset.value;
         ex[k]=value;
         if(k==='dept') ex.batch='';
+        if(k==='school'){
+          ex.dept=''; ex.batch='';
+          if(typeof setExamSchool==='function') setExamSchool(ex.school);
+        }
         renderExams();
       });
     });
   }
 
   function renderExamSchedule(){
+    if(typeof _examSchool!=='undefined') _examSchool=ex.school;
     loadExamScheduleData().then(doc=>{
       if(ex.tab!=='schedule') return;
       const exams=(doc&&doc.exams)||[];
