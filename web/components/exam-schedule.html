@@ -2,6 +2,14 @@
       <h2 class="sr-only">Exam Schedule</h2>
       <div class="exam-filters">
         <div>
+          <label class="flabel">SCHOOL</label>
+          <select class="rsel" id="ex-school" onchange="onExamSchoolChange()">
+            <option value="computing">Computing (FSC)</option>
+            <option value="engineering">Engineering (FSE)</option>
+            <option value="business">Business (FSM)</option>
+          </select>
+        </div>
+        <div>
           <label class="flabel">DEPARTMENT</label>
           <select class="rsel" id="ex-dept" onchange="onExamDeptChange()">
             <option value="">Select Department</option>

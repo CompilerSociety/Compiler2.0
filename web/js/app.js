@@ -3551,14 +3551,15 @@ function dDay(d){return["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];}
 
 /* Real data, loaded from db/exams/<school>.json (synced from the
    Final Examination Schedule xlsx via the Gmail sync backend). */
-const EXAM_SCHEDULE_URL='/db/exams/computing.json';
+const EXAM_SCHEDULE_URLS={computing:'/db/exams/computing.json',engineering:'/db/exams/engineering.json',business:'/db/exams/business.json'};
 let _examData=null;
 let _examLoadPromise=null;
+let _examSchool='computing';
 
 function loadExamScheduleData(){
   if(_examData) return Promise.resolve(_examData);
   if(_examLoadPromise) return _examLoadPromise;
-  _examLoadPromise=fetch(EXAM_SCHEDULE_URL,{cache:'no-store'})
+  _examLoadPromise=fetch(EXAM_SCHEDULE_URLS[_examSchool]||EXAM_SCHEDULE_URLS.computing,{cache:'no-store'})
     .then(r=>{ if(!r.ok) throw new Error('Exam schedule file not found'); return r.json(); })
     .then(data=>{
       _examData=data||{};
@@ -3568,6 +3569,15 @@ function loadExamScheduleData(){
     })
     .catch(err=>{ _examLoadPromise=null; throw err; });
   return _examLoadPromise;
+}
+
+function onExamSchoolChange(){
+  const school=document.getElementById('ex-school')?.value||'computing';
+  _examSchool=school;
+  _examData=null;
+  _examLoadPromise=null;
+  try{localStorage.setItem('fast_exam_school',school);}catch(e){}
+  initExamSchedulePanel();
 }
 
 // Some "schedule" emails are a Midterm/Sessional schedule rather than the
@@ -3787,6 +3797,16 @@ function onExamDeptChange(){
 }
 function onExamBatchChange(){ saveExamPrefs(); renderExamSchedule(); }
 
+function refreshExamDepartments(){
+  const sel=document.getElementById('ex-dept');
+  if(!sel) return;
+  const current=sel.value;
+  const depts=[...new Set((_examData?.exams||[]).flatMap(e=>Object.keys(e.sections||{})))].sort();
+  if(!depts.length) return;
+  sel.innerHTML='<option value="">Select Department</option>'+depts.map(d=>`<option value="${escHtml(d)}">${escHtml(d)}</option>`).join('');
+  if(depts.includes(current)) sel.value=current;
+}
+
 function examCountdown(date){
   const now=new Date();
   now.setHours(0,0,0,0);
@@ -3860,12 +3880,16 @@ function renderExamSchedule(){
 
 function initExamSchedulePanel(){
   const prefs=readExamPrefs();
+  const schoolSel=document.getElementById('ex-school');
+  try{_examSchool=localStorage.getItem('fast_exam_school')||_examSchool;}catch(e){}
+  if(schoolSel) schoolSel.value=_examSchool;
   const deptSel=document.getElementById('ex-dept'),batchSel=document.getElementById('ex-batch');
   const out=document.getElementById('exam-out');
   const flatOut=document.getElementById('exam-flat-out');
   if(flatOut) flatOut.innerHTML=renderUiState({ kind:'loading', title:'Loading schedule', message:'Checking whether a sessional schedule is available.' });
   if(out) out.innerHTML=renderUiState({ kind:'loading', title:'Loading exam schedule', message:'Fetching the latest exam data.' });
   loadExamScheduleData().then(()=>{
+    refreshExamDepartments();
     if(prefs.dept&&deptSel) deptSel.value=prefs.dept;
     if(prefs.batch&&batchSel) batchSel.value=prefs.batch;
     refreshExamSourceBadge();
