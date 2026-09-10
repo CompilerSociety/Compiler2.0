@@ -1751,6 +1751,7 @@
 
   /* Friends are a separate device-local address book, never profile/roster writes. */
   const FRIENDS_KEY='vtable_friends_v1';
+  const SELF_FRIEND_MESSAGE='bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy';
   const friendView={mode:'list',selected:null,request:0,opener:null};
   function isOwnFriendId(nuid){
     const owner=typeof getProfileCookie==='function'?getProfileCookie():null;
@@ -1851,7 +1852,7 @@
     input.value=nuid;
     if(isOwnFriendId(nuid)){
       $('m-friend-details').innerHTML='';
-      friendStatus('You cannot add yourself as a friend. Enter a friend’s NU ID.');
+      friendStatus(SELF_FRIEND_MESSAGE);
       return;
     }
     try{
@@ -1975,7 +1976,7 @@
     form.addEventListener('submit',ev=>{
       ev.preventDefault();
       if(isOwnFriendId(draft.nuid)){
-        friendStatus('You cannot add yourself as a friend. Enter a friend’s NU ID.');
+        friendStatus(SELF_FRIEND_MESSAGE);
         return;
       }
       const friend={nuid:draft.nuid,name:$('m-friend-name').value.trim(),school:choice.school,

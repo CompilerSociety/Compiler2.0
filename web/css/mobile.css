@@ -533,6 +533,7 @@ html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20
 .m-friend-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:22px;background:var(--surface)}
 .m-friend-open{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px;min-height:48px;text-align:left;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
 .m-friend-form{display:grid;gap:10px;min-width:0}
+#m-friend-status{white-space:pre-line}
 .m-friend-form .m-field-label{margin:6px 0 0;line-height:1.5}
 .m-friend-form .m-settings-select{min-width:0}
 .m-friend-form .m-settings-select{font-size:16px}

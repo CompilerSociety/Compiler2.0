@@ -60,7 +60,7 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta name="vi
     for(const ownId of ['25I-0001','25i0001']){
       await page.locator('#m-friend-nuid').fill(ownId);
       await page.locator('#m-friend-find').click();
-      assert.match(await page.locator('#m-friend-status').innerText(), /cannot add yourself/);
+      assert.equal(await page.locator('#m-friend-status').innerText(), 'bazeecha-e-atfal ha dunia mery aagy\nhota ha shab-o-roz tamasha mery aagy');
       assert.equal(await page.locator('#m-friend-save-form').count(),0);
     }
     await page.locator('#m-friend-nuid').fill('25i1234');
