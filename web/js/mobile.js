@@ -1188,7 +1188,7 @@
       wireFilterChips();
 
       const out=$('m-exam-out');
-      const usesMyCourses=typeof examUsesMyCourses==='function'&&examUsesMyCourses(ex.dept);
+      const usesMyCourses=typeof examUsesMyCourses==='function'&&examUsesMyCourses(ex.dept,ex.batch);
       if(usesMyCourses&&!selectedExams.length){
         out.innerHTML='<div class="m-empty">No courses selected locally. Add courses to My Courses to see their papers here.</div>';
         return;

@@ -3707,14 +3707,15 @@ function examEntriesShareCourse(left,right){
   const rightNames=[right?.course,right?.notes,right?.code].filter(Boolean);
   return leftNames.some(a=>rightNames.some(b=>examCourseNamesMatch(a,b)));
 }
-function examUsesMyCourses(dept){
+function examUsesMyCourses(dept,batch){
   const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
   const ownDept=profile&&typeof profileDeptCode==='function'?profileDeptCode(profile):'';
-  return Boolean(ownDept&&dept===ownDept);
+  const ownBatch=profile&&typeof profileFullBatch==='function'?profileFullBatch(profile):'';
+  return Boolean(ownDept&&dept===ownDept&&(!batch||!ownBatch||batch===ownBatch));
 }
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
-  if(!examUsesMyCourses(dept)){
+  if(!examUsesMyCourses(dept,batch)){
     return exams.filter(e=>e.sections&&e.sections[dept]&&(!batch||e.batch===batch));
   }
   const selected=exams.filter(examMatchesMyCourse);
@@ -3798,7 +3799,7 @@ function renderExamSchedule(){
   const data=examsForDeptBatch(dept,batch);
 
   if(!data.length){
-    const usesMyCourses=examUsesMyCourses(dept);
+    const usesMyCourses=examUsesMyCourses(dept,batch);
     const hasSelectedCourses=selectedExamCourseNames().size>0;
     out.innerHTML=renderUiState({
       kind:'empty',
