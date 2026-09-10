@@ -40,6 +40,20 @@
   // profile and worked out where to land, so no screen is shown speculatively.
   let route='splash';
   let toastTimer=null;
+  const DARK_MODE_TIP_KEY='vtable_dark_mode_tip_seen';
+  function showDarkModeTipOnce(){
+    const tip=$('m-dark-mode-tip');
+    if(!tip||!MQ.matches||!profile()) return;
+    try{
+      if(localStorage.getItem(DARK_MODE_TIP_KEY)) return;
+      // Record before displaying. If storage is blocked, skip the tip so it
+      // cannot nag the user on every launch.
+      localStorage.setItem(DARK_MODE_TIP_KEY,'1');
+    }catch(e){return;}
+    tip.hidden=false;
+    const timer=setTimeout(()=>{tip.hidden=true;},8000);
+    $('m-dark-mode-tip-close').onclick=()=>{tip.hidden=true;clearTimeout(timer);};
+  }
   // Floor on the splash. The auth check itself is instant (localStorage), but
   // without this the splash strobes on a warm load.
   const MIN_SPLASH_MS=450;
@@ -206,6 +220,7 @@
     else if(route==='facdetail') renderFacDetail();
     else if(route==='exams') renderExams();
     else if(route==='profile') renderProfile();
+    showDarkModeTipOnce();
   }
 
   /* ══ SIGN IN ═══════════════════════════════════════════════════════ */

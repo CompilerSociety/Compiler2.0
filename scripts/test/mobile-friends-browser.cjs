@@ -51,6 +51,14 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset=
       return route.fulfill({ contentType: 'text/html', body: html });
     });
     await page.goto('http://vtable.test/#/profile');
+    await page.locator('#m-dark-mode-tip').waitFor({state:'visible'});
+    assert.match(await page.locator('#m-dark-mode-tip').innerText(),/Dark mode to switch it on or off/);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('vtable_dark_mode_tip_seen')),'1');
+    await page.locator('#m-dark-mode-tip-close').click();
+    assert.equal(await page.locator('#m-dark-mode-tip').isVisible(),false);
+    await page.reload();
+    await page.locator('#m-add-friend').waitFor({state:'visible'});
+    assert.equal(await page.locator('#m-dark-mode-tip').isVisible(),false);
     assert.equal(await page.locator('#m-friend-sharing-setting').isVisible(),false);
     const pick=async(field,value)=>{
       await page.locator(`[data-picker="${field}"] summary`).click();
