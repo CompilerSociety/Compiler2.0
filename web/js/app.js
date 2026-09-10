@@ -3707,8 +3707,16 @@ function examEntriesShareCourse(left,right){
   const rightNames=[right?.course,right?.notes,right?.code].filter(Boolean);
   return leftNames.some(a=>rightNames.some(b=>examCourseNamesMatch(a,b)));
 }
+function examUsesMyCourses(dept){
+  const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
+  const ownDept=profile&&typeof profileDeptCode==='function'?profileDeptCode(profile):'';
+  return Boolean(ownDept&&dept===ownDept);
+}
 function examsForDeptBatch(dept,batch){
   const exams=(_examData&&_examData.exams)||[];
+  if(!examUsesMyCourses(dept)){
+    return exams.filter(e=>e.sections&&e.sections[dept]&&(!batch||e.batch===batch));
+  }
   const selected=exams.filter(examMatchesMyCourse);
   return selected.filter(e=>{
     const defaultScope=e.sections&&e.sections[dept]&&(!batch||e.batch===batch);
@@ -3752,7 +3760,13 @@ function refreshExamSourceBadge(){
   badge.textContent=examScheduleLabel()+' SCHEDULE';
 }
 
-function onExamDeptChange(){ saveExamPrefs(); renderExamSchedule(); }
+function onExamDeptChange(){
+  const dept=document.getElementById('ex-dept')?.value||'';
+  const batch=document.getElementById('ex-batch');
+  if(dept&&!examUsesMyCourses(dept)&&batch) batch.value='';
+  saveExamPrefs();
+  renderExamSchedule();
+}
 function onExamBatchChange(){ saveExamPrefs(); renderExamSchedule(); }
 
 function examCountdown(date){
@@ -3784,12 +3798,13 @@ function renderExamSchedule(){
   const data=examsForDeptBatch(dept,batch);
 
   if(!data.length){
+    const usesMyCourses=examUsesMyCourses(dept);
     const hasSelectedCourses=selectedExamCourseNames().size>0;
     out.innerHTML=renderUiState({
       kind:'empty',
-      title:!hasSelectedCourses?'No courses selected locally':'No selected-course papers found',
-      message:!hasSelectedCourses?'Your default courses will appear here, along with any courses added in My Courses.':'None of your locally selected courses match this department and batch year.',
-      note:'Only courses saved in My Courses are shown.'
+      title:usesMyCourses?(!hasSelectedCourses?'No courses selected locally':'No selected-course papers found'):'No exam data found',
+      message:usesMyCourses?(!hasSelectedCourses?'Your default courses will appear here, along with any courses added in My Courses.':'None of your locally selected courses match this department and batch year.'):'No exam entries match this department and batch year.',
+      note:usesMyCourses?'Only courses saved in My Courses are shown.':'Try another batch year or department.'
     });
     return;
   }

@@ -1140,8 +1140,9 @@
     if(ex.dept&&ex.batch) return;
     const p=profile();
     if(!p) return;
-    if(!ex.dept&&typeof profileDeptCode==='function') ex.dept=profileDeptCode(p);
-    if(!ex.batch&&typeof profileFullBatch==='function') ex.batch=profileFullBatch(p);
+    const ownDept=typeof profileDeptCode==='function'?profileDeptCode(p):'';
+    if(!ex.dept) ex.dept=ownDept;
+    if(!ex.batch&&ex.dept===ownDept&&typeof profileFullBatch==='function') ex.batch=profileFullBatch(p);
   }
 
   function renderExams(){
@@ -1166,7 +1167,9 @@
     $('m-exam-filters').querySelectorAll('.m-chip').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const k=btn.dataset.ex;
-        ex[k]=ex[k]===btn.dataset.value?'':btn.dataset.value;
+        const value=ex[k]===btn.dataset.value?'':btn.dataset.value;
+        ex[k]=value;
+        if(k==='dept') ex.batch='';
         renderExams();
       });
     });
@@ -1177,13 +1180,16 @@
       if(ex.tab!=='schedule') return;
       const exams=(doc&&doc.exams)||[];
       const selectedExams=exams.filter(e=>typeof examMatchesMyCourse==='function'&&examMatchesMyCourse(e));
-      const depts=Array.from(new Set(selectedExams.flatMap(e=>Object.keys(e.sections||{})))).sort();
-      const batches=Array.from(new Set(selectedExams.map(e=>String(e.batch||'')).filter(Boolean))).sort();
+      const depts=Array.from(new Set(exams.flatMap(e=>Object.keys(e.sections||{})))).sort();
+      const batches=Array.from(new Set(exams
+        .filter(e=>!ex.dept||(e.sections&&e.sections[ex.dept]))
+        .map(e=>String(e.batch||'')).filter(Boolean))).sort();
       $('m-exam-filters').innerHTML=filterChips(depts,batches);
       wireFilterChips();
 
       const out=$('m-exam-out');
-      if(!selectedExams.length){
+      const usesMyCourses=typeof examUsesMyCourses==='function'&&examUsesMyCourses(ex.dept);
+      if(usesMyCourses&&!selectedExams.length){
         out.innerHTML='<div class="m-empty">No courses selected locally. Add courses to My Courses to see their papers here.</div>';
         return;
       }
