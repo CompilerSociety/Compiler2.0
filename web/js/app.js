@@ -3623,6 +3623,9 @@ function normalizeExamCourseName(name){
 }
 function selectedExamCourseNames(){
   const names=new Set();
+  const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
+  const removed=new Set((profile?.courseRemoved||[]).map(normalizeExamCourseName));
+  const added=new Set((profile?.courses||[]).map(c=>normalizeExamCourseName(c&&c.name)).filter(Boolean));
   if(typeof getMyCourses==='function'){
     getMyCourses().forEach(c=>{
       const name=normalizeExamCourseName(c.name);
@@ -3634,10 +3637,8 @@ function selectedExamCourseNames(){
   // exam tab opens before that data has loaded, rebuild the default list from
   // the saved profile and the exam rows themselves, then apply the same local
   // removals/additions used by My Courses.
-  const profile=typeof getProfileCookie==='function'?getProfileCookie():null;
   const scope=typeof myScopeFromCookie==='function'?myScopeFromCookie():null;
   if(profile&&scope){
-    const removed=new Set((profile.courseRemoved||[]).map(normalizeExamCourseName));
     const exams=(_examData&&_examData.exams)||[];
     exams.forEach(e=>{
       const sections=e.sections&&e.sections[scope.dept];
@@ -3646,11 +3647,13 @@ function selectedExamCourseNames(){
         if(name&&!removed.has(name)) names.add(name);
       }
     });
-    (profile.courses||[]).forEach(c=>{
-      const name=normalizeExamCourseName(c&&c.name);
-      if(name) names.add(name);
-    });
   }
+
+  // Apply removals after all default sources have been merged. Explicitly
+  // added courses are applied last, so adding a previously removed course
+  // intentionally puts it back in the exam list.
+  removed.forEach(name=>{ if(!added.has(name)) names.delete(name); });
+  added.forEach(name=>names.add(name));
   return names;
 }
 function examMatchesMyCourse(e){
