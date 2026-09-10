@@ -3637,12 +3637,14 @@ function selectedExamCourseNames(){
   // exam tab opens before that data has loaded, rebuild the default list from
   // the saved profile and the exam rows themselves, then apply the same local
   // removals/additions used by My Courses.
-  const scope=typeof myScopeFromCookie==='function'?myScopeFromCookie():null;
-  if(profile&&scope){
+  const examDept=profile&&typeof profileDeptCode==='function'?profileDeptCode(profile):'';
+  const examBatch=profile&&typeof profileFullBatch==='function'?profileFullBatch(profile):'';
+  const examSection=String(profile?.section||'').trim().toUpperCase();
+  if(profile&&examDept&&examBatch&&examSection){
     const exams=(_examData&&_examData.exams)||[];
     exams.forEach(e=>{
-      const sections=e.sections&&e.sections[scope.dept];
-      if(e.batch===scope.batch&&Array.isArray(sections)&&sections.includes(scope.section)){
+      const sections=e.sections&&e.sections[examDept];
+      if(e.batch===examBatch&&Array.isArray(sections)&&sections.includes(examSection)){
         const name=normalizeExamCourseName(examCourseName(e));
         if(name&&!removed.has(name)) names.add(name);
       }
