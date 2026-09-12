@@ -3644,20 +3644,21 @@ const EXAM_SCHEDULE_URLS={computing:'/api/db?doc=exams/computing',engineering:'/
 let _examData=null;
 let _examLoadPromise=null;
 let _examSchool='computing';
+let _examPanelVersion=0;
 
 function loadExamScheduleData(){
   if(_examData) return Promise.resolve(_examData);
   if(_examLoadPromise) return _examLoadPromise;
-  _examLoadPromise=fetch(EXAM_SCHEDULE_URLS[_examSchool]||EXAM_SCHEDULE_URLS.computing,{cache:'no-store'})
+  const request=fetch(EXAM_SCHEDULE_URLS[_examSchool]||EXAM_SCHEDULE_URLS.computing,{cache:'no-store'})
     .then(r=>{ if(!r.ok) throw new Error('Exam schedule file not found'); return r.json(); })
     .then(data=>{
-      _examData=data||{};
-      if(!Array.isArray(_examData.exams)) _examData.exams=[];
-      if(!Array.isArray(_examData.flat_exams)) _examData.flat_exams=[];
+      data=data||{};
+      if(!Array.isArray(data.exams)) data.exams=[];
+      if(!Array.isArray(data.flat_exams)) data.flat_exams=[];
       // FSE exam exports encode departments in notes (BEE-A / BCE-A), while
       // FSC and FSM exports use the structured sections map. Normalize FSE
       // rows so the same department filters work for every school.
-      _examData.exams.forEach(e=>{
+      data.exams.forEach(e=>{
         if(e.sections&&Object.keys(e.sections).length) return;
         const sections={};
         for(const match of String(e.notes||'').matchAll(/\bB(EE|CE)\s*-\s*([A-E](?:\s*,\s*[A-E])*)/gi)){
@@ -3665,9 +3666,12 @@ function loadExamScheduleData(){
         }
         if(Object.keys(sections).length) e.sections=sections;
       });
-      return _examData;
+      // A request from a previously selected school may finish last.
+      if(_examLoadPromise===request) _examData=data;
+      return data;
     })
-    .catch(err=>{ _examLoadPromise=null; throw err; });
+    .catch(err=>{ if(_examLoadPromise===request) _examLoadPromise=null; throw err; });
+  _examLoadPromise=request;
   return _examLoadPromise;
 }
 
@@ -3690,7 +3694,9 @@ function setExamSchool(school){
 function renderFlatExamSchedule(){
   const out=document.getElementById('exam-flat-out');
   if(!out) return;
-  const flat=((_examData&&_examData.flat_exams)||[]).filter(examMatchesMyCourse);
+  const entries=(_examData&&_examData.flat_exams)||[];
+  if(!entries.length){ out.innerHTML=''; return; }
+  const flat=entries.filter(examMatchesMyCourse);
   if(!flat.length){
     out.innerHTML=renderUiState({
       kind:'empty',
@@ -3983,6 +3989,7 @@ function renderExamSchedule(){
 }
 
 function initExamSchedulePanel(){
+  const version=++_examPanelVersion;
   const prefs=readExamPrefs();
   const schoolSel=document.getElementById('ex-school');
   try{_examSchool=localStorage.getItem('fast_exam_school')||_examSchool;}catch(e){}
@@ -3993,6 +4000,7 @@ function initExamSchedulePanel(){
   if(flatOut) flatOut.innerHTML=renderUiState({ kind:'loading', title:'Loading schedule', message:'Checking whether a sessional schedule is available.' });
   if(out) out.innerHTML=renderUiState({ kind:'loading', title:'Loading exam schedule', message:'Fetching the latest exam data.' });
   loadExamScheduleData().then(()=>{
+    if(version!==_examPanelVersion) return;
     refreshExamDepartments();
     if(prefs.dept&&deptSel) deptSel.value=prefs.dept;
     if(prefs.batch&&batchSel) batchSel.value=prefs.batch;
@@ -4000,6 +4008,8 @@ function initExamSchedulePanel(){
     renderFlatExamSchedule();
     renderExamSchedule();
   }).catch(()=>{
+    if(version!==_examPanelVersion) return;
+    if(flatOut) flatOut.innerHTML='';
     if(out) out.innerHTML=renderUiState({
       kind:'error',
       title:'Could not load exam schedule',

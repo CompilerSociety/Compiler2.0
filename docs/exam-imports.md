@@ -97,7 +97,15 @@ python python/schedule_sync.py --gmail --write
 python python/schedule_sync.py "seating-plan.pdf" --kind seating
 python -m unittest discover -s python -p test_schedule_sync.py
 python -m unittest discover -s python -p test_seating_rooms.py
+node scripts/test/exam-schedule-source.cjs
+node scripts/test/exam-schedule-browser.cjs
 ```
+
+The exam browser checks use Playwright and installed Microsoft Edge. Set
+`PLAYWRIGHT_MODULE` to an installed Playwright package when it is not in
+`node_modules`. They use fixture APIs and check mobile/desktop rendering,
+school filters, date order, My Courses changes, school-switch races, and
+failed-load recovery without external writes.
 
 Seating PDF imports require complete room/date/time coverage. Unknown or scanned
 PDF layouts fail before publication instead of replacing live data with partial
