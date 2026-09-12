@@ -14,13 +14,13 @@
  * 2. Delete the sample code, paste this whole file.
  * 3. Create the GitHub fine-grained PAT at
  *    https://github.com/settings/tokens?type=beta
- *    Repository access = only "Riftwalker23x/Compiler2.0",
+ *    Repository access = only "CompilerSociety/Compiler2.0",
  *    Permissions -> Repository -> "Contents: Read and write".
  *    (Or a classic token with the "repo" scope.)
  * 4. Create a random dispatch secret, e.g.
  *    `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`, and:
  *      a) Add it as a repo secret in
- *         https://github.com/Riftwalker23x/Compiler2.0/settings/secrets/actions
+ *         https://github.com/CompilerSociety/Compiler2.0/settings/secrets/actions
  *         named SYNC_DISPATCH_SECRET (same value here). The workflow refuses
  *         dispatches whose client_payload.secret does not match.
  *      b) Optionally add a repo secret SYNC_DISPATCH_ALLOWED_SENDERS =
@@ -42,7 +42,7 @@
  * minute is the simple choice.
  */
 
-const GITHUB_OWNER = 'Riftwalker23x';
+const GITHUB_OWNER = 'CompilerSociety';
 const GITHUB_REPO  = 'Compiler2.0';
 
 const SCRIPT_PROPS = PropertiesService.getScriptProperties();

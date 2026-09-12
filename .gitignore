@@ -1,5 +1,8 @@
 # Secrets / local credentials
 service-account.json
+.env
+.env.*
+.cache/exam-import-preview.json
 
 # Python cache / build output
 __pycache__/

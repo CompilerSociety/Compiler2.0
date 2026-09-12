@@ -96,7 +96,11 @@ jobs:
           GMAIL_USER: compilersociety@gmail.com
           # 16-char Gmail App Password — add this as a repo secret named GMAIL_PASS.
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
-        run: python api/fetch-timetable.py
+        run: python python/schedule_sync.py --gmail --write
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Send seat-alert push notifications
         # Notifies each subscribed device whose NU ID appears in the seating plan

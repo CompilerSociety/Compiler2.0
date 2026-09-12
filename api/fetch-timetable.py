@@ -1,40 +1,10 @@
-"""
-Vercel Serverless Function / GitHub Actions CLI: fetch-timetable
+"""Schedule parsers and authenticated HTTP/CLI entry points.
 
-Fetches the latest matching Gmail message and routes it by subject keyword:
-  - subject contains "seating"  -> parses the attached seating-plan PDF into
-    db/seating/plan.json
-  - subject contains "schedule" -> parses the attached Final Exam Schedule
-    .xlsx workbook (date/time-slot matrix layout) into
-    db/exams/<school>.json
-  - subject contains "showup"   -> parses the attached Show Up Schedule .xlsx
-    workbook (plain one-row-per-section table, different layout) into
-    db/showup/<school>.json. The school edits this data
-    directly in a linked Google Sheet rather than resending email, so this
-    module also extracts that sheet's link from the email body once (see
-    maybe_bootstrap_showup_sheet_source) and `--poll-showup` (run via
-    .github/workflows/poll-showup-sheet.yml on a 5-min cron) re-fetches that
-    live sheet directly, independent of any new email.
-
-Required environment variables:
-  GMAIL_USER  – Gmail address
-  GMAIL_PASS  – Gmail App Password (not your regular password)
-  MONGODB_URI – Atlas connection string. Everything parsed here is stored in
-                MongoDB; there is no file or commit fallback, so a sync with
-                this unset fails loudly rather than silently discarding a
-                freshly parsed schedule.
-  SYNC_SECRET – shared secret that must accompany every request to the Vercel
-                handler. Read from the Authorization: Bearer header, the
-                X-Sync-Secret header, or the ?secret= query parameter. When
-                this is not set the handler refuses to run (fail closed), so
-                the sync endpoint can never be triggered by anonymous traffic.
-
-Optional environment variables:
-  MONGODB_DB  – database name (default: compiler2)
-
-No GitHub credentials any more. This module used to commit its output back to
-db/*.json through the Contents API; that tree was deleted when MongoDB became
-the only store, and leaving the commit in would have quietly re-created it.
+Gmail ingestion delegates to python/schedule_sync.py: all recent matching UIDs
+are processed with validated, transactional MongoDB writes and success receipts.
+The --poll-showup entry point retains the independent Google Sheet poller.
+Environment: MONGODB_URI, optional MONGODB_DB (compiler2), GMAIL_USER/GMAIL_PASS;
+HTTP calls additionally require SYNC_SECRET.
 """
 
 from __future__ import annotations
@@ -61,18 +31,12 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import unquote
 from urllib.request import Request, urlopen
 
-# MongoDB is the source of truth for db/ since the migration; the JSON files
-# this module writes are the committed mirror the frontend serves statically and
-# the API falls back to. Importing by path keeps working whether this runs as a
-# Vercel function (cwd = repo root) or as `python api/fetch-timetable.py` in the
-# sync workflow. It is optional on purpose: with no MONGODB_URI, or no pymongo,
-# every save below silently stays file-only and this job behaves exactly as it
-# did before Mongo existed.
+# Keep imports working from both the CLI and the Vercel function.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "python"))
 from seating_rooms import parse_pdf as parse_exam_rooms
 try:
     from db import store as _store
-except Exception:  # noqa: BLE001 - never let storage wiring break the sync
+except ImportError:  # Pure parsing remains usable without storage dependencies
     _store = None
 
 # ── Constants ────────────────────────────────────────────────────────────────
@@ -288,91 +252,6 @@ def _build_subject_or_criteria(keywords: list[str]) -> str:
         chain = f'OR ({chain}) (SUBJECT "{kw}")'
     return f"({chain})"
 
-
-def fetch_latest_matching_email() -> tuple[str, str, str, bytes | None, str]:
-    """
-    Connect to Gmail IMAP, find the newest message whose subject matches one of
-    SUBJECT_ROUTES (preferring unread), and return (kind, subject, plain_body,
-    attachment_bytes, attachment_filename). `kind` is "seating" or
-    "exam_schedule" per SUBJECT_ROUTES; attachment_filename is "" when not
-    applicable (e.g. the seating PDF route doesn't need it).
-    Marks the message as \\Seen after a successful read.
-    """
-    user = os.environ.get("GMAIL_USER", "").strip()
-    password = os.environ.get("GMAIL_PASS", "").strip()
-    if not user or not password:
-        raise RuntimeError("GMAIL_USER and GMAIL_PASS environment variables are required")
-
-    context = ssl.create_default_context()
-    mail = imaplib.IMAP4_SSL(GMAIL_IMAP_HOST, GMAIL_IMAP_PORT, ssl_context=context)
-    try:
-        mail.login(user, password)
-        mail.select("INBOX")
-
-        subject_criteria = _build_subject_or_criteria(list(SUBJECT_ROUTES.keys()))
-
-        # Prefer the newest UNREAD matching email; if none is found (e.g. it was
-        # already opened), fall back to the newest matching email regardless of
-        # read state so an opened email still gets processed.
-        ids: list[bytes] = []
-        for criteria in (
-            ("UNSEEN", subject_criteria),
-            (subject_criteria,),
-        ):
-            status, data = mail.search(None, *criteria)
-            if status != "OK":
-                raise RuntimeError(f"IMAP search failed: {status}")
-            found = data[0].split() if data and data[0] else []
-            if found:
-                ids = found
-                break
-
-        if not ids:
-            raise RuntimeError('No emails found with "seating", "schedule", or "showup" in the subject')
-
-        latest_id = ids[-1]
-        status, fetched = mail.fetch(latest_id, "(RFC822)")
-        if status != "OK" or not fetched or not fetched[0]:
-            raise RuntimeError("Failed to fetch email payload")
-
-        raw_bytes = fetched[0][1]
-        msg = email.message_from_bytes(raw_bytes)
-        subject = decode_mime_header(msg.get("Subject", ""))
-        subject_lower = subject.lower()
-
-        kind = None
-        for keyword, (label, _path) in SUBJECT_ROUTES.items():
-            if keyword in subject_lower:
-                kind = label
-                break
-        if kind is None:
-            raise RuntimeError(f"Matched email subject {subject!r} did not match any known route")
-
-        # Always extract body text - for "seating" this is (mainly) the PDF's
-        # own text; for xlsx routes there's no PDF so this naturally falls
-        # through to the mail's own plain/html body, which is what lets us
-        # scan for a linked Google Sheet URL below (see maybe_bootstrap_showup_sheet_source).
-        body = extract_plain_text(msg)
-        attachment_filename = ""
-        if kind == "seating":
-            attachment = find_pdf_attachment(msg)
-        else:
-            xlsx_found = find_xlsx_attachment(msg)
-            if xlsx_found:
-                attachment, attachment_filename = xlsx_found
-            else:
-                attachment = None
-
-        mail.store(latest_id, "+FLAGS", "\\Seen")
-        return kind, subject, body, attachment, attachment_filename
-    finally:
-        try:
-            mail.logout()
-        except Exception:
-            pass
-
-
-# ── Email body → JSON parsing ──────────────────────────────────────────────────
 
 def normalize_header(label: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", (label or "").lower()).strip()
@@ -803,6 +682,12 @@ def _excel_serial_to_iso_date(value: Any) -> str:
         return value.date().isoformat()
     if hasattr(value, "isoformat") and not isinstance(value, str):
         return value.isoformat()
+    if isinstance(value, str):
+        for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%d %B %Y", "%d %b %Y"):
+            try:
+                return datetime.strptime(value.strip(), fmt).date().isoformat()
+            except ValueError:
+                pass
     try:
         n = float(value)
     except (TypeError, ValueError):
@@ -821,6 +706,11 @@ def _iso_date_day_name(iso_date: str) -> str:
 
 def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
     """Parse one matrix cell into {code, course, batch, sections, notes}."""
+    # Normalize undergraduate program spellings before extracting scopes.
+    text = re.sub(r"\bBS\s*\(\s*([A-Z]+)\s*\)", r"BS(\1)", text, flags=re.I)
+    for alias, dept in {"BBA": "BBA", "BAF": "AF", "BEE": "EE", "BCE": "CE"}.items():
+        text = re.sub(rf"\b{alias}\s*(?=-|[A-Z]\b)", f"BS({dept})", text)
+    text = re.sub(r"^([A-Z]{2,3})-(\d{3,4})", r"\1\2", text.strip())
     lines = [ln.strip() for ln in re.split(r"\r\n|\r|\n", text) if ln.strip()]
     if not lines:
         return None
@@ -829,6 +719,9 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
     code = m.group(1) if m else None
     course = m.group(2).strip() if m else lines[0]
     metadata_lines = lines[1:]
+    if code and not course and metadata_lines:
+        course = metadata_lines.pop(0)
+    course = course.lstrip("- ").rstrip("\\ ")
     # Some spreadsheet cells keep the department, sections and batch on the
     # same line as the course title (for example:
     # "AI3001 Knowledge Rep. and Reasoning BS(AI) A,B,C 2024"). Split that
@@ -956,6 +849,8 @@ def parse_exam_schedule_sheet(ws: Any) -> list[dict[str, Any]]:
                 continue
             parsed = parse_exam_paper_cell(str(cell_value))
             if not parsed or not parsed.get("code"):
+                if current_date and re.match(r"^[A-Z]{2,3}\s*-?\s*\d{3,4}", str(cell_value)):
+                    raise ValueError(f"Unrecognized exam cell {ws.title}!{row[col_idx].coordinate}")
                 continue
             scopes = parsed.get("scopes") or [{
                 "batch": parsed["batch"], "sections": parsed["sections"],
@@ -969,6 +864,8 @@ def parse_exam_schedule_sheet(ws: Any) -> list[dict[str, Any]]:
                     "course": parsed["course"],
                     "batch": scope["batch"],
                     "sections": scope["sections"],
+                    "source_cell": f"{ws.title}!{row[col_idx].coordinate}",
+                    "source_text": str(cell_value),
                 }
                 if parsed.get("notes"):
                     entry["notes"] = parsed["notes"]
@@ -994,7 +891,7 @@ MIDTERM_CODE_RE = re.compile(r"^([A-Z]{2,3}-?\d{3,4})\s+(.*)$", re.S)
 # into the room/course columns too and look like fake data - require the
 # room column to at least START with a room-code-like prefix (e.g. "C-301",
 # "A-101  1st flr", "B-019") to guard against that.
-MIDTERM_ROOM_RE = re.compile(r"^[A-Z]{1,3}-?\d+")
+MIDTERM_ROOM_RE = re.compile(r"^[A-Z]{1,3}-?\d{1,3}(?:\s+(?:\d+(?:st|nd|rd|th)\s+fl(?:oo)?r).*)?$", re.I)
 MIDTERM_SLOT_COLS = (2, 4, 6)  # 0-indexed: C, E, G
 
 
@@ -1028,16 +925,12 @@ def _fill_merged_values(ws: Any) -> list[list[Any]]:
 def parse_midterm_schedule_sheet(ws: Any) -> list[dict[str, Any]]:
     grid = _fill_merged_values(ws)
 
-    header_idx = next(
-        (i for i, row in enumerate(grid) if len(row) > 2 and MIDTERM_HEADER_TIME_RE.match(str(row[2] or ""))),
-        None,
-    )
+    header_idx = next((i for i, row in enumerate(grid)
+                       if any(MIDTERM_HEADER_TIME_RE.match(str(v or "")) for v in row[2:])), None)
     if header_idx is None:
         return []
-    slot_labels = {
-        c: str(grid[header_idx][c]).strip()
-        for c in MIDTERM_SLOT_COLS if c < len(grid[header_idx]) and grid[header_idx][c]
-    }
+    slot_labels = {c: str(cell.value).strip() for c, cell in enumerate(list(ws.iter_rows())[header_idx])
+                   if c >= 2 and MIDTERM_HEADER_TIME_RE.match(str(cell.value or ""))}
 
     exams: list[dict[str, Any]] = []
     current_date = ""
@@ -1050,7 +943,7 @@ def parse_midterm_schedule_sheet(ws: Any) -> list[dict[str, Any]]:
         room = str(row[1]).strip() if len(row) > 1 and row[1] else ""
         if not room or not MIDTERM_ROOM_RE.match(room):
             continue
-        for col in MIDTERM_SLOT_COLS:
+        for col in slot_labels:
             if col >= len(row) or not row[col]:
                 continue
             cell_text = str(row[col]).strip()
@@ -1079,7 +972,7 @@ def parse_exam_schedule_workbook(xlsx_bytes: bytes, subject: str, filename: str 
     """
     import openpyxl  # local import: only needed for the exam-schedule route
 
-    wb = openpyxl.load_workbook(io.BytesIO(xlsx_bytes), data_only=True, read_only=True)
+    wb = openpyxl.load_workbook(io.BytesIO(xlsx_bytes), data_only=True, read_only=False)
     documents: dict[str, dict[str, Any]] = {}
     try:
         for sheet_name in wb.sheetnames:
@@ -1087,10 +980,14 @@ def parse_exam_schedule_workbook(xlsx_bytes: bytes, subject: str, filename: str 
             if not school:
                 continue
             ws = wb[sheet_name]
-            exams = parse_exam_schedule_sheet(ws)
-            flat_exams = [] if exams else parse_midterm_schedule_sheet(ws)
+            # Room grids also contain course codes; detect them before the matrix parser.
+            flat_exams = parse_midterm_schedule_sheet(ws)
+            exams = [] if flat_exams else parse_exam_schedule_sheet(ws)
             if not exams and not flat_exams:
-                continue
+                raise ValueError(f"Recognized school sheet {sheet_name!r} contains no parsed exams")
+            previous = documents.get(school, {})
+            exams = previous.get("exams", []) + exams
+            flat_exams = previous.get("flat_exams", []) + flat_exams
             documents[school] = {
                 "updated_at": datetime.now(timezone.utc).isoformat(),
                 "source_subject": subject,
@@ -1374,105 +1271,24 @@ class handler(BaseHTTPRequestHandler):
                                "message": "Missing or invalid sync secret."})
             return
         try:
-            kind, subject, body, attachment, attachment_filename = fetch_latest_matching_email()
-            if kind == "seating":
-                document = parse_seating_plan_email(body, subject, attachment)
-                path = SUBJECT_ROUTES["seating"][1]
-                _write_json_file(path, document)
-                json_response(
-                    self, 200,
-                    {
-                        "ok": True,
-                        "message": "Seating plan synced successfully from PDF file",
-                        "students_parsed": document["count"],
-                        "source_subject": subject,
-                        "stored": path,
-                    },
-                )
-            else:
-                if not attachment:
-                    raise RuntimeError(f"No .xlsx attachment found on the {kind} email")
-                parser = (
-                    parse_showup_schedule_workbook if kind == "showup_schedule"
-                    else parse_exam_schedule_workbook
-                )
-                documents = parser(attachment, subject, attachment_filename)
-                prefix = SCHEDULE_FILE_PREFIX[kind]
-                stored = []
-                for school, doc in documents.items():
-                    path = f"db/{prefix.replace('exam-schedule', 'exams').replace('showup-schedule', 'showup')}/{school}.json"
-                    _write_json_file(doc_path := path, doc)
-                    stored.append(doc_path)
-                json_response(
-                    self, 200,
-                    {
-                        "ok": True,
-                        "message": f"{kind} synced successfully from xlsx file",
-                        "schools_parsed": {s: d["count"] for s, d in documents.items()},
-                        "source_subject": subject,
-                        "stored": stored,
-                    },
-                )
+            from schedule_sync import sync_gmail
+            sync_gmail()
+            json_response(self, 200, {"ok": True, "message": "Validated mailbox imports completed"})
         except Exception as exc:
-            json_response(self, 500, {"ok": False, "error": str(exc)})
+            json_response(self, 500, {"ok": False, "error": type(exc).__name__})
 
     def log_message(self, format: str, *args: Any) -> None:
         return
 
 
 # ── Standalone CLI (GitHub Actions / local) ────────────────────────────────────
-# Same fetch+parse pipeline as the Vercel handler, but writes JSON straight to
-# disk so a CI workflow can commit it with its own GITHUB_TOKEN. Only
-# GMAIL_USER / GMAIL_PASS are required in this mode.
+# Same transactional Gmail pipeline as the authenticated Vercel handler.
 
 def run_cli() -> int:
-    try:
-        kind, subject, body, attachment, attachment_filename = fetch_latest_matching_email()
-    except RuntimeError as exc:
-        # A scheduled run with no matching email is a no-op, not a failure.
-        if "No emails found" in str(exc):
-            print("No seating/schedule/showup email found - nothing to sync.")
-            return 0
-        raise
-
-    # Regardless of what else happens below: if this is a showup-schedule email
-    # and its body links a Google Sheet we haven't recorded yet, save it so the
-    # live poller (run_showup_poll_cli, on its own 5-min schedule) can use it -
-    # this is how we track edits made directly in the sheet, with no new email.
-    maybe_bootstrap_showup_sheet_source(kind, subject, body)
-
-    if kind == "seating":
-        document = parse_seating_plan_email(body, subject, attachment)
-        path = SUBJECT_ROUTES["seating"][1]
-        _write_json_file(path, document)
-        print(f"Wrote {path}: {document['count']} student(s) (subject: {subject!r})")
-    else:
-        if not attachment:
-            print(f"{kind} email (subject: {subject!r}) had no .xlsx attachment - skipping "
-                  f"the attachment parse (any linked Google Sheet was still checked above).")
-            return 0
-        parser = (
-            parse_showup_schedule_workbook if kind == "showup_schedule"
-            else parse_exam_schedule_workbook
-        )
-        documents = parser(attachment, subject, attachment_filename)
-        prefix = SCHEDULE_FILE_PREFIX[kind]
-        for school, doc in documents.items():
-            path = f"db/{prefix.replace('exam-schedule', 'exams').replace('showup-schedule', 'showup')}/{school}.json"
-            # Each new schedule email fully REPLACES the previous one - the
-            # latest emailed schedule is the current one. (A dept/section
-            # schedule like the Final/Sessional populates "exams"; a room-grid
-            # Midterm populates "flat_exams"; the unused array stays empty so
-            # the old format's data doesn't linger.)
-            _write_json_file(path, doc)
-            print(f"Wrote {path}: {doc['count']} exam entries (subject: {subject!r}, file: {attachment_filename!r})")
+    from schedule_sync import sync_gmail
+    sync_gmail()
     return 0
 
-
-# ── Standalone CLI: live Show Up Schedule sheet poll ────────────────────────────
-# Runs on its own tight schedule (every 5 min - see
-# .github/workflows/poll-showup-sheet.yml), independent of email. No-op if no
-# sheet has been discovered yet (see maybe_bootstrap_showup_sheet_source above).
 
 def run_showup_poll_cli() -> int:
     sheet_id = read_showup_sheet_id()
