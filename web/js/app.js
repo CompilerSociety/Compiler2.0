@@ -1312,7 +1312,7 @@ async function refreshRoomExamData(){
     };
     const schools=['computing','business','engineering'];
     const results=await Promise.allSettled([
-      ...schools.map(s=>fetchDoc('/db/exams/'+s+'.json')),
+      ...schools.map(s=>fetchDoc('/api/db?doc=exams/'+s)),
       fetchDoc('/db/seating/plan.json')
     ]);
     const schedules=results.slice(0,3);
@@ -3639,7 +3639,8 @@ function dDay(d){return["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];}
 
 /* Real data, loaded from db/exams/<school>.json (synced from the
    Final Examination Schedule xlsx via the Gmail sync backend). */
-const EXAM_SCHEDULE_URLS={computing:'/db/exams/computing.json',engineering:'/db/exams/engineering.json',business:'/db/exams/business.json'};
+// Use MongoDB directly: tracked db/exams snapshots can shadow URL rewrites.
+const EXAM_SCHEDULE_URLS={computing:'/api/db?doc=exams/computing',engineering:'/api/db?doc=exams/engineering',business:'/api/db?doc=exams/business'};
 let _examData=null;
 let _examLoadPromise=null;
 let _examSchool='computing';

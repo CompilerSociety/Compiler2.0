@@ -21,7 +21,7 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
       const json=data=>route.fulfill({json:data});
       if(p==='/js/status.js') return route.fulfill({contentType:'text/javascript',body:'window.SITE_STATUS={isLive:()=>true};'});
       if(p==='/db/seating/plan.json') return missing?route.fulfill({status:404}):json(seating);
-      if(p.startsWith('/db/exams/')) return json({exams:p.includes('computing')?[{date:'2025-12-15'},{date:'2025-12-16'}]:[]});
+      if(p==='/api/db'&&url.searchParams.get('doc')?.startsWith('exams/')) return json({exams:url.searchParams.get('doc').includes('computing')?[{date:'2025-12-15'},{date:'2025-12-16'}]:[]});
       if(p==='/api/timetable') return json({ok:true,tt:{'BS CS':{'2025':{A:{Monday:[{name:'Normal class',time:'08:30-11:15',location:'C-306'}]}}}}});
       if(p.startsWith('/api/')||p.startsWith('/db/')||url.hostname!=='vtable.test') return json({});
       const file=path.join(root,'web',p==='/'?'index.html':p);
