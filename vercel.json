@@ -133,10 +133,6 @@
       "destination": "/api/db?doc=timetables/repeat-computing"
     },
     {
-      "source": "/db/seating-plan.json",
-      "destination": "/api/db?doc=seating/plan"
-    },
-    {
       "source": "/db/showup-schedule-computing.json",
       "destination": "/api/db?doc=showup/computing"
     },
@@ -203,10 +199,6 @@
     {
       "source": "/db/timetables/repeat-computing.json",
       "destination": "/api/db?doc=timetables/repeat-computing"
-    },
-    {
-      "source": "/db/seating/plan.json",
-      "destination": "/api/db?doc=seating/plan"
     },
     {
       "source": "/db/showup/computing.json",

@@ -98,6 +98,19 @@ jobs:
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
         run: python python/schedule_sync.py --gmail --write
 
+      - name: Commit refreshed seating plan JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          git add -f db/seating/plan.json
+          if git diff --cached --quiet; then
+            echo "Seating plan JSON is unchanged."
+          else
+            git commit -m "data: refresh seating plan"
+            git push origin HEAD:main
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

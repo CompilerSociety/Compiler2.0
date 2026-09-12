@@ -66,6 +66,17 @@ def content_hash(doc):
     return hashlib.sha256(json.dumps(stable, sort_keys=True).encode()).hexdigest()
 
 
+def write_local_mirror(key, doc):
+    """Replace the committed local JSON mirror for a published document."""
+    if key != "seating/plan":
+        return
+    path = ROOT / "db" / "seating" / "plan.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    os.replace(temporary, path)
+
+
 def publish(db, docs, source, receipt=None):
     """All schools, previous revisions and receipt commit in one transaction.
 
@@ -112,9 +123,13 @@ def publish(db, docs, source, receipt=None):
         return results
 
     with db.client.start_session() as session:
-        return session.with_transaction(commit, read_concern=ReadConcern("snapshot"),
-                                        write_concern=WriteConcern("majority"),
-                                        read_preference=ReadPreference.PRIMARY)
+        results = session.with_transaction(commit, read_concern=ReadConcern("snapshot"),
+                                           write_concern=WriteConcern("majority"),
+                                           read_preference=ReadPreference.PRIMARY)
+    for key, status in results.items():
+        if status in ("written", "unchanged"):
+            write_local_mirror(key, docs[key])
+    return results
 
 
 def dates_for(doc):
