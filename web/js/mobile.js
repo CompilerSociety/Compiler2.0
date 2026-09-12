@@ -1340,6 +1340,7 @@
       out.innerHTML=matches.slice(0,8).map(s=>`<div class="m-seat-card m-reveal" style="margin-bottom:10px">
           <div class="m-seat-name">${esc(s.name||'Student')}</div>
           <div class="m-seat-label">${esc(s.nuid||'')}</div>
+          <div class="m-seat-meta">${esc(s.paper||'—')} · ${esc(s.time||'—')} · ${esc(s.class||'—')}</div>
           <div class="m-seat-value">${esc(s.seat||'—')}</div>
         </div>`).join('')+
         `<div class="m-caption">${esc((doc&&doc.source_subject)||'Current seating plan')}</div>`;

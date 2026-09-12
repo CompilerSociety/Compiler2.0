@@ -313,6 +313,7 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-hero-line{font-size:13.5px;opacity:.85;position:relative;word-break:break-word}
 .m-seat-card{background:var(--tint);border-radius:28px;padding:22px;text-align:center}
 .m-seat-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.m-seat-meta{font-size:12px;line-height:1.4;color:var(--mute);margin-top:8px}
 .m-seat-value{font-family:var(--mono);font-weight:500;font-size:26px;color:var(--green);margin-top:6px}
 .m-seat-name{font-weight:700;font-size:16px;margin-bottom:16px}
 

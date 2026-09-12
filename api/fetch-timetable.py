@@ -394,8 +394,14 @@ def normalize_entry(entry: dict[str, str]) -> dict[str, str]:
 # Handles the jsPDF "SEATING PLAN" sheets: shared Date/Slot/Venue headers, a
 # course/paper line, and two side-by-side "S# Roll No. Student Name Seat" tables.
 
-# Seat may be a plain number (e.g. "21") or a column-row code (e.g. "C1R2").
-FAST_REC = re.compile(r"^\s*(\d{1,3})\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+([A-Z]\d+[A-Z]\d+|\d{1,3})\s*$")
+# Seat may be a plain number (e.g. "21"), a column-row code (e.g. "C1R2"),
+# or a special chair assignment used by some seating sheets ("Chair1" /
+# "Chair2").  Chair assignments are valid seating records and must not cause
+# the complete student row to be dropped.
+FAST_REC = re.compile(
+    r"^\s*(\d{1,3})\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+"
+    r"([A-Z]\d+[A-Z]\d+|\d{1,3}|[Cc]hair\d+)\s*$"
+)
 FAST_PAPER = re.compile(r"^\s*([A-Z]{2,3}\d{3,4}\s*,\s*[A-Z0-9\-/]+)\s*-?\s*(.*)$")
 
 
