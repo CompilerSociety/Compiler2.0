@@ -26,25 +26,18 @@ Successful file writes verify the stored content by reading it back.
 
 ## Import automatically on push
 
-Commit and push the exam `.xlsx` in the repository root (including the current
-September workbook), or under `exam-schedules/`, to `main`. **Import exam data
-file** automatically validates and publishes added or modified workbooks using
-the repository secret `MONGODB_URI`. No local database credentials or manual
-workflow inputs are needed. `MONGODB_DB` is an optional repository variable.
-GitHub Actions runs on the push; a local commit alone cannot start it.
+Keep the single exam schedule `.xlsx` in the repository root. Commit and push
+it with the workflow and importer to `main`. **Import exam data file** finds
+that workbook automatically and writes its school schedules using the repository
+secret `MONGODB_URI` (optional variable `MONGODB_DB`, default `compiler2`).
+Manual **Run workflow** does exactly the same, with no inputs.
 
-The importer examines the entire push range, handles filenames with spaces,
-ignores deleted files and Excel lock files, and reads bytes from the pushed
-commit. The commit timestamp identifies the revision. All changed workbooks
-are validated before a single transaction publishes the documents, followed
-by read-back verification. Commit one current revision per school: ambiguous
-workbooks targeting the same school fail instead of guessing which is latest.
-The workflow and importer must be included in your push along with the workbook.
-
-The manual **Import exam data file** GitHub workflow accepts a committed file
-path, kind, source timestamp and write flag. It defaults to validation only and
-uses the repository MongoDB secret for writes. Local uncommitted files must be
-imported locally or committed before using that workflow.
+Only the root exam workbook is opened. Seating-plan PDFs, seating workbooks,
+Excel lock files and nested files are ignored. The importer requires exactly
+one eligible workbook and publishes only `exams/*` documents. It validates the
+workbook, commits the school documents together, and verifies the stored data.
+The pushed commit timestamp identifies the revision. A local commit alone does
+not start GitHub Actions; push it first.
 
 ## What was failing
 

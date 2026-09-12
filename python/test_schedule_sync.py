@@ -14,7 +14,7 @@ import tempfile
 
 
 class ScheduleSyncTests(unittest.TestCase):
-    def test_push_range_handles_spaces_multiple_commits_and_deletions(self):
+    def test_single_root_schedule_ignores_seating_and_nested_files(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             def git(*args):
@@ -22,28 +22,29 @@ class ScheduleSyncTests(unittest.TestCase):
             git("init", "-q")
             git("config", "user.email", "test@example.com")
             git("config", "user.name", "Test")
-            (root / "deleted.xlsx").write_bytes(b"old")
+            name = "1st Sessional Exams Schedule.xlsx"
+            (root / name).write_bytes(self.workbook(("FSC", "FSM", "FSE")))
+            (root / "Seating Plan.pdf").write_bytes(b"must never be parsed")
+            (root / "Seating Plan.xlsx").write_bytes(b"must never be parsed")
+            (root / "~$schedule.xlsx").write_bytes(b"lock")
+            (root / "nested").mkdir()
+            (root / "nested" / "other.xlsx").write_bytes(b"must never be parsed")
             git("add", ".")
-            git("commit", "-qm", "base")
-            before = git("rev-parse", "HEAD")
-            (root / "deleted.xlsx").unlink()
-            (root / "Exam schedule with spaces.xlsx").write_bytes(self.workbook())
-            git("add", "-A")
-            git("commit", "-qm", "schedule")
-            (root / "exam-schedules").mkdir()
-            (root / "exam-schedules" / "engineering.xlsx").write_bytes(self.workbook(("FSE",)))
-            (root / "~$temporary.xlsx").write_bytes(b"lock")
-            git("add", ".")
-            git("commit", "-qm", "second school")
+            git("commit", "-qm", "schedule and unrelated files")
             after = git("rev-parse", "HEAD")
             with patch.object(sync, "ROOT", root):
-                expected = ["Exam schedule with spaces.xlsx", "exam-schedules/engineering.xlsx"]
-                self.assertEqual(committed.changed_workbooks(before, after), expected)
-                self.assertEqual(committed.changed_workbooks("0" * 40, after), expected)
-                with patch.object(sys, "argv", ["import_committed_exams.py", "--before", before, "--after", after]), \
-                     patch.object(sync, "connect") as connect:
+                self.assertEqual(committed.exam_workbook(after), name)
+                docs = sync.parse_attachment((root / name).read_bytes(), name, "exams")
+                db = MagicMock()
+                db.documents.find_one.side_effect = lambda query: {"data": docs[query["_id"]]}
+                with patch.dict(sync.os.environ, {"PUSH_AFTER": after}), \
+                     patch.object(sys, "argv", ["import_committed_exams.py", "--write"]), \
+                     patch.object(sync, "connect", return_value=db), \
+                     patch.object(sync, "publish", return_value={key: "written" for key in docs}) as publish:
                     committed.main()
-                    connect.assert_not_called()
+                    self.assertEqual(set(publish.call_args.args[1]),
+                                     {"exams/computing", "exams/business", "exams/engineering"})
+                    self.assertEqual(db.documents.find_one.call_count, 3)
 
     def workbook(self, names=("FSC",)):
         wb = openpyxl.Workbook()

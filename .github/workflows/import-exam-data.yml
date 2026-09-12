@@ -5,25 +5,7 @@ on:
     branches: [main]
     paths:
       - '*.xlsx'
-      - 'exam-schedules/**/*.xlsx'
   workflow_dispatch:
-    inputs:
-      file:
-        description: Repository-relative XLSX or seating PDF path
-        required: true
-        type: string
-      kind:
-        type: choice
-        options: [exams, seating, showup]
-        default: exams
-      source_time:
-        description: 'Revision timestamp including timezone, e.g. 2026-09-11T00:00:00+05:00'
-        required: true
-        type: string
-      write:
-        description: Commit validated data to MongoDB
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -45,25 +27,9 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python -m unittest discover -s python -p 'test_schedule_sync.py'
-      - name: Import committed exam workbooks
-        if: github.event_name == 'push'
+      - name: Import the root exam schedule
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DB: ${{ vars.MONGODB_DB || 'compiler2' }}
-          PUSH_BEFORE: ${{ github.event.before }}
           PUSH_AFTER: ${{ github.sha }}
         run: python python/import_committed_exams.py --write
-      - name: Validate and import
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          MONGODB_DB: ${{ vars.MONGODB_DB || 'compiler2' }}
-          INPUT_FILE: ${{ inputs.file }}
-          INPUT_KIND: ${{ inputs.kind }}
-          SOURCE_TIME: ${{ inputs.source_time }}
-          WRITE_DATA: ${{ inputs.write }}
-        run: |
-          args=("$INPUT_FILE" --kind "$INPUT_KIND" --source-time "$SOURCE_TIME")
-          if [ "$WRITE_DATA" = true ]; then args+=(--write); fi
-          python python/schedule_sync.py "${args[@]}"
