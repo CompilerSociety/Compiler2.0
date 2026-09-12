@@ -8,44 +8,9 @@ from unittest.mock import MagicMock, patch
 
 import openpyxl
 import schedule_sync as sync
-import import_committed_exams as committed
-import subprocess
-import tempfile
 
 
 class ScheduleSyncTests(unittest.TestCase):
-    def test_single_root_schedule_ignores_seating_and_nested_files(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            def git(*args):
-                return subprocess.check_output(["git", "-C", directory, *args]).decode().strip()
-            git("init", "-q")
-            git("config", "user.email", "test@example.com")
-            git("config", "user.name", "Test")
-            name = "1st Sessional Exams Schedule.xlsx"
-            (root / name).write_bytes(self.workbook(("FSC", "FSM", "FSE")))
-            (root / "Seating Plan.pdf").write_bytes(b"must never be parsed")
-            (root / "Seating Plan.xlsx").write_bytes(b"must never be parsed")
-            (root / "~$schedule.xlsx").write_bytes(b"lock")
-            (root / "nested").mkdir()
-            (root / "nested" / "other.xlsx").write_bytes(b"must never be parsed")
-            git("add", ".")
-            git("commit", "-qm", "schedule and unrelated files")
-            after = git("rev-parse", "HEAD")
-            with patch.object(sync, "ROOT", root):
-                self.assertEqual(committed.exam_workbook(after), name)
-                docs = sync.parse_attachment((root / name).read_bytes(), name, "exams")
-                db = MagicMock()
-                db.documents.find_one.side_effect = lambda query: {"data": docs[query["_id"]]}
-                with patch.dict(sync.os.environ, {"PUSH_AFTER": after}), \
-                     patch.object(sys, "argv", ["import_committed_exams.py", "--write"]), \
-                     patch.object(sync, "connect", return_value=db), \
-                     patch.object(sync, "publish", return_value={key: "written" for key in docs}) as publish:
-                    committed.main()
-                    self.assertEqual(set(publish.call_args.args[1]),
-                                     {"exams/computing", "exams/business", "exams/engineering"})
-                    self.assertEqual(db.documents.find_one.call_count, 3)
-
     def workbook(self, names=("FSC",)):
         wb = openpyxl.Workbook()
         wb.remove(wb.active)
@@ -174,6 +139,48 @@ class ScheduleSyncTests(unittest.TestCase):
         stores = [c for c in mail.uid.call_args_list if c.args[0] == "store"]
         self.assertEqual(len(stores), 1)
         self.assertEqual(stores[0].args[1], b"2")
+
+    def test_exam_workflow_reads_latest_gmail_schedule_only(self):
+        messages = {}
+        for uid, subject in ((b"1", "Old Exam Schedule"), (b"2", "Sessional Exam Schedule"),
+                             (b"3", "Seating Plan of Final Exam")):
+            msg = EmailMessage()
+            msg["Subject"] = subject
+            msg.set_content("Attached")
+            msg.add_attachment(self.workbook(), maintype="application", subtype="octet-stream", filename="exam.xlsx")
+            msg.add_attachment(b"must not parse", maintype="application", subtype="pdf", filename="seating.pdf")
+            messages[uid] = msg.as_bytes()
+        mail = MagicMock()
+        mail.select.return_value = ("OK", [])
+        mail.response.return_value = ("UIDVALIDITY", [b"123"])
+        def uid(command, *args):
+            if command == "search":
+                self.assertNotIn("SINCE", args)
+                self.assertNotIn("UNSEEN", args)
+                return "OK", [b"1 2 3"]
+            if command == "fetch":
+                return "OK", [(b'1 (INTERNALDATE "11-Sep-2026 12:00:00 +0000")', messages[args[0]])]
+            return "OK", []
+        mail.uid.side_effect = uid
+        db = MagicMock()
+        db.schedule_imports.find_one.return_value = None
+        with patch.dict(sync.os.environ, {"GMAIL_USER": "test@example.com", "GMAIL_PASS": "fixture"}), \
+             patch.object(sync, "connect", return_value=db), \
+             patch("imaplib.IMAP4_SSL", return_value=mail), \
+             patch.object(sync, "parse_attachment", wraps=sync.parse_attachment) as parse, \
+             patch.object(sync, "publish", return_value={"exams/computing": "written"}) as publish:
+            sync.sync_gmail(exams_only=True)
+            self.assertEqual(parse.call_count, 1)
+            self.assertEqual(parse.call_args.args[2], "exams")
+            self.assertEqual(publish.call_args.args[2]["message_uid"], "2")
+            self.assertEqual([c.args[1] for c in mail.uid.call_args_list if c.args[0] == "fetch"], [b"3", b"2"])
+            # A broken newest schedule must never fall back to the older one.
+            mail.uid.reset_mock()
+            publish.side_effect = ValueError("invalid schedule")
+            with self.assertRaisesRegex(RuntimeError, "UID 2 failed"):
+                sync.sync_gmail(exams_only=True)
+            self.assertEqual([c.args[1] for c in mail.uid.call_args_list if c.args[0] == "fetch"], [b"3", b"2"])
+            self.assertFalse(any(c.args[0] == "store" for c in mail.uid.call_args_list))
 
 
 if __name__ == "__main__":

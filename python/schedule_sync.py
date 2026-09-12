@@ -132,7 +132,7 @@ def connect():
     return client[os.environ.get("MONGODB_DB", "compiler2")]
 
 
-def sync_gmail(days=30):
+def sync_gmail(days=30, exams_only=False):
     """Scan recent matching UIDs regardless of read state; checkpoint only on commit."""
     import imaplib
     import ssl
@@ -146,13 +146,22 @@ def sync_gmail(days=30):
             raise RuntimeError("Cannot select INBOX")
         validity = mail.response("UIDVALIDITY")[1][0].decode()
         since = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%d-%b-%Y")
-        status, data = mail.uid("search", None, "SINCE", since,
-                                parser._build_subject_or_criteria(["seating", "schedule", "showup", "show up"]))
+        criteria = (parser._build_subject_or_criteria(["schedule", "exam", "sessional"]),) if exams_only else (
+            "SINCE", since, parser._build_subject_or_criteria(["seating", "schedule", "showup", "show up"]))
+        status, data = mail.uid("search", None, *criteria)
         if status != "OK":
             raise RuntimeError("IMAP search failed")
-        for uid in data[0].split():
+        uids = data[0].split()
+        if exams_only:
+            uids = sorted(uids, key=int, reverse=True)
+        for uid in uids:
             receipt = f"{os.environ['GMAIL_USER']}:INBOX:{validity}:{uid.decode()}"
+            if exams_only:
+                receipt += ":exams-v1"
             if db.schedule_imports.find_one({"_id": receipt}):
+                if exams_only:
+                    print("Latest exam schedule already imported from Gmail.")
+                    return
                 continue
             try:
                 status, parts = mail.uid("fetch", uid, "(BODY.PEEK[] INTERNALDATE)")
@@ -163,12 +172,16 @@ def sync_gmail(days=30):
                 received = datetime.strptime(stamp, "%d-%b-%Y %H:%M:%S %z").astimezone(timezone.utc).isoformat()
                 msg = email.message_from_bytes(raw)
                 subject = parser.decode_mime_header(msg.get("Subject", ""))
+                if exams_only and re.search(r"seating|show[\s_-]*up", subject, re.I):
+                    continue
                 if re.search(r"show[\s_-]*up", subject, re.I):
                     parser.maybe_bootstrap_showup_sheet_source("showup_schedule", subject, parser.extract_plain_text(msg))
                 docs, hashes = {}, []
                 for part in msg.walk():
                     name = parser.decode_mime_header(part.get_filename() or "")
                     kind = route(subject, name)
+                    if exams_only and (kind != "exams" or re.search(r"seating|show[\s_-]*up", name, re.I)):
+                        continue
                     if not kind:
                         continue
                     payload = part.get_payload(decode=True)
@@ -187,11 +200,17 @@ def sync_gmail(days=30):
                                            "attachment_hashes": hashes}, receipt)
                 mail.uid("store", uid, "+FLAGS", "(\\Seen)")
                 print(json.dumps({"uid": uid.decode(), "results": result}))
+                if exams_only:
+                    return
             except Exception as exc:
+                if exams_only:
+                    raise RuntimeError(f"Gmail exam schedule UID {uid.decode()} failed ({type(exc).__name__}); existing data retained, retry after fixing the failure") from None
                 failures += 1
                 print(f"UID {uid.decode()} failed: {type(exc).__name__}", file=sys.stderr)
         if failures:
             raise RuntimeError(f"{failures} message(s) failed; uncommitted messages will retry")
+        if exams_only:
+            raise RuntimeError("No exam schedule XLSX found in the CompilerSociety Gmail inbox")
     finally:
         try:
             mail.logout()
@@ -220,7 +239,7 @@ def main():
             ap.error("--gmail requires --write")
         if args.days < 1:
             ap.error("--days must be positive")
-        sync_gmail(args.days)
+        sync_gmail(args.days, exams_only=args.kind == "exams")
         return
     if not args.file:
         ap.error("provide a file or --gmail --write")

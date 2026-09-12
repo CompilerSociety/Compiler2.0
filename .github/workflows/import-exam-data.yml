@@ -1,10 +1,8 @@
-name: Import exam data file
+name: Sync exam schedule from Gmail
 
 on:
   push:
     branches: [main]
-    paths:
-      - '*.xlsx'
   workflow_dispatch:
 
 permissions:
@@ -20,16 +18,15 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Import the root exam schedule
+      - name: Fetch exam schedule from CompilerSociety Gmail and save to MongoDB
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DB: ${{ vars.MONGODB_DB || 'compiler2' }}
-          PUSH_AFTER: ${{ github.sha }}
-        run: python python/import_committed_exams.py --write
+          GMAIL_USER: compilersociety@gmail.com
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
+        run: python python/schedule_sync.py --gmail --kind exams --write

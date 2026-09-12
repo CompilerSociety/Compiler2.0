@@ -24,20 +24,27 @@ The ignored environment file needs `MONGODB_URI` and optionally `MONGODB_DB`
 a timezone; use the issue time, not the time you happen to run the command.
 Successful file writes verify the stored content by reading it back.
 
-## Import automatically on push
+## Gmail is the workflow source
 
-Keep the single exam schedule `.xlsx` in the repository root. Commit and push
-it with the workflow and importer to `main`. **Import exam data file** finds
-that workbook automatically and writes its school schedules using the repository
-secret `MONGODB_URI` (optional variable `MONGODB_DB`, default `compiler2`).
-Manual **Run workflow** does exactly the same, with no inputs.
+**Sync exam schedule from Gmail** runs on every push to `main` and manual
+**Run workflow**, with no inputs. It always reads `compilersociety@gmail.com`
+using repository secret `GMAIL_PASS`, then publishes using `MONGODB_URI`
+(optional variable `MONGODB_DB`, default `compiler2`). No repository workbook
+or seating-plan file is read by this workflow. A commit is only a trigger.
 
-Only the root exam workbook is opened. Seating-plan PDFs, seating workbooks,
-Excel lock files and nested files are ignored. The importer requires exactly
-one eligible workbook and publishes only `exams/*` documents. It validates the
-workbook, commits the school documents together, and verifies the stored data.
-The pushed commit timestamp identifies the revision. A local commit alone does
-not start GitHub Actions; push it first.
+The exam-only command searches the inbox regardless of read state or age,
+newest UID first, skips seating/show-up emails and attachments, and imports
+the latest matching exam XLSX. All school documents are validated and committed
+together. A failed latest exam import stops the run instead of falling back to
+an older schedule. Successful receipts make repeat runs a no-op.
+
+```powershell
+python python/schedule_sync.py --gmail --kind exams --write
+```
+
+Local file commands above are diagnostic/manual utilities, not the workflow
+source. The separate existing multi-purpose Gmail sync continues its original
+seating/show-up duties.
 
 ## What was failing
 
