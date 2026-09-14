@@ -1291,6 +1291,9 @@ function canonicalExamRoom(room){
 function roomAvailabilityMessage(day){
   const date=roomDateForDay(day);
   updateRoomMode(date);
+  if(roomExamStatus==='error'){
+    return 'Could not check exam dates. Room availability is temporarily unavailable. The check will retry automatically.';
+  }
   if(roomExamStatus!=='ready'||Date.now()-roomExamUpdated>GOOGLE_SHEET_REFRESH_MS*2){
     return 'Room availability is unavailable while exam dates are being checked. Please retry shortly.';
   }
@@ -1306,7 +1309,9 @@ async function refreshRoomExamData(){
   if(roomExamRequest) return roomExamRequest;
   roomExamRequest=(async()=>{
     const fetchDoc=async path=>{
-      const response=await fetch(path+'?cachebust='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});
+      const url=new URL(path,window.location.href);
+      url.searchParams.set('cachebust',String(Date.now()));
+      const response=await fetch(url.href,{cache:'no-store',signal:AbortSignal.timeout(15000)});
       if(!response.ok) throw new Error('Room source unavailable');
       return response.json();
     };

@@ -15,13 +15,20 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
     const errors=[];
     page.on('pageerror',e=>errors.push(e.message));
     await page.clock.install({time:new Date('2025-12-15T06:59:00Z')});
-    let missing=false;
+    let missing=false,examFailure=false;
+    const examDocs=[];
     await page.route('**/*',route=>{
       const url=new URL(route.request().url()),p=url.pathname;
       const json=data=>route.fulfill({json:data});
       if(p==='/js/status.js') return route.fulfill({contentType:'text/javascript',body:'window.SITE_STATUS={isLive:()=>true};'});
       if(p==='/db/seating/plan.json') return missing?route.fulfill({status:404}):json(seating);
-      if(p==='/api/db'&&url.searchParams.get('doc')?.startsWith('exams/')) return json({exams:url.searchParams.get('doc').includes('computing')?[{date:'2025-12-15'},{date:'2025-12-16'}]:[]});
+      if(p==='/api/db'){
+        const doc=url.searchParams.get('doc');
+        examDocs.push(doc);
+        if(!['exams/computing','exams/business','exams/engineering'].includes(doc)) return route.fulfill({status:404});
+        if(examFailure) return route.fulfill({status:503});
+        return json({exams:doc==='exams/computing'?[{date:'2025-12-15'},{date:'2025-12-16'}]:[]});
+      }
       if(p==='/api/timetable') return json({ok:true,tt:{'BS CS':{'2025':{A:{Monday:[{name:'Normal class',time:'08:30-11:15',location:'C-306'}]}}}}});
       if(p.startsWith('/api/')||p.startsWith('/db/')||url.hostname!=='vtable.test') return json({});
       const file=path.join(root,'web',p==='/'?'index.html':p);
@@ -30,6 +37,7 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
     });
     await page.goto('http://vtable.test/');
     await page.waitForFunction(()=>typeof roomExamStatus!=='undefined'&&roomExamStatus==='ready'&&typeof window.ExamRooms==='object');
+    assert.deepEqual([...new Set(examDocs)].sort(),['exams/business','exams/computing','exams/engineering']);
     let result=await page.evaluate(()=>({mode:isExamSeason,message:roomAvailabilityMessage('Monday'),busy:getRoomSlotInfo('C-301','Monday').find(s=>s.slot==='09:00-12:00').occupiedBy,free:getRoomSlotInfo('C-306','Monday').every(s=>!s.occupiedBy)}));
     assert.equal(result.mode,true);
     assert.equal(result.message,'');
@@ -47,6 +55,15 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
     assert.match(await page.locator('[data-room="C-301"]').innerText(),/Free now/i);
     await page.evaluate(()=>{document.getElementById('r-block').value='C';onBlockChange();document.getElementById('r-floor').value='3';onFloorChange();document.getElementById('r-day-sel').value='Monday';onDayChange();});
     assert.match(await page.locator('#rooms-result').innerText(),/EXAM SEATING/);
+    examFailure=true;
+    await page.evaluate(()=>refreshRoomTimetables());
+    assert.equal(await page.evaluate(()=>roomExamStatus),'error');
+    assert.match(await page.locator('#rooms-result').innerText(),/Could not check exam dates/);
+    assert.match(await page.locator('#m-rooms-out').innerText(),/Could not check exam dates/);
+    examFailure=false;
+    await page.evaluate(()=>refreshRoomTimetables());
+    assert.equal(await page.evaluate(()=>roomAvailabilityMessage('Monday')),'');
+    assert.match(await page.locator('#rooms-result').innerText(),/EXAM SEATING/);
     missing=true;
     await page.evaluate(()=>refreshRoomTimetables());
     assert.match(await page.locator('#rooms-result').innerText(),/complete seating plan/);
@@ -57,6 +74,6 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
     assert.equal(await page.evaluate(()=>roomAvailabilityMessage()),'');
     assert.equal(await page.evaluate(()=>getRoomSlotInfo('C-306','Monday').find(s=>s.occupiedBy)?.occupiedBy.course),'Normal class');
     assert.deepEqual(errors,[]);
-    console.log('PASS: full app startup; exam source replaces classes; desktop display; missing plan becomes unknown; automatic exit from exam season.');
+    console.log('PASS: exact exam document URLs; full app startup; exam source replaces classes; desktop display; failed checks and recovery; missing plan becomes unknown; automatic exit from exam season.');
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
