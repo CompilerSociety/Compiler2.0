@@ -261,6 +261,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-room-card.is-open .m-room-chev{transform:rotate(180deg);color:var(--green-deep)}
 .m-room-detail{padding:2px 16px 15px;background:var(--tint);animation:m-expand .22s cubic-bezier(.22,1,.36,1)}
 @keyframes m-expand{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.m-room-live{display:grid;gap:3px;padding:10px 16px 12px;background:var(--tint);border-top:1px solid var(--line)}
+.m-room-live-label{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.m-room-live-course{font-size:12.5px;font-weight:700;line-height:1.35;color:var(--ink);word-break:break-word}
+.m-room-live-free{font-family:var(--mono);font-size:11.5px;line-height:1.35;color:var(--green-deep)}
 .m-room-summary{font-family:var(--mono);font-size:12.5px;line-height:1.45;color:var(--green-deep);padding:8px 0 12px;border-top:1px solid rgba(var(--accent-rgb),.18)}
 .m-slotrows{display:flex;flex-direction:column;gap:6px}
 .m-slotrow{display:flex;align-items:center;gap:10px;background:var(--base);border-radius:999px;padding:7px 8px 7px 8px}

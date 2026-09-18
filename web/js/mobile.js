@@ -1012,10 +1012,20 @@
       const slots=roomSlots(room,day);
       const free=freeNowFromSlots(room,day,slots);
       const open=rm.open===room;
+      const currentSlot=getCurrentSlotFor(slotsForRoom(room,day));
+      const currentBooking=currentSlot&&slots.find(s=>s.slot===currentSlot)?.occupiedBy;
+      const summary=roomSummary(slots);
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
       const status=free===true?'Free now':free===false?(isExamSeason?'Exam':'Class'):'—';
+      // During exams, make the active course and the next free time visible
+      // without requiring the student to open the complete room timeline.
+      const liveExam=currentBooking?.exam?`<div class="m-room-live">
+          <span class="m-room-live-label">Ongoing exam</span>
+          <span class="m-room-live-course">${esc(currentBooking.course||'Exam')}</span>
+          <span class="m-room-live-free">${esc(summary)}</span>
+        </div>`:'';
       const detail=open?`<div class="m-room-detail" id="m-room-detail">
-          <div class="m-room-summary">${esc(roomSummary(slots))}</div>
+          <div class="m-room-summary">${esc(summary)}</div>
           <div class="m-slotrows">${slots.map(s=>{
             const busy=Boolean(s.occupiedBy);
             const who=busy?[s.occupiedBy.course,s.occupiedBy.section].filter(Boolean).join(' · '):'Free';
@@ -1034,11 +1044,12 @@
           <span class="m-room-status">${esc(status)}</span>
           <svg class="m-room-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </button>
+        ${liveExam}
         ${detail}
       </div>`;
     }).join('');
     $('m-rooms-out').innerHTML=`<div class="m-roomlist m-reveal">${cards}</div>
-      <div class="m-caption">${isExamSeason?'Based on today’s exam seating plan. Green is free of scheduled exams; grey is booked. Tap a room for exact times.':'Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.'}</div>`;
+      <div class="m-caption">${isExamSeason?'Based on today’s exam seating plan. Occupied rooms show the ongoing exam and when they become free. Tap a room for its full timeline.':'Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.'}</div>`;
     $('m-rooms-out').querySelectorAll('.m-room').forEach(btn=>{
       btn.addEventListener('click',()=>{
         rm.open=rm.open===btn.dataset.room?'':btn.dataset.room;

@@ -156,6 +156,9 @@ canvas#bg3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-e
 
 /* Status badge in header */
 .status-now{font-size:8px;letter-spacing:.5px;padding:3px 8px;border-radius:4px;white-space:nowrap;font-family:'Share Tech Mono',monospace;flex-shrink:0;color:#fff;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.32);max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.room-exam-note{padding:7px 12px;background:rgba(88,16,9,.24);border-bottom:1px solid rgba(255,255,255,.18);color:#fff;font-size:10px;line-height:1.35;word-break:break-word}
+.room-exam-note b{font-family:var(--font-mono);font-size:8px;letter-spacing:.8px;margin-right:4px}
+.room-exam-note span{display:block;margin-top:3px;font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,.85)}
 
 /* Slot timeline rows — white text on coloured background */
 .slot-row{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.15);position:relative}

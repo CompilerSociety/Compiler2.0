@@ -2820,6 +2820,11 @@ function onDayChange(){
 
   const cards=roomData.map(({room,slotInfo,busyNow,curSlot})=>{
     const cardClass=busyNow?'room-card busy-now':'room-card free-now';
+    const currentIndex=slotInfo.findIndex(s=>s.slot===curSlot);
+    const nextFree=currentIndex>=0&&slotInfo.slice(currentIndex+1).find(s=>!s.occupiedBy);
+    const examNote=busyNow?.exam
+      ?`<div class="room-exam-note"><b>ONGOING EXAM:</b> ${escHtml(busyNow.course||'Exam')}<span>${nextFree?`Free from ${fmtExamTime(nextFree.slot.split('-')[0])}`:'Booked for the rest of the day'}</span></div>`
+      :'';
 
     const statusBadge=busyNow
       ?`<span class="status-now busy" title="${escHtml(busyNow.course||'')} · ${escHtml(busyNow.dept||'')} ${escHtml(busyNow.batch||'')}-${escHtml(busyNow.section||'')}">${escHtml(busyNow.course||'')}</span>`
@@ -2851,6 +2856,7 @@ function onDayChange(){
         <span class="room-card-name">${escHtml(room)}</span>
         ${statusBadge}
       </div>
+      ${examNote}
       <div class="room-card-body">${slotsHTML}</div>
     </div>`;
   }).join('');

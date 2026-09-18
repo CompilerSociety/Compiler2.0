@@ -81,7 +81,12 @@ def parse_pages(texts):
             continue
         venue = normalize_room(room.group(1))
         paper_line = next((line for line in text.splitlines() if re.match(r'^[A-Z]{2,3}\d{3,4}\s*[-,]', line)), '')
+        # Some PDFs flatten the course heading and the first/last student row
+        # onto a single extracted line.  The booking must expose only the exam
+        # title; names and NU IDs belong to the seating record, never the room
+        # availability screen.
         paper = ROOM.split(paper_line)[0].strip()
+        paper = re.sub(r'\s+\d+\s+\d{2}[A-Za-z]-\d{4}\b.*$', '', paper, flags=re.I).strip()
         codes = re.findall(r'\b[BM](CS|AI|DS|CY|SE|EE|CE|BA|AF|FT|BAI)\s*-', paper)
         schools.update('engineering' if code in ('EE', 'CE') else 'business' if code in ('BA', 'AF', 'FT', 'BAI') else 'computing' for code in codes)
         bookings.append({'date': date, 'start': start, 'end': end, 'room': venue, 'course': paper or 'Exam', 'page': number})

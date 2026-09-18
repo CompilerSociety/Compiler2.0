@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T17:25:19.695518+00:00",
+  "updated_at": "2026-09-18T22:39:45.225701+00:00",
   "source_subject": "CS seating-plan Sessional I Fall 26 19-9-2026 + FSM Seating Plan - 19 Sep-2026",
   "count": 7571,
   "students": [
@@ -60589,7 +60589,7 @@
         "start": 540,
         "end": 600,
         "room": "C 301",
-        "course": "EE1005,BCS-3A - Digital Logic Design 16 25I-0687 Bisma Farooq C3R4",
+        "course": "EE1005,BCS-3A - Digital Logic Design",
         "pages": [
           1
         ]
@@ -60599,7 +60599,7 @@
         "start": 540,
         "end": 600,
         "room": "C 302",
-        "course": "EE1005,BCS-3A - Digital Logic Design 16 25I-1035 Syed Hamza Haider C5R1",
+        "course": "EE1005,BCS-3A - Digital Logic Design",
         "pages": [
           2
         ]
@@ -60609,7 +60609,7 @@
         "start": 540,
         "end": 600,
         "room": "C 303",
-        "course": "EE1005,BCS-3B - Digital Logic Design 15 25I-0730 Rabia Azhar C3R3",
+        "course": "EE1005,BCS-3B - Digital Logic Design",
         "pages": [
           3
         ]
@@ -60619,7 +60619,7 @@
         "start": 540,
         "end": 600,
         "room": "C 304",
-        "course": "EE1005,BCS-3C - Digital Logic Design 16 25I-0731 Hadia Farhat C3R4",
+        "course": "EE1005,BCS-3C - Digital Logic Design",
         "pages": [
           4
         ]
@@ -60629,7 +60629,7 @@
         "start": 540,
         "end": 600,
         "room": "C 305",
-        "course": "EE1005,BCS-3C - Digital Logic Design 16 25I-0622 Mairah Farooq C2R5",
+        "course": "EE1005,BCS-3D - Digital Logic Design",
         "pages": [
           5
         ]
@@ -60639,7 +60639,7 @@
         "start": 540,
         "end": 600,
         "room": "C 307",
-        "course": "EE1005,BCS-3D - Digital Logic Design 17 25I-2131 Moiz Ahmed Extra 1",
+        "course": "EE1005,BCS-3D - Digital Logic Design",
         "pages": [
           6
         ]
@@ -60649,7 +60649,7 @@
         "start": 540,
         "end": 600,
         "room": "C 308",
-        "course": "EE1005,BCS-3E - Digital Logic Design 17 25I-0805 Muhammad Rohaib Nasir C3R5",
+        "course": "EE1005,BCS-3E - Digital Logic Design",
         "pages": [
           7
         ]
@@ -60659,7 +60659,7 @@
         "start": 540,
         "end": 600,
         "room": "C 309",
-        "course": "EE1005,BCS-3F - Digital Logic Design 16 25I-0625 Abdul Sami Chaudhary C3R4",
+        "course": "EE1005,BCS-3F - Digital Logic Design",
         "pages": [
           8
         ]
@@ -60669,7 +60669,7 @@
         "start": 540,
         "end": 600,
         "room": "C 401",
-        "course": "EE1005,BCS-3F - Digital Logic Design EE1005,BCS-3G - Digital Logic Design",
+        "course": "EE1005,BCS-3F - Digital Logic Design",
         "pages": [
           9
         ]
@@ -60679,7 +60679,7 @@
         "start": 540,
         "end": 600,
         "room": "C 402",
-        "course": "EE1005,BCS-3G - Digital Logic Design 17 25I-0977 Talha Khusro Ghaus C4R6",
+        "course": "EE1005,BCS-3G - Digital Logic Design",
         "pages": [
           10
         ]
@@ -60689,7 +60689,7 @@
         "start": 540,
         "end": 600,
         "room": "C 403",
-        "course": "EE1005,BCS-3H - Digital Logic Design 17 25I-0831 Muhammad Talha C3R5",
+        "course": "EE1005,BCS-3H - Digital Logic Design",
         "pages": [
           11
         ]
@@ -60699,7 +60699,7 @@
         "start": 540,
         "end": 600,
         "room": "C 404",
-        "course": "EE1005,BCS-3H - Digital Logic Design 15 25I-0577 Muhammad Farhan C3R3",
+        "course": "EE1005,BCS-3J - Digital Logic Design",
         "pages": [
           12
         ]
@@ -60709,7 +60709,7 @@
         "start": 540,
         "end": 600,
         "room": "C 405",
-        "course": "DS3003,BDS-9A - Data Warehousing 14 25I-0791 Areesha Ashraf C2R3",
+        "course": "EE1005,BCS-3J - Digital Logic Design",
         "pages": [
           13
         ]
@@ -60719,7 +60719,7 @@
         "start": 540,
         "end": 600,
         "room": "C 406",
-        "course": "DS3004,BDS-5B - Data Warehousing 16 23I-6186 Ammen C3R4",
+        "course": "DS3004,BDS-5B - Data Warehousing and Business Intellligence",
         "pages": [
           14
         ]
@@ -60729,7 +60729,7 @@
         "start": 540,
         "end": 600,
         "room": "C 407",
-        "course": "DS3004,BDS-5A - Data Warehousing 16 23I-2591 Lubabah Moten C4R6",
+        "course": "DS3004,BDS-5A - Data Warehousing and Business Intellligence",
         "pages": [
           15
         ]
@@ -60739,7 +60739,7 @@
         "start": 540,
         "end": 600,
         "room": "C 408",
-        "course": "DS3004,BDS-5A - Data Warehousing 16 24I-2546 Shoaib Hassan C3R4",
+        "course": "DS3004,BDS-5A - Data Warehousing and Business Intellligence",
         "pages": [
           16
         ]
@@ -60749,7 +60749,7 @@
         "start": 540,
         "end": 600,
         "room": "C 409",
-        "course": "CS4075,BCS-7A - Cloud Computing 16 23I-0634 Muhammad Sameer C3R4",
+        "course": "CS4075,BCS-7A - Cloud Computing",
         "pages": [
           17
         ]
@@ -60759,7 +60759,7 @@
         "start": 540,
         "end": 600,
         "room": "D 301",
-        "course": "CS4075,BCS-7A - Cloud Computing 18 22I-1002 Mohammad Rayyan Khan C3R6",
+        "course": "CS4075,BCS-7B - Cloud Computing",
         "pages": [
           18
         ]
@@ -60769,7 +60769,7 @@
         "start": 540,
         "end": 600,
         "room": "D 302",
-        "course": "CS4075,BCS-7B - Cloud Computing 18 23I-2054 Subhan Umer Farooq C3R6",
+        "course": "CS4075,BCY-7A - Cloud Computing",
         "pages": [
           19
         ]
@@ -60779,7 +60779,7 @@
         "start": 540,
         "end": 600,
         "room": "D 303",
-        "course": "CS4075,BCY-7A - Cloud Computing 18 22I-1592 Muhammad Huzaifa Afzal C1R2",
+        "course": "CS4075,BCY-7B - Cloud Computing",
         "pages": [
           20
         ]
@@ -60789,7 +60789,7 @@
         "start": 540,
         "end": 600,
         "room": "D 304",
-        "course": "AI3001,BAI-5A - Knowledge 18 23I-2053 Umar Farooq C3R6",
+        "course": "CS4075,BCY-7B - Cloud Computing",
         "pages": [
           21
         ]
@@ -60799,7 +60799,7 @@
         "start": 540,
         "end": 600,
         "room": "D 305",
-        "course": "AI3001,BAI-5A - Knowledge 19 24I-0081 Afaan Sohail C4R1",
+        "course": "AI3001,BAI-5A - Knowledge Representation and Reasoning",
         "pages": [
           22
         ]
@@ -60809,7 +60809,7 @@
         "start": 540,
         "end": 600,
         "room": "D 306",
-        "course": "AI3001,BAI-5A - Knowledge 18 24I-0022 Ubaid Ur Rehman C3R6",
+        "course": "AI3001,BAI-5B - Knowledge Representation and Reasoning",
         "pages": [
           23
         ]
@@ -60819,7 +60819,7 @@
         "start": 540,
         "end": 600,
         "room": "D 311",
-        "course": "AI3001,BAI-5B - Knowledge AI3001,BAI-5C - Knowledge",
+        "course": "AI3001,BAI-5B - Knowledge Representation and Reasoning",
         "pages": [
           24
         ]
@@ -60829,7 +60829,7 @@
         "start": 540,
         "end": 600,
         "room": "D 312",
-        "course": "AI3001,BAI-5C - Knowledge 17 24I-0130 Fiza Ali C3R6",
+        "course": "AI3001,BAI-5C - Knowledge Representation and Reasoning",
         "pages": [
           25
         ]
@@ -60839,7 +60839,7 @@
         "start": 620,
         "end": 680,
         "room": "C 301",
-        "course": "SS1012,BAI-1A - Functional English 16 26I-0022 Haider Rehman C3R4",
+        "course": "SS1012,BAI-1A - Functional English",
         "pages": [
           26
         ]
@@ -60849,7 +60849,7 @@
         "start": 620,
         "end": 680,
         "room": "C 302",
-        "course": "SS1012,BAI-1A - Functional English 16 26I-0153 Mohammad Ayaan C5R6",
+        "course": "SS1012,BAI-1A - Functional English",
         "pages": [
           27
         ]
@@ -60859,7 +60859,7 @@
         "start": 620,
         "end": 680,
         "room": "C 303",
-        "course": "SS1012,BAI-1B - Functional English 16 26I-0088 Muhammad Faiq Munir C3R4",
+        "course": "SS1012,BAI-1B - Functional English",
         "pages": [
           28
         ]
@@ -60869,7 +60869,7 @@
         "start": 620,
         "end": 680,
         "room": "C 304",
-        "course": "SS1012,BAI-1C - Functional English 16 26I-0115 Zaeem Ahmad C3R4",
+        "course": "SS1012,BAI-1C - Functional English",
         "pages": [
           29
         ]
@@ -60879,7 +60879,7 @@
         "start": 620,
         "end": 680,
         "room": "C 305",
-        "course": "SS1012,BAI-1C - Functional English 16 26I-0158 Halit Celik C5R3",
+        "course": "SS1012,BAI-1C - Functional English",
         "pages": [
           30
         ]
@@ -60889,7 +60889,7 @@
         "start": 620,
         "end": 680,
         "room": "C 307",
-        "course": "SS1004,BCS-9A - English Composition 16 26I-0531 Muhammad Sohaib Imran C3R4",
+        "course": "SS1012,BCS-1A - Functional English",
         "pages": [
           31
         ]
@@ -60899,7 +60899,7 @@
         "start": 620,
         "end": 680,
         "room": "C 308",
-        "course": "SS1012,BCS-1A - Functional English 15 26I-0556 Muhammad Shehroz Ali C3R2",
+        "course": "SS1012,BCS-1B - Functional English",
         "pages": [
           32
         ]
@@ -60909,7 +60909,7 @@
         "start": 620,
         "end": 680,
         "room": "C 309",
-        "course": "SS1004,BCS-9B - English Composition 14 26I-0591 Ibraheem Abdullah C3R3",
+        "course": "SS1012,BCS-1B - Functional English",
         "pages": [
           33
         ]
@@ -60919,7 +60919,7 @@
         "start": 620,
         "end": 680,
         "room": "C 401",
-        "course": "SS1012,BCS-1C - Functional English 17 26I-0622 Raheel Safdar C3R5",
+        "course": "SS1012,BCS-1C - Functional English",
         "pages": [
           34
         ]
@@ -60929,7 +60929,7 @@
         "start": 620,
         "end": 680,
         "room": "C 402",
-        "course": "SS1012,BCS-1C - Functional English SS1012,BCS-1D - Functional English",
+        "course": "SS1012,BCS-1C - Functional English",
         "pages": [
           35
         ]
@@ -60939,7 +60939,7 @@
         "start": 620,
         "end": 680,
         "room": "C 403",
-        "course": "SS1012,BCS-1D - Functional English 16 26I-0688 Muhammad Ahmad C3R4",
+        "course": "SS1012,BCS-1D - Functional English",
         "pages": [
           36
         ]
@@ -60949,7 +60949,7 @@
         "start": 620,
         "end": 680,
         "room": "C 404",
-        "course": "SS1012,BCS-1D - Functional English 15 26I-0711 Abuzar Ali C3R3",
+        "course": "SS1012,BCS-1E - Functional English",
         "pages": [
           37
         ]
@@ -60959,7 +60959,7 @@
         "start": 620,
         "end": 680,
         "room": "C 405",
-        "course": "SS1012,BCS-1E - Functional English 16 26I-0920 Ghanwa Jawahir C5R2",
+        "course": "SS1012,BCS-1E - Functional English",
         "pages": [
           38
         ]
@@ -60969,7 +60969,7 @@
         "start": 620,
         "end": 680,
         "room": "C 406",
-        "course": "SS1012,BCS-1F - Functional English 16 26I-0784 Naila Kiran C3R4",
+        "course": "SS1012,BCS-1F - Functional English",
         "pages": [
           39
         ]
@@ -60979,7 +60979,7 @@
         "start": 620,
         "end": 680,
         "room": "C 407",
-        "course": "SS1012,BCS-1F - Functional English 15 26I-0821 Mohammad Shayan C3R3",
+        "course": "SS1012,BCS-1G - Functional English",
         "pages": [
           40
         ]
@@ -60989,7 +60989,7 @@
         "start": 620,
         "end": 680,
         "room": "C 408",
-        "course": "SS1012,BCS-1G - Functional English 16 26I-0856 Muhammad Abdul C4R6",
+        "course": "SS1012,BCS-1G - Functional English",
         "pages": [
           41
         ]
@@ -60999,7 +60999,7 @@
         "start": 620,
         "end": 680,
         "room": "C 409",
-        "course": "SS1012,BCS-1H - Functional English 16 26I-0884 Muhammad Talha C3R4",
+        "course": "SS1012,BCS-1H - Functional English",
         "pages": [
           42
         ]
@@ -61009,7 +61009,7 @@
         "start": 620,
         "end": 680,
         "room": "D 301",
-        "course": "SS1012,BCS-1H - Functional English 18 26I-2010 Muhammad Ahmad Ayan C2R5",
+        "course": "SS1012,BCY-1A - Functional English",
         "pages": [
           43
         ]
@@ -61019,7 +61019,7 @@
         "start": 620,
         "end": 680,
         "room": "D 302",
-        "course": "SS1004,BCY-9A - English Composition 19 26I-2057 Hamna Akhtar C4R6",
+        "course": "SS1012,BCY-1A - Functional English",
         "pages": [
           44
         ]
@@ -61029,7 +61029,7 @@
         "start": 620,
         "end": 680,
         "room": "D 303",
-        "course": "SS1012,BCY-1B - Functional English 19 26I-2082 Fatima Javid C4R1",
+        "course": "SS1012,BCY-1B - Functional English",
         "pages": [
           45
         ]
@@ -61039,7 +61039,7 @@
         "start": 620,
         "end": 680,
         "room": "D 304",
-        "course": "SS1012,BCY-1B - Functional English 18 26I-2101 Huda Tahir C1R6",
+        "course": "SS1012,BCY-1C - Functional English",
         "pages": [
           46
         ]
@@ -61049,7 +61049,7 @@
         "start": 620,
         "end": 680,
         "room": "D 305",
-        "course": "SS1012,BCY-1C - Functional English 19 26I-2164 Syed Muhammad C5R5",
+        "course": "SS1012,BCY-1C - Functional English",
         "pages": [
           47
         ]
@@ -61059,7 +61059,7 @@
         "start": 620,
         "end": 680,
         "room": "D 306",
-        "course": "SS1012,BCY-1D - Functional English 17 26I-2199 Saad Muhammad C4R1",
+        "course": "SS1012,BCY-1D - Functional English",
         "pages": [
           48
         ]
@@ -61069,7 +61069,7 @@
         "start": 620,
         "end": 680,
         "room": "D 311",
-        "course": "SS1012,BCY-1D - Functional English 18 26I-2514 Farhan Alam C3R6",
+        "course": "SS1012,BDS-1A - Functional English",
         "pages": [
           49
         ]
@@ -61079,7 +61079,7 @@
         "start": 620,
         "end": 680,
         "room": "D 312",
-        "course": "SS1012,BDS-1A - Functional English 18 26I-2553 Saad Arshad C3R4",
+        "course": "SS1012,BDS-1B - Functional English",
         "pages": [
           50
         ]
@@ -61089,7 +61089,7 @@
         "start": 620,
         "end": 680,
         "room": "D 313",
-        "course": "SS1012,BDS-1B - Functional English 18 26I-2588 Amanullah C2R5",
+        "course": "SS1012,BDS-1C - Functional English",
         "pages": [
           51
         ]
@@ -61099,7 +61099,7 @@
         "start": 620,
         "end": 680,
         "room": "D 314",
-        "course": "SS1012,BDS-1C - Functional English 18 26I-3001 Muhammad Shaheer C1R4",
+        "course": "SS1012,BSE-1A - Functional English",
         "pages": [
           52
         ]
@@ -61109,7 +61109,7 @@
         "start": 620,
         "end": 680,
         "room": "D 315",
-        "course": "SS1012,BSE-1A - Functional English 18 26I-3043 Muhammad Umar C3R6",
+        "course": "SS1012,BSE-1A - Functional English",
         "pages": [
           53
         ]
@@ -61119,7 +61119,7 @@
         "start": 620,
         "end": 680,
         "room": "D 316",
-        "course": "SS1012,BSE-1A - Functional English 18 26I-3068 Muhammad Shayan C3R6",
+        "course": "SS1012,BSE-1B - Functional English",
         "pages": [
           54
         ]
@@ -61129,7 +61129,7 @@
         "start": 620,
         "end": 680,
         "room": "D 401",
-        "course": "SS1012,BSE-1B - Functional English 19 26I-3248 Haniya Iftikhar Cheema C5R4",
+        "course": "SS1012,BSE-1B - Functional English",
         "pages": [
           55
         ]
@@ -61139,7 +61139,7 @@
         "start": 620,
         "end": 680,
         "room": "D 402",
-        "course": "SS1012,BSE-1C - Functional English 19 26I-3131 Zia Ullah C4R1",
+        "course": "SS1012,BSE-1C - Functional English",
         "pages": [
           56
         ]
@@ -61149,7 +61149,7 @@
         "start": 620,
         "end": 680,
         "room": "D 403",
-        "course": "SS1012,BSE-1C - Functional English 18 26I-3165 Ayesha Khan C3R2",
+        "course": "SS1012,BSE-1D - Functional English",
         "pages": [
           57
         ]
@@ -61159,7 +61159,7 @@
         "start": 620,
         "end": 680,
         "room": "D 404",
-        "course": "SS1012,BSE-1D - Functional English 17 26I-3203 Muhammad Tousif Asif C4R1",
+        "course": "SS1012,BSE-1D - Functional English",
         "pages": [
           58
         ]
@@ -61169,7 +61169,7 @@
         "start": 620,
         "end": 680,
         "room": "D 405",
-        "course": "SS1012,BSE-1E - Functional English 13 26I-3229 Muhammad Huzaifa C3R6",
+        "course": "SS1012,BSE-1E - Functional English",
         "pages": [
           59
         ]
@@ -61179,7 +61179,7 @@
         "start": 620,
         "end": 680,
         "room": "D 406",
-        "course": "SS1012,BSE-1E - Functional English 13 26I-3261 Hashir Rehan C4R1",
+        "course": "SS1012,BSE-1E - Functional English",
         "pages": [
           60
         ]
@@ -61189,7 +61189,7 @@
         "start": 700,
         "end": 760,
         "room": "C 301",
-        "course": "CS3014,BCS-7A - Applied Human 17 23I-0657 Ahmed Laiq C3R5",
+        "course": "CS3014,BCS-7A - Applied Human Computer Interaction",
         "pages": [
           61
         ]
@@ -61199,7 +61199,7 @@
         "start": 700,
         "end": 760,
         "room": "C 302",
-        "course": "CS3014,BCS-7A - Applied Human 16 23I-0500 Rehan Akram C2R3",
+        "course": "CS3014,BCS-7B - Applied Human Computer Interaction",
         "pages": [
           62
         ]
@@ -61209,7 +61209,7 @@
         "start": 700,
         "end": 760,
         "room": "C 303",
-        "course": "CS3014,BCS-7B - Applied Human 16 23I-0004 Ayesha Jamshaid C1R2",
+        "course": "CS3014,BCS-7C - Applied Human Computer Interaction",
         "pages": [
           63
         ]
@@ -61219,7 +61219,7 @@
         "start": 700,
         "end": 760,
         "room": "C 304",
-        "course": "CS3014,BCS-7C - Applied Human 17 23I-0776 Mishal Fatima C5R1",
+        "course": "CS3014,BCS-7C - Applied Human Computer Interaction",
         "pages": [
           64
         ]
@@ -61229,7 +61229,7 @@
         "start": 700,
         "end": 760,
         "room": "C 305",
-        "course": "CS3014,BCS-7D - Applied Human 16 23I-0650 Muhammad Omer Khan C3R4",
+        "course": "CS3014,BCS-7D - Applied Human Computer Interaction",
         "pages": [
           65
         ]
@@ -61239,7 +61239,7 @@
         "start": 700,
         "end": 760,
         "room": "C 307",
-        "course": "CS3014,BCS-7D - Applied Human 16 23I-0503 Fatima Binte Shakir C2R3",
+        "course": "CS3014,BCS-7E - Applied Human Computer Interaction",
         "pages": [
           66
         ]
@@ -61249,7 +61249,7 @@
         "start": 700,
         "end": 760,
         "room": "C 308",
-        "course": "CS3014,BCS-7E - Applied Human 16 23I-0775 Shah Salman Ahmad Mir C5R1",
+        "course": "CS3014,BCS-7E - Applied Human Computer Interaction",
         "pages": [
           67
         ]
@@ -61259,7 +61259,7 @@
         "start": 700,
         "end": 760,
         "room": "C 309",
-        "course": "CS3014,BCS-7F - Applied Human 16 23I-0683 Muhammad Ali Sher C3R4",
+        "course": "CS3014,BCS-7F - Applied Human Computer Interaction",
         "pages": [
           68
         ]
@@ -61269,7 +61269,7 @@
         "start": 700,
         "end": 760,
         "room": "C 401",
-        "course": "CS3014,BCS-7G - Applied Human 17 23I-0639 Taimoor Ahmad C3R5",
+        "course": "CS3014,BCS-7G - Applied Human Computer Interaction",
         "pages": [
           69
         ]
@@ -61279,7 +61279,7 @@
         "start": 700,
         "end": 760,
         "room": "C 402",
-        "course": "CS3014,BCS-5A - Applied Human 17 24I-0668 Muhammad Sarim C5R2",
+        "course": "CS3014,BCS-5A - Applied Human Computer Interaction",
         "pages": [
           70
         ]
@@ -61289,7 +61289,7 @@
         "start": 700,
         "end": 760,
         "room": "C 403",
-        "course": "CS3014,BCS-5A - Applied Human 16 24I-0845 Hamza Sheikh C5R2",
+        "course": "CS3014,BCS-5A - Applied Human Computer Interaction",
         "pages": [
           71
         ]
@@ -61299,7 +61299,7 @@
         "start": 700,
         "end": 760,
         "room": "C 404",
-        "course": "CS3014,BCS-5B - Applied Human 16 24I-0701 Huda Ali Murtaza C3R4",
+        "course": "CS3014,BCS-5B - Applied Human Computer Interaction",
         "pages": [
           72
         ]
@@ -61309,7 +61309,7 @@
         "start": 700,
         "end": 760,
         "room": "C 405",
-        "course": "CS3014,BCS-5B - Applied Human 16 24I-0591 Muhammad Umer Sadan C3R4",
+        "course": "CS3014,BCS-5C - Applied Human Computer Interaction",
         "pages": [
           73
         ]
@@ -61319,7 +61319,7 @@
         "start": 700,
         "end": 760,
         "room": "C 406",
-        "course": "CS3014,BCS-5C - Applied Human 16 24I-0540 Waseed E Mustafa C2R3",
+        "course": "CS3014,BCS-5D - Applied Human Computer Interaction",
         "pages": [
           74
         ]
@@ -61329,7 +61329,7 @@
         "start": 700,
         "end": 760,
         "room": "C 407",
-        "course": "CS3014,BCS-5D - Applied Human 16 24I-0834 Muhammad Hamza C4R5",
+        "course": "CS3014,BCS-5D - Applied Human Computer Interaction",
         "pages": [
           75
         ]
@@ -61339,7 +61339,7 @@
         "start": 700,
         "end": 760,
         "room": "C 408",
-        "course": "CS3014,BCS-5E - Applied Human 16 24I-0739 Danish Nadeem C3R4",
+        "course": "CS3014,BCS-5E - Applied Human Computer Interaction",
         "pages": [
           76
         ]
@@ -61349,7 +61349,7 @@
         "start": 700,
         "end": 760,
         "room": "C 409",
-        "course": "CS3014,BCS-5E - Applied Human 16 24I-0595 Abdul Wahab Wasti C3R4",
+        "course": "CS3014,BCS-5F - Applied Human Computer Interaction",
         "pages": [
           77
         ]
@@ -61359,7 +61359,7 @@
         "start": 700,
         "end": 760,
         "room": "D 301",
-        "course": "CS3014,BCS-5F - Applied Human 18 24I-0502 Eman Bilal C1R2",
+        "course": "CS3014,BCS-5G - Applied Human Computer Interaction",
         "pages": [
           78
         ]
@@ -61369,7 +61369,7 @@
         "start": 700,
         "end": 760,
         "room": "D 302",
-        "course": "CS2007,BSE-9A - Human Computer 18 24I-0717 Muhammad Hassaan Ul C3R6",
+        "course": "CS3014,BCS-5G - Applied Human Computer Interaction",
         "pages": [
           79
         ]
@@ -61379,7 +61379,7 @@
         "start": 700,
         "end": 760,
         "room": "D 303",
-        "course": "AI2002,BCY-5A - Artificial Intelligence 19 24I-2084 Muhammad Sannan Khan C5R5",
+        "course": "AI2002,BCY-5A - Artificial Intelligence",
         "pages": [
           80
         ]
@@ -61389,7 +61389,7 @@
         "start": 700,
         "end": 760,
         "room": "D 304",
-        "course": "AI2002,BCY-5A - Artificial Intelligence 18 22I-7427 Chaudhary Ayan Nadeem C1R2",
+        "course": "AI2002,BCY-5B - Artificial Intelligence",
         "pages": [
           81
         ]
@@ -61399,7 +61399,7 @@
         "start": 700,
         "end": 760,
         "room": "D 305",
-        "course": "AI2002,BCY-5B - Artificial Intelligence 18 24I-2024 Muhammad Abubaker C3R2",
+        "course": "AI2002,BCY-5C - Artificial Intelligence",
         "pages": [
           82
         ]
@@ -61409,7 +61409,7 @@
         "start": 700,
         "end": 760,
         "room": "D 306",
-        "course": "AI2002,BCY-5C - Artificial Intelligence 18 24I-3024 Muhammad Shayan Tariq C3R6",
+        "course": "AI2002,BSE-5A - Artificial Intelligence",
         "pages": [
           83
         ]
@@ -61419,7 +61419,7 @@
         "start": 700,
         "end": 760,
         "room": "D 311",
-        "course": "AI2002,BSE-5A - Artificial Intelligence AI2002,BSE-5B - Artificial Intelligence",
+        "course": "AI2002,BSE-5A - Artificial Intelligence",
         "pages": [
           84
         ]
@@ -61429,7 +61429,7 @@
         "start": 700,
         "end": 760,
         "room": "D 312",
-        "course": "AI2002,BSE-5B - Artificial Intelligence 19 24I-3151 Novwera Amjad C5R2",
+        "course": "AI2002,BSE-5B - Artificial Intelligence",
         "pages": [
           85
         ]
@@ -61439,7 +61439,7 @@
         "start": 700,
         "end": 760,
         "room": "D 313",
-        "course": "AI2002,BSE-5C - Artificial Intelligence 17 24I-3107 Muhammad Hasaam C3R6",
+        "course": "AI2002,BSE-5C - Artificial Intelligence",
         "pages": [
           86
         ]
@@ -61449,7 +61449,7 @@
         "start": 60,
         "end": 120,
         "room": "C 301",
-        "course": "MG4069,BCS-9B - Digital 17 22I-1068 Muhammad Awab Ur C5R4",
+        "course": "MG4069,BCS-9B - Digital Sustainability",
         "pages": [
           87
         ]
@@ -61459,7 +61459,7 @@
         "start": 60,
         "end": 120,
         "room": "C 302",
-        "course": "MG4069,BCS-9A - Digital 16 22I-1310 Saifullah Imran C1R3",
+        "course": "MG4069,BCS-9B - Digital Sustainability",
         "pages": [
           88
         ]
@@ -61469,7 +61469,7 @@
         "start": 60,
         "end": 120,
         "room": "C 303",
-        "course": "MG4069,BCS-9A - Digital 17 22I-1622 Abdul Mueed Malik C3R5",
+        "course": "MG4069,BCS-9A - Digital Sustainability",
         "pages": [
           89
         ]
@@ -61479,7 +61479,7 @@
         "start": 150,
         "end": 210,
         "room": "C 301",
-        "course": "EE2003,BAI-5A - Computer 17 24I-0098 Muhammad Arsal Butt C3R5",
+        "course": "EE2003,BAI-5A - Computer Organization and Assembly Language",
         "pages": [
           90
         ]
@@ -61489,7 +61489,7 @@
         "start": 150,
         "end": 210,
         "room": "C 302",
-        "course": "EE2003,BCS-5A - Computer 16 24I-0641 Ayaan Ahmed C3R4",
+        "course": "EE2003,BCS-5A - Computer Organization and Assembly Language",
         "pages": [
           91
         ]
@@ -61499,7 +61499,7 @@
         "start": 150,
         "end": 210,
         "room": "C 303",
-        "course": "EE2003,BAI-3A - Computer 16 22I-0867 Mohammad Umer C1R3",
+        "course": "EE2003,BCS-5B - Computer Organization and Assembly Language",
         "pages": [
           92
         ]
@@ -61509,7 +61509,7 @@
         "start": 150,
         "end": 210,
         "room": "C 304",
-        "course": "EE2003,BAI-3A - Computer 17 25I-0112 Atif Umar C3R5",
+        "course": "EE2003,BAI-3A - Computer Organization and Assembly Language",
         "pages": [
           93
         ]
@@ -61519,7 +61519,7 @@
         "start": 150,
         "end": 210,
         "room": "C 305",
-        "course": "EE2003,BAI-3B - Computer 16 25I-0063 Muhammad Abdullah C3R4",
+        "course": "EE2003,BAI-3B - Computer Organization and Assembly Language",
         "pages": [
           94
         ]
@@ -61529,7 +61529,7 @@
         "start": 150,
         "end": 210,
         "room": "C 307",
-        "course": "EE2003,BAI-3B - Computer 15 25I-0023 Muhammad Aliyan Ali C2R5",
+        "course": "EE2003,BAI-3C - Computer Organization and Assembly Language",
         "pages": [
           95
         ]
@@ -61539,7 +61539,7 @@
         "start": 150,
         "end": 210,
         "room": "C 308",
-        "course": "EE2003,BAI-3C - Computer 17 25I-2613 Arsheen Zaidi C5R5",
+        "course": "EE2003,BAI-3C - Computer Organization and Assembly Language",
         "pages": [
           96
         ]
@@ -61549,7 +61549,7 @@
         "start": 150,
         "end": 210,
         "room": "C 309",
-        "course": "EE2003,BCY-3A - Computer 16 25I-2202 Syed Muhammad Anas C3R4",
+        "course": "EE2003,BCY-3A - Computer Organization and Assembly Language",
         "pages": [
           97
         ]
@@ -61559,7 +61559,7 @@
         "start": 150,
         "end": 210,
         "room": "C 401",
-        "course": "EE2003,BCY-3B - Computer 16 25I-2101 Ahmed Tariq C3R4",
+        "course": "EE2003,BCY-3B - Computer Organization and Assembly Language",
         "pages": [
           98
         ]
@@ -61569,7 +61569,7 @@
         "start": 150,
         "end": 210,
         "room": "C 402",
-        "course": "EE2003,BCY-3B - Computer EE2003,BCY-3C - Computer",
+        "course": "EE2003,BCY-3B - Computer Organization and Assembly Language",
         "pages": [
           99
         ]
@@ -61579,7 +61579,7 @@
         "start": 150,
         "end": 210,
         "room": "C 403",
-        "course": "EE2003,BCY-3C - Computer 16 25I-2123 Kisra Kalim C3R4",
+        "course": "EE2003,BCY-3C - Computer Organization and Assembly Language",
         "pages": [
           100
         ]
@@ -61589,7 +61589,7 @@
         "start": 150,
         "end": 210,
         "room": "C 404",
-        "course": "EE2003,BCY-3C - Computer 15 25I-2117 Zainab Aon C3R3",
+        "course": "EE2003,BDS-3A - Computer Organization and Assembly Language",
         "pages": [
           101
         ]
@@ -61599,7 +61599,7 @@
         "start": 150,
         "end": 210,
         "room": "C 405",
-        "course": "EE2003,BDS-3A - Computer 16 25I-2622 Hassan Asad C5R3",
+        "course": "EE2003,BDS-3A - Computer Organization and Assembly Language",
         "pages": [
           102
         ]
@@ -61609,7 +61609,7 @@
         "start": 150,
         "end": 210,
         "room": "C 406",
-        "course": "EE2003,BDS-3B - Computer 15 25I-2562 Aisha Irshad C3R3",
+        "course": "EE2003,BDS-3B - Computer Organization and Assembly Language",
         "pages": [
           103
         ]
@@ -61619,7 +61619,7 @@
         "start": 150,
         "end": 210,
         "room": "C 407",
-        "course": "EE2003,BSE-3A - Computer 16 25I-3044 Ahmad Hussain Gill C3R4",
+        "course": "EE2003,BSE-3A - Computer Organization and Assembly Language",
         "pages": [
           104
         ]
@@ -61629,7 +61629,7 @@
         "start": 150,
         "end": 210,
         "room": "C 408",
-        "course": "EE2003,BSE-3A - Computer 16 25I-6626 Aleeza Noor C5R4",
+        "course": "EE2003,BSE-3A - Computer Organization and Assembly Language",
         "pages": [
           105
         ]
@@ -61639,7 +61639,7 @@
         "start": 150,
         "end": 210,
         "room": "C 409",
-        "course": "EE2003,BSE-3B - Computer 15 25I-3084 Khadija Mubashir C3R3",
+        "course": "EE2003,BSE-3B - Computer Organization and Assembly Language",
         "pages": [
           106
         ]
@@ -61649,7 +61649,7 @@
         "start": 150,
         "end": 210,
         "room": "D 301",
-        "course": "EE2003,BSE-3C - Computer 19 25I-3019 Muhammad Bin C4R1",
+        "course": "EE2003,BSE-3C - Computer Organization and Assembly Language",
         "pages": [
           107
         ]
@@ -61659,7 +61659,7 @@
         "start": 150,
         "end": 210,
         "room": "D 302",
-        "course": "EE2003,BSE-3C - Computer 18 25I-3027 Minal Ali C3R6",
+        "course": "EE2003,BSE-3D - Computer Organization and Assembly Language",
         "pages": [
           108
         ]
@@ -61669,7 +61669,7 @@
         "start": 150,
         "end": 210,
         "room": "D 303",
-        "course": "AI4009,BSE-7A - Generative AI 19 23I-3027 Aqsa Khurram C5R5",
+        "course": "AI4009,BSE-7A - Generative AI",
         "pages": [
           109
         ]
@@ -61679,7 +61679,7 @@
         "start": 150,
         "end": 210,
         "room": "D 304",
-        "course": "AI4009,BSE-7A - Generative AI 18 22I-2436 Muhammad Zayam Adeel C1R4",
+        "course": "AI4009,BSE-7B - Generative AI",
         "pages": [
           110
         ]
@@ -61689,7 +61689,7 @@
         "start": 150,
         "end": 210,
         "room": "D 305",
-        "course": "AI4009,BCS-7A - Generative AI 18 23I-3018 Abdul Basit C2R4",
+        "course": "AI4009,BSE-7B - Generative AI",
         "pages": [
           111
         ]
@@ -61699,7 +61699,7 @@
         "start": 150,
         "end": 210,
         "room": "D 306",
-        "course": "AI4009,BCS-7A - Generative AI 14 23I-0699 Ashehal Sadik C3R6",
+        "course": "AI4009,BCS-7A - Generative AI",
         "pages": [
           112
         ]
@@ -61709,7 +61709,7 @@
         "start": 150,
         "end": 210,
         "room": "D 311",
-        "course": "AI4009,BCS-7B - Generative AI 18 23I-0631 Mustafa Faraz C3R6",
+        "course": "AI4009,BCS-7B - Generative AI",
         "pages": [
           113
         ]
@@ -61719,7 +61719,7 @@
         "start": 220,
         "end": 280,
         "room": "C 301",
-        "course": "NS1001,BCY-1A - Applied Physics 16 26I-2016 Habiba Asif C3R4",
+        "course": "NS1001,BCY-1A - Applied Physics",
         "pages": [
           114
         ]
@@ -61729,7 +61729,7 @@
         "start": 220,
         "end": 280,
         "room": "C 302",
-        "course": "NS1001,BCY-1A - Applied Physics 15 26I-2055 Minahil Asif C3R3",
+        "course": "NS1001,BCY-1A - Applied Physics",
         "pages": [
           115
         ]
@@ -61739,7 +61739,7 @@
         "start": 220,
         "end": 280,
         "room": "C 303",
-        "course": "NS1001,BCY-1B - Applied Physics 15 26I-2071 Muhammad Hassaan C3R3",
+        "course": "NS1001,BCY-1B - Applied Physics",
         "pages": [
           116
         ]
@@ -61749,7 +61749,7 @@
         "start": 220,
         "end": 280,
         "room": "C 304",
-        "course": "NS1001,BCY-1B - Applied Physics 15 26I-2106 Muhammad Shoaib C3R4",
+        "course": "NS1001,BCY-1B - Applied Physics",
         "pages": [
           117
         ]
@@ -61759,7 +61759,7 @@
         "start": 220,
         "end": 280,
         "room": "C 305",
-        "course": "NS1001,BCY-1C - Applied Physics 16 26I-2123 Malik Muhammad Awwab C3R4",
+        "course": "NS1001,BCY-1C - Applied Physics",
         "pages": [
           118
         ]
@@ -61769,7 +61769,7 @@
         "start": 220,
         "end": 280,
         "room": "C 307",
-        "course": "NS1001,BCY-1C - Applied Physics 16 26I-2164 Syed Muhammad C4R5",
+        "course": "NS1001,BCY-1C - Applied Physics",
         "pages": [
           119
         ]
@@ -61779,7 +61779,7 @@
         "start": 220,
         "end": 280,
         "room": "C 308",
-        "course": "NS1001,BCY-1D - Applied Physics 16 26I-2190 Syed Hassan Haider C3R4",
+        "course": "NS1001,BCY-1D - Applied Physics",
         "pages": [
           120
         ]
@@ -61789,7 +61789,7 @@
         "start": 220,
         "end": 280,
         "room": "C 309",
-        "course": "NS1001,BCY-1D - Applied Physics 15 26I-3001 Muhammad Shaheer C1R6",
+        "course": "NS1001,BSE-1A - Applied Physics",
         "pages": [
           121
         ]
@@ -61799,7 +61799,7 @@
         "start": 220,
         "end": 280,
         "room": "C 401",
-        "course": "NS1001,BSE-1A - Applied Physics 16 26I-3037 Baseerat Zahra C3R4",
+        "course": "NS1001,BSE-1A - Applied Physics",
         "pages": [
           122
         ]
@@ -61809,7 +61809,7 @@
         "start": 220,
         "end": 280,
         "room": "C 402",
-        "course": "NS1001,BSE-1A - Applied Physics 15 25I-0911 Muhammad Ayan Rafiq C1R4",
+        "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
           123
         ]
@@ -61819,7 +61819,7 @@
         "start": 220,
         "end": 280,
         "room": "C 403",
-        "course": "NS1001,BSE-1B - Applied Physics 16 26I-3085 Ahmad Abdullah Ashraf C3R4",
+        "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
           124
         ]
@@ -61829,7 +61829,7 @@
         "start": 220,
         "end": 280,
         "room": "C 404",
-        "course": "NS1001,BSE-1B - Applied Physics NS1001,BSE-1C - Applied Physics",
+        "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
           125
         ]
@@ -61839,7 +61839,7 @@
         "start": 220,
         "end": 280,
         "room": "C 405",
-        "course": "NS1001,BSE-1C - Applied Physics 16 26I-3128 Muhammad Hassaan C3R4",
+        "course": "NS1001,BSE-1C - Applied Physics",
         "pages": [
           126
         ]
@@ -61849,7 +61849,7 @@
         "start": 220,
         "end": 280,
         "room": "C 406",
-        "course": "NS1001,BSE-1C - Applied Physics 16 26I-3292 Rayyan Rashid C5R5",
+        "course": "NS1001,BSE-1C - Applied Physics",
         "pages": [
           127
         ]
@@ -61859,7 +61859,7 @@
         "start": 220,
         "end": 280,
         "room": "C 407",
-        "course": "NS1001,BSE-1D - Applied Physics 16 26I-3181 Muhammad Khubaib C3R4",
+        "course": "NS1001,BSE-1D - Applied Physics",
         "pages": [
           128
         ]
@@ -61869,7 +61869,7 @@
         "start": 220,
         "end": 280,
         "room": "C 408",
-        "course": "NS1001,BSE-1D - Applied Physics 16 26I-3296 Ayesha Mustafa C5R2",
+        "course": "NS1001,BSE-1D - Applied Physics",
         "pages": [
           129
         ]
@@ -61879,7 +61879,7 @@
         "start": 220,
         "end": 280,
         "room": "C 409",
-        "course": "NS1001,BSE-1E - Applied Physics 16 26I-3237 Sarfaraz Ahmed C3R4",
+        "course": "NS1001,BSE-1E - Applied Physics",
         "pages": [
           130
         ]
@@ -61889,7 +61889,7 @@
         "start": 220,
         "end": 280,
         "room": "D 301",
-        "course": "NS1001,BSE-1E - Applied Physics 18 25I-7703 Iqra Ilyas C1R6",
+        "course": "SS5014,MCS-2A - Understanding of Religions I",
         "pages": [
           131
         ]
@@ -61899,7 +61899,7 @@
         "start": 220,
         "end": 280,
         "room": "D 302",
-        "course": "SS5014,MCS-2A - Understanding of",
+        "course": "SS5014,MCS-2A - Understanding of Religions I",
         "pages": [
           132
         ]
@@ -61909,7 +61909,7 @@
         "start": 220,
         "end": 280,
         "room": "D 303",
-        "course": "SS6007,PCS-1A - Understanding of 14 26I-9020 Humayoon Siddique C4R5",
+        "course": "SS6007,PCS-1A - Understanding of",
         "pages": [
           133
         ]
@@ -61919,7 +61919,7 @@
         "start": 220,
         "end": 280,
         "room": "D 304",
-        "course": "MG3040,BAI-7A - Methods in Business 19 23I-0052 Shamir Shahzad C4R1",
+        "course": "MG3040,BAI-7A - Methods in Business Research",
         "pages": [
           134
         ]
@@ -61929,7 +61929,7 @@
         "start": 220,
         "end": 280,
         "room": "D 305",
-        "course": "MG3040,BAI-7A - Methods in Business 18 22I-0541 Ali Hassan C3R2",
+        "course": "MG3040,BAI-7B - Methods in Business Research",
         "pages": [
           135
         ]
@@ -61939,7 +61939,7 @@
         "start": 220,
         "end": 280,
         "room": "D 306",
-        "course": "MG3040,BAI-7B - Methods in Business 19 23I-2574 Muhammad Uwaid Munir C6R4",
+        "course": "MG3040,BAI-7B - Methods in Business Research",
         "pages": [
           136
         ]
@@ -61949,7 +61949,7 @@
         "start": 220,
         "end": 280,
         "room": "D 311",
-        "course": "MG3040,BAI-7C - Methods in Business 19 22I-2624 Zain Ali Khan C6R4",
+        "course": "MG3040,BAI-7C - Methods in Business Research",
         "pages": [
           137
         ]
@@ -61959,7 +61959,7 @@
         "start": 220,
         "end": 280,
         "room": "D 312",
-        "course": "MG3040,BDS-7A - Methods in 19 23I-2598 Muhammad Ahmad Sajid C4R1",
+        "course": "MG3040,BDS-7A - Methods in Business Research",
         "pages": [
           138
         ]
@@ -61969,7 +61969,7 @@
         "start": 220,
         "end": 280,
         "room": "D 313",
-        "course": "MG3040,BDS-7B - Methods in 20 23I-2599 Ahmed Ghaffar C5R5",
+        "course": "MG3040,BDS-7B - Methods in Business Research",
         "pages": [
           139
         ]
@@ -61979,7 +61979,7 @@
         "start": 220,
         "end": 280,
         "room": "D 314",
-        "course": "MG3040,BDS-7C - Methods in 19 23I-2575 Affaf Mehmood C4R1",
+        "course": "MG3040,BDS-7C - Methods in Business Research",
         "pages": [
           140
         ]
@@ -61989,7 +61989,7 @@
         "start": 300,
         "end": 360,
         "room": "C 301",
-        "course": "CS5001,MAI-1A - Research 16 26I-7626 Mujtaba Abbas C3R4",
+        "course": "CS5001,MAI-1A - Research Methodology",
         "pages": [
           141
         ]
@@ -61999,7 +61999,7 @@
         "start": 300,
         "end": 360,
         "room": "C 302",
-        "course": "CS5001,MAI-1A - Research 15 26I-7609 Waqas Ahmad C2R5",
+        "course": "CS5001,MAI-1B - Research Methodology",
         "pages": [
           142
         ]
@@ -62009,7 +62009,7 @@
         "start": 300,
         "end": 360,
         "room": "C 303",
-        "course": "CS5001,MAI-1B - Research 17 26I-7676 Nauman Raees C5R3",
+        "course": "CS5001,MAI-1B - Research Methodology",
         "pages": [
           143
         ]
@@ -62019,7 +62019,7 @@
         "start": 300,
         "end": 360,
         "room": "C 304",
-        "course": "CS5001,MCS-1A - Research 16 26I-7721 Abdul Moeez Siddiqui C3R4",
+        "course": "CS5001,MCY-1A - Research Methodology",
         "pages": [
           144
         ]
@@ -62029,7 +62029,7 @@
         "start": 300,
         "end": 360,
         "room": "C 305",
-        "course": "CS5001,MDS-1A - Research 14 26I-8008 Romana Javed C5R2",
+        "course": "CS5001,MDS-1A - Research Methodology",
         "pages": [
           145
         ]
@@ -62039,7 +62039,7 @@
         "start": 300,
         "end": 360,
         "room": "C 307",
-        "course": "CS5001,MDS-1A - Research 11 26I-8025 Muhammad Faseeh C3R3",
+        "course": "CS5001,MDS-1A - Research Methodology",
         "pages": [
           146
         ]
@@ -62049,7 +62049,7 @@
         "start": 300,
         "end": 360,
         "room": "C 308",
-        "course": "CS5031,MAI-3A - Applied Computer 16 25I-7614 Shanzae Khan C3R5",
+        "course": "CS5031,MAI-3A - Applied Computer Vision",
         "pages": [
           147
         ]
@@ -62059,7 +62059,7 @@
         "start": 380,
         "end": 440,
         "room": "C 301",
-        "course": "CS5037,MCS-2A - Data Visualization 11 26I-8851 Nouman Umar C1R5",
+        "course": "CS5145,MCI-1A - Database and Operating Systems",
         "pages": [
           148
         ]
@@ -62069,7 +62069,7 @@
         "start": 380,
         "end": 440,
         "room": "C 302",
-        "course": "CS5037,MCS-2A - Data Visualization 12 25I-8001 Fizza Raouf Khan C3R2",
+        "course": "DS5007,MDS-1A - Natural Language Processing",
         "pages": [
           149
         ]
@@ -62079,7 +62079,7 @@
         "start": 540,
         "end": 600,
         "room": "A 101",
-        "course": "AF1003,BAF-1A - Introduction to 18 26I-4526 Rumaisa Aziz C3R4",
+        "course": "AF1003,BAF-1A - Introduction to Financial Accounting",
         "pages": [
           1
         ]
@@ -62089,7 +62089,7 @@
         "start": 540,
         "end": 600,
         "room": "A 102",
-        "course": "AF1003,BAF-1B - Introduction to 18 26I-4566 M Ahmed Mushtaq C3R4",
+        "course": "AF1003,BAF-1B - Introduction to Financial Accounting",
         "pages": [
           2
         ]
@@ -62099,7 +62099,7 @@
         "start": 540,
         "end": 600,
         "room": "A 103",
-        "course": "AF1003,BAF-1B - Introduction to 19 26I-5514 Husnain Altaf Khan C4R1",
+        "course": "AF1003,BFT-1A - Introduction to Financial Accounting",
         "pages": [
           3
         ]
@@ -62109,7 +62109,7 @@
         "start": 540,
         "end": 600,
         "room": "A 104",
-        "course": "AF1003,BFT-1A - Introduction to 20 26I-5540 Shahzain Hashmi C1R5",
+        "course": "AF1003,BFT-1B - Introduction to Financial Accounting",
         "pages": [
           4
         ]
@@ -62119,7 +62119,7 @@
         "start": 540,
         "end": 600,
         "room": "A 01",
-        "course": "AF1003,BFT-1B - Introduction to 16 26I-5581 Ayesha Falak C3R4",
+        "course": "AF1003,BFT-1B - Introduction to Financial Accounting",
         "pages": [
           5
         ]
@@ -62129,7 +62129,7 @@
         "start": 540,
         "end": 600,
         "room": "A 02",
-        "course": "AF1003,BFT-1C - Introduction to 16 26I-5600 M Mohsin C3R4",
+        "course": "AF1003,BFT-1C - Introduction to Financial Accounting",
         "pages": [
           6
         ]
@@ -62139,7 +62139,7 @@
         "start": 540,
         "end": 600,
         "room": "A 03",
-        "course": "AF1003,BFT-1C - Introduction to 16 26I-5707 Enaya Kamran C5R4",
+        "course": "AF1003,BFT-1C - Introduction to Financial Accounting",
         "pages": [
           7
         ]
@@ -62149,7 +62149,7 @@
         "start": 540,
         "end": 600,
         "room": "A 04",
-        "course": "AF1003,BFT-1D - Introduction to 16 26I-5654 Hamdood Yousaf C3R4",
+        "course": "AF1003,BFT-1D - Introduction to Financial Accounting",
         "pages": [
           8
         ]
@@ -62159,7 +62159,7 @@
         "start": 540,
         "end": 600,
         "room": "A 211",
-        "course": "AF1003,BBA-1A - Introduction to 15 26I-4020 Abdul Hannan Siddiqui C4R7",
+        "course": "AF1003,BBA-1A - Introduction to Financial Accounting",
         "pages": [
           9
         ]
@@ -62169,7 +62169,7 @@
         "start": 540,
         "end": 600,
         "room": "A 201",
-        "course": "AF1003,BBA-1A - Introduction to 16 26I-4108 Syeda Maryam Ali C4R4",
+        "course": "AF1003,BBA-1A - Introduction to Financial Accounting",
         "pages": [
           10
         ]
@@ -62179,7 +62179,7 @@
         "start": 540,
         "end": 600,
         "room": "A 202",
-        "course": "AF1003,BBA-1B - Introduction to 17 26I-4060 M Maaz Mahmood C3R5",
+        "course": "AF1003,BBA-1B - Introduction to Financial Accounting",
         "pages": [
           11
         ]
@@ -62189,7 +62189,7 @@
         "start": 540,
         "end": 600,
         "room": "A 203",
-        "course": "AF1003,BBA-1C - Introduction to 16 26I-4090 Meesum Raza C3R4",
+        "course": "AF1003,BBA-1C - Introduction to Financial Accounting",
         "pages": [
           12
         ]
@@ -62199,7 +62199,7 @@
         "start": 540,
         "end": 600,
         "room": "A 301",
-        "course": "AF1003,BBA-1C - Introduction to 16 26I-4142 M Huzaifa C5R5",
+        "course": "AF1003,BBA-1C - Introduction to Financial Accounting",
         "pages": [
           13
         ]
@@ -62209,7 +62209,7 @@
         "start": 540,
         "end": 600,
         "room": "A 302",
-        "course": "AF1003,BSBA-1A - Introduction to 16 26I-5034 Kiran Raja C3R4",
+        "course": "AF1003,BSBA-1A - Introduction to Financial Accounting",
         "pages": [
           14
         ]
@@ -62219,7 +62219,7 @@
         "start": 540,
         "end": 600,
         "room": "A 303",
-        "course": "AF1003,BSBA-1A - Introduction to 15 26I-5055 M Arsalaan Mansoor C3R3",
+        "course": "AF1003,BSBA-1B - Introduction to Financial Accounting",
         "pages": [
           15
         ]
@@ -62229,7 +62229,7 @@
         "start": 540,
         "end": 600,
         "room": "A 305",
-        "course": "AF1003,BSBA-1B - Introduction to 15 26I-5179 Ali Ayyaz Khan C3R1",
+        "course": "AF1003,BSBA-1B - Introduction to Financial Accounting",
         "pages": [
           16
         ]
@@ -62239,7 +62239,7 @@
         "start": 540,
         "end": 600,
         "room": "A 310",
-        "course": "AF1003,BSBA-1C - Introduction to 16 26I-5110 Areeba C3R4",
+        "course": "AF1003,BSBA-1C - Introduction to Financial Accounting",
         "pages": [
           17
         ]
@@ -62249,7 +62249,7 @@
         "start": 540,
         "end": 600,
         "room": "A 311",
-        "course": "AF1003,BSBA-1C - Introduction to 16 26I-5218 Hamza Liaquat C5R1",
+        "course": "AF1003,BSBA-1C - Introduction to Financial Accounting",
         "pages": [
           18
         ]
@@ -62259,7 +62259,7 @@
         "start": 540,
         "end": 600,
         "room": "A 314",
-        "course": "AF1003,BSBA-1D - Introduction to 13 26I-5156 M Sahib C3R1",
+        "course": "AF1003,BSBA-1D - Introduction to Financial Accounting",
         "pages": [
           19
         ]
@@ -62269,7 +62269,7 @@
         "start": 540,
         "end": 600,
         "room": "A 315",
-        "course": "AF1003,BSBA-1D - Introduction to 13 26I-5208 John Elia C3R1",
+        "course": "AF1003,BSBA-1D - Introduction to Financial Accounting",
         "pages": [
           20
         ]
@@ -62279,7 +62279,7 @@
         "start": 620,
         "end": 680,
         "room": "A 101",
-        "course": "SS2041,BBA-3A - Critical Thinking",
+        "course": "SS1021,BAF-3A - Understanding of World Religions I",
         "pages": [
           21
         ]
@@ -62289,7 +62289,7 @@
         "start": 620,
         "end": 680,
         "room": "A 102",
-        "course": "SS1021,BAF-3A - Understanding of",
+        "course": "SS2041,BBA-3A - Critical Thinking",
         "pages": [
           22
         ]
@@ -62299,7 +62299,7 @@
         "start": 620,
         "end": 680,
         "room": "A 103",
-        "course": "SS1021,BAF-3A - Understanding of",
+        "course": "SS2041,BBA-3B - Critical Thinking",
         "pages": [
           23
         ]
@@ -62309,7 +62309,7 @@
         "start": 620,
         "end": 680,
         "room": "A 104",
-        "course": "SS1021,BAF-3B - Understanding of",
+        "course": "SS1021,BAF-3B - Understanding of World Religions I",
         "pages": [
           24
         ]
@@ -62319,7 +62319,7 @@
         "start": 620,
         "end": 680,
         "room": "A 01",
-        "course": "SS1021,BAF-3B - Understanding of",
+        "course": "SS2041,BBA-3C - Critical Thinking",
         "pages": [
           25
         ]
@@ -62329,7 +62329,7 @@
         "start": 620,
         "end": 680,
         "room": "A 02",
-        "course": "SS2041,BBA-3C - Critical Thinking",
+        "course": "SS1021,BSBA-3A - Understanding of World Religions I",
         "pages": [
           26
         ]
@@ -62339,7 +62339,7 @@
         "start": 620,
         "end": 680,
         "room": "A 03",
-        "course": "SS1021,BSBA-3A - Understanding of",
+        "course": "SS1021,BSBA-3A - Understanding of World Religions I",
         "pages": [
           27
         ]
@@ -62349,7 +62349,7 @@
         "start": 620,
         "end": 680,
         "room": "A 04",
-        "course": "SS2041,BBA-3D - Critical Thinking",
+        "course": "SS1021,BSBA-3B - Understanding of World Religions I",
         "pages": [
           28
         ]
@@ -62359,7 +62359,7 @@
         "start": 620,
         "end": 680,
         "room": "A 211",
-        "course": "SS1021,BSBA-3B - Understanding of",
+        "course": "SS2041,BBA-3D - Critical Thinking",
         "pages": [
           29
         ]
@@ -62369,7 +62369,7 @@
         "start": 620,
         "end": 680,
         "room": "A 201",
-        "course": "MG3012,BFT-5A - Blockchain 15 25I-5095 M Hashim C1R5",
+        "course": "SS1021,BSBA-3B - Understanding of World Religions I",
         "pages": [
           30
         ]
@@ -62379,7 +62379,7 @@
         "start": 620,
         "end": 680,
         "room": "A 202",
-        "course": "MG3012,BFT-5A - Blockchain",
+        "course": "MG3012,BFT-5A - Blockchain Technology for Business",
         "pages": [
           31
         ]
@@ -62389,7 +62389,7 @@
         "start": 620,
         "end": 680,
         "room": "A 203",
-        "course": "MG3012,BFT-5A - Blockchain 15 25I-5102 M Hassan C3R1",
+        "course": "SS1021,BSBA-3C - Understanding of World Religions I",
         "pages": [
           32
         ]
@@ -62399,7 +62399,7 @@
         "start": 620,
         "end": 680,
         "room": "A 301",
-        "course": "MG3012,BFT-5A - Blockchain 16 24I-5706 Sibgha Sheraz C5R5",
+        "course": "MG3012,BFT-5A - Blockchain Technology for Business",
         "pages": [
           33
         ]
@@ -62409,7 +62409,7 @@
         "start": 620,
         "end": 680,
         "room": "A 302",
-        "course": "MG3012,BFT-5B - Blockchain 16 24I-5694 M Rafeh Uddin C5R3",
+        "course": "MG3012,BFT-5B - Blockchain Technology for Business",
         "pages": [
           34
         ]
@@ -62419,7 +62419,7 @@
         "start": 620,
         "end": 680,
         "room": "A 303",
-        "course": "MG3012,BFT-5C - Blockchain 16 24I-5671 Ahmed Mujtaba C4R5",
+        "course": "MG3012,BFT-5C - Blockchain Technology for Business",
         "pages": [
           35
         ]
@@ -62429,7 +62429,7 @@
         "start": 620,
         "end": 680,
         "room": "A 305",
-        "course": "MG3012,BFT-5D - Blockchain 14 24I-5605 Imtishal Shahid C2R7",
+        "course": "MG3012,BFT-5D - Blockchain Technology for Business",
         "pages": [
           36
         ]
@@ -62449,7 +62449,7 @@
         "start": 700,
         "end": 760,
         "room": "A 102",
-        "course": "AF2004,BFT-3A - Business Finance 17 24I-4651 Amaima Syed C2R2",
+        "course": "AF3001,BAF-5A - Financial Management",
         "pages": [
           38
         ]
@@ -62469,7 +62469,7 @@
         "start": 700,
         "end": 760,
         "room": "A 104",
-        "course": "AF2004,BFT-3A - Business Finance 17 24I-4548 Ahsan Mumtaz C1R5",
+        "course": "AF3001,BAF-5B - Financial Management",
         "pages": [
           40
         ]
@@ -62509,7 +62509,7 @@
         "start": 700,
         "end": 760,
         "room": "A 04",
-        "course": "AF2004,BFT-3B - Business Finance 15 23I-4041 Simra Tahir C3R3",
+        "course": "AF3001,BBA-5A - Financial Management",
         "pages": [
           44
         ]
@@ -62529,7 +62529,7 @@
         "start": 700,
         "end": 760,
         "room": "A 201",
-        "course": "AF2004,BFT-3C - Business Finance 16 25I-5609 Ammar Asif C5R5",
+        "course": "AF2004,BFT-3C - Business Finance",
         "pages": [
           46
         ]
@@ -62539,7 +62539,7 @@
         "start": 700,
         "end": 760,
         "room": "A 202",
-        "course": "AF2004,BFT-3C - Business Finance 15 23I-4047 Alizeh Zia C1R5",
+        "course": "AF3001,BBA-5B - Financial Management",
         "pages": [
           47
         ]
@@ -62549,7 +62549,7 @@
         "start": 700,
         "end": 760,
         "room": "A 203",
-        "course": "AF2004,BFT-3D - Business Finance 15 24I-4086 Alisha Khalid C1R5",
+        "course": "AF3001,BBA-5B - Financial Management",
         "pages": [
           48
         ]
@@ -62569,7 +62569,7 @@
         "start": 700,
         "end": 760,
         "room": "A 302",
-        "course": "AF2004,BFT-3D - Business Finance 16 25I-5685 Mahad Nisar C5R4",
+        "course": "AF2004,BFT-3D - Business Finance",
         "pages": [
           50
         ]
@@ -62579,7 +62579,7 @@
         "start": 700,
         "end": 760,
         "room": "A 303",
-        "course": "AF3001,BBA-5C - Financial 15 22I-0313 Areeba Faisal C1R4",
+        "course": "AF4006,BAF-7A - Investment Anal. and",
         "pages": [
           51
         ]
@@ -62589,7 +62589,7 @@
         "start": 700,
         "end": 760,
         "room": "A 305",
-        "course": "AF3001,BSBA-5A - Financial 15 24I-5042 Amna Usman C4R4",
+        "course": "AF3001,BSBA-5A - Financial Management",
         "pages": [
           52
         ]
@@ -62599,7 +62599,7 @@
         "start": 700,
         "end": 760,
         "room": "A 310",
-        "course": "AF3001,BSBA-5A - Financial 16 24I-5142 Hassaan Bin Asif C4R5",
+        "course": "AF3001,BSBA-5A - Financial Management",
         "pages": [
           53
         ]
@@ -62609,7 +62609,7 @@
         "start": 700,
         "end": 760,
         "room": "A 311",
-        "course": "AF3001,BSBA-5B - Financial AF4006,BAF-7B - Investment Anal. and",
+        "course": "AF3001,BSBA-5B - Financial Management",
         "pages": [
           54
         ]
@@ -62619,7 +62619,7 @@
         "start": 700,
         "end": 760,
         "room": "A 314",
-        "course": "AF3001,BSBA-5B - Financial AF4006,BAF-7B - Investment Anal. and",
+        "course": "AF3001,BSBA-5B - Financial Management",
         "pages": [
           55
         ]
@@ -62629,7 +62629,7 @@
         "start": 700,
         "end": 760,
         "room": "A 315",
-        "course": "AF3001,BSBA-5B - Financial 14 23I-5069 Mohammad Shahaan Ali C2R1",
+        "course": "AF3001,BSBA-5C - Financial Management",
         "pages": [
           56
         ]
@@ -62639,7 +62639,7 @@
         "start": 700,
         "end": 760,
         "room": "A 316",
-        "course": "AF3001,BSBA-5C - Financial 15 24I-5107 Ammar Bin Aman C3R1",
+        "course": "AF3001,BSBA-5C - Financial Management",
         "pages": [
           57
         ]
@@ -62649,7 +62649,7 @@
         "start": 60,
         "end": 120,
         "room": "A 101",
-        "course": "AF1002,BFT-3A - Financial Accounting",
+        "course": "AF1001,BAF-3A - Fundamentals of Accounting",
         "pages": [
           58
         ]
@@ -62659,7 +62659,7 @@
         "start": 60,
         "end": 120,
         "room": "A 102",
-        "course": "AF1001,BAF-3A - Fundamentals of 18 25I-4163 Sumaiyah Babar C2R6",
+        "course": "AF1002,BFT-3A - Financial Accounting",
         "pages": [
           59
         ]
@@ -62679,7 +62679,7 @@
         "start": 60,
         "end": 120,
         "room": "A 104",
-        "course": "AF1002,BAF-3B - Financial FT4005,BFT-7A - Digital Banking and",
+        "course": "AF1002,BAF-3B - Financial Accounting",
         "pages": [
           61
         ]
@@ -62689,7 +62689,7 @@
         "start": 60,
         "end": 120,
         "room": "A 01",
-        "course": "AF1002,BAF-3B - Financial 15 23I-5530 Mahwish Khalid C1R2",
+        "course": "FT4005,BFT-7A - Digital Banking and Payment Industry",
         "pages": [
           62
         ]
@@ -62699,7 +62699,7 @@
         "start": 150,
         "end": 210,
         "room": "A 101",
-        "course": "AF2003,BBA-3A - Management 18 22I-0132 Rameen Awais C1R2",
+        "course": "MG4067,BBA-7A - Strategic Diversity, Equity and Inclusion",
         "pages": [
           63
         ]
@@ -62709,7 +62709,7 @@
         "start": 150,
         "end": 210,
         "room": "A 102",
-        "course": "AF2003,BBA-3A - Management 18 22I-5006 Minhaaj Saqib C1R2",
+        "course": "MG4067,BBA-7A - Strategic Diversity, Equity and Inclusion",
         "pages": [
           64
         ]
@@ -62719,7 +62719,7 @@
         "start": 150,
         "end": 210,
         "room": "A 103",
-        "course": "AF2003,BBA-3B - Management 20 25I-4137 Afshan Tarik C6R4",
+        "course": "AF2003,BBA-3B - Management Accounting",
         "pages": [
           65
         ]
@@ -62729,7 +62729,7 @@
         "start": 150,
         "end": 210,
         "room": "A 104",
-        "course": "AF2003,BBA-3B - Management 20 24I-4135 Sanaullah C3R7",
+        "course": "AF2003,BBA-3C - Management Accounting",
         "pages": [
           66
         ]
@@ -62739,7 +62739,7 @@
         "start": 150,
         "end": 210,
         "room": "A 01",
-        "course": "AF2003,BBA-3C - Management 17 25I-4175 M Ameer Hamza C5R2",
+        "course": "AF2003,BBA-3C - Management Accounting",
         "pages": [
           67
         ]
@@ -62749,7 +62749,7 @@
         "start": 150,
         "end": 210,
         "room": "A 02",
-        "course": "AF2003,BBA-3D - Management 17 25I-4133 Ehab Baloch C3R5",
+        "course": "AF2003,BBA-3D - Management Accounting",
         "pages": [
           68
         ]
@@ -62759,7 +62759,7 @@
         "start": 220,
         "end": 280,
         "room": "A 101",
-        "course": "SS2019,BAF-1A - Psychology",
+        "course": "SS1007,BBA-1A - Islamic",
         "pages": [
           69
         ]
@@ -62769,7 +62769,7 @@
         "start": 220,
         "end": 280,
         "room": "A 102",
-        "course": "SS1007,BBA-1A - Islamic 17 26I-4526 Rumaisa Aziz C2R3",
+        "course": "SS2019,BAF-1A - Psychology",
         "pages": [
           70
         ]
@@ -62779,7 +62779,7 @@
         "start": 220,
         "end": 280,
         "room": "A 103",
-        "course": "SS1007,BBA-1A - Islamic 17 26I-4506 Maryam Shaukat C1R5",
+        "course": "SS2019,BAF-1B - Psychology",
         "pages": [
           71
         ]
@@ -62789,7 +62789,7 @@
         "start": 220,
         "end": 280,
         "room": "A 104",
-        "course": "SS1007,BBA-1B - Islamic 17 26I-4571 Khadija Shuaib C2R4",
+        "course": "SS2019,BAF-1B - Psychology",
         "pages": [
           72
         ]
@@ -62799,7 +62799,7 @@
         "start": 220,
         "end": 280,
         "room": "A 01",
-        "course": "SS1007,BBA-1B - Islamic 15 24I-4678 M Yasir Rehman C1R3",
+        "course": "SS2019,BFT-3A - Psychology",
         "pages": [
           73
         ]
@@ -62809,7 +62809,7 @@
         "start": 220,
         "end": 280,
         "room": "A 02",
-        "course": "SS1007,BBA-1B - Islamic 15 25I-5574 Areesha Fatima C1R4",
+        "course": "SS2019,BFT-3A - Psychology",
         "pages": [
           74
         ]
@@ -62819,7 +62819,7 @@
         "start": 220,
         "end": 280,
         "room": "A 03",
-        "course": "SS1007,BBA-1C - Islamic 16 26I-4087 Manahil Mazhar C4R5",
+        "course": "SS1007,BBA-1C - Islamic",
         "pages": [
           75
         ]
@@ -62829,7 +62829,7 @@
         "start": 220,
         "end": 280,
         "room": "A 04",
-        "course": "SS1007,BBA-1C - Islamic 15 25I-5507 Tooba Jabeen Savul C1R6",
+        "course": "SS2019,BFT-3B - Psychology",
         "pages": [
           76
         ]
@@ -62839,7 +62839,7 @@
         "start": 220,
         "end": 280,
         "room": "A 211",
-        "course": "SS1007,BBA-1C - Islamic 14 25I-5573 Moazma Asif C1R4",
+        "course": "SS2019,BFT-3B - Psychology",
         "pages": [
           77
         ]
@@ -62849,7 +62849,7 @@
         "start": 220,
         "end": 280,
         "room": "A 201",
-        "course": "SS1007,BFT-1A - Islamic 16 26I-5515 Ali Nadeem C4R5",
+        "course": "SS1007,BFT-1A - Islamic",
         "pages": [
           78
         ]
@@ -62859,7 +62859,7 @@
         "start": 220,
         "end": 280,
         "room": "A 202",
-        "course": "SS2019,BFT-3C - Psychology",
+        "course": "SS1007,BFT-1A - Islamic",
         "pages": [
           79
         ]
@@ -62869,7 +62869,7 @@
         "start": 220,
         "end": 280,
         "room": "A 203",
-        "course": "SS1007,BFT-1A - Islamic 15 25I-5581 Bareera Qayyum Khan C1R4",
+        "course": "SS2019,BFT-3C - Psychology",
         "pages": [
           80
         ]
@@ -62879,7 +62879,7 @@
         "start": 220,
         "end": 280,
         "room": "A 301",
-        "course": "SS1007,BFT-1B - Islamic 16 26I-5556 M Saad Aamir C4R4",
+        "course": "SS1007,BFT-1B - Islamic",
         "pages": [
           81
         ]
@@ -62889,7 +62889,7 @@
         "start": 220,
         "end": 280,
         "room": "A 302",
-        "course": "SS2019,BFT-3D - Psychology",
+        "course": "SS1007,BFT-1B - Islamic",
         "pages": [
           82
         ]
@@ -62899,7 +62899,7 @@
         "start": 220,
         "end": 280,
         "room": "A 303",
-        "course": "SS1007,BFT-1B - Islamic 15 25I-5539 M Usman Asif C1R2",
+        "course": "SS2019,BFT-3D - Psychology",
         "pages": [
           83
         ]
@@ -62909,7 +62909,7 @@
         "start": 220,
         "end": 280,
         "room": "A 305",
-        "course": "SS1007,BFT-1C - Islamic 14 25I-5605 Manahil Atif C1R3",
+        "course": "SS2019,BFT-3D - Psychology",
         "pages": [
           84
         ]
@@ -62919,7 +62919,7 @@
         "start": 220,
         "end": 280,
         "room": "A 310",
-        "course": "SS1007,BFT-1C - Islamic 16 26I-5610 M Ammar Waseem C4R4",
+        "course": "SS1007,BFT-1C - Islamic",
         "pages": [
           85
         ]
@@ -62929,7 +62929,7 @@
         "start": 220,
         "end": 280,
         "room": "A 311",
-        "course": "SS1007,BFT-1C - Islamic 16 26I-5717 Syed Fawad Mustafa C5R5",
+        "course": "SS1007,BFT-1C - Islamic",
         "pages": [
           86
         ]
@@ -62939,7 +62939,7 @@
         "start": 220,
         "end": 280,
         "room": "A 314",
-        "course": "SS1007,BFT-1D - Islamic 15 26I-5638 Sania Urooj C3R1",
+        "course": "SS1007,BFT-1D - Islamic",
         "pages": [
           87
         ]
@@ -62949,7 +62949,7 @@
         "start": 220,
         "end": 280,
         "room": "A 315",
-        "course": "SS1007,BFT-1D - Islamic 15 26I-5680 Amina Aftab C3R1",
+        "course": "SS1007,BFT-1D - Islamic",
         "pages": [
           88
         ]
@@ -62959,7 +62959,7 @@
         "start": 300,
         "end": 360,
         "room": "A 101",
-        "course": "AF4016,BBA-7A - Applied Financial 14 25I-7014 Kashaf Jamil C3R7",
+        "course": "AF5007,MB-3A - Advanced Financial Management",
         "pages": [
           89
         ]
@@ -62969,7 +62969,7 @@
         "start": 380,
         "end": 440,
         "room": "A 101",
-        "course": "BA5006,MSBA-1A - Advanced Data 17 26I-7314 Abdul Haseeb Ahmed C3R4",
+        "course": "BA5006,MSBA-1A - Advanced Data Analysis",
         "pages": [
           90
         ]
@@ -62979,7 +62979,7 @@
         "start": 380,
         "end": 440,
         "room": "A 102",
-        "course": "AF4001,MB-1A - Accounting for 16 26I-7000 Hasib Ullah Farahmand C3R3",
+        "course": "MG5015,MB-1A - Strategic HR and Leadership",
         "pages": [
           91
         ]

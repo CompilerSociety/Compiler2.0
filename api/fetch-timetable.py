@@ -689,6 +689,28 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
             "Verify table alignment formats inside the source file."
         )
 
+    # The page-level room parser establishes complete room coverage, while the
+    # coordinate parser has the cleanest course title.  Join them here so Free
+    # Rooms shows the current exam name (never a flattened student name).
+    if room_occupancy is not None:
+        course_counts: dict[tuple[str, str, int, int], dict[str, int]] = {}
+        for row in cleaned:
+            paper = row.get("paper", "").strip()
+            venue = re.sub(r"\s+", " ", row.get("class", "")).strip().upper()
+            time_match = re.fullmatch(r"\s*(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})\s*", row.get("time", ""))
+            if not (paper and venue and time_match):
+                continue
+            sh, sm, eh, em = map(int, time_match.groups())
+            key = (row.get("date") or exam_date, venue, sh * 60 + sm, eh * 60 + em)
+            titles = course_counts.setdefault(key, {})
+            titles[paper] = titles.get(paper, 0) + 1
+        for booking in room_occupancy.get("bookings", []):
+            key = (booking.get("date", ""), re.sub(r"\s+", " ", booking.get("room", "")).strip().upper(),
+                   booking.get("start"), booking.get("end"))
+            titles = course_counts.get(key, {})
+            if titles:
+                booking["course"] = max(titles, key=titles.get)
+
     document: dict[str, Any] = {
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "source_subject": subject,
