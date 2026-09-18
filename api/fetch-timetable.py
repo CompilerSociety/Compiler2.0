@@ -361,6 +361,14 @@ def normalize_seat(seat: str) -> str:
     if not raw:
         return ""
 
+    m = re.fullmatch(r"EXTRA\s*(\d+)", raw)
+    if m:
+        return f"Extra {m.group(1)}"
+
+    m = re.fullmatch(r"CHAIR\s*(\d+)", raw)
+    if m:
+        return f"Chair{m.group(1)}"
+
     m = re.search(r"C\s*[-:]?\s*(\d+)\s*R\s*[-:]?\s*(\d+)", raw)
     if m:
         return f"C{m.group(1)}R{m.group(2)}"
@@ -395,12 +403,12 @@ def normalize_entry(entry: dict[str, str]) -> dict[str, str]:
 # course/paper line, and two side-by-side "S# Roll No. Student Name Seat" tables.
 
 # Seat may be a plain number (e.g. "21"), a column-row code (e.g. "C1R2"),
-# or a special chair assignment used by some seating sheets ("Chair1" /
-# "Chair2").  Chair assignments are valid seating records and must not cause
-# the complete student row to be dropped.
+# or a special chair/extra assignment used by some seating sheets ("Chair1"
+# or "Extra 2"). These assignments are valid seating records and must not
+# cause the complete student row to be dropped or be split into the name.
 FAST_REC = re.compile(
     r"^\s*(\d{1,3})\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+"
-    r"([A-Z]\d+[A-Z]\d+|\d{1,3}|[Cc]hair\d+)\s*$"
+    r"([Ee]xtra\s*\d+|[Cc]hair\s*\d+|[A-Z]\d+[A-Z]\d+|\d{1,3})\s*$"
 )
 FAST_PAPER = re.compile(r"^\s*([A-Z]{2,3}\d{3,4}\s*,\s*[A-Z0-9\-/]+)\s*-?\s*(.*)$")
 

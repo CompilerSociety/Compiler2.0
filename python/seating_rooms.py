@@ -22,7 +22,7 @@ DATE = re.compile(
 )
 TIME = re.compile(r"\b(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:to|[-–—])\s*(\d{1,2}:\d{2})\s*(AM|PM)?\b", re.I)
 ROOM = re.compile(r"(?:Room\s*No\.?\s*:?|Venue\s*:)\s*(.+?)(?=\s+\d+(?:st|nd|rd|th)\s+Floor|\n|$)", re.I)
-STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|\d+)\s*$", re.I)
+STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|Extra\s*\d+|\d+)\s*$", re.I)
 
 
 def iso_date(value):
