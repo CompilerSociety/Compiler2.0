@@ -15,15 +15,20 @@ from pathlib import Path
 
 import pdfplumber
 
-DATE = re.compile(r"\b([A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2}|\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|20\d{2}-\d{2}-\d{2})\b")
+DATE = re.compile(
+    r"\b([A-Za-z]{3,9}\s*,\s*\d{1,2}\s*,\s*[A-Za-z]{3,9}\s*,\s*\d{2}|"
+    r"[A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2}|"
+    r"\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|20\d{2}-\d{2}-\d{2})\b"
+)
 TIME = re.compile(r"\b(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:to|[-–—])\s*(\d{1,2}:\d{2})\s*(AM|PM)?\b", re.I)
 ROOM = re.compile(r"(?:Room\s*No\.?\s*:?|Venue\s*:)\s*(.+?)(?=\s+\d+(?:st|nd|rd|th)\s+Floor|\n|$)", re.I)
 STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|\d+)\s*$", re.I)
 
 
 def iso_date(value):
-    value = value.replace(',', '')
-    for fmt in ('%b %d %Y', '%B %d %Y', '%d %B %Y', '%d %b %Y', '%Y-%m-%d'):
+    value = re.sub(r"\s+", " ", value.replace(',', ' ')).strip()
+    for fmt in ('%a %d %b %y', '%A %d %B %Y', '%a %d %b %Y',
+                '%b %d %Y', '%B %d %Y', '%d %B %Y', '%d %b %Y', '%Y-%m-%d'):
         try:
             return datetime.strptime(value, fmt).date().isoformat()
         except ValueError:

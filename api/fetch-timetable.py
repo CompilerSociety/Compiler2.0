@@ -608,9 +608,26 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
         except Exception as exc:
             room_occupancy = {'version': 1, 'complete': False, 'dates': [], 'bookings': [], 'errors': [{'reason': str(exc)}]}
             attendance_students = []
-        if attendance_students:
+
+        # The generated seating sheets place two student columns on the same
+        # extracted text line. Use the coordinate parser for student rows so
+        # the columns stay separate; the room parser remains the authority for
+        # page/date/venue completeness validation.
+        try:
+            coordinate_students, coordinate_date = parse_pdf_coordinates(pdf_bytes)
+        except Exception as exc:
+            print(f"Coordinate parse failed ({exc}); using room-parser rows.")
+            coordinate_students, coordinate_date = [], ""
+        coordinate_ready = bool(coordinate_students) and all(
+            row.get('nuid') and row.get('seat') and row.get('time')
+            for row in coordinate_students
+        )
+        if coordinate_ready:
+            students = coordinate_students
+            exam_date = ((room_occupancy or {}).get('dates') or [""])[0] or coordinate_date
+        elif attendance_students:
             students = attendance_students
-            exam_date = room_occupancy['dates'][0]
+            exam_date = ((room_occupancy or {}).get('dates') or [""])[0]
 
     # 1) Coordinate-based parse (most accurate: keeps seats aligned to rows).
     if pdf_bytes and not students:
