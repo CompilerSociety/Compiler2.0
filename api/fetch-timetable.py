@@ -516,26 +516,44 @@ def parse_pdf_coordinates(payload: bytes) -> tuple[list[dict[str, str]], str]:
                 if right:
                     right_halves.append(right)
 
-            paper = ""
-            for half in left_halves + right_halves:
-                rec = FAST_REC.match(half)
-                if rec:
-                    students.append({
-                        "name": re.sub(r"\s+", " ", rec.group(3).strip()),
-                        "nuid": rec.group(2).upper(),
-                        "seat": rec.group(4),
-                        "paper": paper,
-                        "time": slot,
-                        "class": venue,
-                    })
-                    continue
-                stripped = half.strip()
-                paper_match = FAST_PAPER.match(half)
-                if paper_match and re.match(r"^[A-Z]{2,3}\d{3,4}", stripped):
-                    paper = _clean_paper(paper_match.group(1), paper_match.group(2))
-                elif (paper and re.fullmatch(r"[A-Za-z][A-Za-z \-]*", stripped)
-                      and not re.search(r"(Lab|Development)$", paper)):
-                    paper = re.sub(r"\s+", " ", f"{paper} {stripped}")
+            def parse_column(
+                halves: list[str], paper: str = "", seen_student_since_paper: bool = False,
+                allow_wrapped_title: bool = True,
+            ) -> tuple[str, bool]:
+                """Read one visual column without mistaking wrapped names for course text."""
+                for half in halves:
+                    rec = FAST_REC.match(half)
+                    if rec:
+                        students.append({
+                            "name": re.sub(r"\s+", " ", rec.group(3).strip()),
+                            "nuid": rec.group(2).upper(),
+                            "seat": rec.group(4),
+                            "paper": paper,
+                            "time": slot,
+                            "class": venue,
+                        })
+                        seen_student_since_paper = True
+                        continue
+                    stripped = half.strip()
+                    paper_match = FAST_PAPER.match(half)
+                    if paper_match and re.match(r"^[A-Z]{2,3}\d{3,4}", stripped):
+                        paper = _clean_paper(paper_match.group(1), paper_match.group(2))
+                        seen_student_since_paper = False
+                        # A header in this column may itself wrap onto the next line.
+                        allow_wrapped_title = True
+                    elif (allow_wrapped_title and paper and not seen_student_since_paper
+                          and re.fullmatch(r"[A-Za-z][A-Za-z \-]*", stripped)
+                          and not re.search(r"\b(?:Generated|Exam|Venue|Allocation|System|Page|Seating|PLAN)\b", stripped, re.I)
+                          and not re.search(r"(Lab|Development)$", paper)):
+                        # A wrapped paper title is above its first student row.
+                        paper = re.sub(r"\s+", " ", f"{paper} {stripped}")
+                return paper, seen_student_since_paper
+
+            paper, seen_student_since_paper = parse_column(left_halves)
+            # The right column can begin with page-header fragments ("School of\n"
+            # "Computing PLAN", etc.).  It shares the left column's active course,
+            # but may only extend a title after finding its own course header.
+            parse_column(right_halves, paper, seen_student_since_paper, allow_wrapped_title=False)
 
     return students, date
 
