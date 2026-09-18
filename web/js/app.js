@@ -1599,9 +1599,11 @@ function _normalizeRoomName(room){
   let r=cleanTxt(room).toUpperCase();
   r=r.replace(/\s+/g,' ');
   let m;
-  m=r.match(/^([A-D])\s*[-]\s*(\d{3}|(?:IT\s*)?LAB\s*\d+|MARGALA\s*\d*|RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)/i);
+  m=r.match(/^([A-D])\s*[-]\s*(\d{2,3}|(?:IT\s*)?LAB\s*\d+|MARGALA\s*\d*|RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)/i);
   if(m) return `${m[1].toUpperCase()}-${m[2].toUpperCase().replace(/\s+/g,' ').trim()}`;
-  r=r.replace(/\b([A-D])\s+(\d{3})\b/,'$1-$2');
+  // The FSM plan labels ground-floor rooms as "A 01", while the app's
+  // inventory uses "A-01". Treat both two- and three-digit rooms alike.
+  r=r.replace(/\b([A-D])\s+(\d{2,3})\b/,'$1-$2');
   r=r.replace(/\b([A-D])\s+(IT\s+)?LAB\s*[-#]?\s*(\d+)\b/i,'$1-$2LAB $3');
   r=r.replace(/\b([A-D])\s+(MARGALA|RAWAL)\s+(\d+)\b/i,'$1-$2 $3');
   r=r.replace(/\b([A-D])\s+GPU\s+LAB\b/i,'$1-GPU LAB');
