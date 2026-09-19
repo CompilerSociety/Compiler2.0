@@ -33,7 +33,7 @@ from urllib.request import Request, urlopen
 
 # Keep imports working from both the CLI and the Vercel function.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "python"))
-from seating_rooms import parse_pdf as parse_exam_rooms
+from seating_rooms import TIME as SEATING_TIME, parse_pdf as parse_exam_rooms, time_range as seating_time_range
 try:
     from db import store as _store
 except ImportError:  # Pure parsing remains usable without storage dependencies
@@ -697,11 +697,14 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
         for row in cleaned:
             paper = row.get("paper", "").strip()
             venue = re.sub(r"\s+", " ", row.get("class", "")).strip().upper()
-            time_match = re.fullmatch(r"\s*(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})\s*", row.get("time", ""))
+            time_match = SEATING_TIME.fullmatch(row.get("time", "").strip())
             if not (paper and venue and time_match):
                 continue
-            sh, sm, eh, em = map(int, time_match.groups())
-            key = (row.get("date") or exam_date, venue, sh * 60 + sm, eh * 60 + em)
+            try:
+                start, end = seating_time_range(time_match)
+            except ValueError:
+                continue
+            key = (row.get("date") or exam_date, venue, start, end)
             titles = course_counts.setdefault(key, {})
             titles[paper] = titles.get(paper, 0) + 1
         for booking in room_occupancy.get("bookings", []):

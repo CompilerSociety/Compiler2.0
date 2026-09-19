@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T22:39:45.225701+00:00",
+  "updated_at": "2026-09-19T00:33:43.900954+00:00",
   "source_subject": "CS seating-plan Sessional I Fall 26 19-9-2026 + FSM Seating Plan - 19 Sep-2026",
   "count": 7571,
   "students": [
@@ -61446,8 +61446,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "C 301",
         "course": "MG4069,BCS-9B - Digital Sustainability",
         "pages": [
@@ -61456,8 +61456,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "C 302",
         "course": "MG4069,BCS-9B - Digital Sustainability",
         "pages": [
@@ -61466,8 +61466,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "C 303",
         "course": "MG4069,BCS-9A - Digital Sustainability",
         "pages": [
@@ -61476,8 +61476,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 301",
         "course": "EE2003,BAI-5A - Computer Organization and Assembly Language",
         "pages": [
@@ -61486,8 +61486,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 302",
         "course": "EE2003,BCS-5A - Computer Organization and Assembly Language",
         "pages": [
@@ -61496,8 +61496,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 303",
         "course": "EE2003,BCS-5B - Computer Organization and Assembly Language",
         "pages": [
@@ -61506,8 +61506,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 304",
         "course": "EE2003,BAI-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61516,8 +61516,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 305",
         "course": "EE2003,BAI-3B - Computer Organization and Assembly Language",
         "pages": [
@@ -61526,8 +61526,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 307",
         "course": "EE2003,BAI-3C - Computer Organization and Assembly Language",
         "pages": [
@@ -61536,8 +61536,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 308",
         "course": "EE2003,BAI-3C - Computer Organization and Assembly Language",
         "pages": [
@@ -61546,8 +61546,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 309",
         "course": "EE2003,BCY-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61556,8 +61556,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 401",
         "course": "EE2003,BCY-3B - Computer Organization and Assembly Language",
         "pages": [
@@ -61566,8 +61566,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 402",
         "course": "EE2003,BCY-3B - Computer Organization and Assembly Language",
         "pages": [
@@ -61576,8 +61576,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 403",
         "course": "EE2003,BCY-3C - Computer Organization and Assembly Language",
         "pages": [
@@ -61586,8 +61586,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 404",
         "course": "EE2003,BDS-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61596,8 +61596,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 405",
         "course": "EE2003,BDS-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61606,8 +61606,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 406",
         "course": "EE2003,BDS-3B - Computer Organization and Assembly Language",
         "pages": [
@@ -61616,8 +61616,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 407",
         "course": "EE2003,BSE-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61626,8 +61626,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 408",
         "course": "EE2003,BSE-3A - Computer Organization and Assembly Language",
         "pages": [
@@ -61636,8 +61636,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "C 409",
         "course": "EE2003,BSE-3B - Computer Organization and Assembly Language",
         "pages": [
@@ -61646,8 +61646,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 301",
         "course": "EE2003,BSE-3C - Computer Organization and Assembly Language",
         "pages": [
@@ -61656,8 +61656,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 302",
         "course": "EE2003,BSE-3D - Computer Organization and Assembly Language",
         "pages": [
@@ -61666,8 +61666,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 303",
         "course": "AI4009,BSE-7A - Generative AI",
         "pages": [
@@ -61676,8 +61676,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 304",
         "course": "AI4009,BSE-7B - Generative AI",
         "pages": [
@@ -61686,8 +61686,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 305",
         "course": "AI4009,BSE-7B - Generative AI",
         "pages": [
@@ -61696,8 +61696,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 306",
         "course": "AI4009,BCS-7A - Generative AI",
         "pages": [
@@ -61706,8 +61706,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "D 311",
         "course": "AI4009,BCS-7B - Generative AI",
         "pages": [
@@ -61716,8 +61716,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 301",
         "course": "NS1001,BCY-1A - Applied Physics",
         "pages": [
@@ -61726,8 +61726,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 302",
         "course": "NS1001,BCY-1A - Applied Physics",
         "pages": [
@@ -61736,8 +61736,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 303",
         "course": "NS1001,BCY-1B - Applied Physics",
         "pages": [
@@ -61746,8 +61746,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 304",
         "course": "NS1001,BCY-1B - Applied Physics",
         "pages": [
@@ -61756,8 +61756,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 305",
         "course": "NS1001,BCY-1C - Applied Physics",
         "pages": [
@@ -61766,8 +61766,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 307",
         "course": "NS1001,BCY-1C - Applied Physics",
         "pages": [
@@ -61776,8 +61776,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 308",
         "course": "NS1001,BCY-1D - Applied Physics",
         "pages": [
@@ -61786,8 +61786,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 309",
         "course": "NS1001,BSE-1A - Applied Physics",
         "pages": [
@@ -61796,8 +61796,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 401",
         "course": "NS1001,BSE-1A - Applied Physics",
         "pages": [
@@ -61806,8 +61806,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 402",
         "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
@@ -61816,8 +61816,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 403",
         "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
@@ -61826,8 +61826,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 404",
         "course": "NS1001,BSE-1B - Applied Physics",
         "pages": [
@@ -61836,8 +61836,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 405",
         "course": "NS1001,BSE-1C - Applied Physics",
         "pages": [
@@ -61846,8 +61846,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 406",
         "course": "NS1001,BSE-1C - Applied Physics",
         "pages": [
@@ -61856,8 +61856,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 407",
         "course": "NS1001,BSE-1D - Applied Physics",
         "pages": [
@@ -61866,8 +61866,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 408",
         "course": "NS1001,BSE-1D - Applied Physics",
         "pages": [
@@ -61876,8 +61876,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "C 409",
         "course": "NS1001,BSE-1E - Applied Physics",
         "pages": [
@@ -61886,8 +61886,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 301",
         "course": "SS5014,MCS-2A - Understanding of Religions I",
         "pages": [
@@ -61896,8 +61896,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 302",
         "course": "SS5014,MCS-2A - Understanding of Religions I",
         "pages": [
@@ -61906,8 +61906,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 303",
         "course": "SS6007,PCS-1A - Understanding of",
         "pages": [
@@ -61916,8 +61916,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 304",
         "course": "MG3040,BAI-7A - Methods in Business Research",
         "pages": [
@@ -61926,8 +61926,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 305",
         "course": "MG3040,BAI-7B - Methods in Business Research",
         "pages": [
@@ -61936,8 +61936,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 306",
         "course": "MG3040,BAI-7B - Methods in Business Research",
         "pages": [
@@ -61946,8 +61946,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 311",
         "course": "MG3040,BAI-7C - Methods in Business Research",
         "pages": [
@@ -61956,8 +61956,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 312",
         "course": "MG3040,BDS-7A - Methods in Business Research",
         "pages": [
@@ -61966,8 +61966,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 313",
         "course": "MG3040,BDS-7B - Methods in Business Research",
         "pages": [
@@ -61976,8 +61976,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "D 314",
         "course": "MG3040,BDS-7C - Methods in Business Research",
         "pages": [
@@ -61986,8 +61986,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 301",
         "course": "CS5001,MAI-1A - Research Methodology",
         "pages": [
@@ -61996,8 +61996,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 302",
         "course": "CS5001,MAI-1B - Research Methodology",
         "pages": [
@@ -62006,8 +62006,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 303",
         "course": "CS5001,MAI-1B - Research Methodology",
         "pages": [
@@ -62016,8 +62016,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 304",
         "course": "CS5001,MCY-1A - Research Methodology",
         "pages": [
@@ -62026,8 +62026,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 305",
         "course": "CS5001,MDS-1A - Research Methodology",
         "pages": [
@@ -62036,8 +62036,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 307",
         "course": "CS5001,MDS-1A - Research Methodology",
         "pages": [
@@ -62046,8 +62046,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "C 308",
         "course": "CS5031,MAI-3A - Applied Computer Vision",
         "pages": [
@@ -62056,8 +62056,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 380,
-        "end": 440,
+        "start": 1100,
+        "end": 1160,
         "room": "C 301",
         "course": "CS5145,MCI-1A - Database and Operating Systems",
         "pages": [
@@ -62066,8 +62066,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 380,
-        "end": 440,
+        "start": 1100,
+        "end": 1160,
         "room": "C 302",
         "course": "DS5007,MDS-1A - Natural Language Processing",
         "pages": [
@@ -62646,8 +62646,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "A 101",
         "course": "AF1001,BAF-3A - Fundamentals of Accounting",
         "pages": [
@@ -62656,8 +62656,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "A 102",
         "course": "AF1002,BFT-3A - Financial Accounting",
         "pages": [
@@ -62666,8 +62666,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "A 103",
         "course": "AF1002,BFT-3A - Financial Accounting",
         "pages": [
@@ -62676,8 +62676,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "A 104",
         "course": "AF1002,BAF-3B - Financial Accounting",
         "pages": [
@@ -62686,8 +62686,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 60,
-        "end": 120,
+        "start": 780,
+        "end": 840,
         "room": "A 01",
         "course": "FT4005,BFT-7A - Digital Banking and Payment Industry",
         "pages": [
@@ -62696,8 +62696,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 101",
         "course": "MG4067,BBA-7A - Strategic Diversity, Equity and Inclusion",
         "pages": [
@@ -62706,8 +62706,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 102",
         "course": "MG4067,BBA-7A - Strategic Diversity, Equity and Inclusion",
         "pages": [
@@ -62716,8 +62716,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 103",
         "course": "AF2003,BBA-3B - Management Accounting",
         "pages": [
@@ -62726,8 +62726,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 104",
         "course": "AF2003,BBA-3C - Management Accounting",
         "pages": [
@@ -62736,8 +62736,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 01",
         "course": "AF2003,BBA-3C - Management Accounting",
         "pages": [
@@ -62746,8 +62746,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 150,
-        "end": 210,
+        "start": 870,
+        "end": 930,
         "room": "A 02",
         "course": "AF2003,BBA-3D - Management Accounting",
         "pages": [
@@ -62756,8 +62756,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 101",
         "course": "SS1007,BBA-1A - Islamic",
         "pages": [
@@ -62766,8 +62766,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 102",
         "course": "SS2019,BAF-1A - Psychology",
         "pages": [
@@ -62776,8 +62776,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 103",
         "course": "SS2019,BAF-1B - Psychology",
         "pages": [
@@ -62786,8 +62786,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 104",
         "course": "SS2019,BAF-1B - Psychology",
         "pages": [
@@ -62796,8 +62796,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 01",
         "course": "SS2019,BFT-3A - Psychology",
         "pages": [
@@ -62806,8 +62806,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 02",
         "course": "SS2019,BFT-3A - Psychology",
         "pages": [
@@ -62816,8 +62816,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 03",
         "course": "SS1007,BBA-1C - Islamic",
         "pages": [
@@ -62826,8 +62826,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 04",
         "course": "SS2019,BFT-3B - Psychology",
         "pages": [
@@ -62836,8 +62836,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 211",
         "course": "SS2019,BFT-3B - Psychology",
         "pages": [
@@ -62846,8 +62846,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 201",
         "course": "SS1007,BFT-1A - Islamic",
         "pages": [
@@ -62856,8 +62856,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 202",
         "course": "SS1007,BFT-1A - Islamic",
         "pages": [
@@ -62866,8 +62866,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 203",
         "course": "SS2019,BFT-3C - Psychology",
         "pages": [
@@ -62876,8 +62876,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 301",
         "course": "SS1007,BFT-1B - Islamic",
         "pages": [
@@ -62886,8 +62886,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 302",
         "course": "SS1007,BFT-1B - Islamic",
         "pages": [
@@ -62896,8 +62896,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 303",
         "course": "SS2019,BFT-3D - Psychology",
         "pages": [
@@ -62906,8 +62906,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 305",
         "course": "SS2019,BFT-3D - Psychology",
         "pages": [
@@ -62916,8 +62916,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 310",
         "course": "SS1007,BFT-1C - Islamic",
         "pages": [
@@ -62926,8 +62926,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 311",
         "course": "SS1007,BFT-1C - Islamic",
         "pages": [
@@ -62936,8 +62936,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 314",
         "course": "SS1007,BFT-1D - Islamic",
         "pages": [
@@ -62946,8 +62946,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 220,
-        "end": 280,
+        "start": 940,
+        "end": 1000,
         "room": "A 315",
         "course": "SS1007,BFT-1D - Islamic",
         "pages": [
@@ -62956,8 +62956,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 300,
-        "end": 360,
+        "start": 1020,
+        "end": 1080,
         "room": "A 101",
         "course": "AF5007,MB-3A - Advanced Financial Management",
         "pages": [
@@ -62966,8 +62966,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 380,
-        "end": 440,
+        "start": 1100,
+        "end": 1160,
         "room": "A 101",
         "course": "BA5006,MSBA-1A - Advanced Data Analysis",
         "pages": [
@@ -62976,8 +62976,8 @@
       },
       {
         "date": "2026-09-19",
-        "start": 380,
-        "end": 440,
+        "start": 1100,
+        "end": 1160,
         "room": "A 102",
         "course": "MG5015,MB-1A - Strategic HR and Leadership",
         "pages": [

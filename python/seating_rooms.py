@@ -37,15 +37,28 @@ def iso_date(value):
 
 
 def time_range(match):
-    """Infer the omitted AM in '9:00 to 12:00 PM', never turn it into 9 PM."""
+    """Return campus-local minutes, inferring the PDF's omitted PM labels.
+
+    FAST's seating plans print morning slots as 9:00-12:40 and then restart at
+    1:00 without writing "PM".  A bare 1:00-7:20 is therefore afternoon, not
+    1:00-7:20 AM.  Explicit AM/PM labels still take precedence.
+    """
     start, ap, end, bp = match.groups()
     def minutes(s, period):
         h, m = map(int, s.split(':'))
         if m > 59 or h > 23 or (period and not 1 <= h <= 12):
             raise ValueError('Invalid exam time')
         return ((h % 12 + (12 if period.upper() == 'PM' else 0)) if period else h) * 60 + m
+    if not ap and not bp:
+        start_hour = int(start.split(':')[0])
+        end_hour = int(end.split(':')[0])
+        start_min = minutes(start, 'PM' if 1 <= start_hour <= 7 else '')
+        end_min = minutes(end, 'PM' if 1 <= end_hour <= 7 else '')
+        if 0 < end_min - start_min <= 6 * 60:
+            return start_min, end_min
+        raise ValueError(f'Ambiguous exam time: {match.group(0)}')
     end_min = minutes(end, bp or '')
-    candidates = [minutes(start, ap)] if ap else [minutes(start, p) for p in (['AM', 'PM'] if bp else [''])]
+    candidates = [minutes(start, ap)] if ap else [minutes(start, p) for p in ['AM', 'PM']]
     valid = [s for s in candidates if 0 < end_min - s <= 6 * 60]
     if len(valid) != 1:
         raise ValueError(f'Ambiguous exam time: {match.group(0)}')

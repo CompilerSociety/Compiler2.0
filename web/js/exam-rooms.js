@@ -24,7 +24,11 @@
     return bookings.length>0&&bookings.every(b=>Boolean(normalize(b.room)));
   }
   function slots(date,seating){
-    const bounds=new Set([0,1440]);
+    // Start at the first published exam.  Adding a synthetic midnight bound
+    // made 12:00 AM–the first exam look like an active "exam seating" slot.
+    // Keep the end-of-day bound so rooms can still be shown free after the
+    // final exam has finished.
+    const bounds=new Set([1440]);
     for(const b of seating?.room_occupancy?.bookings||[]){
       if(b.date===date&&Number.isFinite(b.start)&&Number.isFinite(b.end)){bounds.add(b.start);bounds.add(b.end);}
     }
