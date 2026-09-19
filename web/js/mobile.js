@@ -677,11 +677,20 @@
     const p=profile();
     const nuid=String(p?.nuid||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
     if(!nuid||typeof loadSeatingPlanData!=='function') return;
+    const clearForMissingPlan=()=>{
+      // During an exam period, never fall back to a lecture card when the
+      // seating file has not arrived yet. The Home area stays deliberately
+      // blank until there is a real paper assignment for the student.
+      if(typeof isExamSeason!=='undefined'&&isExamSeason){
+        const banner=$('m-now-banner');
+        if(banner) banner.outerHTML='<div class="m-home-exam-empty" id="m-now-banner" aria-hidden="true"></div>';
+      }
+    };
     loadSeatingPlanData().then(doc=>{
       if(route!=='today'||weekMode) return;
       const examDate=doc?.exam_date||doc?.room_occupancy?.dates?.[0]||'';
       const today=campusDateKey();
-      if(!/^\d{4}-\d{2}-\d{2}$/.test(examDate)||examDate<today) return;
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(examDate)||examDate<today){ clearForMissingPlan(); return; }
       const dayOffset=Math.round((Date.parse(`${examDate}T00:00:00Z`)-Date.parse(`${today}T00:00:00Z`))/86400000);
       const now=nowSeconds();
       const exams=(doc?.students||[]).map(student=>{
@@ -693,24 +702,32 @@
         return {...student,bounds,startsIn,endsIn};
       }).filter(Boolean).filter(exam=>exam.endsIn>0)
         .sort((a,b)=>a.startsIn-b.startsIn);
-      if(!exams.length) return;
+      if(!exams.length){ clearForMissingPlan(); return; }
       const exam=exams.find(item=>item.startsIn<=0)||exams[0];
+      // The top card is the active/nearest paper. If another paper remains on
+      // the same day, show it immediately below rather than making students
+      // wait for the first countdown to end.
+      const following=exams.filter(item=>item!==exam&&item.startsIn>0).slice(0,1);
       const live=exam.startsIn<=0;
       const when=live?'EXAM NOW':dayOffset===0?'NEXT EXAM · TODAY':dayOffset===1?'NEXT EXAM · TOMORROW':'NEXT EXAM';
       const until=Date.now()+(live?exam.endsIn:exam.startsIn)*1000;
       const banner=$('m-now-banner');
       if(!banner) return;
-      banner.outerHTML=`<div class="m-now${live?' is-live':''}" id="m-now-banner" data-until="${until}">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(when)} · ${esc(examTimeLabel(exam.bounds[0]))} – ${esc(examTimeLabel(exam.bounds[1]))}</span></div>
-        <div class="m-now-name">${esc(exam.paper||'Exam')}</div>
-        <div class="m-now-stats">
-          <div><div class="m-now-stat-label">Room · Seat</div><div class="m-now-stat-value">${esc(exam.class||'—')} · ${esc(exam.seat||'—')}</div></div>
-          <div><div class="m-now-stat-label">${live?'Ends in':'Starts in'}</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
-        </div>
+      const card=(item,label,withCountdown=false)=>`<div class="m-now${item===exam&&live?' is-live':''}">
+          <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(label)} · ${esc(examTimeLabel(item.bounds[0]))} – ${esc(examTimeLabel(item.bounds[1]))}</span></div>
+          <div class="m-now-name">${esc(item.paper||'Exam')}</div>
+          <div class="m-now-stats">
+            <div><div class="m-now-stat-label">Room · Seat</div><div class="m-now-stat-value">${esc(item.class||'—')} · ${esc(item.seat||'—')}</div></div>
+            <div><div class="m-now-stat-label">${withCountdown?(live?'Ends in':'Starts in'):'After this'}</div><div class="m-now-stat-value"${withCountdown?' id="m-now-count"':''}>${withCountdown?'—':examTimeLabel(item.bounds[0])}</div></div>
+          </div>
+        </div>`;
+      banner.outerHTML=`<div class="m-home-exam-stack" id="m-now-banner" data-until="${until}">
+        ${card(exam,when,true)}
+        ${following.map(item=>card(item,live?'AFTER THIS PAPER':'THEN',false)).join('')}
       </div>`;
       tickBanner();
       wireTodayBanner();
-    }).catch(()=>{});
+    }).catch(clearForMissingPlan);
   }
 
   function classRowHTML(r){

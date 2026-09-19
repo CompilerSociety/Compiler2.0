@@ -204,6 +204,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-now-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;position:relative}
 .m-now-stat-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 .m-now-stat-value{font-family:var(--mono);font-weight:500;font-size:18px;margin-top:3px;word-break:break-word}
+.m-home-exam-stack{display:grid;gap:10px}
+.m-home-exam-stack .m-now{margin:0}
+.m-home-exam-stack .m-now:not(.is-live) .m-now-dot{animation:none}
+.m-home-exam-empty{display:none}
 .m-gap{width:100%;display:flex;align-items:center;gap:11px;text-align:left;background:var(--tint);border:1px dashed rgba(var(--accent-rgb),.55);border-radius:22px;padding:14px 16px;color:var(--green-deep);cursor:pointer;font-family:inherit}
 .m-gap svg{width:18px;height:18px;flex-shrink:0}
 .m-gap-text{flex:1;min-width:0;font-size:13px;font-weight:500;line-height:1.4}
