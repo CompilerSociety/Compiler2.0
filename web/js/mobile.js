@@ -625,6 +625,14 @@
     pane.innerHTML=html;
 
     tickBanner();
+    wireTodayBanner();
+    // A published seating plan is more important than the ordinary lecture
+    // timetable on its exam date. Replace the class banner as soon as the
+    // student's own exam record has loaded.
+    showHomeExamBanner();
+  }
+
+  function wireTodayBanner(){
     const banner=$('m-now-banner');
     if(banner){
       // Same easter egg as double-clicking the header logo on desktop, but it
@@ -638,9 +646,71 @@
       });
       banner.style.touchAction='manipulation';
     }
-    pane.querySelectorAll('.m-gap').forEach(btn=>{
+    $('m-today-pane')?.querySelectorAll('.m-gap').forEach(btn=>{
       btn.addEventListener('click',()=>go('rooms'));
     });
+  }
+
+  function seatingTimeBounds(time){
+    const parts=String(time||'').trim().split(/\s*[-\u2013\u2014]\s*/);
+    if(parts.length!==2) return null;
+    const minute=value=>{
+      const match=String(value).trim().match(/^(\d{1,2}):(\d{2})$/);
+      if(!match) return null;
+      let hour=Number(match[1]), mins=Number(match[2]);
+      if(mins>59||hour<1||hour>12) return null;
+      // Seating plans omit AM/PM. Their 1:00–7:20 slots are afternoon.
+      if(hour>=1&&hour<=7) hour+=12;
+      return hour*60+mins;
+    };
+    const start=minute(parts[0]),end=minute(parts[1]);
+    return start!=null&&end!=null&&end>start?[start,end]:null;
+  }
+  function examTimeLabel(minute){
+    const hour=Math.floor(minute/60), mins=minute%60;
+    return `${hour%12||12}:${String(mins).padStart(2,'0')} ${hour>=12?'PM':'AM'}`;
+  }
+  function campusDateKey(){
+    return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Karachi',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  }
+  function showHomeExamBanner(){
+    const p=profile();
+    const nuid=String(p?.nuid||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!nuid||typeof loadSeatingPlanData!=='function') return;
+    loadSeatingPlanData().then(doc=>{
+      if(route!=='today'||weekMode) return;
+      const examDate=doc?.exam_date||doc?.room_occupancy?.dates?.[0]||'';
+      const today=campusDateKey();
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(examDate)||examDate<today) return;
+      const dayOffset=Math.round((Date.parse(`${examDate}T00:00:00Z`)-Date.parse(`${today}T00:00:00Z`))/86400000);
+      const now=nowSeconds();
+      const exams=(doc?.students||[]).map(student=>{
+        const key=String(student.nuid||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+        const bounds=seatingTimeBounds(student.time);
+        if(key!==nuid||!bounds) return null;
+        const startsIn=dayOffset*86400+bounds[0]*60-now;
+        const endsIn=dayOffset*86400+bounds[1]*60-now;
+        return {...student,bounds,startsIn,endsIn};
+      }).filter(Boolean).filter(exam=>exam.endsIn>0)
+        .sort((a,b)=>a.startsIn-b.startsIn);
+      if(!exams.length) return;
+      const exam=exams.find(item=>item.startsIn<=0)||exams[0];
+      const live=exam.startsIn<=0;
+      const when=live?'EXAM NOW':dayOffset===0?'NEXT EXAM · TODAY':dayOffset===1?'NEXT EXAM · TOMORROW':'NEXT EXAM';
+      const until=Date.now()+(live?exam.endsIn:exam.startsIn)*1000;
+      const banner=$('m-now-banner');
+      if(!banner) return;
+      banner.outerHTML=`<div class="m-now${live?' is-live':''}" id="m-now-banner" data-until="${until}">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(when)} · ${esc(examTimeLabel(exam.bounds[0]))} – ${esc(examTimeLabel(exam.bounds[1]))}</span></div>
+        <div class="m-now-name">${esc(exam.paper||'Exam')}</div>
+        <div class="m-now-stats">
+          <div><div class="m-now-stat-label">Room · Seat</div><div class="m-now-stat-value">${esc(exam.class||'—')} · ${esc(exam.seat||'—')}</div></div>
+          <div><div class="m-now-stat-label">${live?'Ends in':'Starts in'}</div><div class="m-now-stat-value" id="m-now-count">—</div></div>
+        </div>
+      </div>`;
+      tickBanner();
+      wireTodayBanner();
+    }).catch(()=>{});
   }
 
   function classRowHTML(r){
