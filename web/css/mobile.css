@@ -204,6 +204,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-now-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;position:relative}
 .m-now-stat-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 .m-now-stat-value{font-family:var(--mono);font-weight:500;font-size:18px;margin-top:3px;word-break:break-word}
+.m-home-exam-stack{display:grid;gap:10px}
+.m-home-exam-stack .m-now{margin:0}
+.m-home-exam-stack .m-now:not(.is-live) .m-now-dot{animation:none}
+.m-home-exam-empty{display:none}
 .m-gap{width:100%;display:flex;align-items:center;gap:11px;text-align:left;background:var(--tint);border:1px dashed rgba(var(--accent-rgb),.55);border-radius:22px;padding:14px 16px;color:var(--green-deep);cursor:pointer;font-family:inherit}
 .m-gap svg{width:18px;height:18px;flex-shrink:0}
 .m-gap-text{flex:1;min-width:0;font-size:13px;font-weight:500;line-height:1.4}
@@ -261,6 +265,10 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-room-card.is-open .m-room-chev{transform:rotate(180deg);color:var(--green-deep)}
 .m-room-detail{padding:2px 16px 15px;background:var(--tint);animation:m-expand .22s cubic-bezier(.22,1,.36,1)}
 @keyframes m-expand{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.m-room-live{display:grid;gap:3px;padding:10px 16px 12px;background:var(--tint);border-top:1px solid var(--line)}
+.m-room-live-label{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.m-room-live-course{font-size:12.5px;font-weight:700;line-height:1.35;color:var(--ink);word-break:break-word}
+.m-room-live-free{font-family:var(--mono);font-size:11.5px;line-height:1.35;color:var(--green-deep)}
 .m-room-summary{font-family:var(--mono);font-size:12.5px;line-height:1.45;color:var(--green-deep);padding:8px 0 12px;border-top:1px solid rgba(var(--accent-rgb),.18)}
 .m-slotrows{display:flex;flex-direction:column;gap:6px}
 .m-slotrow{display:flex;align-items:center;gap:10px;background:var(--base);border-radius:999px;padding:7px 8px 7px 8px}
@@ -314,6 +322,7 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-seat-card{background:var(--tint);border-radius:28px;padding:22px;text-align:center}
 .m-seat-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .m-seat-meta{font-size:12px;line-height:1.4;color:var(--mute);margin-top:8px}
+.m-seat-room{color:#c47d46;font-weight:700;white-space:nowrap}
 .m-seat-value{font-family:var(--mono);font-weight:500;font-size:26px;color:var(--green);margin-top:6px}
 .m-seat-name{font-weight:700;font-size:16px;margin-bottom:16px}
 

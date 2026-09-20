@@ -15,13 +15,20 @@
     const plan=seating?.room_occupancy;
     if(!plan?.complete||plan.version!==1||!plan.dates?.includes(date)||!Array.isArray(plan.bookings)) return false;
     if(plan.bookings.some(b=>!validDate(b.date)||!b.room||!Number.isFinite(b.start)||!Number.isFinite(b.end)||b.start<0||b.end>1440||b.start>=b.end)) return false;
-    // A school-specific seating file cannot prove other schools' rooms free.
-    if(schedules.some(doc=>rows(doc).some(e=>e.date===date)&&!plan.schools?.includes(doc.school))) return false;
+    // The seating plan is the room-allocation authority.  Exam schedules
+    // decide that the app is in an exam period, but a complete seating plan
+    // lists every occupied room; every other room in the published inventory
+    // is therefore free.  Do not hide valid seating data merely because an
+    // independent school schedule has a different coverage label.
     const bookings=plan.bookings.filter(b=>b.date===date);
     return bookings.length>0&&bookings.every(b=>Boolean(normalize(b.room)));
   }
   function slots(date,seating){
-    const bounds=new Set([0,1440]);
+    // Start at the first published exam.  Adding a synthetic midnight bound
+    // made 12:00 AM–the first exam look like an active "exam seating" slot.
+    // Keep the end-of-day bound so rooms can still be shown free after the
+    // final exam has finished.
+    const bounds=new Set([1440]);
     for(const b of seating?.room_occupancy?.bookings||[]){
       if(b.date===date&&Number.isFinite(b.start)&&Number.isFinite(b.end)){bounds.add(b.start);bounds.add(b.end);}
     }

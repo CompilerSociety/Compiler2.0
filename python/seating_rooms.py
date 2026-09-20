@@ -15,15 +15,20 @@ from pathlib import Path
 
 import pdfplumber
 
-DATE = re.compile(r"\b([A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2}|\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|20\d{2}-\d{2}-\d{2})\b")
+DATE = re.compile(
+    r"\b([A-Za-z]{3,9}\s*,\s*\d{1,2}\s*,\s*[A-Za-z]{3,9}\s*,\s*\d{2}|"
+    r"[A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2}|"
+    r"\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|20\d{2}-\d{2}-\d{2})\b"
+)
 TIME = re.compile(r"\b(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:to|[-–—])\s*(\d{1,2}:\d{2})\s*(AM|PM)?\b", re.I)
 ROOM = re.compile(r"(?:Room\s*No\.?\s*:?|Venue\s*:)\s*(.+?)(?=\s+\d+(?:st|nd|rd|th)\s+Floor|\n|$)", re.I)
-STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|\d+)\s*$", re.I)
+STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|Extra\s*\d+|\d+)\s*$", re.I)
 
 
 def iso_date(value):
-    value = value.replace(',', '')
-    for fmt in ('%b %d %Y', '%B %d %Y', '%d %B %Y', '%d %b %Y', '%Y-%m-%d'):
+    value = re.sub(r"\s+", " ", value.replace(',', ' ')).strip()
+    for fmt in ('%a %d %b %y', '%A %d %B %Y', '%a %d %b %Y',
+                '%b %d %Y', '%B %d %Y', '%d %B %Y', '%d %b %Y', '%Y-%m-%d'):
         try:
             return datetime.strptime(value, fmt).date().isoformat()
         except ValueError:
@@ -32,15 +37,28 @@ def iso_date(value):
 
 
 def time_range(match):
-    """Infer the omitted AM in '9:00 to 12:00 PM', never turn it into 9 PM."""
+    """Return campus-local minutes, inferring the PDF's omitted PM labels.
+
+    FAST's seating plans print morning slots as 9:00-12:40 and then restart at
+    1:00 without writing "PM".  A bare 1:00-7:20 is therefore afternoon, not
+    1:00-7:20 AM.  Explicit AM/PM labels still take precedence.
+    """
     start, ap, end, bp = match.groups()
     def minutes(s, period):
         h, m = map(int, s.split(':'))
         if m > 59 or h > 23 or (period and not 1 <= h <= 12):
             raise ValueError('Invalid exam time')
         return ((h % 12 + (12 if period.upper() == 'PM' else 0)) if period else h) * 60 + m
+    if not ap and not bp:
+        start_hour = int(start.split(':')[0])
+        end_hour = int(end.split(':')[0])
+        start_min = minutes(start, 'PM' if 1 <= start_hour <= 7 else '')
+        end_min = minutes(end, 'PM' if 1 <= end_hour <= 7 else '')
+        if 0 < end_min - start_min <= 6 * 60:
+            return start_min, end_min
+        raise ValueError(f'Ambiguous exam time: {match.group(0)}')
     end_min = minutes(end, bp or '')
-    candidates = [minutes(start, ap)] if ap else [minutes(start, p) for p in (['AM', 'PM'] if bp else [''])]
+    candidates = [minutes(start, ap)] if ap else [minutes(start, p) for p in ['AM', 'PM']]
     valid = [s for s in candidates if 0 < end_min - s <= 6 * 60]
     if len(valid) != 1:
         raise ValueError(f'Ambiguous exam time: {match.group(0)}')
@@ -76,7 +94,12 @@ def parse_pages(texts):
             continue
         venue = normalize_room(room.group(1))
         paper_line = next((line for line in text.splitlines() if re.match(r'^[A-Z]{2,3}\d{3,4}\s*[-,]', line)), '')
+        # Some PDFs flatten the course heading and the first/last student row
+        # onto a single extracted line.  The booking must expose only the exam
+        # title; names and NU IDs belong to the seating record, never the room
+        # availability screen.
         paper = ROOM.split(paper_line)[0].strip()
+        paper = re.sub(r'\s+\d+\s+\d{2}[A-Za-z]-\d{4}\b.*$', '', paper, flags=re.I).strip()
         codes = re.findall(r'\b[BM](CS|AI|DS|CY|SE|EE|CE|BA|AF|FT|BAI)\s*-', paper)
         schools.update('engineering' if code in ('EE', 'CE') else 'business' if code in ('BA', 'AF', 'FT', 'BAI') else 'computing' for code in codes)
         bookings.append({'date': date, 'start': start, 'end': end, 'room': venue, 'course': paper or 'Exam', 'page': number})

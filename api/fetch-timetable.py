@@ -33,7 +33,7 @@ from urllib.request import Request, urlopen
 
 # Keep imports working from both the CLI and the Vercel function.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "python"))
-from seating_rooms import parse_pdf as parse_exam_rooms
+from seating_rooms import TIME as SEATING_TIME, parse_pdf as parse_exam_rooms, time_range as seating_time_range
 try:
     from db import store as _store
 except ImportError:  # Pure parsing remains usable without storage dependencies
@@ -361,6 +361,14 @@ def normalize_seat(seat: str) -> str:
     if not raw:
         return ""
 
+    m = re.fullmatch(r"EXTRA\s*(\d+)", raw)
+    if m:
+        return f"Extra {m.group(1)}"
+
+    m = re.fullmatch(r"CHAIR\s*(\d+)", raw)
+    if m:
+        return f"Chair{m.group(1)}"
+
     m = re.search(r"C\s*[-:]?\s*(\d+)\s*R\s*[-:]?\s*(\d+)", raw)
     if m:
         return f"C{m.group(1)}R{m.group(2)}"
@@ -395,12 +403,12 @@ def normalize_entry(entry: dict[str, str]) -> dict[str, str]:
 # course/paper line, and two side-by-side "S# Roll No. Student Name Seat" tables.
 
 # Seat may be a plain number (e.g. "21"), a column-row code (e.g. "C1R2"),
-# or a special chair assignment used by some seating sheets ("Chair1" /
-# "Chair2").  Chair assignments are valid seating records and must not cause
-# the complete student row to be dropped.
+# or a special chair/extra assignment used by some seating sheets ("Chair1"
+# or "Extra 2"). These assignments are valid seating records and must not
+# cause the complete student row to be dropped or be split into the name.
 FAST_REC = re.compile(
     r"^\s*(\d{1,3})\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+"
-    r"([A-Z]\d+[A-Z]\d+|\d{1,3}|[Cc]hair\d+)\s*$"
+    r"([Ee]xtra\s*\d+|[Cc]hair\s*\d+|[A-Z]\d+[A-Z]\d+|\d{1,3})\s*$"
 )
 FAST_PAPER = re.compile(r"^\s*([A-Z]{2,3}\d{3,4}\s*,\s*[A-Z0-9\-/]+)\s*-?\s*(.*)$")
 
@@ -508,26 +516,44 @@ def parse_pdf_coordinates(payload: bytes) -> tuple[list[dict[str, str]], str]:
                 if right:
                     right_halves.append(right)
 
-            paper = ""
-            for half in left_halves + right_halves:
-                rec = FAST_REC.match(half)
-                if rec:
-                    students.append({
-                        "name": re.sub(r"\s+", " ", rec.group(3).strip()),
-                        "nuid": rec.group(2).upper(),
-                        "seat": rec.group(4),
-                        "paper": paper,
-                        "time": slot,
-                        "class": venue,
-                    })
-                    continue
-                stripped = half.strip()
-                paper_match = FAST_PAPER.match(half)
-                if paper_match and re.match(r"^[A-Z]{2,3}\d{3,4}", stripped):
-                    paper = _clean_paper(paper_match.group(1), paper_match.group(2))
-                elif (paper and re.fullmatch(r"[A-Za-z][A-Za-z \-]*", stripped)
-                      and not re.search(r"(Lab|Development)$", paper)):
-                    paper = re.sub(r"\s+", " ", f"{paper} {stripped}")
+            def parse_column(
+                halves: list[str], paper: str = "", seen_student_since_paper: bool = False,
+                allow_wrapped_title: bool = True,
+            ) -> tuple[str, bool]:
+                """Read one visual column without mistaking wrapped names for course text."""
+                for half in halves:
+                    rec = FAST_REC.match(half)
+                    if rec:
+                        students.append({
+                            "name": re.sub(r"\s+", " ", rec.group(3).strip()),
+                            "nuid": rec.group(2).upper(),
+                            "seat": rec.group(4),
+                            "paper": paper,
+                            "time": slot,
+                            "class": venue,
+                        })
+                        seen_student_since_paper = True
+                        continue
+                    stripped = half.strip()
+                    paper_match = FAST_PAPER.match(half)
+                    if paper_match and re.match(r"^[A-Z]{2,3}\d{3,4}", stripped):
+                        paper = _clean_paper(paper_match.group(1), paper_match.group(2))
+                        seen_student_since_paper = False
+                        # A header in this column may itself wrap onto the next line.
+                        allow_wrapped_title = True
+                    elif (allow_wrapped_title and paper and not seen_student_since_paper
+                          and re.fullmatch(r"[A-Za-z][A-Za-z \-]*", stripped)
+                          and not re.search(r"\b(?:Generated|Exam|Venue|Allocation|System|Page|Seating|PLAN)\b", stripped, re.I)
+                          and not re.search(r"(Lab|Development)$", paper)):
+                        # A wrapped paper title is above its first student row.
+                        paper = re.sub(r"\s+", " ", f"{paper} {stripped}")
+                return paper, seen_student_since_paper
+
+            paper, seen_student_since_paper = parse_column(left_halves)
+            # The right column can begin with page-header fragments ("School of\n"
+            # "Computing PLAN", etc.).  It shares the left column's active course,
+            # but may only extend a title after finding its own course header.
+            parse_column(right_halves, paper, seen_student_since_paper, allow_wrapped_title=False)
 
     return students, date
 
@@ -608,9 +634,26 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
         except Exception as exc:
             room_occupancy = {'version': 1, 'complete': False, 'dates': [], 'bookings': [], 'errors': [{'reason': str(exc)}]}
             attendance_students = []
-        if attendance_students:
+
+        # The generated seating sheets place two student columns on the same
+        # extracted text line. Use the coordinate parser for student rows so
+        # the columns stay separate; the room parser remains the authority for
+        # page/date/venue completeness validation.
+        try:
+            coordinate_students, coordinate_date = parse_pdf_coordinates(pdf_bytes)
+        except Exception as exc:
+            print(f"Coordinate parse failed ({exc}); using room-parser rows.")
+            coordinate_students, coordinate_date = [], ""
+        coordinate_ready = bool(coordinate_students) and all(
+            row.get('nuid') and row.get('seat') and row.get('time')
+            for row in coordinate_students
+        )
+        if coordinate_ready:
+            students = coordinate_students
+            exam_date = ((room_occupancy or {}).get('dates') or [""])[0] or coordinate_date
+        elif attendance_students:
             students = attendance_students
-            exam_date = room_occupancy['dates'][0]
+            exam_date = ((room_occupancy or {}).get('dates') or [""])[0]
 
     # 1) Coordinate-based parse (most accurate: keeps seats aligned to rows).
     if pdf_bytes and not students:
@@ -645,6 +688,31 @@ def parse_seating_plan_email(body: str, subject: str, pdf_bytes: bytes | None = 
             "Could not parse any student records from the email PDF payload. "
             "Verify table alignment formats inside the source file."
         )
+
+    # The page-level room parser establishes complete room coverage, while the
+    # coordinate parser has the cleanest course title.  Join them here so Free
+    # Rooms shows the current exam name (never a flattened student name).
+    if room_occupancy is not None:
+        course_counts: dict[tuple[str, str, int, int], dict[str, int]] = {}
+        for row in cleaned:
+            paper = row.get("paper", "").strip()
+            venue = re.sub(r"\s+", " ", row.get("class", "")).strip().upper()
+            time_match = SEATING_TIME.fullmatch(row.get("time", "").strip())
+            if not (paper and venue and time_match):
+                continue
+            try:
+                start, end = seating_time_range(time_match)
+            except ValueError:
+                continue
+            key = (row.get("date") or exam_date, venue, start, end)
+            titles = course_counts.setdefault(key, {})
+            titles[paper] = titles.get(paper, 0) + 1
+        for booking in room_occupancy.get("bookings", []):
+            key = (booking.get("date", ""), re.sub(r"\s+", " ", booking.get("room", "")).strip().upper(),
+                   booking.get("start"), booking.get("end"))
+            titles = course_counts.get(key, {})
+            if titles:
+                booking["course"] = max(titles, key=titles.get)
 
     document: dict[str, Any] = {
         "updated_at": datetime.now(timezone.utc).isoformat(),

@@ -625,6 +625,14 @@
     pane.innerHTML=html;
 
     tickBanner();
+    wireTodayBanner();
+    // A published seating plan is more important than the ordinary lecture
+    // timetable on its exam date. Replace the class banner as soon as the
+    // student's own exam record has loaded.
+    showHomeExamBanner();
+  }
+
+  function wireTodayBanner(){
     const banner=$('m-now-banner');
     if(banner){
       // Same easter egg as double-clicking the header logo on desktop, but it
@@ -638,9 +646,88 @@
       });
       banner.style.touchAction='manipulation';
     }
-    pane.querySelectorAll('.m-gap').forEach(btn=>{
+    $('m-today-pane')?.querySelectorAll('.m-gap').forEach(btn=>{
       btn.addEventListener('click',()=>go('rooms'));
     });
+  }
+
+  function seatingTimeBounds(time){
+    const parts=String(time||'').trim().split(/\s*[-\u2013\u2014]\s*/);
+    if(parts.length!==2) return null;
+    const minute=value=>{
+      const match=String(value).trim().match(/^(\d{1,2}):(\d{2})$/);
+      if(!match) return null;
+      let hour=Number(match[1]), mins=Number(match[2]);
+      if(mins>59||hour<1||hour>12) return null;
+      // Seating plans omit AM/PM. Their 1:00–7:20 slots are afternoon.
+      if(hour>=1&&hour<=7) hour+=12;
+      return hour*60+mins;
+    };
+    const start=minute(parts[0]),end=minute(parts[1]);
+    return start!=null&&end!=null&&end>start?[start,end]:null;
+  }
+  function examTimeLabel(minute){
+    const hour=Math.floor(minute/60), mins=minute%60;
+    return `${hour%12||12}:${String(mins).padStart(2,'0')} ${hour>=12?'PM':'AM'}`;
+  }
+  function campusDateKey(){
+    return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Karachi',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  }
+  function showHomeExamBanner(){
+    const p=profile();
+    const nuid=String(p?.nuid||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!nuid||typeof loadSeatingPlanData!=='function') return;
+    const clearForMissingPlan=()=>{
+      // During an exam period, never fall back to a lecture card when the
+      // seating file has not arrived yet. The Home area stays deliberately
+      // blank until there is a real paper assignment for the student.
+      if(typeof isExamSeason!=='undefined'&&isExamSeason){
+        const banner=$('m-now-banner');
+        if(banner) banner.outerHTML='<div class="m-home-exam-empty" id="m-now-banner" aria-hidden="true"></div>';
+      }
+    };
+    loadSeatingPlanData().then(doc=>{
+      if(route!=='today'||weekMode) return;
+      const examDate=doc?.exam_date||doc?.room_occupancy?.dates?.[0]||'';
+      const today=campusDateKey();
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(examDate)||examDate<today){ clearForMissingPlan(); return; }
+      const dayOffset=Math.round((Date.parse(`${examDate}T00:00:00Z`)-Date.parse(`${today}T00:00:00Z`))/86400000);
+      const now=nowSeconds();
+      const exams=(doc?.students||[]).map(student=>{
+        const key=String(student.nuid||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+        const bounds=seatingTimeBounds(student.time);
+        if(key!==nuid||!bounds) return null;
+        const startsIn=dayOffset*86400+bounds[0]*60-now;
+        const endsIn=dayOffset*86400+bounds[1]*60-now;
+        return {...student,bounds,startsIn,endsIn};
+      }).filter(Boolean).filter(exam=>exam.endsIn>0)
+        .sort((a,b)=>a.startsIn-b.startsIn);
+      if(!exams.length){ clearForMissingPlan(); return; }
+      const exam=exams.find(item=>item.startsIn<=0)||exams[0];
+      // The top card is the active/nearest paper. If another paper remains on
+      // the same day, show it immediately below rather than making students
+      // wait for the first countdown to end.
+      const following=exams.filter(item=>item!==exam&&item.startsIn>0).slice(0,1);
+      const live=exam.startsIn<=0;
+      const when=live?'EXAM NOW':dayOffset===0?'NEXT EXAM · TODAY':dayOffset===1?'NEXT EXAM · TOMORROW':'NEXT EXAM';
+      const until=Date.now()+(live?exam.endsIn:exam.startsIn)*1000;
+      const banner=$('m-now-banner');
+      if(!banner) return;
+      const card=(item,label,withCountdown=false)=>`<div class="m-now${item===exam&&live?' is-live':''}">
+          <div class="m-now-head"><span class="m-now-dot"></span><span>${esc(label)} · ${esc(examTimeLabel(item.bounds[0]))} – ${esc(examTimeLabel(item.bounds[1]))}</span></div>
+          <div class="m-now-name">${esc(item.paper||'Exam')}</div>
+          <div class="m-now-stats">
+            <div><div class="m-now-stat-label">Room · Seat</div><div class="m-now-stat-value">${esc(item.class||'—')} · ${esc(item.seat||'—')}</div></div>
+            <div><div class="m-now-stat-label">${withCountdown?(live?'Ends in':'Starts in'):'After this'}</div><div class="m-now-stat-value"${withCountdown?' id="m-now-count"':''}>${withCountdown?'—':examTimeLabel(item.bounds[0])}</div></div>
+          </div>
+        </div>`;
+      banner.outerHTML=`<div class="m-home-exam-stack" id="m-now-banner" data-until="${until}">
+        ${card(exam,when,true)}
+        ${following.map(item=>card(item,live?'AFTER THIS PAPER':'THEN',false)).join('')}
+      </div>`;
+      tickBanner();
+      wireTodayBanner();
+    }).catch(clearForMissingPlan);
   }
 
   function classRowHTML(r){
@@ -1012,10 +1099,20 @@
       const slots=roomSlots(room,day);
       const free=freeNowFromSlots(room,day,slots);
       const open=rm.open===room;
+      const currentSlot=getCurrentSlotFor(slotsForRoom(room,day));
+      const currentBooking=currentSlot&&slots.find(s=>s.slot===currentSlot)?.occupiedBy;
+      const summary=roomSummary(slots);
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
       const status=free===true?'Free now':free===false?(isExamSeason?'Exam':'Class'):'—';
+      // During exams, make the active course and the next free time visible
+      // without requiring the student to open the complete room timeline.
+      const liveExam=currentBooking?.exam?`<div class="m-room-live">
+          <span class="m-room-live-label">Ongoing exam</span>
+          <span class="m-room-live-course">${esc(currentBooking.course||'Exam')}</span>
+          <span class="m-room-live-free">${esc(summary)}</span>
+        </div>`:'';
       const detail=open?`<div class="m-room-detail" id="m-room-detail">
-          <div class="m-room-summary">${esc(roomSummary(slots))}</div>
+          <div class="m-room-summary">${esc(summary)}</div>
           <div class="m-slotrows">${slots.map(s=>{
             const busy=Boolean(s.occupiedBy);
             const who=busy?[s.occupiedBy.course,s.occupiedBy.section].filter(Boolean).join(' · '):'Free';
@@ -1034,11 +1131,12 @@
           <span class="m-room-status">${esc(status)}</span>
           <svg class="m-room-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </button>
+        ${liveExam}
         ${detail}
       </div>`;
     }).join('');
     $('m-rooms-out').innerHTML=`<div class="m-roomlist m-reveal">${cards}</div>
-      <div class="m-caption">${isExamSeason?'Based on today’s exam seating plan. Green is free of scheduled exams; grey is booked. Tap a room for exact times.':'Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.'}</div>`;
+      <div class="m-caption">${isExamSeason?'Based on today’s exam seating plan. Occupied rooms show the ongoing exam and when they become free. Tap a room for its full timeline.':'Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.'}</div>`;
     $('m-rooms-out').querySelectorAll('.m-room').forEach(btn=>{
       btn.addEventListener('click',()=>{
         rm.open=rm.open===btn.dataset.room?'':btn.dataset.room;
@@ -1340,7 +1438,7 @@
       out.innerHTML=matches.slice(0,8).map(s=>`<div class="m-seat-card m-reveal" style="margin-bottom:10px">
           <div class="m-seat-name">${esc(s.name||'Student')}</div>
           <div class="m-seat-label">${esc(s.nuid||'')}</div>
-          <div class="m-seat-meta">${esc(s.paper||'—')} · ${esc(s.time||'—')} · ${esc(s.class||'—')}</div>
+          <div class="m-seat-meta">${esc(s.paper||'—')} · ${esc(s.time||'—')} · <span class="m-seat-room">${esc(s.class||'—')}</span></div>
           <div class="m-seat-value">${esc(s.seat||'—')}</div>
         </div>`).join('')+
         `<div class="m-caption">${esc((doc&&doc.source_subject)||'Current seating plan')}</div>`;

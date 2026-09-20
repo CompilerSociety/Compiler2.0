@@ -1599,9 +1599,11 @@ function _normalizeRoomName(room){
   let r=cleanTxt(room).toUpperCase();
   r=r.replace(/\s+/g,' ');
   let m;
-  m=r.match(/^([A-D])\s*[-]\s*(\d{3}|(?:IT\s*)?LAB\s*\d+|MARGALA\s*\d*|RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)/i);
+  m=r.match(/^([A-D])\s*[-]\s*(\d{2,3}|(?:IT\s*)?LAB\s*\d+|MARGALA\s*\d*|RAWAL\s*\d*|GPU\s*LAB|MEHRAN\s*\d*|CALL-\d+|DIGITAL\b)/i);
   if(m) return `${m[1].toUpperCase()}-${m[2].toUpperCase().replace(/\s+/g,' ').trim()}`;
-  r=r.replace(/\b([A-D])\s+(\d{3})\b/,'$1-$2');
+  // The FSM plan labels ground-floor rooms as "A 01", while the app's
+  // inventory uses "A-01". Treat both two- and three-digit rooms alike.
+  r=r.replace(/\b([A-D])\s+(\d{2,3})\b/,'$1-$2');
   r=r.replace(/\b([A-D])\s+(IT\s+)?LAB\s*[-#]?\s*(\d+)\b/i,'$1-$2LAB $3');
   r=r.replace(/\b([A-D])\s+(MARGALA|RAWAL)\s+(\d+)\b/i,'$1-$2 $3');
   r=r.replace(/\b([A-D])\s+GPU\s+LAB\b/i,'$1-GPU LAB');
@@ -2820,6 +2822,11 @@ function onDayChange(){
 
   const cards=roomData.map(({room,slotInfo,busyNow,curSlot})=>{
     const cardClass=busyNow?'room-card busy-now':'room-card free-now';
+    const currentIndex=slotInfo.findIndex(s=>s.slot===curSlot);
+    const nextFree=currentIndex>=0&&slotInfo.slice(currentIndex+1).find(s=>!s.occupiedBy);
+    const examNote=busyNow?.exam
+      ?`<div class="room-exam-note"><b>ONGOING EXAM:</b> ${escHtml(busyNow.course||'Exam')}<span>${nextFree?`Free from ${fmtExamTime(nextFree.slot.split('-')[0])}`:'Booked for the rest of the day'}</span></div>`
+      :'';
 
     const statusBadge=busyNow
       ?`<span class="status-now busy" title="${escHtml(busyNow.course||'')} · ${escHtml(busyNow.dept||'')} ${escHtml(busyNow.batch||'')}-${escHtml(busyNow.section||'')}">${escHtml(busyNow.course||'')}</span>`
@@ -2851,6 +2858,7 @@ function onDayChange(){
         <span class="room-card-name">${escHtml(room)}</span>
         ${statusBadge}
       </div>
+      ${examNote}
       <div class="room-card-body">${slotsHTML}</div>
     </div>`;
   }).join('');
