@@ -131,10 +131,11 @@ class ScheduleSyncTests(unittest.TestCase):
         db.schedule_imports.find_one.return_value = None
         with patch.dict(sync.os.environ, {"GMAIL_USER": "test@example.com", "GMAIL_PASS": "fixture"}), \
              patch.object(sync, "connect", return_value=db), \
-             patch("imaplib.IMAP4_SSL", return_value=mail), \
+             patch("imaplib.IMAP4_SSL", return_value=mail) as imap_ssl, \
              patch.object(sync, "publish", side_effect=[RuntimeError("write failed"), {"exams/computing": "written"}]) as publish:
             with self.assertRaisesRegex(RuntimeError, "1 message"):
-                sync.sync_gmail()
+                sync.sync_gmail(days=30)
+            self.assertEqual(imap_ssl.call_args.kwargs["timeout"], 60.0)
         self.assertEqual(publish.call_count, 2)
         stores = [c for c in mail.uid.call_args_list if c.args[0] == "store"]
         self.assertEqual(len(stores), 1)
@@ -169,7 +170,7 @@ class ScheduleSyncTests(unittest.TestCase):
              patch("imaplib.IMAP4_SSL", return_value=mail), \
              patch.object(sync, "parse_attachment", wraps=sync.parse_attachment) as parse, \
              patch.object(sync, "publish", return_value={"exams/computing": "written"}) as publish:
-            sync.sync_gmail(exams_only=True)
+            sync.sync_gmail(days=30, exams_only=True)
             self.assertEqual(parse.call_count, 1)
             self.assertEqual(parse.call_args.args[2], "exams")
             self.assertEqual(publish.call_args.args[2]["message_uid"], "2")
@@ -178,7 +179,7 @@ class ScheduleSyncTests(unittest.TestCase):
             mail.uid.reset_mock()
             publish.side_effect = ValueError("invalid schedule")
             with self.assertRaisesRegex(RuntimeError, "UID 2 failed"):
-                sync.sync_gmail(exams_only=True)
+                sync.sync_gmail(days=30, exams_only=True)
             self.assertEqual([c.args[1] for c in mail.uid.call_args_list if c.args[0] == "fetch"], [b"3", b"2"])
             self.assertFalse(any(c.args[0] == "store" for c in mail.uid.call_args_list))
 

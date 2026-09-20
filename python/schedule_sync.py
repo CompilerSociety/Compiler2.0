@@ -147,12 +147,29 @@ def connect():
     return client[os.environ.get("MONGODB_DB", "compiler2")]
 
 
-def sync_gmail(days=30, exams_only=False):
-    """Scan recent matching UIDs regardless of read state; checkpoint only on commit."""
+def sync_gmail(days=1, exams_only=False):
+    """Scan matching UIDs from the rolling time window; checkpoint on commit."""
     import imaplib
     import ssl
     db = connect()
-    mail = imaplib.IMAP4_SSL(parser.GMAIL_IMAP_HOST, ssl_context=ssl.create_default_context())
+    # Never let a stalled Gmail socket consume the entire GitHub Actions job.
+    # IMAP4_SSL's timeout applies to the connection and to subsequent socket
+    # operations, including SEARCH, FETCH, STORE, and LOGOUT.  Keep it
+    # configurable for slower environments, but fail closed by default.
+    if days <= 0:
+        raise RuntimeError("Gmail lookback must be positive")
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    try:
+        imap_timeout = float(os.environ.get("GMAIL_IMAP_TIMEOUT", "60"))
+    except ValueError:
+        raise RuntimeError("GMAIL_IMAP_TIMEOUT must be a positive number of seconds") from None
+    if imap_timeout <= 0:
+        raise RuntimeError("GMAIL_IMAP_TIMEOUT must be a positive number of seconds")
+    mail = imaplib.IMAP4_SSL(
+        parser.GMAIL_IMAP_HOST,
+        ssl_context=ssl.create_default_context(),
+        timeout=imap_timeout,
+    )
     failures = 0
     try:
         mail.login(os.environ["GMAIL_USER"], os.environ["GMAIL_PASS"])
@@ -160,7 +177,9 @@ def sync_gmail(days=30, exams_only=False):
         if status != "OK":
             raise RuntimeError("Cannot select INBOX")
         validity = mail.response("UIDVALIDITY")[1][0].decode()
-        since = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%d-%b-%Y")
+        # IMAP SINCE is date-based and can include nearly an extra day, so the
+        # received timestamp is checked again below against the exact cutoff.
+        since = cutoff.strftime("%d-%b-%Y")
         criteria = (parser._build_subject_or_criteria(["schedule", "exam", "sessional"]),) if exams_only else (
             "SINCE", since, parser._build_subject_or_criteria(["seating", "schedule", "showup", "show up"]))
         status, data = mail.uid("search", None, *criteria)
@@ -185,6 +204,8 @@ def sync_gmail(days=30, exams_only=False):
                 header, raw = next(p for p in parts if isinstance(p, tuple))
                 stamp = re.search(rb'INTERNALDATE "([^"]+)"', header).group(1).decode()
                 received = datetime.strptime(stamp, "%d-%b-%Y %H:%M:%S %z").astimezone(timezone.utc).isoformat()
+                if datetime.fromisoformat(received) < cutoff:
+                    continue
                 msg = email.message_from_bytes(raw)
                 subject = parser.decode_mime_header(msg.get("Subject", ""))
                 if exams_only and re.search(r"seating|show[\s_-]*up", subject, re.I):
@@ -242,7 +263,7 @@ def main():
     ap.add_argument("--env-file", type=Path)
     ap.add_argument("--output", type=Path, help="Write parsed preview locally")
     ap.add_argument("--gmail", action="store_true")
-    ap.add_argument("--days", type=int, default=30)
+    ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
     if args.env_file:
         for line in args.env_file.read_text(encoding="utf-8-sig").splitlines():

@@ -85,8 +85,10 @@ set; standalone MongoDB is unsupported. No source-of-truth JSON fallback is used
 An identical import does not change timestamps. Older source revisions and
 entirely older exam periods are skipped. Missing schools are left intact.
 
-Gmail scans the last 30 days by UID, regardless of read status. `--days N`
-expands the recovery window. Receipts in `schedule_imports` include mailbox,
+Gmail scans the last 24 hours by UID, regardless of read status. The importer
+also applies an exact timestamp cutoff because IMAP's `SINCE` filter is
+date-based. `--days N` expands the recovery window for manual recovery.
+Receipts in `schedule_imports` include mailbox,
 UIDVALIDITY and UID, and are written only with committed data. Fetch uses
 BODY.PEEK; Seen is set after commit. Failed messages retry next run and do not
 prevent independent messages from being attempted. The job fails if any import
