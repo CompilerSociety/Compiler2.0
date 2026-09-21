@@ -606,6 +606,10 @@
     const customised=typeof hasMyCourses==='function' && hasMyCourses();
     const meta=customised?'MY COURSES'
       :`${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}`;
+    // Keep the ordinary timetable in its own wrapper.  When a student has a
+    // seating-plan record, Home shows only their paper card(s); lecture rows
+    // must not appear below those papers on an exam day.
+    html+='<div id="m-today-class-list">';
     html+=`<div class="m-meta-row"><span>${rows.length} CLASS${rows.length===1?'':'ES'}</span>
       <b>${meta}</b></div>`;
 
@@ -622,6 +626,7 @@
       });
       html+='</div>';
     }
+    html+='</div>';
     pane.innerHTML=html;
 
     tickBanner();
@@ -725,6 +730,10 @@
         ${card(exam,when,true)}
         ${following.map(item=>card(item,live?'AFTER THIS PAPER':'THEN',false)).join('')}
       </div>`;
+      // A seating assignment takes precedence over the normal class list for
+      // the day.  Keeping it hidden (rather than deleting it) lets a normal
+      // render restore lectures as soon as there is no applicable plan.
+      $('m-today-class-list')?.setAttribute('hidden','');
       tickBanner();
       wireTodayBanner();
     }).catch(clearForMissingPlan);
