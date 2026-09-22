@@ -46,6 +46,10 @@ const GITHUB_OWNER = 'CompilerSociety';
 const GITHUB_REPO  = 'Compiler2.0';
 
 const SCRIPT_PROPS = PropertiesService.getScriptProperties();
+// Apps Script runs this function every minute, but GitHub Actions may need
+// longer than a minute to finish. Do not enqueue duplicate runs while the
+// previous dispatch is still processing the same unread message.
+const DISPATCH_COOLDOWN_MS = 5 * 60 * 1000;
 
 function getScriptProperty_(name) {
   const value = SCRIPT_PROPS.getProperty(name);
@@ -62,6 +66,22 @@ function checkSyncEmails() {
   const threads = GmailApp.search('is:unread (subject:seating OR subject:schedule OR subject:showup) newer_than:1d');
   if (!threads.length) {
     return; // nothing new -> do not trigger the workflow
+  }
+
+  const threadIds = threads.map(function(thread) { return thread.getId(); }).sort();
+  const lastDispatch = Number(SCRIPT_PROPS.getProperty('LAST_SYNC_DISPATCH_MS') || 0);
+  let lastDispatchThreads = [];
+  try {
+    lastDispatchThreads = JSON.parse(SCRIPT_PROPS.getProperty('LAST_SYNC_THREAD_IDS') || '[]');
+  } catch (error) {
+    // Treat malformed state as stale and dispatch again.
+  }
+  const onlyPreviouslyDispatchedThreads = threadIds.every(function(id) {
+    return lastDispatchThreads.indexOf(id) !== -1;
+  });
+  if (onlyPreviouslyDispatchedThreads && lastDispatch && Date.now() - lastDispatch < DISPATCH_COOLDOWN_MS) {
+    Logger.log('Sync already dispatched recently; waiting before retrying.');
+    return;
   }
 
   // Fail loudly (visible in the Apps Script execution log) if the credentials
@@ -86,6 +106,8 @@ function checkSyncEmails() {
 
   const code = response.getResponseCode();
   if (code === 204) {
+    SCRIPT_PROPS.setProperty('LAST_SYNC_DISPATCH_MS', String(Date.now()));
+    SCRIPT_PROPS.setProperty('LAST_SYNC_THREAD_IDS', JSON.stringify(threadIds));
     Logger.log('Triggered sync workflow (%s unread thread(s)).', threads.length);
   } else {
     Logger.log('GitHub dispatch failed: %s %s', code, response.getContentText());

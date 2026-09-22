@@ -40,7 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
-      group: notification-delivery-and-audit
+      # Keep schedule ingestion independent from notification delivery. The
+      # old shared group let a busy notification queue cancel/replace syncs.
+      group: sync-schedules
       cancel-in-progress: false
     steps:
       - name: Validate repository_dispatch trigger
@@ -83,6 +85,20 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
+
+      - name: Verify required sync secrets
+        shell: bash
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
+        run: |
+          set -euo pipefail
+          for name in MONGODB_URI GMAIL_PASS; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Missing required repository secret: $name"
+              exit 1
+            fi
+          done
 
       - name: Install system dependencies (pdftotext)
         run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
