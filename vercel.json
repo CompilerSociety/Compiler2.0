@@ -181,6 +181,10 @@
       "destination": "/api/db?doc=exams/engineering"
     },
     {
+      "source": "/db/seating/plan.json",
+      "destination": "/api/db?doc=seating/plan"
+    },
+    {
       "source": "/db/faculty/data.json",
       "destination": "/api/db?doc=faculty/data"
     },
