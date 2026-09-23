@@ -4035,7 +4035,7 @@ function initExamSchedulePanel(){
 /* ══════════════════════════════════════════
    SEATING PLAN
 ══════════════════════════════════════════ */
-const SEATING_PLAN_URL='/db/seating/plan.json';
+const SEATING_PLAN_URL=`/db/seating/plan.json?cachebust=${Date.now()}`;
 let _seatingData=null;
 let _seatingLoadPromise=null;
 
