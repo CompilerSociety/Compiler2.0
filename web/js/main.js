@@ -271,6 +271,7 @@ async function startApplication() {
   initializeFaculty();
   await initializeCompilerRun();
   await loadMobileRuntime();
+  await loadScript(versioned('/js/announcement.js'));
 }
 startApplication().catch(error => {
   console.error('Application startup failed:', error);
