@@ -30,7 +30,7 @@ function slotToMinutes(value){let [h,m]=value.split(':').map(Number);if(h<8)h+=1
 function timeToNumber(value){return slotToMinutes(value);}
 `;
 new (require('node:vm').Script)(shared+'\n'+fixtures+'\n'+read('web/js/mobile.js'));
-const css = ['web/css/main.css', 'web/css/mobile.css'].map(file => read(file).replace(/@import[^;]+;/g, '')).join('\n');
+const css = ['web/css/main.css', 'web/css/mobile.css'].map(file => read(file).replace(/@import url\([^)]*\)[^;]*;/g, '')).join('\n');
 const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#141414"><style>${css}</style></head><body>${read('web/components/mobile-app.html')}<script>${shared}\n${fixtures}\n${read('web/js/mobile.js')}</script></body></html>`;
 
 (async () => {

@@ -1,7 +1,9 @@
-<!-- Phone-only shell. Rendered instead of .shell below the mobile breakpoint
-     (see css/mobile.css); the desktop DOM stays in the page, hidden, because
+<!-- The app shell at every width. Phones get the bottom tab bar
+     (css/mobile.css); wider screens get a sidebar and wider grids
+     (css/desktop.css). The old desktop DOM stays in the page, hidden, because
      js/app.js drives it and expects every one of its IDs to exist.
-     Lists are filled by js/mobile.js — this is the skeleton only. -->
+     Lists are filled by js/mobile.js — this is the skeleton only.
+     Elements marked .m-desk-only exist only in the desktop layout. -->
 <div class="m-app" id="m-app">
 
   <section class="m-arcade" id="m-friends-sheet" role="dialog" aria-modal="true" aria-labelledby="m-friends-title" hidden>
@@ -111,6 +113,9 @@
         <div class="m-head-sub" id="m-head-sub" hidden></div>
       </div>
       <div class="m-header-actions">
+        <!-- Desktop guests: logging in is optional there, so the header
+             offers it instead of the bell and avatar. -->
+        <button class="m-login-btn m-desk-only" id="m-login-btn" type="button">Log in</button>
         <!-- Opens Profile, where the real notification toggles live. -->
         <button class="m-icon-btn" id="m-bell-btn" type="button" aria-label="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -223,6 +228,12 @@
     </div>
 
     <nav class="m-tabs" id="m-tabs" aria-label="Primary">
+      <!-- Desktop sidebar header. Double-clicking the wordmark opens the
+           arcade, as the old desktop logo did. -->
+      <div class="m-side-brand m-desk-only">
+        <div class="m-side-wordmark" id="m-side-wordmark">VTABLE</div>
+        <div class="m-side-campus">FAST NUCES Islamabad</div>
+      </div>
       <button class="m-tab is-active" data-route="today" type="button" aria-current="page">
         <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
         <span class="m-tab-label">Today</span>
@@ -243,6 +254,16 @@
         <span class="m-tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></span>
         <span class="m-tab-label">Exams</span>
       </button>
+      <!-- Desktop sidebar footer: who you are (or what logging in adds),
+           and the theme switch, which guests need too. -->
+      <div class="m-side-foot m-desk-only">
+        <div id="m-side-account"></div>
+        <label class="m-side-theme" for="m-side-dark">
+          <span>Dark mode</span>
+          <input class="m-toggle" id="m-side-dark" type="checkbox" role="switch">
+        </label>
+        <div class="m-side-credit">Built with love by Compiler Society</div>
+      </div>
     </nav>
   </div>
 

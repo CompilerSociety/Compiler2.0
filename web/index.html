@@ -28,14 +28,15 @@
        file under /css or /js. Browsers (especially installed PWAs, which
        revalidate far less eagerly than a normal tab) otherwise keep serving
        an old cached bundle indefinitely, silently masking bug fixes. -->
-  <link rel="stylesheet" href="/css/main.css?v=61">
-  <!-- Phone layout. Additive: everything inside is scoped to the mobile
-       breakpoint, so the desktop look is unchanged. See css/mobile.css. -->
-  <link rel="stylesheet" href="/css/mobile.css?v=61">
-  <link rel="stylesheet" href="/css/announcement.css?v=61">
+  <link rel="stylesheet" href="/css/main.css?v=62">
+  <!-- The app UI. mobile.css is the base (phone) layout at every width;
+       desktop.css re-lays it out for wide windows. -->
+  <link rel="stylesheet" href="/css/mobile.css?v=62">
+  <link rel="stylesheet" href="/css/desktop.css?v=62">
+  <link rel="stylesheet" href="/css/announcement.css?v=62">
   <!-- Launch switch. Plain script so it runs before the deferred /js/main.js
        module and can gate the whole app. See js/status.js. -->
-  <script src="/js/status.js?v=61"></script>
+  <script src="/js/status.js?v=62"></script>
   <script>
     (function () {
       try {
@@ -58,7 +59,7 @@
       try {
         var mobileTheme = localStorage.getItem('vtable_mobile_theme') === 'dark' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-mobile-theme', mobileTheme);
-        if (mobileTheme === 'dark' && window.matchMedia('(max-width:767px)').matches) {
+        if (mobileTheme === 'dark') {
           document.querySelector('meta[name="theme-color"]').content = '#2a0709';
         }
         var stored = localStorage.getItem('theme');
@@ -77,6 +78,6 @@
     <div id="mobile-container"></div>
     <div id="mascot" class="mascot" aria-hidden="true"><span class="mascot-emoji">🐰</span></div>
   </div>
-  <script type="module" src="/js/main.js?v=61"></script>
+  <script type="module" src="/js/main.js?v=62"></script>
 </body>
 </html>

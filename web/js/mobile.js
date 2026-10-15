@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════
-   PHONE APP
+   THE APP (phone and desktop)
    A second view over the SAME data layer as the desktop app. Loaded as a
    classic script immediately after js/app.js, so it shares that file's
    global scope and reads its live bindings (TT, ROOM_TT, FACULTY_DATA, the
@@ -11,12 +11,21 @@
    the desktop select drives, so that path sets #school and calls the
    existing refresh — the same thing a desktop click does.
 
-   Nothing here runs above the phone breakpoint; see css/mobile.css.
+   It was phone-only; it is now the UI at every width. css/desktop.css lays
+   the same screens out for wide windows, and the one behavioural split is
+   login: phones open on the sign-in screen until the student logs in or
+   picks "Continue as guest", while desktop opens straight into the app as a
+   guest and offers "Log in" from the header and sidebar. Either way, the
+   features that need a profile (your own Today/Week, My courses, friends,
+   notifications, profile) stay locked until there is one.
    ══════════════════════════════════════════════════════════════════════ */
 (function MobileApp(){
   'use strict';
 
-  const MQ=window.matchMedia('(max-width:767px)');
+  // PHONE gates the few things that only make sense under a finger;
+  // DESK picks the desktop layout's behaviour (no forced sign-in).
+  const PHONE=window.matchMedia('(max-width:767px)');
+  const DESK=window.matchMedia('(min-width:768px)');
   const MOBILE_THEME_KEY='vtable_mobile_theme';
   let coursesExpanded=false;
   function setMobileTheme(dark){
@@ -26,7 +35,9 @@
   }
   function syncMobileThemeChrome(){
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#2a0709':'#e8dcc4';
+    if(meta) meta.content=document.documentElement.dataset.mobileTheme==='dark'?'#2a0709':'#e8dcc4';
+    const side=$('m-side-dark');
+    if(side) side.checked=document.documentElement.dataset.mobileTheme==='dark';
   }
   const SKIP_KEY='vtable_skipped_login';
   const $=id=>document.getElementById(id);
@@ -43,7 +54,7 @@
   const DARK_MODE_TIP_KEY='vtable_dark_mode_tip_seen';
   function showDarkModeTipOnce(){
     const tip=$('m-dark-mode-tip');
-    if(!tip||!MQ.matches||!profile()) return;
+    if(!tip||!PHONE.matches||!profile()) return;
     try{
       if(localStorage.getItem(DARK_MODE_TIP_KEY)) return;
       // Record before displaying. If storage is blocked, skip the tip so it
@@ -74,6 +85,12 @@
   function profile(){ return (typeof getProfileCookie==='function')?getProfileCookie():null; }
   function skipped(){ try{ return localStorage.getItem(SKIP_KEY)==='1'; }catch(e){ return false; } }
   function setSkipped(v){ try{ v?localStorage.setItem(SKIP_KEY,'1'):localStorage.removeItem(SKIP_KEY); }catch(e){} }
+  // On desktop the sign-in screen is a page you visit, not a gate, so it gets
+  // a history entry and Back returns to wherever the student was.
+  function openSignin(){
+    if(DESK.matches) go('signin');
+    else { route='signin'; render(); }
+  }
   // The real calendar day, for the header. Deliberately not todayName(), which
   // folds Sunday onto Monday so the class list has something to show.
   function headerDate(){
@@ -178,7 +195,10 @@
     const onboarding=route==='onboard';
     const manual=route==='manual';
     const registering=route==='register';
-    const signin=route==='signin'||(!signedIn&&!skipped()&&!onboarding&&!manual&&!registering);
+    // Desktop never forces the sign-in screen: a logged-out visitor is a
+    // guest until they choose to log in.
+    const signin=route==='signin'||(!signedIn&&!skipped()&&!DESK.matches&&!onboarding&&!manual&&!registering);
+    $('m-app').classList.toggle('is-guest',!signedIn);
 
     $('m-signin').classList.toggle('on',signin);
     $('m-onboard').classList.toggle('on',onboarding);
@@ -192,6 +212,9 @@
       inner.forEach(id=>$('m-'+id).classList.remove('on'));
       return;
     }
+    // A route the main app does not know (a stale #/signin after logging in,
+    // say) lands on Today rather than a blank body.
+    if(!inner.includes(route)) route='today';
     inner.forEach(id=>{ $('m-'+id).classList.toggle('on',route===id); });
     $('m-head-title').textContent=TITLES[route]||'VTable';
     const sub=$('m-head-sub');
@@ -208,8 +231,8 @@
     const p=profile();
     // A hand-picked FSE/FSM profile has no name to initial, so fall back to
     // the department code ("EE", "BBA") which is what identifies it.
-    $('m-avatar-initials').textContent=p?(initials(p.name)!=='—'?initials(p.name)
-      :(String(p.department||'').replace(/^BS\s+/i,'').slice(0,2).toUpperCase()||'—')):'—';
+    $('m-avatar-initials').textContent=avatarText(p);
+    renderSideAccount(p);
 
     if(route==='today') renderToday();
     else if(route==='lookup') renderLookup();
@@ -219,6 +242,77 @@
     else if(route==='exams') renderExams();
     else if(route==='profile') renderProfile();
     showDarkModeTipOnce();
+  }
+
+  function avatarText(p){
+    if(!p) return '—';
+    return initials(p.name)!=='—'?initials(p.name)
+      :(String(p.department||'').replace(/^BS\s+/i,'').slice(0,2).toUpperCase()||'—');
+  }
+
+  /* ══ GUEST vs LOGGED IN (desktop) ══════════════════════════════════
+     What a profile adds. Listed wherever a guest meets a locked feature, so
+     logging in reads as an upgrade rather than a wall. */
+  const PERKS=[
+    ['Your day, live','Today’s classes with a countdown to the next one, and your whole week.'],
+    ['My courses','Add repeat or elective courses from other sections; drop ones you don’t take.'],
+    ['Friends','Save friends’ sections and see their week next to yours.'],
+    ['Notifications','Class changes, exam seating and show-up alerts for your section.'],
+    ['Exams for you','Exam and show-up schedules pre-filtered to your batch and section.'],
+    ['Leaderboards','Put your name on the arcade high-score boards.']
+  ];
+  function perksHTML(limit){
+    return `<ul class="m-perks">${PERKS.slice(0,limit||PERKS.length).map(([t,d])=>
+      `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join('')}</ul>`;
+  }
+
+  // Sidebar footer (desktop only; hidden on phones by CSS).
+  function renderSideAccount(p){
+    const host=$('m-side-account');
+    if(!host) return;
+    if(!p){
+      host.innerHTML=`<div class="m-side-guest">
+          <div class="m-side-kicker">Browsing as guest</div>
+          <p>Log in with your NU ID to get your own timetable, courses, friends and alerts.</p>
+          <button class="m-btn-primary m-side-login" id="m-side-login" type="button">Log in</button>
+        </div>`;
+      $('m-side-login').addEventListener('click',openSignin);
+      return;
+    }
+    const sub=[p.manual?(MANUAL_SCHOOLS[p.school]||''):p.nuid,p.section].filter(Boolean).join(' · ');
+    host.innerHTML=`<button class="m-side-me${route==='profile'?' is-active':''}" id="m-side-me" type="button"${route==='profile'?' aria-current="page"':''}>
+        <span class="m-side-me-avatar">${esc(avatarText(p))}</span>
+        <span class="m-side-me-text"><span class="m-side-me-name">${esc(p.name||p.department||'Student')}</span>
+          <span class="m-side-me-sub">${esc(sub||p.department||'')}</span></span>
+      </button>`;
+    $('m-side-me').addEventListener('click',()=>go('profile'));
+  }
+
+  // Desktop guest landing, shown on Today when the class timetable owns that
+  // screen (outside NASCON). The public tools work without a profile, so
+  // point at them first, then at what logging in adds.
+  function guestHomeHTML(){
+    const tools=[
+      ['lookup','Timetable lookup','Any section’s classes, by school, program, batch and day.'],
+      ['rooms','Free rooms','Which rooms are empty right now, by block and floor.'],
+      ['faculty','Faculty','Offices, emails and courses for every teacher.'],
+      ['exams','Exams','Sessional and final schedules, plus show-up days.']
+    ];
+    return `<div class="m-guest-home">
+      <div class="m-guest-hero">
+        <div class="m-kicker">WELCOME TO VTABLE</div>
+        <h1 class="m-hero">Stop wandering FAST.</h1>
+        <p class="m-hero-sub">Everything below works without an account.</p>
+      </div>
+      <div class="m-guest-tools">${tools.map(([r,t,d])=>
+        `<button class="m-guest-tool" type="button" data-guest-go="${r}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join('')}
+      </div>
+      <div class="m-guest-unlock">
+        <div class="m-section-label">Log in to unlock</div>
+        ${perksHTML()}
+        <button class="m-btn-primary m-locked-btn" id="m-locked-login" type="button">Log in with your NU ID</button>
+      </div>
+    </div>`;
   }
 
   /* ══ SIGN IN ═══════════════════════════════════════════════════════ */
@@ -513,12 +607,16 @@
   function lockedHTML(){
     return `<div class="m-locked">
       <div class="m-locked-title">Please login with your nu ID to use this feature</div>
+      ${DESK.matches?perksHTML():''}
       <button class="m-btn-primary m-locked-btn" id="m-locked-login" type="button">Log in</button>
     </div>`;
   }
   function wireLocked(container){
     const btn=container.querySelector('#m-locked-login');
-    if(btn) btn.addEventListener('click',()=>{ setSkipped(false); route='signin'; render(); });
+    if(btn) btn.addEventListener('click',()=>{ setSkipped(false); openSignin(); });
+    container.querySelectorAll('[data-guest-go]').forEach(b=>{
+      b.addEventListener('click',()=>go(b.dataset.guestGo));
+    });
   }
 
   function renderToday(){
@@ -547,7 +645,7 @@
     const keys=profileKeys();
     if(!keys){
       const target=weekMode?weekPane:todayPane;
-      target.innerHTML=lockedHTML();
+      target.innerHTML=(DESK.matches&&!profile())?guestHomeHTML():lockedHTML();
       wireLocked(target);
       return;
     }
@@ -1854,6 +1952,14 @@
     // Full width, and as much height as the stage gives — floored so the field
     // is never shorter than it is wide, capped so a tall phone does not
     // stretch it past what stays readable at arm's length.
+    if(DESK.matches){
+      // A window, not a phone: a landscape field framed inside the stage,
+      // short enough that the whole thing stays on screen.
+      const w=Math.round(Math.min(vw-64, 1000));
+      const h=Math.round(Math.min(vh-112, w*0.62));
+      window.setGameField(g.canvas, w, h);
+      return;
+    }
     const w=Math.round(vw);
     const h=Math.round(Math.min(w*1.6, Math.max(w, vh)));
     window.setGameField(g.canvas, w, h);
@@ -1929,7 +2035,7 @@
      app.js fires this from each game's gameOver(). Only now does the
      leaderboard come on screen. */
   function onGameOver(ev){
-    if(!arcadeGame||!MQ.matches) return;
+    if(!arcadeGame) return;
     const d=(ev&&ev.detail)||{};
     if(d.game&&d.game!==arcadeGame.id) return;
     releaseDuck();
@@ -2462,25 +2568,7 @@
     $('m-dead-again').addEventListener('click',playAgain);
     $('m-dead-quit').addEventListener('click',showPicker);
     document.addEventListener('vtable:gameover',onGameOver);
-    window.addEventListener('resize',()=>{ if(arcadeGame&&MQ.matches) layoutStage(); });
-    // Turning the phone sideways puts the window past the mobile breakpoint, so
-    // .m-app — and the canvas borrowed into it — goes display:none while the
-    // desktop overlay reappears empty. Hand the game back at that moment and
-    // the desktop modal picks it up mid-run, which is the right shape for a
-    // 720x220 field anyway. Coming back to portrait re-borrows it.
-    const onBreakpoint=()=>{
-      if(!arcadeGame) return;
-      if(MQ.matches){
-        borrow(arcadeGame.canvas,$('m-play-stage'));
-        if(!$('m-dead').hidden) borrow(arcadeGame.lb,$('m-play-lb'));
-        layoutStage();
-      }else{
-        releaseDuck();
-        returnAllBorrowed();
-      }
-    };
-    if(MQ.addEventListener) MQ.addEventListener('change',onBreakpoint);
-    else if(MQ.addListener) MQ.addListener(onBreakpoint);
+    window.addEventListener('resize',()=>{ if(arcadeGame) layoutStage(); });
     // The leaderboard's signed-out row is desktop markup with an inline onclick
     // that opens the DESKTOP profile modal — invisible inside the mobile
     // breakpoint, so the tap would appear to do nothing. Catch it in the
@@ -2492,7 +2580,7 @@
       ev.preventDefault();
       ev.stopPropagation();
       closeArcade();
-      if(profile()) go('profile'); else { route='signin'; render(); }
+      if(profile()) go('profile'); else openSignin();
     },true);
   }
 
@@ -2783,8 +2871,9 @@
       if(typeof clearProfileCookie==='function') clearProfileCookie();
       setSkipped(false);
       fac.selected=null;
-      route='signin';
-      render();
+      // Desktop carries on as a guest; the phone goes back to its sign-in.
+      if(DESK.matches) go('today',true);
+      else { route='signin'; render(); }
     });
   }
 
@@ -2814,6 +2903,13 @@
       btn.addEventListener('click',()=>go(btn.dataset.route));
     });
     $('m-avatar-btn').addEventListener('click',()=>go('profile'));
+    $('m-login-btn').addEventListener('click',openSignin);
+    $('m-side-dark').addEventListener('change',e=>{
+      setMobileTheme(e.target.checked);
+      const other=$('m-dark-mode'); if(other) other.checked=e.target.checked;
+    });
+    // The old desktop logo's easter egg, moved onto the sidebar wordmark.
+    $('m-side-wordmark').addEventListener('dblclick',()=>openArcade());
     // The bell is not its own inbox - it opens Profile, which already has the
     // real notification toggles (see the "NOTIFICATIONS" section rendered by
     // renderProfile()). Same destination as the avatar button, just a second,
@@ -2842,23 +2938,33 @@
       if(r&&r!==route){ route=r; render(); }
     });
     // The desktop layer owns data loading; re-render when it lands something new.
-    document.addEventListener('vtable:data',()=>{ if(MQ.matches) render(); });
+    document.addEventListener('vtable:data',()=>render());
+    // Crossing the breakpoint changes whether sign-in is a gate.
+    DESK.addEventListener('change',()=>render());
     let roomMinute='';
     setInterval(()=>{
-      if(MQ.matches&&route==='rooms'){
+      if(route==='rooms'){
         const minute=roomDateForDay()+':'+nowMinutes();
         if(minute!==roomMinute){roomMinute=minute;renderRooms();}
       }
     },1000);
-    setInterval(()=>{ if(MQ.matches&&route==='today'&&!weekMode) tickBanner(); },1000);
+    setInterval(()=>{ if(route==='today'&&!weekMode) tickBanner(); },1000);
   }
 
   function start(){
     if(!$('m-app')) return;
     syncMobileThemeChrome();
-    MQ.addEventListener('change',syncMobileThemeChrome);
     wire();
-    const r=readHash();
+    let r=readHash();
+    // Old desktop deep links (#timetable, vtable.site/freerooms, …) open the
+    // matching screen of this UI.
+    const legacy={timetable:'lookup',freerooms:'rooms',faculty:'faculty',exams:'exams',seating:'exams',showup:'exams'};
+    const old=String(location.hash||'').replace(/^#/,'');
+    if(!r&&legacy[old]){
+      r=legacy[old];
+      if(old==='showup') ex.tab='showup';
+      history.replaceState(null,'','#/'+r);
+    }
     // render() decides sign-in vs app from the stored profile, so "today" is
     // just the default landing spot — a signed-in user goes straight there and
     // never sees the sign-in screen. No minimum splash time: the app opens
@@ -2871,7 +2977,7 @@
   // The NASCON '26 poster, shown on every app open while the planner is on.
   function showNasconPromo(){
     const el=$('m-nc-promo');
-    if(!el||!NASCON_ON||!MQ.matches) return;
+    if(!el||!NASCON_ON) return;
     const opener=document.activeElement;
     const close=()=>{
       el.hidden=true;

@@ -4932,6 +4932,9 @@ _facultySheetTimer=setInterval(()=>refreshFacultySheetData(true),FACULTY_SHEET_R
 /* ── Background 3D grid ── */
 (function bg(){
   const cv=document.getElementById('bg3d'),ctx=cv.getContext('2d');
+  // The .m-app shell is the UI at every width now and hides this canvas, so
+  // do not spin a 60fps loop drawing to something nobody can see.
+  if(getComputedStyle(cv).display==='none') return;
   function resize(){cv.width=cv.offsetWidth;cv.height=Math.max(cv.offsetHeight,760)}
   resize();window.addEventListener('resize',resize);
   const pts=Array.from({length:28},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0005,vy:(Math.random()-.5)*.0005}));

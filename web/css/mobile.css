@@ -1,19 +1,17 @@
 /* ══════════════════════════════════════════════════════════════════════
-   PHONE LAYOUT
-   Everything here is additive: the desktop look is untouched. The mobile
-   shell (.m-app) is display:none by default and only takes over inside the
-   breakpoint below, where the desktop .shell is hidden instead. The desktop
-   DOM is never removed — js/app.js drives it and its startup barrier
-   requires every one of those IDs to exist.
+   APP LAYOUT
+   The .m-app shell is the UI at every width. It was built phone-first, and
+   this file is still the phone layout; css/desktop.css re-lays the same
+   shell out for wider screens (sidebar instead of the bottom tab bar, wider
+   grids). The old desktop .shell stays in the DOM, hidden — js/app.js
+   drives it and its startup barrier requires every one of those IDs to
+   exist.
 
    Tokens and type follow VTable mobile app design/design_handoff_vtable_app.
-   Mobile appearance is controlled by data-mobile-theme.
+   Appearance is controlled by data-mobile-theme.
    ══════════════════════════════════════════════════════════════════════ */
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap');
 
-.m-app{display:none}
-
-@media (max-width:767px){
 
 .m-app{
   /* NASCON '26 palette, sampled from the official agenda posts: maroon
@@ -632,4 +630,3 @@ html[data-mobile-theme="dark"] .m-app :is(.m-stage-x,.m-dead){background:rgba(20
 .m-friend-quote-close:hover{background:var(--tint)}
 .m-friend-quote-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .m-friend-quote p[lang="ur"]{margin-top:12px;font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic","Urdu Typesetting",serif;font-size:18px;line-height:1.9}
-} /* end mobile breakpoint */

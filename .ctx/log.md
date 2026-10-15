@@ -61,3 +61,6 @@ Pushed NASCON Free Rooms (209112c). Added "Continue as guest" link on the mobile
 
 ## 2026-10-15T21:00:00+05:00
 26I-0816 was deleted from Mongo by the user, but the Vercel CDN copy of /db/students/26.json (s-maxage 300, swr 3600) still listed it, so sign-in skipped registration. loadProfileStudents now appends ?fresh=<ts> and drops PROFILE_STUDENTS_CACHE, so sign-in always reads the DB. Bumped to v=61. Not committed.
+
+## 2026-10-15T22:00:00+05:00
+Desktop redesign: the .m-app shell is now the UI at every width (mobile.css no longer wrapped in max-width:767px; new web/css/desktop.css lays it out >=768px with a sidebar nav, wider grids, centred sign-in). Desktop never gates on sign-in: logged-out visitors are guests (.m-app.is-guest), with "Log in" in header + sidebar; guests get a landing on Today (guestHomeHTML, non-NASCON) and perks lists on locked screens. Logged-in desktop users get the avatar/bell, sidebar profile card, own Today/Week, My courses, friends, notifications. Old #timetable/#freerooms/... links map to the new routes; arcade opens by double-clicking the sidebar wordmark. bg3d loop skipped when hidden. Bumped to v=62.
