@@ -191,7 +191,7 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-nc-live{background:rgba(var(--accent-rgb),.14);color:var(--green-deep)}
 .m-nc-add{width:40px;height:40px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--base);color:var(--green-deep);display:grid;place-items:center;cursor:pointer;padding:0}
 .m-nc-add svg{width:18px;height:18px}
-.m-nc-add.is-on{background:var(--green);border-color:var(--green);color:var(--on-accent)}
+.m-nc-add.is-on{background:rgba(179,64,47,.1);border-color:rgba(179,64,47,.35);color:var(--red)}
 .m-nc-add:focus-visible,.m-nc-day:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .m-nc-empty{display:grid;gap:10px;font-family:var(--sans)}
 .m-nc-empty-title{font-family:var(--mono);font-weight:500;font-size:15px;color:var(--ink)}

@@ -19,3 +19,6 @@ Replaced mobile Today screen with NASCON 26 planner: Today = saved events (local
 
 ## 2026-10-15T12:00:00+05:00
 Pushed NASCON planner to main (d1df27e, rebased on 30ed292, v=48). Then added countdown banner on Today (nasconBannerHTML in mobile.js): live event = red "ends in", else next = green "starts in", plus a "THEN" card; all-day picks only lead when nothing timed is left. Bumped to v=49. Not committed yet.
+
+## 2026-10-15T13:00:00+05:00
+Pushed countdown (8ca072e). Saved events now show a red cross (remove) instead of a check; bumped to v=50. Not committed.

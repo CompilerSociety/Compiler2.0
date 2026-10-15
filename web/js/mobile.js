@@ -888,7 +888,7 @@
       </div>
       <button class="m-nc-add${saved?' is-on':''}" type="button" data-nc-id="${esc(e.id)}" aria-pressed="${saved}" aria-label="${esc(label)}" title="${esc(saved?'Remove from my events':'Add to my events')}">
         ${saved
-          ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+          ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
           :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'}
       </button>
     </div>`;
