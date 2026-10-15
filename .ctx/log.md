@@ -16,3 +16,6 @@
 
 ## 2026-10-15T00:00:00+05:00
 Replaced mobile Today screen with NASCON 26 planner: Today = saved events (localStorage vtable_nascon_events_v1), Week tab renamed "Nascon Schedule" (day -> category incl. All -> events with + add). Agenda data in web/js/nascon-data.js (loaded by main.js before mobile.js). Old class timetable code kept; toggled by NASCON_ON in mobile.js. Asset version bumped to 47. Not committed.
+
+## 2026-10-15T12:00:00+05:00
+Pushed NASCON planner to main (d1df27e, rebased on 30ed292, v=48). Then added countdown banner on Today (nasconBannerHTML in mobile.js): live event = red "ends in", else next = green "starts in", plus a "THEN" card; all-day picks only lead when nothing timed is left. Bumped to v=49. Not committed yet.

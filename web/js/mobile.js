@@ -903,6 +903,62 @@
     });
   }
 
+  // Absolute epoch ms for an event's start/end; agenda times are Islamabad
+  // local (UTC+5). An "onwards" item is treated as running until 10 PM.
+  function nasconAt(e,which){
+    const hhmm=which==='end'?(e.end||'22:00'):e.start;
+    return Date.parse(`${e.date}T${hhmm}:00+05:00`);
+  }
+  // The same banner the class timetable used: the event in progress (red,
+  // counting down to its end) or the next one (green, counting down to its
+  // start), with the event after it listed underneath. tickBanner() drives
+  // the countdown and re-renders Today when it hits zero.
+  function nasconBannerHTML(mine){
+    const now=Date.now();
+    const upcoming=mine.map(e=>({e,s:nasconAt(e,'start'),en:nasconAt(e,'end')}))
+      .filter(x=>x.en>now)
+      .sort((a,b)=>(a.s-b.s)||(a.en-b.en));
+    // All-day picks would sit "live" from 9 to 10 and bury every timed event,
+    // so they only get the banner once nothing timed is left.
+    const timedOnly=upcoming.filter(x=>!x.e.allDay);
+    const timed=timedOnly.length?timedOnly:upcoming;
+    if(!timed.length){
+      return `<div class="m-now is-idle" id="m-now-banner">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>NO EVENTS LEFT</span></div>
+        <div class="m-now-name">All your NASCON<br>events are done.</div>
+      </div>`;
+    }
+    // Several picks can overlap; the live one finishing first leads.
+    const live=timed.filter(x=>x.s<=now).sort((a,b)=>a.en-b.en)[0];
+    const lead=live||timed[0];
+    const then=timed.find(x=>x!==lead&&x.s>now&&x.s>=lead.s);
+    const today=campusDateKey();
+    const dayWord=x=>{
+      if(x.e.date===today) return '';
+      const d=(window.NASCON_AGENDA||[]).find(a=>a.day===x.e.day);
+      const off=Math.round((Date.parse(`${x.e.date}T00:00:00Z`)-Date.parse(`${today}T00:00:00Z`))/86400000);
+      return off===1?'TOMORROW':(d?`${d.label} · ${d.sub}`.toUpperCase():'');
+    };
+    const timesOf=x=>{ const t=nasconTime(x.e); return x.e.allDay?'ALL DAY':`${t.start} – ${t.end}`; };
+    const card=(x,label,withCount)=>{
+      const isLive=withCount&&x===live;
+      return `<div class="m-now${isLive?' is-live':''}">
+        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc([label,timesOf(x)].filter(Boolean).join(' · '))}</span></div>
+        <div class="m-now-name">${esc(x.e.name)}</div>
+        <div class="m-now-stats">
+          <div><div class="m-now-stat-label">Venue</div><div class="m-now-stat-value">${esc(x.e.venue||'—')}</div></div>
+          <div><div class="m-now-stat-label">${withCount?(isLive?'Ends in':'Starts in'):'Starts'}</div><div class="m-now-stat-value"${withCount?' id="m-now-count"':''}>${withCount?'—':esc(nasconTime(x.e).start)}</div></div>
+        </div>
+      </div>`;
+    };
+    const leadLabel=live?'HAPPENING NOW':(dayWord(lead)||'UP NEXT');
+    const thenLabel=then?['THEN',dayWord(then)].filter(Boolean).join(' · '):'';
+    return `<div class="m-home-exam-stack" id="m-now-banner" data-until="${live?lead.en:lead.s}">
+      ${card(lead,leadLabel,true)}
+      ${then?card(then,thenLabel,false):''}
+    </div>`;
+  }
+
   // "Today": the student's own picks, grouped by fest day.
   function renderNasconMine(pane){
     const saved=new Set(nasconSaved());
@@ -917,7 +973,8 @@
       return;
     }
     const today=campusDateKey();
-    let html=`<div class="m-meta-row"><span>${mine.length} EVENT${mine.length===1?'':'S'}</span><b>MY NASCON</b></div>`;
+    let html=nasconBannerHTML(mine);
+    html+=`<div class="m-meta-row"><span>${mine.length} EVENT${mine.length===1?'':'S'}</span><b>MY NASCON</b></div>`;
     (window.NASCON_AGENDA||[]).forEach(d=>{
       const rows=nasconSort(mine.filter(e=>e.day===d.day));
       if(!rows.length) return;
@@ -926,6 +983,8 @@
     });
     html+='<button class="m-btn-ghost" id="m-nc-more" type="button">Add more events</button>';
     pane.innerHTML=html;
+    tickBanner();
+    wireTodayBanner();
     wireNasconAdds(pane,()=>renderNasconMine(pane));
     $('m-nc-more').addEventListener('click',()=>{ weekMode=true; renderToday(); });
   }
