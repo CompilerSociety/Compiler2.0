@@ -58,7 +58,6 @@ const timeFormatter=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE
 
 /* Extracted from index.html; order intentionally preserved for behavioural compatibility. */
 
-let PROFILE_STUDENTS_CACHE=null;
 let PROFILE_SYNC_IN_PROGRESS=false;
 const PROFILE_STORAGE_KEY='vtable_profile_nuid';
 const PROFILE_COOKIE_KEY='vtable_profile';
@@ -575,20 +574,20 @@ function updateProfileRegistrationFields(nuid){
   // Do NOT reveal the form here; it is only shown after a lookup finds no match,
   // otherwise it flashes on screen while the data is still loading.
 }
+// Sign-in must see the roster as it is in the database right now: a row that
+// was just deleted (or just registered) has to count immediately. The CDN
+// keeps /db/students/*.json for minutes, so each lookup carries a unique
+// query string — a fresh cache key the edge has never stored — and nothing is
+// remembered in the page between attempts either.
 async function loadProfileStudents(nuid){
-  const cacheKey=`profile:${String(nuid||'').trim().toUpperCase()}`;
-  if(PROFILE_STUDENTS_CACHE && PROFILE_STUDENTS_CACHE.cacheKey===cacheKey) return PROFILE_STUDENTS_CACHE.students;
   const sourceFile=getProfileDataFileForNuid(nuid);
   try{
-    const res=await fetch(sourceFile,{cache:'no-store'});
+    const res=await fetch(`${sourceFile}?fresh=${Date.now()}`,{cache:'no-store'});
     if(!res.ok) throw new Error('Profile data unavailable');
     const data=await res.json();
-    const students=Array.isArray(data.students)?data.students:[];
-    PROFILE_STUDENTS_CACHE={cacheKey,students};
-    return students;
+    return Array.isArray(data.students)?data.students:[];
   }catch(err){
     console.warn('Profile sync failed:', err);
-    PROFILE_STUDENTS_CACHE={cacheKey,students:[]};
     return [];
   }
 }

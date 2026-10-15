@@ -58,3 +58,6 @@ Free Rooms runs on the NASCON agenda for 2026-10-16..18 (phone + desktop): nasco
 
 ## 2026-10-15T20:30:00+05:00
 Pushed NASCON Free Rooms (209112c). Added "Continue as guest" link on the mobile sign-in screen: sets vtable_skipped_login and goes to Today; remembered across launches; Profile shows Log in for guests. Bumped to v=60. Not committed.
+
+## 2026-10-15T21:00:00+05:00
+26I-0816 was deleted from Mongo by the user, but the Vercel CDN copy of /db/students/26.json (s-maxage 300, swr 3600) still listed it, so sign-in skipped registration. loadProfileStudents now appends ?fresh=<ts> and drops PROFILE_STUDENTS_CACHE, so sign-in always reads the DB. Bumped to v=61. Not committed.
