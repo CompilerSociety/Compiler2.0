@@ -25,3 +25,9 @@ Pushed countdown (8ca072e). Saved events now show a red cross (remove) instead o
 
 ## 2026-10-15T14:00:00+05:00
 Pushed cross button (8ae484f). Hid My courses / My Friends on Today while NASCON_ON (#m-today.is-nascon CSS rule); bumped to v=51. Not committed.
+
+## 2026-10-15T15:00:00+05:00
+Pushed hidden buttons (0122ac1). Added per-event venue picker: pencil on events with 2+ rooms (nasconVenues splits venue text), choice saved in localStorage vtable_nascon_venues_v1 and shown in rows + countdown card. Countdown now one big card only (dropped THEN card). Bumped to v=52. Not committed.
+
+## 2026-10-15T16:00:00+05:00
+Re-themed the mobile app to NASCON maroon (#7a1c1e) on cream (#fffaf2) via the .m-app tokens in mobile.css (light + dark), and the browser theme-color. Desktop (main.css) still green. Bumped to v=53. Not committed (venue picker + one-card banner also uncommitted).

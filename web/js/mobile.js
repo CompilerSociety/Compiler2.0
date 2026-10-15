@@ -26,7 +26,7 @@
   }
   function syncMobileThemeChrome(){
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#141414':'#ffffff';
+    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#170d0e':'#fffaf2';
   }
   const SKIP_KEY='vtable_skipped_login';
   const $=id=>document.getElementById(id);
@@ -843,7 +843,7 @@
     if(!d) return [];
     return d.events.map(([start,end,name,cat,venue])=>({
       id:`d${day}-${nasconSlug(name)}`, day, date:d.date, name,
-      cat:cat||'General', venue:venue||'', allDay:start==='all',
+      cat:cat||'General', venue:venue||'', venues:nasconVenues(venue), allDay:start==='all',
       start:start==='all'?'09:00':start, end:start==='all'?'22:00':end
     }));
   }
@@ -875,9 +875,67 @@
     const now=nowMinutes(), s=nasconMin(e.start), en=e.end?nasconMin(e.end):24*60;
     return now>=s&&now<en?'now':now>=en?'past':'';
   }
+  // The agenda lists every room an event runs in as one string. Split it into
+  // the rooms a student could actually pick: "Rawal Lab 1,4" and
+  // "Karakorum 1, 2, 3" carry their prefix onto the bare numbers, "C-401 to
+  // C-405" expands to each room, a trailing "D Block" stays with the room
+  // before it, and commas inside brackets ("Cafe, inside") are not splits.
+  function nasconVenues(venue){
+    const parts=[];
+    let depth=0, cur='';
+    for(const ch of String(venue||'')){
+      if(ch==='(') depth++;
+      if(ch===')') depth=Math.max(0,depth-1);
+      if(!depth&&(ch===','||ch===';')){ parts.push(cur); cur=''; continue; }
+      cur+=ch;
+    }
+    parts.push(cur);
+    const out=[];
+    let prefix='';
+    parts.map(p=>p.trim()).filter(Boolean).forEach(p=>{
+      if(/^[A-Z] Block$/.test(p)&&out.length){ out[out.length-1]+=', '+p; return; }
+      if(/^\d+$/.test(p)&&prefix){ out.push(prefix+p); return; }
+      const range=p.match(/^([A-Z]+-)(\d+)\s+to\s+\1(\d+)$/);
+      if(range&&+range[3]>+range[2]&&+range[3]-+range[2]<20){
+        for(let n=+range[2];n<=+range[3];n++) out.push(range[1]+n);
+        return;
+      }
+      const m=p.match(/^(.*?\s)\d+$/);
+      prefix=m?m[1]:'';
+      out.push(p);
+    });
+    return out;
+  }
+  const NASCON_VENUE_KEY='vtable_nascon_venues_v1';
+  let ncEditing='';
+  function nasconPicks(){
+    try{ const v=JSON.parse(localStorage.getItem(NASCON_VENUE_KEY)||'{}'); return v&&typeof v==='object'&&!Array.isArray(v)?v:{}; }
+    catch(e){ return {}; }
+  }
+  function nasconSetPick(id,venue){
+    const picks=nasconPicks();
+    if(venue) picks[id]=venue; else delete picks[id];
+    try{ localStorage.setItem(NASCON_VENUE_KEY,JSON.stringify(picks)); return true; }
+    catch(e){ toast('Could not save — storage is blocked'); return false; }
+  }
+  // The room the student chose, if it is still one of the event's rooms.
+  function nasconPicked(e){
+    const v=nasconPicks()[e.id];
+    return v&&e.venues.includes(v)?v:'';
+  }
+  function nasconPlace(e){ return nasconPicked(e)||e.venue; }
+
   function nasconRowHTML(e,saved){
     const t=nasconTime(e), st=nasconState(e);
     const label=saved?`Remove ${e.name} from my events`:`Add ${e.name} to my events`;
+    const picked=nasconPicked(e), editing=ncEditing===e.id, canPick=e.venues.length>1;
+    const pencil=canPick?`<button class="m-nc-edit${editing?' is-on':''}" type="button" data-nc-edit="${esc(e.id)}" aria-expanded="${editing}" aria-label="${esc(`Pick your venue for ${e.name}`)}" title="Pick your venue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </button>`:'';
+    const picker=editing?`<div class="m-nc-venues" role="group" aria-label="Venues for ${esc(e.name)}">
+        ${e.venues.map(v=>`<button class="m-chip${picked===v?' is-on':''}" type="button" data-nc-venue="${esc(v)}" data-nc-for="${esc(e.id)}" aria-pressed="${picked===v}">${esc(v)}</button>`).join('')}
+        ${picked?`<button class="m-chip m-nc-venue-all" type="button" data-nc-venue="" data-nc-for="${esc(e.id)}">Show all venues</button>`:''}
+      </div>`:'';
     return `<div class="m-row m-nc-row${st==='now'?' is-now':''}${st==='past'?' is-past':''}">
       <div class="m-row-time"><div class="m-row-start">${esc(t.start)}</div><div class="m-row-end">${esc(t.end)}</div></div>
       <div class="m-row-rule"></div>
@@ -885,9 +943,11 @@
         ${st==='now'?'<span class="m-note m-nc-live">Happening now</span>':''}
         <div class="m-row-name">${esc(e.name)}</div>
         <div class="m-row-pills">
-          ${e.venue?`<span class="m-pill${st==='now'?' is-green':''}">${esc(e.venue)}</span>`:''}
+          ${e.venue?`<span class="m-pill${st==='now'?' is-green':''}${picked?' m-nc-picked':''}">${esc(picked||e.venue)}</span>`:''}
+          ${pencil}
           <span class="m-pill m-nc-cat">${esc(e.cat)}</span>
         </div>
+        ${picker}
       </div>
       <button class="m-nc-add${saved?' is-on':''}" type="button" data-nc-id="${esc(e.id)}" aria-pressed="${saved}" aria-label="${esc(label)}" title="${esc(saved?'Remove from my events':'Add to my events')}">
         ${saved
@@ -904,6 +964,21 @@
         rerender();
       });
     });
+    pane.querySelectorAll('[data-nc-edit]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        ncEditing=ncEditing===btn.dataset.ncEdit?'':btn.dataset.ncEdit;
+        rerender();
+      });
+    });
+    pane.querySelectorAll('[data-nc-venue]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const v=btn.dataset.ncVenue;
+        if(!nasconSetPick(btn.dataset.ncFor,v)) return;
+        ncEditing='';
+        toast(v?`Venue set to ${v}`:'Showing all venues');
+        rerender();
+      });
+    });
   }
 
   // Absolute epoch ms for an event's start/end; agenda times are Islamabad
@@ -914,8 +989,9 @@
   }
   // The same banner the class timetable used: the event in progress (red,
   // counting down to its end) or the next one (green, counting down to its
-  // start), with the event after it listed underneath. tickBanner() drives
-  // the countdown and re-renders Today when it hits zero.
+  // start) — one card only; the full list sits below it. tickBanner() drives
+  // the countdown and re-renders Today when it hits zero, moving the card on
+  // to the next event.
   function nasconBannerHTML(mine){
     const now=Date.now();
     const upcoming=mine.map(e=>({e,s:nasconAt(e,'start'),en:nasconAt(e,'end')}))
@@ -934,7 +1010,6 @@
     // Several picks can overlap; the live one finishing first leads.
     const live=timed.filter(x=>x.s<=now).sort((a,b)=>a.en-b.en)[0];
     const lead=live||timed[0];
-    const then=timed.find(x=>x!==lead&&x.s>now&&x.s>=lead.s);
     const today=campusDateKey();
     const dayWord=x=>{
       if(x.e.date===today) return '';
@@ -949,16 +1024,14 @@
         <div class="m-now-head"><span class="m-now-dot"></span><span>${esc([label,timesOf(x)].filter(Boolean).join(' · '))}</span></div>
         <div class="m-now-name">${esc(x.e.name)}</div>
         <div class="m-now-stats">
-          <div><div class="m-now-stat-label">Venue</div><div class="m-now-stat-value">${esc(x.e.venue||'—')}</div></div>
+          <div><div class="m-now-stat-label">Venue</div><div class="m-now-stat-value">${esc(nasconPlace(x.e)||'—')}</div></div>
           <div><div class="m-now-stat-label">${withCount?(isLive?'Ends in':'Starts in'):'Starts'}</div><div class="m-now-stat-value"${withCount?' id="m-now-count"':''}>${withCount?'—':esc(nasconTime(x.e).start)}</div></div>
         </div>
       </div>`;
     };
     const leadLabel=live?'HAPPENING NOW':(dayWord(lead)||'UP NEXT');
-    const thenLabel=then?['THEN',dayWord(then)].filter(Boolean).join(' · '):'';
     return `<div class="m-home-exam-stack" id="m-now-banner" data-until="${live?lead.en:lead.s}">
       ${card(lead,leadLabel,true)}
-      ${then?card(then,thenLabel,false):''}
     </div>`;
   }
 
