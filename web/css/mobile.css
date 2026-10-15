@@ -177,6 +177,17 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-meta-row b{color:var(--green);font-weight:500;min-width:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m-rows{display:flex;flex-direction:column;gap:9px}
 
+/* ── NASCON '26 open banner ─────────────────────────────────────────── */
+.m-nc-promo{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));background:rgba(30,6,8,.72);animation:m-nc-fade .2s ease-out}
+.m-nc-promo[hidden]{display:none}
+.m-nc-promo-card{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center}
+.m-nc-promo-img{display:block;width:auto;max-width:100%;max-height:calc(100dvh - 140px);height:auto;border-radius:20px;box-shadow:0 18px 44px rgba(0,0,0,.45)}
+.m-nc-promo-close{position:absolute;top:-6px;right:-6px;width:40px;height:40px;border-radius:50%;border:none;background:var(--green);color:var(--on-accent);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.m-nc-promo-close svg{width:18px;height:18px}
+.m-nc-promo-go{max-width:320px;margin-top:14px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+@keyframes m-nc-fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.m-nc-promo{animation:none}}
+
 /* ── NASCON planner (Today / Nascon Schedule) ───────────────────────── */
 #m-today.is-nascon #m-courses-btn,#m-today.is-nascon #m-friends-btn{display:none!important}
 .m-nc-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}

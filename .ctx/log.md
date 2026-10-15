@@ -40,3 +40,6 @@ Pushed lighter palette (80cf680). Event rows now list every room as its own pill
 
 ## 2026-10-15T17:30:00+05:00
 Pushed all-rooms view (118d51e). Set mobile palette to colours sampled from the NASCON posters: maroon #561014 primary, cream #e8dcc4 secondary/background, ink #36120a; dark = maroon page #2a0709 with cream accent. Bumped to v=56. Not committed.
+
+## 2026-10-15T18:00:00+05:00
+Pushed exact palette (aab6ef9). Added NASCON 26 poster pop-up on every mobile app open (web/assets/images/nascon-26.webp, #m-nc-promo in mobile-app.html, showNasconPromo in mobile.js): close X, backdrop tap, Escape, or "Plan your NASCON" -> schedule tab. Bumped to v=57. Not committed.

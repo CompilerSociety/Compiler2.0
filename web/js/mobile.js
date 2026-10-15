@@ -2890,7 +2890,34 @@
     setTimeout(()=>{
       route=target;
       render();
+      showNasconPromo();
     },Math.max(0,MIN_SPLASH_MS-(performance.now()||0)));
+  }
+
+  // The NASCON '26 poster, shown on every app open while the planner is on.
+  function showNasconPromo(){
+    const el=$('m-nc-promo');
+    if(!el||!NASCON_ON||!MQ.matches) return;
+    const opener=document.activeElement;
+    const close=()=>{
+      el.hidden=true;
+      $('m-main').inert=false;
+      document.removeEventListener('keydown',onKey);
+      if(opener&&opener.focus) opener.focus();
+    };
+    const onKey=ev=>{ if(ev.key==='Escape') close(); };
+    $('m-nc-promo-close').onclick=close;
+    $('m-nc-promo-go').onclick=()=>{
+      close();
+      if(route!=='today') go('today');
+      weekMode=true; renderToday();
+    };
+    // Tapping the dimmed backdrop (not the poster) also dismisses it.
+    el.onclick=ev=>{ if(ev.target===el) close(); };
+    document.addEventListener('keydown',onKey);
+    el.hidden=false;
+    $('m-main').inert=true;
+    $('m-nc-promo-close').focus();
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
