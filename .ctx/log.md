@@ -43,3 +43,6 @@ Pushed all-rooms view (118d51e). Set mobile palette to colours sampled from the 
 
 ## 2026-10-15T18:00:00+05:00
 Pushed exact palette (aab6ef9). Added NASCON 26 poster pop-up on every mobile app open (web/assets/images/nascon-26.webp, #m-nc-promo in mobile-app.html, showNasconPromo in mobile.js): close X, backdrop tap, Escape, or "Plan your NASCON" -> schedule tab. Bumped to v=57. Not committed.
+
+## 2026-10-15T18:30:00+05:00
+Pushed open banner (47d2675). Made VTABLE x NASCON promo poster: marketing/poster/poster.html (+ nascon-logo.png), rendered to marketing/poster/vtable-x-nascon-poster.png (2160x2700) via headless Chrome; phones are live iframes of the app, so render by copying the folder into web/_poster/ temporarily. Not committed.
