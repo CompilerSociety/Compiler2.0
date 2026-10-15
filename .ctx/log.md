@@ -46,3 +46,6 @@ Pushed exact palette (aab6ef9). Added NASCON 26 poster pop-up on every mobile ap
 
 ## 2026-10-15T18:30:00+05:00
 Pushed open banner (47d2675). Made VTABLE x NASCON promo poster: marketing/poster/poster.html (+ nascon-logo.png), rendered to marketing/poster/vtable-x-nascon-poster.png (2160x2700) via headless Chrome; phones are live iframes of the app, so render by copying the folder into web/_poster/ temporarily. Not committed.
+
+## 2026-10-15T19:00:00+05:00
+Pushed poster (3f2b738). Added "Not officially affiliated with FAST NUCES or NASCON." line to the poster footer (band now 270px tall) and re-rendered. Not committed.
