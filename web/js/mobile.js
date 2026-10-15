@@ -26,7 +26,7 @@
   }
   function syncMobileThemeChrome(){
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#170d0e':'#fffaf2';
+    if(meta) meta.content=MQ.matches&&document.documentElement.dataset.mobileTheme==='dark'?'#170d0e':'#fdf4e6';
   }
   const SKIP_KEY='vtable_skipped_login';
   const $=id=>document.getElementById(id);

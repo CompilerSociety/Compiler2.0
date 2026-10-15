@@ -31,3 +31,6 @@ Pushed hidden buttons (0122ac1). Added per-event venue picker: pencil on events 
 
 ## 2026-10-15T16:00:00+05:00
 Re-themed the mobile app to NASCON maroon (#7a1c1e) on cream (#fffaf2) via the .m-app tokens in mobile.css (light + dark), and the browser theme-color. Desktop (main.css) still green. Bumped to v=53. Not committed (venue picker + one-card banner also uncommitted).
+
+## 2026-10-15T16:30:00+05:00
+Pushed theme (b5445c9). Lightened light-theme palette: accent #b23a3c, cream base #fdf4e6. Bumped to v=54. Not committed.

@@ -16,15 +16,15 @@
 @media (max-width:767px){
 
 .m-app{
-  /* NASCON '26 palette: deep maroon on warm cream paper, taken from the
+  /* NASCON '26 palette: soft brick red on warm cream paper, taken from the
      official agenda posts. Token names are historical (--green is the
      accent), so every component picks the theme up without edits. */
-  color-scheme:light; --base:#fffaf2; --solid:#2b1211; --on-accent:#fbf3e4;
-  --accent-rgb:122,28,30; --bright-rgb:232,176,150;
-  --ink:#2b1211; --green:#7a1c1e; --green-deep:#561315; --green-bright:#e8b096;
-  --tint:#f4e6d3; --tint-hover:#ecd9c1; --surface:#fdf6ea; --page:#f3e9d8;
-  --neutral:#efe3d0; --slot-free:#7fb87d; --slot-busy:#e3d8c8; --seat-section:#ecd2c0;
-  --red:#c2451f; --red-deep:#8f2f12; --red-bright:#f2a07c; --red-soft:#c95028;
+  color-scheme:light; --base:#fdf4e6; --solid:#3a1a1a; --on-accent:#fff8ec;
+  --accent-rgb:178,58,60; --bright-rgb:246,196,176;
+  --ink:#3a1a1a; --green:#b23a3c; --green-deep:#8c2a2d; --green-bright:#f6c4b0;
+  --tint:#f8e1d6; --tint-hover:#f2d3c4; --surface:#fffaf1; --page:#f8ecd9;
+  --neutral:#f3e6d2; --slot-free:#7fb87d; --slot-busy:#e8dccb; --seat-section:#f2d4c6;
+  --red:#c9561f; --red-deep:#94360f; --red-bright:#f7b08a; --red-soft:#d2622c;
   --line:rgba(43,18,17,.1); --line-strong:rgba(43,18,17,.16);
   --mute:rgba(43,18,17,.52); --mute-2:rgba(43,18,17,.64); --mute-3:rgba(43,18,17,.46);
   --mono:'DM Mono','JetBrains Mono',monospace; --sans:'Figtree','Inter',system-ui,sans-serif;
