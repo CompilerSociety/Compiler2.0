@@ -34,3 +34,6 @@ Re-themed the mobile app to NASCON maroon (#7a1c1e) on cream (#fffaf2) via the .
 
 ## 2026-10-15T16:30:00+05:00
 Pushed theme (b5445c9). Lightened light-theme palette: accent #b23a3c, cream base #fdf4e6. Bumped to v=54. Not committed.
+
+## 2026-10-15T17:00:00+05:00
+Pushed lighter palette (80cf680). Event rows now list every room as its own pill by default (or just the picked one), with the pencil moved under the pills captioned "Edit your venue". Bumped to v=55. Not committed.

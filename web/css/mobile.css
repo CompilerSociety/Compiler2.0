@@ -195,10 +195,13 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-nc-live{background:rgba(var(--accent-rgb),.14);color:var(--green-deep)}
 .m-nc-add{width:40px;height:40px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--base);color:var(--green-deep);display:grid;place-items:center;cursor:pointer;padding:0}
 .m-nc-add svg{width:18px;height:18px}
-.m-nc-edit{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--base);color:var(--green-deep);display:grid;place-items:center;cursor:pointer;padding:0;align-self:center}
+.m-nc-edit-btn{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-top:10px;padding:0;border:none;background:none;color:var(--green-deep);cursor:pointer;font-family:inherit}
+.m-nc-edit{width:30px;height:30px;border-radius:50%;border:1px solid rgba(var(--accent-rgb),.35);background:var(--base);display:grid;place-items:center}
 .m-nc-edit svg{width:14px;height:14px}
-.m-nc-edit.is-on{background:var(--green);border-color:var(--green);color:var(--on-accent)}
-.m-nc-edit:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.m-nc-edit-text{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute-2);white-space:nowrap}
+.m-nc-edit-btn.is-on .m-nc-edit{background:var(--green);border-color:var(--green);color:var(--on-accent)}
+.m-nc-edit-btn.is-on .m-nc-edit-text{color:var(--green-deep)}
+.m-nc-edit-btn:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:12px}
 .m-nc-picked{box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.55);color:var(--green-deep)}
 .m-nc-venues{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-strong)}
 .m-nc-venues .m-chip{font-size:12.5px;padding:7px 12px;white-space:normal;text-align:left}

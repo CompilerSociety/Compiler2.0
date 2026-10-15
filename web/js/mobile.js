@@ -929,9 +929,12 @@
     const t=nasconTime(e), st=nasconState(e);
     const label=saved?`Remove ${e.name} from my events`:`Add ${e.name} to my events`;
     const picked=nasconPicked(e), editing=ncEditing===e.id, canPick=e.venues.length>1;
-    const pencil=canPick?`<button class="m-nc-edit${editing?' is-on':''}" type="button" data-nc-edit="${esc(e.id)}" aria-expanded="${editing}" aria-label="${esc(`Pick your venue for ${e.name}`)}" title="Pick your venue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+    const pencil=canPick?`<button class="m-nc-edit-btn${editing?' is-on':''}" type="button" data-nc-edit="${esc(e.id)}" aria-expanded="${editing}" aria-label="${esc(`Edit your venue for ${e.name}`)}">
+        <span class="m-nc-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        <span class="m-nc-edit-text">Edit your venue</span>
       </button>`:'';
+    // Every room by default; just the student's own once they have picked.
+    const shown=picked?[picked]:(e.venues.length?e.venues:(e.venue?[e.venue]:[]));
     const picker=editing?`<div class="m-nc-venues" role="group" aria-label="Venues for ${esc(e.name)}">
         ${e.venues.map(v=>`<button class="m-chip${picked===v?' is-on':''}" type="button" data-nc-venue="${esc(v)}" data-nc-for="${esc(e.id)}" aria-pressed="${picked===v}">${esc(v)}</button>`).join('')}
         ${picked?`<button class="m-chip m-nc-venue-all" type="button" data-nc-venue="" data-nc-for="${esc(e.id)}">Show all venues</button>`:''}
@@ -943,10 +946,10 @@
         ${st==='now'?'<span class="m-note m-nc-live">Happening now</span>':''}
         <div class="m-row-name">${esc(e.name)}</div>
         <div class="m-row-pills">
-          ${e.venue?`<span class="m-pill${st==='now'?' is-green':''}${picked?' m-nc-picked':''}">${esc(picked||e.venue)}</span>`:''}
-          ${pencil}
+          ${shown.map(v=>`<span class="m-pill${st==='now'?' is-green':''}${picked?' m-nc-picked':''}">${esc(v)}</span>`).join('')}
           <span class="m-pill m-nc-cat">${esc(e.cat)}</span>
         </div>
+        ${pencil}
         ${picker}
       </div>
       <button class="m-nc-add${saved?' is-on':''}" type="button" data-nc-id="${esc(e.id)}" aria-pressed="${saved}" aria-label="${esc(label)}" title="${esc(saved?'Remove from my events':'Add to my events')}">
