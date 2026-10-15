@@ -37,3 +37,6 @@ Pushed theme (b5445c9). Lightened light-theme palette: accent #b23a3c, cream bas
 
 ## 2026-10-15T17:00:00+05:00
 Pushed lighter palette (80cf680). Event rows now list every room as its own pill by default (or just the picked one), with the pencil moved under the pills captioned "Edit your venue". Bumped to v=55. Not committed.
+
+## 2026-10-15T17:30:00+05:00
+Pushed all-rooms view (118d51e). Set mobile palette to colours sampled from the NASCON posters: maroon #561014 primary, cream #e8dcc4 secondary/background, ink #36120a; dark = maroon page #2a0709 with cream accent. Bumped to v=56. Not committed.

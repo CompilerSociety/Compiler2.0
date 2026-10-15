@@ -16,17 +16,18 @@
 @media (max-width:767px){
 
 .m-app{
-  /* NASCON '26 palette: soft brick red on warm cream paper, taken from the
-     official agenda posts. Token names are historical (--green is the
-     accent), so every component picks the theme up without edits. */
-  color-scheme:light; --base:#fdf4e6; --solid:#3a1a1a; --on-accent:#fff8ec;
-  --accent-rgb:178,58,60; --bright-rgb:246,196,176;
-  --ink:#3a1a1a; --green:#b23a3c; --green-deep:#8c2a2d; --green-bright:#f6c4b0;
-  --tint:#f8e1d6; --tint-hover:#f2d3c4; --surface:#fffaf1; --page:#f8ecd9;
-  --neutral:#f3e6d2; --slot-free:#7fb87d; --slot-busy:#e8dccb; --seat-section:#f2d4c6;
-  --red:#c9561f; --red-deep:#94360f; --red-bright:#f7b08a; --red-soft:#d2622c;
-  --line:rgba(43,18,17,.1); --line-strong:rgba(43,18,17,.16);
-  --mute:rgba(43,18,17,.52); --mute-2:rgba(43,18,17,.64); --mute-3:rgba(43,18,17,.46);
+  /* NASCON '26 palette, sampled from the official agenda posts: maroon
+     #561014 is the main colour, the poster's cream paper #e8dcc4 the
+     secondary. Token names are historical (--green is the accent), so
+     every component picks the theme up without edits. */
+  color-scheme:light; --base:#e8dcc4; --solid:#561014; --on-accent:#e8dcc4;
+  --accent-rgb:86,16,20; --bright-rgb:232,220,196;
+  --ink:#36120a; --green:#561014; --green-deep:#3e0a0d; --green-bright:#e8dcc4;
+  --tint:#dccdb0; --tint-hover:#d3c2a3; --surface:#f1e8d6; --page:#e2d5bb;
+  --neutral:#ddcfb4; --slot-free:#7fb87d; --slot-busy:#d6c8ad; --seat-section:#d9b9a8;
+  --red:#b8321e; --red-deep:#7e1f10; --red-bright:#f2a07c; --red-soft:#b8371f;
+  --line:rgba(54,18,10,.12); --line-strong:rgba(54,18,10,.2);
+  --mute:rgba(54,18,10,.62); --mute-2:rgba(54,18,10,.74); --mute-3:rgba(54,18,10,.55);
   --mono:'DM Mono','JetBrains Mono',monospace; --sans:'Figtree','Inter',system-ui,sans-serif;
   display:flex; flex-direction:column; position:fixed; inset:0; z-index:40;
   background:var(--base); color:var(--ink); font-family:var(--sans);
@@ -549,15 +550,15 @@ body.has-pwa-bar{padding-bottom:0!important}
 
 
 html[data-mobile-theme="dark"] .m-app{
-  /* NASCON dark: the poster inverted — cream accent on near-black maroon. */
-  color-scheme:dark; --base:#170d0e; --solid:#3a1a1b; --on-accent:#3a0f10;
-  --ink:#f6ece0; --green:#e6cfac; --green-deep:#f2e1c4; --green-bright:#f6e8d2;
-  --accent-rgb:230,207,172; --bright-rgb:246,232,210;
-  --tint:#33191a; --tint-hover:#422224; --surface:#211314; --page:#1b1011;
-  --neutral:#2c1a1b; --slot-free:#c9a77a; --slot-busy:#4a3536; --seat-section:#5a2d2e;
-  --red:#b8452c; --red-deep:#ffb39e; --red-bright:#ffab94; --red-soft:#b84a2e;
-  --line:rgba(246,236,224,.1); --line-strong:rgba(246,236,224,.2);
-  --mute:#aaa19a; --mute-2:#c4b9b0; --mute-3:#a69b92;
+  /* NASCON dark: the poster's maroon band as the page, cream as accent. */
+  color-scheme:dark; --base:#2a0709; --solid:#561014; --on-accent:#561014;
+  --ink:#f3ead8; --green:#e8dcc4; --green-deep:#f3ead8; --green-bright:#f3ead8;
+  --accent-rgb:232,220,196; --bright-rgb:243,234,216;
+  --tint:#4a1216; --tint-hover:#5a181d; --surface:#3a0c10; --page:#31080b;
+  --neutral:#46121a; --slot-free:#c9a77a; --slot-busy:#5a2a2e; --seat-section:#6e2a2e;
+  --red:#c2451f; --red-deep:#ffb39e; --red-bright:#ffab94; --red-soft:#c2451f;
+  --line:rgba(232,220,196,.14); --line-strong:rgba(232,220,196,.24);
+  --mute:#c9b69c; --mute-2:#dccbb2; --mute-3:#bba98f;
 }
 html[data-mobile-theme="dark"] .m-app :is(.m-toast,.m-rooms-bar,.m-hero-dark,.m-daycard.is-today .m-daycard-head,.m-block.is-on,.m-chip.is-ink.is-on,.m-now.is-live,.m-room.is-busy){color:#f5eee8}
 html[data-mobile-theme="dark"] .m-room.is-busy :is(.m-room-status,.m-room-chev){color:#fff}
