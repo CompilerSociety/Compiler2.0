@@ -140,15 +140,26 @@ const ASSET_VERSION = (() => {
   catch (e) { return ''; }
 })();
 const versioned = (path) => (ASSET_VERSION ? `${path}?v=${ASSET_VERSION}` : path);
+// Start downloading every runtime script now, in parallel with the HTML
+// components. They still execute strictly in order through loadScript()
+// below, which then finds each one already in the HTTP cache instead of
+// waiting for the previous file before even requesting the next.
+// isSiteLive is a hoisted function declaration further down; skipping this
+// while the launch gate is closed keeps the holding page light.
+if (isSiteLive()) ['/js/exam-rooms.js', '/js/app.js', '/js/nascon-data.js', '/js/mobile.js', '/js/announcement.js'].forEach(path => {
+  const link = document.createElement('link');
+  link.rel = 'preload'; link.as = 'script'; link.href = versioned(path);
+  document.head.appendChild(link);
+});
 async function loadCompatibilityRuntime() {
   await loadScript(versioned('/js/exam-rooms.js'));
+  // Before app.js: its Free Rooms panel asks the NASCON agenda on fest days.
+  await loadScript(versioned('/js/nascon-data.js')).catch(() => {});
   return loadScript(versioned('/js/app.js'));
 }
 // The phone view reads app.js's globals directly, so it must load after it and
 // as a classic script — a module would not share that global scope.
 async function loadMobileRuntime() {
-  // NASCON agenda the Today screen reads; a failed load just shows it empty.
-  await loadScript(versioned('/js/nascon-data.js')).catch(() => {});
   return loadScript(versioned('/js/mobile.js'));
 }
 // Original initialization remains in app.js so its globals, listener order, and

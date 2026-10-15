@@ -2611,6 +2611,9 @@ function getRoomSlotInfo(room,day,slotsForFloor){
   // For any other day show the full day's slots (labs have just four, so
   // clock-filtering them in the evening made them look empty/broken).
   return getSlotsForDay(day,slotList).map(slot=>{
+    // On the NASCON dates the fest agenda, not the class timetable, decides.
+    const fest=typeof nasconRoomStatus==='function'?nasconRoomStatus(room,day,slot):undefined;
+    if(fest!==undefined) return{slot,occupiedBy:fest};
     let occupiedBy=useSheet?findCDOccupancy(room,day,slot):null;
     for(let i=0;i<sources.length&&!occupiedBy;i++){
       occupiedBy=findOccupancyInTT(ROOM_TT[sources[i]],room,day,slot);
@@ -2683,14 +2686,15 @@ function onFloorChange(){
     return;
   }
   daySel.disabled=false;
-  DAYS.forEach(d=>{
+  const roomDays=DAYS.concat(typeof nasconExtraRoomDays==='function'?nasconExtraRoomDays():[]);
+  roomDays.forEach(d=>{
     const opt=document.createElement('option');
     opt.value=d;opt.textContent=d;
     daySel.appendChild(opt);
   });
   // Auto-select today if it's a weekday
   const campusDay=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',weekday:'long'}).format(new Date());
-  const todayName=DAYS.includes(campusDay)?campusDay:'';
+  const todayName=roomDays.includes(campusDay)?campusDay:'';
   if(todayName){daySel.value=todayName;onDayChange();}
 }
 

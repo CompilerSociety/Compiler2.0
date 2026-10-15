@@ -49,3 +49,9 @@ Pushed open banner (47d2675). Made VTABLE x NASCON promo poster: marketing/poste
 
 ## 2026-10-15T19:00:00+05:00
 Pushed poster (3f2b738). Added "Not officially affiliated with FAST NUCES or NASCON." line to the poster footer (band now 270px tall) and re-rendered. Not committed.
+
+## 2026-10-15T19:30:00+05:00
+Pushed poster disclaimer (51e8da0). Faster app open: removed MIN_SPLASH_MS floor in mobile.js start() (routes immediately), and main.js now preloads exam-rooms/app/nascon-data/mobile/announcement scripts in parallel when the site is live. Bumped to v=58. Not committed.
+
+## 2026-10-15T20:00:00+05:00
+Free Rooms runs on the NASCON agenda for 2026-10-16..18 (phone + desktop): nasconRoomStatus() in nascon-data.js (now loaded before app.js) maps agenda venues to inventory rooms (DIT n->D-IT Lab n, Margalla->C-Margala, Karakorum->A-KK-I.., Khyber->A-Khyber I.., Potohar->B-Poth, A-block 3rd floor for Devils Lair, Cyber Lab, B-Digital etc.) and replaces the class timetable on those dates; desktop day picker gains Sunday on Day 3; phone card says Event. Not in inventory: A-108, C-109, D-102, D-Audi. Bumped to v=59. Not committed.

@@ -54,9 +54,6 @@
     const timer=setTimeout(()=>{tip.hidden=true;},8000);
     $('m-dark-mode-tip-close').onclick=()=>{tip.hidden=true;clearTimeout(timer);};
   }
-  // Floor on the splash. The auth check itself is instant (localStorage), but
-  // without this the splash strobes on a warm load.
-  const MIN_SPLASH_MS=450;
 
   /* ── Small helpers ─────────────────────────────────────────────────── */
   function toast(msg){
@@ -875,37 +872,9 @@
     const now=nowMinutes(), s=nasconMin(e.start), en=e.end?nasconMin(e.end):24*60;
     return now>=s&&now<en?'now':now>=en?'past':'';
   }
-  // The agenda lists every room an event runs in as one string. Split it into
-  // the rooms a student could actually pick: "Rawal Lab 1,4" and
-  // "Karakorum 1, 2, 3" carry their prefix onto the bare numbers, "C-401 to
-  // C-405" expands to each room, a trailing "D Block" stays with the room
-  // before it, and commas inside brackets ("Cafe, inside") are not splits.
-  function nasconVenues(venue){
-    const parts=[];
-    let depth=0, cur='';
-    for(const ch of String(venue||'')){
-      if(ch==='(') depth++;
-      if(ch===')') depth=Math.max(0,depth-1);
-      if(!depth&&(ch===','||ch===';')){ parts.push(cur); cur=''; continue; }
-      cur+=ch;
-    }
-    parts.push(cur);
-    const out=[];
-    let prefix='';
-    parts.map(p=>p.trim()).filter(Boolean).forEach(p=>{
-      if(/^[A-Z] Block$/.test(p)&&out.length){ out[out.length-1]+=', '+p; return; }
-      if(/^\d+$/.test(p)&&prefix){ out.push(prefix+p); return; }
-      const range=p.match(/^([A-Z]+-)(\d+)\s+to\s+\1(\d+)$/);
-      if(range&&+range[3]>+range[2]&&+range[3]-+range[2]<20){
-        for(let n=+range[2];n<=+range[3];n++) out.push(range[1]+n);
-        return;
-      }
-      const m=p.match(/^(.*?\s)\d+$/);
-      prefix=m?m[1]:'';
-      out.push(p);
-    });
-    return out;
-  }
+  // The agenda lists every room an event runs in as one string; split it
+  // into the rooms a student could actually pick. Shared splitter lives in nascon-data.js (Free Rooms uses it too).
+  function nasconVenues(venue){ return typeof nasconSplitVenues==='function'?nasconSplitVenues(venue):(venue?[venue]:[]); }
   const NASCON_VENUE_KEY='vtable_nascon_venues_v1';
   let ncEditing='';
   function nasconPicks(){
@@ -1247,6 +1216,9 @@
   // which hides slots that have already passed when the day is today — the
   // design's bar is the day's full slot grid, green for free, grey for busy.
   function slotOccupant(room,day,slot){
+    // On the NASCON dates the fest agenda, not the class timetable, decides.
+    const fest=typeof nasconRoomStatus==='function'?nasconRoomStatus(room,day,slot):undefined;
+    if(fest!==undefined) return fest;
     updateRoomMode(roomDateForDay(day));
     const sources=BLOCK_SOURCES[roomBlock(room)]||['computing'];
     let occupiedBy=((typeof isCDBlockRoom==='function')&&isCDBlockRoom(room))
@@ -1389,7 +1361,7 @@
       const currentBooking=currentSlot&&slots.find(s=>s.slot===currentSlot)?.occupiedBy;
       const summary=roomSummary(slots);
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
-      const status=free===true?'Free now':free===false?'Class':'—';
+      const status=free===true?'Free now':free===false?(currentBooking&&currentBooking.dept==='NASCON'?'Event':'Class'):'—';
       // During exams, make the active course and the next free time visible
       // without requiring the student to open the complete room timeline.
       const liveExam='';
@@ -2881,17 +2853,14 @@
     syncMobileThemeChrome();
     MQ.addEventListener('change',syncMobileThemeChrome);
     wire();
-    render(); // paint the splash immediately
     const r=readHash();
     // render() decides sign-in vs app from the stored profile, so "today" is
     // just the default landing spot — a signed-in user goes straight there and
-    // never sees the sign-in screen.
-    const target=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:'today';
-    setTimeout(()=>{
-      route=target;
-      render();
-      showNasconPromo();
-    },Math.max(0,MIN_SPLASH_MS-(performance.now()||0)));
+    // never sees the sign-in screen. No minimum splash time: the app opens
+    // the moment this script has run.
+    route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:'today';
+    render();
+    showNasconPromo();
   }
 
   // The NASCON '26 poster, shown on every app open while the planner is on.
