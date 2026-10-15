@@ -2796,6 +2796,11 @@
     $('m-reg-back').addEventListener('click',()=>{ route='signin'; render(); });
     $('m-reg-name').addEventListener('keydown',e=>{ if(e.key==='Enter') saveRegistration(); });
     $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
+    $('m-guest-btn').addEventListener('click',()=>{
+      // Remembered, so a guest is not sent back to sign-in on every launch.
+      setSkipped(true);
+      go('today',true);
+    });
     $('m-manual-go').addEventListener('click',saveManual);
     $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });
     $('m-onboard-push').addEventListener('click',()=>enablePush('m-onboard-push-status','m-onboard-push'));
