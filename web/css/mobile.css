@@ -174,6 +174,7 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-rows{display:flex;flex-direction:column;gap:9px}
 
 /* ── NASCON planner (Today / Nascon Schedule) ───────────────────────── */
+#m-today.is-nascon #m-courses-btn,#m-today.is-nascon #m-friends-btn{display:none!important}
 .m-nc-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .m-nc-day{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px;border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);color:var(--ink);cursor:pointer;font-family:inherit}
 .m-nc-day-label{font-family:var(--mono);font-weight:500;font-size:15px}

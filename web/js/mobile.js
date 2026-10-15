@@ -539,6 +539,9 @@
     // "Today" lists the events the student saved, "Nascon Schedule" browses
     // the full agenda. The class timetable code below is left in place for
     // when this is switched back.
+    // My courses / My Friends are about the class timetable, so they are
+    // hidden (not removed) while the NASCON planner owns this screen.
+    $('m-today').classList.toggle('is-nascon',NASCON_ON);
     if(NASCON_ON){
       if(weekMode) renderNasconSchedule(weekPane); else renderNasconMine(todayPane);
       return;

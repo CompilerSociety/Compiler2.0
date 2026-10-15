@@ -22,3 +22,6 @@ Pushed NASCON planner to main (d1df27e, rebased on 30ed292, v=48). Then added co
 
 ## 2026-10-15T13:00:00+05:00
 Pushed countdown (8ca072e). Saved events now show a red cross (remove) instead of a check; bumped to v=50. Not committed.
+
+## 2026-10-15T14:00:00+05:00
+Pushed cross button (8ae484f). Hid My courses / My Friends on Today while NASCON_ON (#m-today.is-nascon CSS rule); bumped to v=51. Not committed.
