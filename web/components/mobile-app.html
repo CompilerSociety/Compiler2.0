@@ -91,7 +91,7 @@
     <!-- Opt-in here rather than only in Profile: this is the one moment we
          know the student's identity is fresh, and permission must be asked
          from a real click. Enrolling also sends their section to the server,
-         which is what the class/exam/seating senders read. -->
+         which is what the class and exam senders read. -->
     <button class="m-btn-ghost" id="m-onboard-push" type="button">Turn on notifications</button>
     <div class="m-signin-status" id="m-onboard-push-status" role="status" aria-live="polite"></div>
     <button class="m-btn-primary" id="m-onboard-go" type="button">Save your profile</button>
@@ -119,9 +119,9 @@
 
       <!-- Today / Week -->
       <section class="m-screen on" id="m-today">
-        <div class="m-seg" role="tablist" aria-label="Today or week">
+        <div class="m-seg" role="tablist" aria-label="My NASCON events or the full NASCON schedule">
           <button class="m-seg-btn is-active" id="m-seg-today" role="tab" aria-selected="true" type="button">Today</button>
-          <button class="m-seg-btn" id="m-seg-week" role="tab" aria-selected="false" type="button">Week</button>
+          <button class="m-seg-btn" id="m-seg-week" role="tab" aria-selected="false" type="button">Nascon Schedule</button>
         </div>
         <button class="m-courses-btn" id="m-courses-btn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -203,9 +203,8 @@
 
       <!-- Exams -->
       <section class="m-screen" id="m-exams">
-        <div class="m-seg m-seg-3" role="tablist" aria-label="Exam views">
+        <div class="m-seg m-seg-2" role="tablist" aria-label="Exam views">
           <button class="m-seg-btn is-active" id="m-seg-schedule" role="tab" aria-selected="true" type="button">Schedule</button>
-          <button class="m-seg-btn" id="m-seg-seating" role="tab" aria-selected="false" type="button">Seating</button>
           <button class="m-seg-btn" id="m-seg-showup" role="tab" aria-selected="false" type="button">Show-up</button>
         </div>
         <div id="m-exam-filters"></div>

@@ -13,3 +13,6 @@
 
 ## 2026-09-10T23:30:00+05:00
 - User preference: push completed code changes to the repository as part of each task after validation.
+
+## 2026-10-15T00:00:00+05:00
+Replaced mobile Today screen with NASCON 26 planner: Today = saved events (localStorage vtable_nascon_events_v1), Week tab renamed "Nascon Schedule" (day -> category incl. All -> events with + add). Agenda data in web/js/nascon-data.js (loaded by main.js before mobile.js). Old class timetable code kept; toggled by NASCON_ON in mobile.js. Asset version bumped to 47. Not committed.

@@ -172,6 +172,30 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-meta-row>span{min-width:0;flex-shrink:0}
 .m-meta-row b{color:var(--green);font-weight:500;min-width:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m-rows{display:flex;flex-direction:column;gap:9px}
+
+/* ── NASCON planner (Today / Nascon Schedule) ───────────────────────── */
+.m-nc-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m-nc-day{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px;border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);color:var(--ink);cursor:pointer;font-family:inherit}
+.m-nc-day-label{font-family:var(--mono);font-weight:500;font-size:15px}
+.m-nc-day-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--mute)}
+.m-nc-day.is-on{background:var(--green);border-color:var(--green);color:var(--on-accent)}
+.m-nc-day.is-on .m-nc-day-sub{color:var(--on-accent);opacity:.8}
+.m-nc-cats{display:flex;flex-wrap:wrap;gap:8px}
+.m-nc-row{align-items:center;gap:11px;padding:14px 12px 14px 14px}
+.m-nc-row .m-row-time{width:72px}
+.m-nc-row .m-row-start{font-size:14px;white-space:nowrap}
+.m-nc-row .m-row-end{line-height:1.35}
+.m-nc-row .m-row-name{font-size:15px}
+.m-nc-row .m-pill{white-space:normal;line-height:1.35;max-width:100%}
+.m-nc-cat{background:var(--tint);color:var(--green-deep)}
+.m-nc-live{background:rgba(var(--accent-rgb),.14);color:var(--green-deep)}
+.m-nc-add{width:40px;height:40px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--base);color:var(--green-deep);display:grid;place-items:center;cursor:pointer;padding:0}
+.m-nc-add svg{width:18px;height:18px}
+.m-nc-add.is-on{background:var(--green);border-color:var(--green);color:var(--on-accent)}
+.m-nc-add:focus-visible,.m-nc-day:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.m-nc-empty{display:grid;gap:10px;font-family:var(--sans)}
+.m-nc-empty-title{font-family:var(--mono);font-weight:500;font-size:15px;color:var(--ink)}
+.m-nc-empty .m-btn-primary{margin-top:4px}
 .m-row{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 16px}
 .m-row.is-now{background:var(--tint);border-color:rgba(var(--accent-rgb),.45)}
 .m-row.is-past{opacity:.55}

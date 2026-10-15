@@ -237,10 +237,6 @@
             <span class="profile-notif-text"><span class="profile-notif-label">Show-up schedule</span><span class="profile-notif-help">When your show-up time or venue changes.</span></span>
             <input class="profile-notif-switch" id="notif-pref-show" type="checkbox" checked onchange="onNotificationPrefChange('show',this.checked)">
           </label>
-          <label class="profile-notif-row" for="notif-pref-seat">
-            <span class="profile-notif-text"><span class="profile-notif-label">Seating plan</span><span class="profile-notif-help">When your exam seat is assigned or moved.</span></span>
-            <input class="profile-notif-switch" id="notif-pref-seat" type="checkbox" checked onchange="onNotificationPrefChange('seat',this.checked)">
-          </label>
           <!-- Dead switch: no free-room digest sender exists yet, so this stays
                disabled. The preference is still stored and honoured end to end,
                so the day the sender lands nothing here has to change. -->
@@ -248,6 +244,7 @@
             <span class="profile-notif-text"><span class="profile-notif-label">Free-room digest <span class="profile-notif-soon">Soon</span></span><span class="profile-notif-help">Not built yet — this switch is reserved.</span></span>
             <input class="profile-notif-switch" id="notif-pref-room" type="checkbox" disabled onchange="onNotificationPrefChange('room',this.checked)">
           </label>
+          <input id="notif-pref-seat" type="checkbox" hidden aria-hidden="true">
         </div>
       </div>
     </div>

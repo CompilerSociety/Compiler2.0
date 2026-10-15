@@ -535,6 +535,15 @@
     todayPane.hidden=weekMode;
     weekPane.hidden=!weekMode;
 
+    // The first page is the NASCON '26 planner for the length of the fest:
+    // "Today" lists the events the student saved, "Nascon Schedule" browses
+    // the full agenda. The class timetable code below is left in place for
+    // when this is switched back.
+    if(NASCON_ON){
+      if(weekMode) renderNasconSchedule(weekPane); else renderNasconMine(todayPane);
+      return;
+    }
+
     const keys=profileKeys();
     if(!keys){
       const target=weekMode?weekPane:todayPane;
@@ -606,9 +615,6 @@
     const customised=typeof hasMyCourses==='function' && hasMyCourses();
     const meta=customised?'MY COURSES'
       :`${esc(keys.dept)} · ${esc(keys.batch)} · ${esc(keys.sec)}`;
-    // Keep the ordinary timetable in its own wrapper.  When a student has a
-    // seating-plan record, Home shows only their paper card(s); lecture rows
-    // must not appear below those papers on an exam day.
     html+='<div id="m-today-class-list">';
     html+=`<div class="m-meta-row"><span>${rows.length} CLASS${rows.length===1?'':'ES'}</span>
       <b>${meta}</b></div>`;
@@ -631,10 +637,6 @@
 
     tickBanner();
     wireTodayBanner();
-    // A published seating plan is more important than the ordinary lecture
-    // timetable on its exam date. Replace the class banner as soon as the
-    // student's own exam record has loaded.
-    showHomeExamBanner();
   }
 
   function wireTodayBanner(){
@@ -826,6 +828,147 @@
     pane.innerHTML='<div class="m-daycards">'+cards+'</div>';
   }
 
+  /* ══ NASCON '26 ════════════════════════════════════════════════════ */
+  // Saved picks live only in this browser, as a list of event ids.
+  const NASCON_KEY='vtable_nascon_events_v1';
+  const NASCON_ON=Array.isArray(window.NASCON_AGENDA)&&window.NASCON_AGENDA.length>0;
+  const nc={day:0,cat:''};
+
+  function nasconSlug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+  function nasconEvents(day){
+    const d=(window.NASCON_AGENDA||[]).find(x=>x.day===day);
+    if(!d) return [];
+    return d.events.map(([start,end,name,cat,venue])=>({
+      id:`d${day}-${nasconSlug(name)}`, day, date:d.date, name,
+      cat:cat||'General', venue:venue||'', allDay:start==='all',
+      start:start==='all'?'09:00':start, end:start==='all'?'22:00':end
+    }));
+  }
+  function nasconAll(){ return (window.NASCON_AGENDA||[]).flatMap(d=>nasconEvents(d.day)); }
+  function nasconSaved(){
+    try{ const v=JSON.parse(localStorage.getItem(NASCON_KEY)||'[]'); return Array.isArray(v)?v:[]; }
+    catch(e){ return []; }
+  }
+  function nasconToggle(id){
+    const list=nasconSaved();
+    const at=list.indexOf(id);
+    if(at>=0) list.splice(at,1); else list.push(id);
+    try{ localStorage.setItem(NASCON_KEY,JSON.stringify(list)); }
+    catch(e){ toast('Could not save — storage is blocked'); return false; }
+    return at<0;
+  }
+  function nasconMin(hhmm){ const [h,m]=String(hhmm||'').split(':').map(Number); return h*60+(m||0); }
+  function nasconTime(e){
+    if(e.allDay) return {start:'All day',end:'9 AM–10 PM'};
+    return {start:toAmPm(e.start),end:e.end?toAmPm(e.end):'onwards'};
+  }
+  function nasconSort(list){
+    return list.slice().sort((a,b)=>(a.allDay-b.allDay)||nasconMin(a.start)-nasconMin(b.start)
+      ||nasconMin(a.end||'23:59')-nasconMin(b.end||'23:59')||a.name.localeCompare(b.name));
+  }
+  // Live/past only make sense on the fest day itself.
+  function nasconState(e){
+    if(e.date!==campusDateKey()) return '';
+    const now=nowMinutes(), s=nasconMin(e.start), en=e.end?nasconMin(e.end):24*60;
+    return now>=s&&now<en?'now':now>=en?'past':'';
+  }
+  function nasconRowHTML(e,saved){
+    const t=nasconTime(e), st=nasconState(e);
+    const label=saved?`Remove ${e.name} from my events`:`Add ${e.name} to my events`;
+    return `<div class="m-row m-nc-row${st==='now'?' is-now':''}${st==='past'?' is-past':''}">
+      <div class="m-row-time"><div class="m-row-start">${esc(t.start)}</div><div class="m-row-end">${esc(t.end)}</div></div>
+      <div class="m-row-rule"></div>
+      <div class="m-row-main">
+        ${st==='now'?'<span class="m-note m-nc-live">Happening now</span>':''}
+        <div class="m-row-name">${esc(e.name)}</div>
+        <div class="m-row-pills">
+          ${e.venue?`<span class="m-pill${st==='now'?' is-green':''}">${esc(e.venue)}</span>`:''}
+          <span class="m-pill m-nc-cat">${esc(e.cat)}</span>
+        </div>
+      </div>
+      <button class="m-nc-add${saved?' is-on':''}" type="button" data-nc-id="${esc(e.id)}" aria-pressed="${saved}" aria-label="${esc(label)}" title="${esc(saved?'Remove from my events':'Add to my events')}">
+        ${saved
+          ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+          :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'}
+      </button>
+    </div>`;
+  }
+  function wireNasconAdds(pane,rerender){
+    pane.querySelectorAll('[data-nc-id]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const added=nasconToggle(btn.dataset.ncId);
+        toast(added?'Added to my events':'Removed from my events');
+        rerender();
+      });
+    });
+  }
+
+  // "Today": the student's own picks, grouped by fest day.
+  function renderNasconMine(pane){
+    const saved=new Set(nasconSaved());
+    const mine=nasconAll().filter(e=>saved.has(e.id));
+    if(!mine.length){
+      pane.innerHTML=`<div class="m-empty m-nc-empty">
+        <div class="m-nc-empty-title">You haven't picked any NASCON events yet</div>
+        <div>Open the schedule, choose a day and a category, and tap <b>+</b> on the events you want to attend.</div>
+        <button class="m-btn-primary" id="m-nc-browse" type="button">Select events</button>
+      </div>`;
+      $('m-nc-browse').addEventListener('click',()=>{ weekMode=true; renderToday(); });
+      return;
+    }
+    const today=campusDateKey();
+    let html=`<div class="m-meta-row"><span>${mine.length} EVENT${mine.length===1?'':'S'}</span><b>MY NASCON</b></div>`;
+    (window.NASCON_AGENDA||[]).forEach(d=>{
+      const rows=nasconSort(mine.filter(e=>e.day===d.day));
+      if(!rows.length) return;
+      html+=`<div class="m-section-label">${esc(d.label)} · ${esc(d.sub)}${d.date===today?' · Today':''}</div>`;
+      html+='<div class="m-rows">'+rows.map(e=>nasconRowHTML(e,true)).join('')+'</div>';
+    });
+    html+='<button class="m-btn-ghost" id="m-nc-more" type="button">Add more events</button>';
+    pane.innerHTML=html;
+    wireNasconAdds(pane,()=>renderNasconMine(pane));
+    $('m-nc-more').addEventListener('click',()=>{ weekMode=true; renderToday(); });
+  }
+
+  // "Nascon Schedule": pick a day, then a category, then add events.
+  function renderNasconSchedule(pane){
+    const agenda=window.NASCON_AGENDA||[];
+    let html='<div class="m-section-label">Select a day</div><div class="m-nc-days">';
+    agenda.forEach(d=>{
+      html+=`<button class="m-nc-day${nc.day===d.day?' is-on':''}" type="button" data-nc-day="${d.day}" aria-pressed="${nc.day===d.day}">
+        <span class="m-nc-day-label">${esc(d.label)}</span><span class="m-nc-day-sub">${esc(d.sub)}</span></button>`;
+    });
+    html+='</div>';
+    if(!nc.day){
+      html+='<div class="m-empty" style="margin-top:14px">Choose a day to see its events.</div>';
+    }else{
+      const events=nasconEvents(nc.day);
+      const cats=['All',...new Set(events.map(e=>e.cat))];
+      if(nc.cat&&!cats.includes(nc.cat)) nc.cat='';
+      html+='<div class="m-section-label">Select a category</div><div class="m-nc-cats">';
+      cats.forEach(c=>{
+        html+=`<button class="m-chip${nc.cat===c?' is-on':''}" type="button" data-nc-cat="${esc(c)}" aria-pressed="${nc.cat===c}">${esc(c)}</button>`;
+      });
+      html+='</div>';
+      if(!nc.cat){
+        html+='<div class="m-empty" style="margin-top:14px">Choose a category to see its events.</div>';
+      }else{
+        const saved=new Set(nasconSaved());
+        const rows=nasconSort(nc.cat==='All'?events:events.filter(e=>e.cat===nc.cat));
+        html+=`<div class="m-meta-row"><span>${rows.length} EVENT${rows.length===1?'':'S'}</span><b>${esc(nc.cat.toUpperCase())}</b></div>`;
+        html+='<div class="m-rows">'+rows.map(e=>nasconRowHTML(e,saved.has(e.id))).join('')+'</div>';
+      }
+    }
+    pane.innerHTML=html;
+    pane.querySelectorAll('[data-nc-day]').forEach(btn=>btn.addEventListener('click',()=>{
+      nc.day=Number(btn.dataset.ncDay); nc.cat=''; renderNasconSchedule(pane);
+    }));
+    pane.querySelectorAll('[data-nc-cat]').forEach(btn=>btn.addEventListener('click',()=>{
+      nc.cat=btn.dataset.ncCat; renderNasconSchedule(pane);
+    }));
+    wireNasconAdds(pane,()=>renderNasconSchedule(pane));
+  }
+
   /* ══ LOOKUP ════════════════════════════════════════════════════════ */
   const lk={school:'computing',program:'',batch:'',section:'',day:'',course:''};
   const SCHOOL_LABELS={computing:'Computing',engineering:'Engineering',business:'Business'};
@@ -967,10 +1110,6 @@
   // design's bar is the day's full slot grid, green for free, grey for busy.
   function slotOccupant(room,day,slot){
     updateRoomMode(roomDateForDay(day));
-    if(isExamSeason){
-      if(roomAvailabilityMessage(day)) return {course:'Availability unknown',unknown:true};
-      return ExamRooms.occupant(room,roomDateForDay(day),...examSlotRange(slot),ROOM_SEATING,canonicalExamRoom);
-    }
     const sources=BLOCK_SOURCES[roomBlock(room)]||['computing'];
     let occupiedBy=((typeof isCDBlockRoom==='function')&&isCDBlockRoom(room))
       ?findCDOccupancy(room,day,slot):null;
@@ -1008,10 +1147,10 @@
   function renderRooms(){
     const day=todayName();
     const availabilityMessage=roomAvailabilityMessage(day);
-    const cur=isExamSeason?getCurrentSlotFor(slotsForRoom('')):getCurrentSlot();
+    const cur=getCurrentSlot();
     // cur is a raw "02:20-03:40" slot key — render it the way students read it.
     $('m-rooms-slot').textContent=cur
-      ?((isExamSeason?'EXAM SEATING · ':'SLOT ')+roomTime(cur.split('-')[0])+' – '+roomTime(cur.split('-')[1]))
+      ?('SLOT '+roomTime(cur.split('-')[0])+' – '+roomTime(cur.split('-')[1]))
       :'OUTSIDE CLASS HOURS';
     tickRoomsClock();
 
@@ -1075,7 +1214,7 @@
   function roomSummary(slots){
     const now=nowMinutes();
     const rows=slots.map(s=>{
-      const b=isExamSeason?examSlotRange(s.slot):slotBounds(s.slot);
+      const b=slotBounds(s.slot);
       return {slot:s.slot,busy:Boolean(s.occupiedBy),start:b?b[0]:0,end:b?b[1]:0};
     });
     const startOf=r=>roomTime(r.slot.split('-')[0]);
@@ -1112,14 +1251,10 @@
       const currentBooking=currentSlot&&slots.find(s=>s.slot===currentSlot)?.occupiedBy;
       const summary=roomSummary(slots);
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
-      const status=free===true?'Free now':free===false?(isExamSeason?'Exam':'Class'):'—';
+      const status=free===true?'Free now':free===false?'Class':'—';
       // During exams, make the active course and the next free time visible
       // without requiring the student to open the complete room timeline.
-      const liveExam=currentBooking?.exam?`<div class="m-room-live">
-          <span class="m-room-live-label">Ongoing exam</span>
-          <span class="m-room-live-course">${esc(currentBooking.course||'Exam')}</span>
-          <span class="m-room-live-free">${esc(summary)}</span>
-        </div>`:'';
+      const liveExam='';
       const detail=open?`<div class="m-room-detail" id="m-room-detail">
           <div class="m-room-summary">${esc(summary)}</div>
           <div class="m-slotrows">${slots.map(s=>{
@@ -1145,7 +1280,7 @@
       </div>`;
     }).join('');
     $('m-rooms-out').innerHTML=`<div class="m-roomlist m-reveal">${cards}</div>
-      <div class="m-caption">${isExamSeason?'Based on today’s exam seating plan. Occupied rooms show the ongoing exam and when they become free. Tap a room for its full timeline.':'Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.'}</div>`;
+      <div class="m-caption">Each bar is the day’s slots — green is free, grey is booked. A room card in red is in use right now. Tap a room to see when it frees up. Labs run four long slots instead of eight.</div>`;
     $('m-rooms-out').querySelectorAll('.m-room').forEach(btn=>{
       btn.addEventListener('click',()=>{
         rm.open=rm.open===btn.dataset.room?'':btn.dataset.room;
@@ -1158,7 +1293,7 @@
     if(!el) return;
     el.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Karachi',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date());
   }
-  function roomTime(value){return isExamSeason?fmtExamTime(value):toAmPm(value);}
+  function roomTime(value){return toAmPm(value);}
 
   /* ══ FACULTY ═══════════════════════════════════════════════════════ */
   const fac={q:'',dept:'All',selected:null};
@@ -1262,7 +1397,7 @@
   }
 
   /* ══ EXAMS ═════════════════════════════════════════════════════════ */
-  const ex={tab:'schedule',school:'computing',dept:'',batch:'',seatQuery:''};
+  const ex={tab:'schedule',school:'computing',dept:'',batch:''};
 
   function examType(doc){
     const f=String((doc&&(doc.source_filename||doc.source_subject))||'').toLowerCase();
@@ -1283,14 +1418,13 @@
   }
 
   function renderExams(){
-    ['schedule','seating','showup'].forEach(t=>{
+    ['schedule','showup'].forEach(t=>{
       const btn=$('m-seg-'+t);
       btn.classList.toggle('is-active',ex.tab===t);
       btn.setAttribute('aria-selected',String(ex.tab===t));
     });
     seedExamFilters();
-    if(ex.tab==='seating') renderSeating();
-    else if(ex.tab==='showup') renderShowup();
+    if(ex.tab==='showup') renderShowup();
     else renderExamSchedule();
   }
 
@@ -2576,7 +2710,7 @@
 
     $('m-seg-today').addEventListener('click',()=>{ weekMode=false; renderToday(); });
     $('m-seg-week').addEventListener('click',()=>{ weekMode=true; renderToday(); });
-    ['schedule','seating','showup'].forEach(t=>{
+    ['schedule','showup'].forEach(t=>{
       $('m-seg-'+t).addEventListener('click',()=>{ ex.tab=t; $('m-exam-out').innerHTML=''; renderExams(); });
     });
 

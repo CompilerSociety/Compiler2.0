@@ -1,7 +1,7 @@
 {
   "name": "V Table \u2014 FAST NUCES Islamabad",
   "short_name": "V Table",
-  "description": "Class timetable, free rooms, seating plan, exam & show-up schedule, and faculty vault for FAST NUCES Islamabad.",
+  "description": "Class timetable, free rooms, exam & show-up schedule, and faculty vault for FAST NUCES Islamabad.",
   "start_url": "/",
   "scope": "/",
   "display": "fullscreen",

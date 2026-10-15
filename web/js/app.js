@@ -319,8 +319,7 @@ function applyProfileToOpenScheduleTabs(){
     if(on('p0')&&typeof refreshTTFilters==='function'){ refreshTTFilters(); if(typeof loadTT==='function') loadTT(); }
     if(on('p2')&&typeof initShowupSchedulePanel==='function') initShowupSchedulePanel();
     if(on('p3')&&typeof initExamSchedulePanel==='function') initExamSchedulePanel();
-    if(on('p4')&&typeof initSeatingPlan==='function') initSeatingPlan();
-    if(on('p5')) applyProfileToFacultyVault();
+    if(on('p4')){ renderFacultyVault(); applyProfileToFacultyVault(); }
   }catch(e){ /* ignore */ }
 }
 function saveProfileCookie(){
@@ -727,7 +726,6 @@ const NOTIFICATION_CATEGORIES=[
   {key:'cls',label:'Class changes',help:'Cancelled or rescheduled classes for your section.'},
   {key:'exam',label:'Exam schedule',help:'When a new exam schedule is published.'},
   {key:'show',label:'Show-up schedule',help:'When your show-up time or venue changes.'},
-  {key:'seat',label:'Seating plan',help:'When your exam seat is assigned or moved.'},
   {key:'room',label:'Free-room digest',help:'Not built yet — this switch is reserved.',dead:true}
 ];
 const NOTIF_PREFS_DEFAULT={cls:true,exam:true,show:true,seat:true,room:false};
@@ -1220,9 +1218,7 @@ function isLabRoom(room){
   return false;
 }
 function slotsForRoom(room,day){
-  const date=roomDateForDay(day);
-  updateRoomMode(date);
-  return isExamSeason?ExamRooms.slots(date,ROOM_SEATING):(isLabRoom(room)?LAB_SLOTS:CLASSROOM_SLOTS);
+  return isLabRoom(room)?LAB_SLOTS:CLASSROOM_SLOTS;
 }
 function isLabFloor(floorName){
   if(!floorName) return false;
@@ -1266,8 +1262,7 @@ const BLOCK_SOURCES={A:['computing','business'],B:['computing','engineering'],C:
 // The single source-selection switch. Recomputed against campus dates on every
 // room render/query and data refresh; never tied to the selected exam school.
 let isExamSeason=false;
-let ROOM_EXAMS=[],ROOM_SEATING=null,roomExamStatus='loading',roomExamUpdated=0,roomExamRequest=null;
-let roomCoverageCache=null,examRoomInventory=null,examRoomFloors=null;
+let roomExamStatus='ready';
 function roomDateForDay(day){
   const today=ExamRooms.dateKey(new Date());
   if(!day) return today;
@@ -1277,59 +1272,11 @@ function roomDateForDay(day){
   return date.toISOString().slice(0,10);
 }
 function updateRoomMode(date=roomDateForDay()){
-  isExamSeason=ExamRooms.inSeason(date,ROOM_EXAMS,ROOM_SEATING);
-  return isExamSeason;
-}
-function canonicalExamRoom(room){
-  if(examRoomFloors!==BLOCK_FLOORS){
-    examRoomFloors=BLOCK_FLOORS;
-    examRoomInventory=new Set(Object.values(BLOCK_FLOORS).flatMap(floors=>Object.values(floors).flat()).map(normalizeRoomName));
-  }
-  const canonical=normalizeRoomName(canonicalizeLoc(room));
-  return examRoomInventory.has(canonical)?canonical:null;
+  isExamSeason=false;
+  return false;
 }
 function roomAvailabilityMessage(day){
-  const date=roomDateForDay(day);
-  updateRoomMode(date);
-  if(roomExamStatus==='error'){
-    return 'Could not check exam dates. Room availability is temporarily unavailable. The check will retry automatically.';
-  }
-  if(roomExamStatus!=='ready'||Date.now()-roomExamUpdated>GOOGLE_SHEET_REFRESH_MS*2){
-    return 'Room availability is unavailable while exam dates are being checked. Please retry shortly.';
-  }
-  if(isExamSeason&&(!roomCoverageCache||roomCoverageCache.date!==date||roomCoverageCache.seating!==ROOM_SEATING||roomCoverageCache.exams!==ROOM_EXAMS||roomCoverageCache.floors!==BLOCK_FLOORS)){
-    roomCoverageCache={date,seating:ROOM_SEATING,exams:ROOM_EXAMS,floors:BLOCK_FLOORS,ok:ExamRooms.coverage(date,ROOM_EXAMS,ROOM_SEATING,canonicalExamRoom)};
-  }
-  if(isExamSeason&&!roomCoverageCache.ok){
-    return 'Exams are scheduled. Room availability will appear when a complete seating plan for '+date+' is available.';
-  }
   return '';
-}
-async function refreshRoomExamData(){
-  if(roomExamRequest) return roomExamRequest;
-  roomExamRequest=(async()=>{
-    const fetchDoc=async path=>{
-      const url=new URL(path,window.location.href);
-      url.searchParams.set('cachebust',String(Date.now()));
-      const response=await fetch(url.href,{cache:'no-store',signal:AbortSignal.timeout(15000)});
-      if(!response.ok) throw new Error('Room source unavailable');
-      return response.json();
-    };
-    const schools=['computing','business','engineering'];
-    const results=await Promise.allSettled([
-      ...schools.map(s=>fetchDoc('/api/db?doc=exams/'+s)),
-      fetchDoc('/db/seating/plan.json')
-    ]);
-    const schedules=results.slice(0,3);
-    const valid=schedules.every(r=>r.status==='fulfilled'&&(Array.isArray(r.value?.exams)||Array.isArray(r.value?.flat_exams)));
-    // Keep prior dates on failure only as evidence of exams, never as proof of free rooms.
-    if(valid) ROOM_EXAMS=schedules.map((r,i)=>({...r.value,school:schools[i]}));
-    ROOM_SEATING=results[3].status==='fulfilled'?results[3].value:null;
-    roomExamStatus=valid?'ready':'error';
-    roomExamUpdated=Date.now();
-    updateRoomMode();
-  })().finally(()=>{roomExamRequest=null;});
-  return roomExamRequest;
 }
 
 
@@ -2410,10 +2357,10 @@ async function fetchSchoolTT(school){
 
 // Load every school's timetable so Free Rooms can merge them per block.
 async function refreshRoomTimetables(){
-  await Promise.all([refreshRoomExamData(),...Object.keys(ROOM_TT).map(async school=>{
+  await Promise.all(Object.keys(ROOM_TT).map(async school=>{
     const tt=await fetchSchoolTT(school);
     if(tt) ROOM_TT[school]=canonicalizeTTLocations(tt);
-  })]);
+  }));
   rebuildBlockFloorsFromTT();
   refreshRoomSelectorsAfterDataUpdate();
   const p1=document.getElementById('p1');
@@ -2657,7 +2604,6 @@ function findOccupancyInTT(tt,room,day,slot){
 // Returns per-slot schedule for a room on a given day (upcoming slots only)
 function getRoomSlotInfo(room,day,slotsForFloor){
   const date=roomDateForDay(day);
-  updateRoomMode(date);
   const slotList=slotsForFloor||slotsForRoom(room,day);
   const sources=BLOCK_SOURCES[roomBlock(room)]||['computing'];
   const useSheet=isCDBlockRoom(room);
@@ -2665,11 +2611,6 @@ function getRoomSlotInfo(room,day,slotsForFloor){
   // For any other day show the full day's slots (labs have just four, so
   // clock-filtering them in the evening made them look empty/broken).
   return getSlotsForDay(day,slotList).map(slot=>{
-    if(isExamSeason){
-      const range=examSlotRange(slot);
-      const occupiedBy=roomAvailabilityMessage(day)?{course:'Availability unknown',unknown:true}:ExamRooms.occupant(room,date,...range,ROOM_SEATING,canonicalExamRoom);
-      return {slot,occupiedBy};
-    }
     let occupiedBy=useSheet?findCDOccupancy(room,day,slot):null;
     for(let i=0;i<sources.length&&!occupiedBy;i++){
       occupiedBy=findOccupancyInTT(ROOM_TT[sources[i]],room,day,slot);
@@ -2824,9 +2765,7 @@ function onDayChange(){
     const cardClass=busyNow?'room-card busy-now':'room-card free-now';
     const currentIndex=slotInfo.findIndex(s=>s.slot===curSlot);
     const nextFree=currentIndex>=0&&slotInfo.slice(currentIndex+1).find(s=>!s.occupiedBy);
-    const examNote=busyNow?.exam
-      ?`<div class="room-exam-note"><b>ONGOING EXAM:</b> ${escHtml(busyNow.course||'Exam')}<span>${nextFree?`Free from ${fmtExamTime(nextFree.slot.split('-')[0])}`:'Booked for the rest of the day'}</span></div>`
-      :'';
+    const examNote='';
 
     const statusBadge=busyNow
       ?`<span class="status-now busy" title="${escHtml(busyNow.course||'')} · ${escHtml(busyNow.dept||'')} ${escHtml(busyNow.batch||'')}-${escHtml(busyNow.section||'')}">${escHtml(busyNow.course||'')}</span>`
@@ -2847,7 +2786,7 @@ function onDayChange(){
         :`<span class="slot-status-free">FREE</span>`;
       return `<div class="slot-row ${slotClass}${isCurrent?' is-current':''}">
         <div class="slot-dot ${dotClass}"></div>
-        <span class="slot-time-lbl">${fmtSlot(slot,isExamSeason)}</span>
+        <span class="slot-time-lbl">${fmtSlot(slot)}</span>
         ${statusHTML}
         ${nowBadge}
       </div>`;
@@ -2866,7 +2805,7 @@ function onDayChange(){
   const countClass=freeNowCount>0?'result-count green':'result-count red';
   res.innerHTML=`<div class="result-header">
     <span class="result-label">BLOCK ${block} &nbsp;&#9656;&nbsp; ${floorLabel(floor).toUpperCase()} &nbsp;&#9656;&nbsp; ${day.toUpperCase()}</span>
-    <span class="${countClass}">${isToday?(hasCurrentSlot?`${freeNowCount}/${allRooms.length} FREE NOW`:'NO ACTIVE SLOT'):roomDateForDay(day)}${isExamSeason?' · EXAM SEATING':''}</span>
+    <span class="${countClass}">${isToday?(hasCurrentSlot?`${freeNowCount}/${allRooms.length} FREE NOW`:'NO ACTIVE SLOT'):roomDateForDay(day)}</span>
   </div>
   <div class="rooms-grid">${cards}</div>`;
   setRoomsFreeBadge(hasCurrentSlot?freeNowCount:null,allRooms.length);
@@ -2874,21 +2813,21 @@ function onDayChange(){
 
 /* ── Tab switch with hash routing ── */
 function sw(i, pushHash=true){
-  ['nc0','nc1','nc2','nc3','nc4','nc5'].forEach((id,j)=>{
+  ['nc0','nc1','nc2','nc3','nc4'].forEach((id,j)=>{
     const el=document.getElementById(id);
     if(!el) return;
     el.className='nav-card'+(j===i?' active':'');
     el.setAttribute('aria-selected',j===i);
     el.setAttribute('tabindex',j===i?0:-1);
   });
-  ['p0','p1','p2','p3','p4','p5'].forEach((id,j)=>{
+  ['p0','p1','p2','p3','p4'].forEach((id,j)=>{
     const panel=document.getElementById(id);
     if(!panel) return;
     panel.className='panel'+(j===i?' on':'');
     panel.setAttribute('aria-hidden',j===i?'false':'true');
   });
   if(pushHash){
-    const slugs=['timetable','freerooms','showup','exams','seating','faculty'];
+    const slugs=['timetable','freerooms','showup','exams','faculty'];
     if(location.hash!=='#'+slugs[i]) history.replaceState(null,'','#'+slugs[i]);
   }
   if(i===1){
@@ -2902,8 +2841,7 @@ function sw(i, pushHash=true){
   }
   if(i===2) initShowupSchedulePanel();
   if(i===3) initExamSchedulePanel();
-  if(i===4) initSeatingPlan();
-  if(i===5){ renderFacultyVault(); applyProfileToFacultyVault(); }
+  if(i===4){ renderFacultyVault(); applyProfileToFacultyVault(); }
 }
 
 /* ── Timetable panel ── */
@@ -3444,13 +3382,13 @@ function tickBanner(){
   const d=p.weekday;
   const dateStr=`${p.day} ${p.month} ${p.year}`;
   updateRoomMode();
-  const slot=isExamSeason?getCurrentSlotFor(slotsForRoom('')):getCurrentSlot();
+  const slot=getCurrentSlot();
 
   const hc=document.getElementById('clk');if(hc)hc.textContent=t;
   const hd=document.getElementById('clk-day');if(hd)hd.textContent=d+' — '+dateStr;
   const rt=document.getElementById('r-time');if(rt)rt.textContent=t;
   const rd=document.getElementById('r-day-div');if(rd)rd.textContent=d+' · '+dateStr;
-  const rs=document.getElementById('r-slot');if(rs)rs.textContent=slot?`${isExamSeason?'EXAM SEATING':'CURRENT SLOT'}: ${fmtSlot(slot,isExamSeason)}`:'NO ACTIVE SLOT RIGHT NOW';
+  const rs=document.getElementById('r-slot');if(rs)rs.textContent=slot?`CURRENT SLOT: ${fmtSlot(slot)}`:'NO ACTIVE SLOT RIGHT NOW';
 
   // Auto-refresh rooms view whenever the active slot changes
   const roomTickKey=roomDateForDay()+':'+slot+':'+roomExamStatus;
@@ -3472,7 +3410,7 @@ initLiveSheetSync();
 // Hash-based routing: open panel from URL hash on load
 (function initHashRouting(){
   const hash=location.hash.replace('#','');
-  const slugs=['timetable','freerooms','showup','exams','seating','faculty'];
+  const slugs=['timetable','freerooms','showup','exams','faculty'];
   const idx=slugs.indexOf(hash);
   // Deferred to a microtask, not called inline. sw() runs the opened tab's
   // init, and those inits read bindings declared further down this file
