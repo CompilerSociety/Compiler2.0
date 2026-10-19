@@ -67,3 +67,6 @@ Desktop redesign: the .m-app shell is now the UI at every width (mobile.css no l
 
 ## 2026-10-19T12:00:00+05:00
 Removed NASCON '26 after the fest (Oct 16-18). Mobile Today/Week are the class timetable again (renderNascon* + whole NASCON section, promo poster, venue picker gone from mobile.js); Week tab label restored; Free Rooms no longer consults the agenda on phone or desktop (no Sunday in the desktop day picker, card says Class); mobile.css restored to pre-NASCON 30ed292 green theme + guest-button rules; theme-color back to #ffffff/#141414. Deleted web/js/nascon-data.js and web/assets/images/nascon-26.webp. Kept: guest login, seating-plan retirement, parallel script preload, no splash floor. marketing/poster/ left untouched. Rebased onto the desktop redesign (b126996): kept its unwrapped mobile.css/desktop.css, sidebar and guest landing; dropped its NASCON leftovers (is-nascon guest selector, maroon shadow, promo). Bumped to v=63. Verified in browser at 375px and 1280px, signed in and guest (local API 503s, so data was injected from TT to prove rendering).
+
+## 2026-10-19T12:30:00+05:00
+Deleted marketing/poster/ (VTABLE x NASCON promo poster: poster.html, nascon-logo.png, vtable-x-nascon-poster.png) at the user's request; nothing referenced it. No NASCON content left in the repo outside .ctx/log.md history.
