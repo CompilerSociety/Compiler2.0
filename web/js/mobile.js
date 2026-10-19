@@ -35,7 +35,7 @@
   }
   function syncMobileThemeChrome(){
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content=document.documentElement.dataset.mobileTheme==='dark'?'#2a0709':'#e8dcc4';
+    if(meta) meta.content=document.documentElement.dataset.mobileTheme==='dark'?'#141414':'#ffffff';
     const side=$('m-side-dark');
     if(side) side.checked=document.documentElement.dataset.mobileTheme==='dark';
   }
@@ -288,8 +288,8 @@
     $('m-side-me').addEventListener('click',()=>go('profile'));
   }
 
-  // Desktop guest landing, shown on Today when the class timetable owns that
-  // screen (outside NASCON). The public tools work without a profile, so
+  // Desktop guest landing, shown on Today in place of the class timetable a
+  // signed-in student would see. The public tools work without a profile, so
   // point at them first, then at what logging in adds.
   function guestHomeHTML(){
     const tools=[
@@ -630,18 +630,6 @@
     todayPane.hidden=weekMode;
     weekPane.hidden=!weekMode;
 
-    // The first page is the NASCON '26 planner for the length of the fest:
-    // "Today" lists the events the student saved, "Nascon Schedule" browses
-    // the full agenda. The class timetable code below is left in place for
-    // when this is switched back.
-    // My courses / My Friends are about the class timetable, so they are
-    // hidden (not removed) while the NASCON planner owns this screen.
-    $('m-today').classList.toggle('is-nascon',NASCON_ON);
-    if(NASCON_ON){
-      if(weekMode) renderNasconSchedule(weekPane); else renderNasconMine(todayPane);
-      return;
-    }
-
     const keys=profileKeys();
     if(!keys){
       const target=weekMode?weekPane:todayPane;
@@ -926,254 +914,6 @@
     pane.innerHTML='<div class="m-daycards">'+cards+'</div>';
   }
 
-  /* ══ NASCON '26 ════════════════════════════════════════════════════ */
-  // Saved picks live only in this browser, as a list of event ids.
-  const NASCON_KEY='vtable_nascon_events_v1';
-  const NASCON_ON=Array.isArray(window.NASCON_AGENDA)&&window.NASCON_AGENDA.length>0;
-  const nc={day:0,cat:''};
-
-  function nasconSlug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-  function nasconEvents(day){
-    const d=(window.NASCON_AGENDA||[]).find(x=>x.day===day);
-    if(!d) return [];
-    return d.events.map(([start,end,name,cat,venue])=>({
-      id:`d${day}-${nasconSlug(name)}`, day, date:d.date, name,
-      cat:cat||'General', venue:venue||'', venues:nasconVenues(venue), allDay:start==='all',
-      start:start==='all'?'09:00':start, end:start==='all'?'22:00':end
-    }));
-  }
-  function nasconAll(){ return (window.NASCON_AGENDA||[]).flatMap(d=>nasconEvents(d.day)); }
-  function nasconSaved(){
-    try{ const v=JSON.parse(localStorage.getItem(NASCON_KEY)||'[]'); return Array.isArray(v)?v:[]; }
-    catch(e){ return []; }
-  }
-  function nasconToggle(id){
-    const list=nasconSaved();
-    const at=list.indexOf(id);
-    if(at>=0) list.splice(at,1); else list.push(id);
-    try{ localStorage.setItem(NASCON_KEY,JSON.stringify(list)); }
-    catch(e){ toast('Could not save — storage is blocked'); return false; }
-    return at<0;
-  }
-  function nasconMin(hhmm){ const [h,m]=String(hhmm||'').split(':').map(Number); return h*60+(m||0); }
-  function nasconTime(e){
-    if(e.allDay) return {start:'All day',end:'9 AM–10 PM'};
-    return {start:toAmPm(e.start),end:e.end?toAmPm(e.end):'onwards'};
-  }
-  function nasconSort(list){
-    return list.slice().sort((a,b)=>(a.allDay-b.allDay)||nasconMin(a.start)-nasconMin(b.start)
-      ||nasconMin(a.end||'23:59')-nasconMin(b.end||'23:59')||a.name.localeCompare(b.name));
-  }
-  // Live/past only make sense on the fest day itself.
-  function nasconState(e){
-    if(e.date!==campusDateKey()) return '';
-    const now=nowMinutes(), s=nasconMin(e.start), en=e.end?nasconMin(e.end):24*60;
-    return now>=s&&now<en?'now':now>=en?'past':'';
-  }
-  // The agenda lists every room an event runs in as one string; split it
-  // into the rooms a student could actually pick. Shared splitter lives in nascon-data.js (Free Rooms uses it too).
-  function nasconVenues(venue){ return typeof nasconSplitVenues==='function'?nasconSplitVenues(venue):(venue?[venue]:[]); }
-  const NASCON_VENUE_KEY='vtable_nascon_venues_v1';
-  let ncEditing='';
-  function nasconPicks(){
-    try{ const v=JSON.parse(localStorage.getItem(NASCON_VENUE_KEY)||'{}'); return v&&typeof v==='object'&&!Array.isArray(v)?v:{}; }
-    catch(e){ return {}; }
-  }
-  function nasconSetPick(id,venue){
-    const picks=nasconPicks();
-    if(venue) picks[id]=venue; else delete picks[id];
-    try{ localStorage.setItem(NASCON_VENUE_KEY,JSON.stringify(picks)); return true; }
-    catch(e){ toast('Could not save — storage is blocked'); return false; }
-  }
-  // The room the student chose, if it is still one of the event's rooms.
-  function nasconPicked(e){
-    const v=nasconPicks()[e.id];
-    return v&&e.venues.includes(v)?v:'';
-  }
-  function nasconPlace(e){ return nasconPicked(e)||e.venue; }
-
-  function nasconRowHTML(e,saved){
-    const t=nasconTime(e), st=nasconState(e);
-    const label=saved?`Remove ${e.name} from my events`:`Add ${e.name} to my events`;
-    const picked=nasconPicked(e), editing=ncEditing===e.id, canPick=e.venues.length>1;
-    const pencil=canPick?`<button class="m-nc-edit-btn${editing?' is-on':''}" type="button" data-nc-edit="${esc(e.id)}" aria-expanded="${editing}" aria-label="${esc(`Edit your venue for ${e.name}`)}">
-        <span class="m-nc-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
-        <span class="m-nc-edit-text">Edit your venue</span>
-      </button>`:'';
-    // Every room by default; just the student's own once they have picked.
-    const shown=picked?[picked]:(e.venues.length?e.venues:(e.venue?[e.venue]:[]));
-    const picker=editing?`<div class="m-nc-venues" role="group" aria-label="Venues for ${esc(e.name)}">
-        ${e.venues.map(v=>`<button class="m-chip${picked===v?' is-on':''}" type="button" data-nc-venue="${esc(v)}" data-nc-for="${esc(e.id)}" aria-pressed="${picked===v}">${esc(v)}</button>`).join('')}
-        ${picked?`<button class="m-chip m-nc-venue-all" type="button" data-nc-venue="" data-nc-for="${esc(e.id)}">Show all venues</button>`:''}
-      </div>`:'';
-    return `<div class="m-row m-nc-row${st==='now'?' is-now':''}${st==='past'?' is-past':''}">
-      <div class="m-row-time"><div class="m-row-start">${esc(t.start)}</div><div class="m-row-end">${esc(t.end)}</div></div>
-      <div class="m-row-rule"></div>
-      <div class="m-row-main">
-        ${st==='now'?'<span class="m-note m-nc-live">Happening now</span>':''}
-        <div class="m-row-name">${esc(e.name)}</div>
-        <div class="m-row-pills">
-          ${shown.map(v=>`<span class="m-pill${st==='now'?' is-green':''}${picked?' m-nc-picked':''}">${esc(v)}</span>`).join('')}
-          <span class="m-pill m-nc-cat">${esc(e.cat)}</span>
-        </div>
-        ${pencil}
-        ${picker}
-      </div>
-      <button class="m-nc-add${saved?' is-on':''}" type="button" data-nc-id="${esc(e.id)}" aria-pressed="${saved}" aria-label="${esc(label)}" title="${esc(saved?'Remove from my events':'Add to my events')}">
-        ${saved
-          ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
-          :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'}
-      </button>
-    </div>`;
-  }
-  function wireNasconAdds(pane,rerender){
-    pane.querySelectorAll('[data-nc-id]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const added=nasconToggle(btn.dataset.ncId);
-        toast(added?'Added to my events':'Removed from my events');
-        rerender();
-      });
-    });
-    pane.querySelectorAll('[data-nc-edit]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        ncEditing=ncEditing===btn.dataset.ncEdit?'':btn.dataset.ncEdit;
-        rerender();
-      });
-    });
-    pane.querySelectorAll('[data-nc-venue]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const v=btn.dataset.ncVenue;
-        if(!nasconSetPick(btn.dataset.ncFor,v)) return;
-        ncEditing='';
-        toast(v?`Venue set to ${v}`:'Showing all venues');
-        rerender();
-      });
-    });
-  }
-
-  // Absolute epoch ms for an event's start/end; agenda times are Islamabad
-  // local (UTC+5). An "onwards" item is treated as running until 10 PM.
-  function nasconAt(e,which){
-    const hhmm=which==='end'?(e.end||'22:00'):e.start;
-    return Date.parse(`${e.date}T${hhmm}:00+05:00`);
-  }
-  // The same banner the class timetable used: the event in progress (red,
-  // counting down to its end) or the next one (green, counting down to its
-  // start) — one card only; the full list sits below it. tickBanner() drives
-  // the countdown and re-renders Today when it hits zero, moving the card on
-  // to the next event.
-  function nasconBannerHTML(mine){
-    const now=Date.now();
-    const upcoming=mine.map(e=>({e,s:nasconAt(e,'start'),en:nasconAt(e,'end')}))
-      .filter(x=>x.en>now)
-      .sort((a,b)=>(a.s-b.s)||(a.en-b.en));
-    // All-day picks would sit "live" from 9 to 10 and bury every timed event,
-    // so they only get the banner once nothing timed is left.
-    const timedOnly=upcoming.filter(x=>!x.e.allDay);
-    const timed=timedOnly.length?timedOnly:upcoming;
-    if(!timed.length){
-      return `<div class="m-now is-idle" id="m-now-banner">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>NO EVENTS LEFT</span></div>
-        <div class="m-now-name">All your NASCON<br>events are done.</div>
-      </div>`;
-    }
-    // Several picks can overlap; the live one finishing first leads.
-    const live=timed.filter(x=>x.s<=now).sort((a,b)=>a.en-b.en)[0];
-    const lead=live||timed[0];
-    const today=campusDateKey();
-    const dayWord=x=>{
-      if(x.e.date===today) return '';
-      const d=(window.NASCON_AGENDA||[]).find(a=>a.day===x.e.day);
-      const off=Math.round((Date.parse(`${x.e.date}T00:00:00Z`)-Date.parse(`${today}T00:00:00Z`))/86400000);
-      return off===1?'TOMORROW':(d?`${d.label} · ${d.sub}`.toUpperCase():'');
-    };
-    const timesOf=x=>{ const t=nasconTime(x.e); return x.e.allDay?'ALL DAY':`${t.start} – ${t.end}`; };
-    const card=(x,label,withCount)=>{
-      const isLive=withCount&&x===live;
-      return `<div class="m-now${isLive?' is-live':''}">
-        <div class="m-now-head"><span class="m-now-dot"></span><span>${esc([label,timesOf(x)].filter(Boolean).join(' · '))}</span></div>
-        <div class="m-now-name">${esc(x.e.name)}</div>
-        <div class="m-now-stats">
-          <div><div class="m-now-stat-label">Venue</div><div class="m-now-stat-value">${esc(nasconPlace(x.e)||'—')}</div></div>
-          <div><div class="m-now-stat-label">${withCount?(isLive?'Ends in':'Starts in'):'Starts'}</div><div class="m-now-stat-value"${withCount?' id="m-now-count"':''}>${withCount?'—':esc(nasconTime(x.e).start)}</div></div>
-        </div>
-      </div>`;
-    };
-    const leadLabel=live?'HAPPENING NOW':(dayWord(lead)||'UP NEXT');
-    return `<div class="m-home-exam-stack" id="m-now-banner" data-until="${live?lead.en:lead.s}">
-      ${card(lead,leadLabel,true)}
-    </div>`;
-  }
-
-  // "Today": the student's own picks, grouped by fest day.
-  function renderNasconMine(pane){
-    const saved=new Set(nasconSaved());
-    const mine=nasconAll().filter(e=>saved.has(e.id));
-    if(!mine.length){
-      pane.innerHTML=`<div class="m-empty m-nc-empty">
-        <div class="m-nc-empty-title">You haven't picked any NASCON events yet</div>
-        <div>Open the schedule, choose a day and a category, and tap <b>+</b> on the events you want to attend.</div>
-        <button class="m-btn-primary" id="m-nc-browse" type="button">Select events</button>
-      </div>`;
-      $('m-nc-browse').addEventListener('click',()=>{ weekMode=true; renderToday(); });
-      return;
-    }
-    const today=campusDateKey();
-    let html=nasconBannerHTML(mine);
-    html+=`<div class="m-meta-row"><span>${mine.length} EVENT${mine.length===1?'':'S'}</span><b>MY NASCON</b></div>`;
-    (window.NASCON_AGENDA||[]).forEach(d=>{
-      const rows=nasconSort(mine.filter(e=>e.day===d.day));
-      if(!rows.length) return;
-      html+=`<div class="m-section-label">${esc(d.label)} · ${esc(d.sub)}${d.date===today?' · Today':''}</div>`;
-      html+='<div class="m-rows">'+rows.map(e=>nasconRowHTML(e,true)).join('')+'</div>';
-    });
-    html+='<button class="m-btn-ghost" id="m-nc-more" type="button">Add more events</button>';
-    pane.innerHTML=html;
-    tickBanner();
-    wireTodayBanner();
-    wireNasconAdds(pane,()=>renderNasconMine(pane));
-    $('m-nc-more').addEventListener('click',()=>{ weekMode=true; renderToday(); });
-  }
-
-  // "Nascon Schedule": pick a day, then a category, then add events.
-  function renderNasconSchedule(pane){
-    const agenda=window.NASCON_AGENDA||[];
-    let html='<div class="m-section-label">Select a day</div><div class="m-nc-days">';
-    agenda.forEach(d=>{
-      html+=`<button class="m-nc-day${nc.day===d.day?' is-on':''}" type="button" data-nc-day="${d.day}" aria-pressed="${nc.day===d.day}">
-        <span class="m-nc-day-label">${esc(d.label)}</span><span class="m-nc-day-sub">${esc(d.sub)}</span></button>`;
-    });
-    html+='</div>';
-    if(!nc.day){
-      html+='<div class="m-empty" style="margin-top:14px">Choose a day to see its events.</div>';
-    }else{
-      const events=nasconEvents(nc.day);
-      const cats=['All',...new Set(events.map(e=>e.cat))];
-      if(nc.cat&&!cats.includes(nc.cat)) nc.cat='';
-      html+='<div class="m-section-label">Select a category</div><div class="m-nc-cats">';
-      cats.forEach(c=>{
-        html+=`<button class="m-chip${nc.cat===c?' is-on':''}" type="button" data-nc-cat="${esc(c)}" aria-pressed="${nc.cat===c}">${esc(c)}</button>`;
-      });
-      html+='</div>';
-      if(!nc.cat){
-        html+='<div class="m-empty" style="margin-top:14px">Choose a category to see its events.</div>';
-      }else{
-        const saved=new Set(nasconSaved());
-        const rows=nasconSort(nc.cat==='All'?events:events.filter(e=>e.cat===nc.cat));
-        html+=`<div class="m-meta-row"><span>${rows.length} EVENT${rows.length===1?'':'S'}</span><b>${esc(nc.cat.toUpperCase())}</b></div>`;
-        html+='<div class="m-rows">'+rows.map(e=>nasconRowHTML(e,saved.has(e.id))).join('')+'</div>';
-      }
-    }
-    pane.innerHTML=html;
-    pane.querySelectorAll('[data-nc-day]').forEach(btn=>btn.addEventListener('click',()=>{
-      nc.day=Number(btn.dataset.ncDay); nc.cat=''; renderNasconSchedule(pane);
-    }));
-    pane.querySelectorAll('[data-nc-cat]').forEach(btn=>btn.addEventListener('click',()=>{
-      nc.cat=btn.dataset.ncCat; renderNasconSchedule(pane);
-    }));
-    wireNasconAdds(pane,()=>renderNasconSchedule(pane));
-  }
-
   /* ══ LOOKUP ════════════════════════════════════════════════════════ */
   const lk={school:'computing',program:'',batch:'',section:'',day:'',course:''};
   const SCHOOL_LABELS={computing:'Computing',engineering:'Engineering',business:'Business'};
@@ -1314,9 +1054,6 @@
   // which hides slots that have already passed when the day is today — the
   // design's bar is the day's full slot grid, green for free, grey for busy.
   function slotOccupant(room,day,slot){
-    // On the NASCON dates the fest agenda, not the class timetable, decides.
-    const fest=typeof nasconRoomStatus==='function'?nasconRoomStatus(room,day,slot):undefined;
-    if(fest!==undefined) return fest;
     updateRoomMode(roomDateForDay(day));
     const sources=BLOCK_SOURCES[roomBlock(room)]||['computing'];
     let occupiedBy=((typeof isCDBlockRoom==='function')&&isCDBlockRoom(room))
@@ -1459,7 +1196,7 @@
       const currentBooking=currentSlot&&slots.find(s=>s.slot===currentSlot)?.occupiedBy;
       const summary=roomSummary(slots);
       const bars=slots.map(s=>`<span class="m-slot${s.occupiedBy?'':' is-free'}"></span>`).join('');
-      const status=free===true?'Free now':free===false?(currentBooking&&currentBooking.dept==='NASCON'?'Event':'Class'):'—';
+      const status=free===true?'Free now':free===false?'Class':'—';
       // During exams, make the active course and the next free time visible
       // without requiring the student to open the complete room timeline.
       const liveExam='';
@@ -2971,33 +2708,6 @@
     // the moment this script has run.
     route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:'today';
     render();
-    showNasconPromo();
-  }
-
-  // The NASCON '26 poster, shown on every app open while the planner is on.
-  function showNasconPromo(){
-    const el=$('m-nc-promo');
-    if(!el||!NASCON_ON) return;
-    const opener=document.activeElement;
-    const close=()=>{
-      el.hidden=true;
-      $('m-main').inert=false;
-      document.removeEventListener('keydown',onKey);
-      if(opener&&opener.focus) opener.focus();
-    };
-    const onKey=ev=>{ if(ev.key==='Escape') close(); };
-    $('m-nc-promo-close').onclick=close;
-    $('m-nc-promo-go').onclick=()=>{
-      close();
-      if(route!=='today') go('today');
-      weekMode=true; renderToday();
-    };
-    // Tapping the dimmed backdrop (not the poster) also dismisses it.
-    el.onclick=ev=>{ if(ev.target===el) close(); };
-    document.addEventListener('keydown',onKey);
-    el.hidden=false;
-    $('m-main').inert=true;
-    $('m-nc-promo-close').focus();
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);

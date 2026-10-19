@@ -146,15 +146,13 @@ const versioned = (path) => (ASSET_VERSION ? `${path}?v=${ASSET_VERSION}` : path
 // waiting for the previous file before even requesting the next.
 // isSiteLive is a hoisted function declaration further down; skipping this
 // while the launch gate is closed keeps the holding page light.
-if (isSiteLive()) ['/js/exam-rooms.js', '/js/app.js', '/js/nascon-data.js', '/js/mobile.js', '/js/announcement.js'].forEach(path => {
+if (isSiteLive()) ['/js/exam-rooms.js', '/js/app.js', '/js/mobile.js', '/js/announcement.js'].forEach(path => {
   const link = document.createElement('link');
   link.rel = 'preload'; link.as = 'script'; link.href = versioned(path);
   document.head.appendChild(link);
 });
 async function loadCompatibilityRuntime() {
   await loadScript(versioned('/js/exam-rooms.js'));
-  // Before app.js: its Free Rooms panel asks the NASCON agenda on fest days.
-  await loadScript(versioned('/js/nascon-data.js')).catch(() => {});
   return loadScript(versioned('/js/app.js'));
 }
 // The phone view reads app.js's globals directly, so it must load after it and
