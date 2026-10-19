@@ -782,9 +782,9 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
     """Parse one matrix cell into {code, course, batch, sections, notes}."""
     # Normalize undergraduate program spellings before extracting scopes.
     text = re.sub(r"\bBS\s*\(\s*([A-Z]+)\s*\)", r"BS(\1)", text, flags=re.I)
-    for alias, dept in {"BBA": "BBA", "BAF": "AF", "BEE": "EE", "BCE": "CE"}.items():
+    for alias, dept in {"BBA": "BBA", "BAF": "AF", "BEE": "EE", "BCE": "CE", "BSE": "SE"}.items():
         text = re.sub(rf"\b{alias}\s*(?=-|[A-Z]\b)", f"BS({dept})", text)
-    text = re.sub(r"^([A-Z]{2,3})-(\d{3,4})", r"\1\2", text.strip())
+    text = re.sub(r"^([A-Z]{2,3})\s*-?\s*(\d{3,4})", r"\1\2", text.strip())
     lines = [ln.strip() for ln in re.split(r"\r\n|\r|\n", text) if ln.strip()]
     if not lines:
         return None
@@ -801,7 +801,7 @@ def parse_exam_paper_cell(text: str) -> dict[str, Any] | None:
     # "AI3001 Knowledge Rep. and Reasoning BS(AI) A,B,C 2024"). Split that
     # inline metadata before parsing so the row remains filterable by its real
     # department and batch instead of being stranded with an empty scope.
-    inline_dept = re.search(r"\bBS\([A-Z]+\)", course, re.I)
+    inline_dept = re.search(r"\b(?:BS\(|MS\s*\()[A-Z]+\)", course, re.I)
     if inline_dept:
         metadata_lines = [course[inline_dept.start():].strip(), *metadata_lines]
         course = course[:inline_dept.start()].strip()

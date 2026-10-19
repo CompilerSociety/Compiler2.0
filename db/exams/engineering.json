@@ -1,470 +1,720 @@
 {
-  "updated_at": "2026-09-10T00:00:00+05:00",
-  "source_subject": "1st Sessional Exams Schedule Fall 2026 (Draft Version)",
-  "source_filename": "1st Sessional Exams Schedule Fall 2026 (Draft Version).xlsx",
-  "count": 46,
+  "updated_at": "2026-10-19T13:22:51.145611+00:00",
+  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft Version)",
+  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft Version) as on 19-10-2026.xlsx",
+  "count": 44,
   "exams": [
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "9:00 to 10:00",
       "code": "MT1001",
       "course": "Applied Calculus",
       "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B5",
+      "source_text": "MT1001 Applied Calculus\nBCE-A\nBEE-A,B,C\n2026"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20",
       "code": "EE2001",
       "course": "Electronic Circuit Design",
       "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A"
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!D5",
+      "source_text": "EE2001 Electronic Circuit Design\nBEE-A\n2024"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "11:40 to 12:40",
       "code": "CS1004",
       "course": "Object Oriented Programming",
       "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B"
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!F5",
+      "source_text": "CS1004 Object Oriented Programming\nBCE-A,B\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "01:00 to 02:00",
       "code": "MG4015",
       "course": "Engineering Management",
       "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A,B"
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!H5",
+      "source_text": "MG4015 Engineering Management\nBEE-A,B\n2023"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "02:30 to 03:30",
       "code": "EE1005",
       "course": "Digital Logic Design",
       "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A,B,C"
+      "sections": {
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!J5",
+      "source_text": "EE1005 Digital Logic Design\nBEE-A,B,C\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40",
       "code": "SS2043",
       "course": "Civics and Community Engagement",
       "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B"
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!L5",
+      "source_text": "SS2043 Civics and Community Engagement\nBCE-A,B\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
-      "time": "9:00 to 10:00",
-      "code": "EE4033",
-      "course": "Industrial Processes Control",
-      "batch": null,
-      "sections": {},
-      "notes": "BEE-9A"
-    },
-    {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20",
       "code": "EE2007",
       "course": "Data Communication and Networks",
       "batch": "2024",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B"
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!D6",
+      "source_text": "EE2007 Data Communication and Networks\nBCE-A\nBEE-A,B\n2024"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40",
-      "code": "SS5014",
-      "course": "Understanding of Holy Quran I/Ethics I",
+      "code": "SS5016",
+      "course": "Understanding of Holy Quran I/Comparative Study of Religions II",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSE!L6",
+      "source_text": "SS5016 - Understanding of Holy Quran I/Comparative Study of Religions II\nMEE-1A\n2026",
       "notes": "MEE-1A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "9:00 to 10:00",
       "code": "IO3031",
       "course": "Introduction to Internet of Things",
       "batch": null,
-      "sections": {},
-      "notes": "BEE-9A"
+      "sections": {
+        "EE": [
+          "9A"
+        ]
+      },
+      "source_cell": "FSE!B7",
+      "source_text": "IO3031 Introduction to Internet of Things\nBEE-9A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40",
-      "code": "SS6007",
-      "course": "- Understanding of Holy Quran I/Philosophy of Religions I",
+      "code": "SS6008",
+      "course": "Understanding of Holy Quran I/Philosophy of Religions II",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSE!L7",
+      "source_text": "\tSS6008 - Understanding of Holy Quran I/Philosophy of Religions II\nPEE-1A\n2026",
       "notes": "PEE-1A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "9:00 to 10:00",
-      "code": "MG1008",
-      "course": "- Occupational Health and Safety",
-      "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "10:20 to 11:20",
-      "code": "SS2007",
-      "course": "Technical and Business Writing",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "11:40 to 12:40",
-      "code": "NS1002",
-      "course": "Physics for Engineers",
-      "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00",
-      "code": "CS2021",
-      "course": "Object Oriented Data Structures",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "02:30 to 03:30",
-      "code": "EE1004",
-      "course": "Electronic Devices and Circuits",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "03:40 to 04:40",
-      "code": "EE3002",
-      "course": "�P Interfacing and Programming",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "10:20 to 11:20",
-      "code": "EE2004",
-      "course": "Electrical Network Analysis",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00",
-      "code": "CS1002",
-      "course": "Programming Fundamentals",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "03:40 to 04:40",
-      "code": "EE3012",
-      "course": "�P Interfacing and Programming",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "11:40 to 12:40",
-      "code": "CY4054",
-      "course": "Blockchain Technologies and Applications",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BCE-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00",
-      "code": "CS1011",
-      "course": "Programming for Engineers",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "03:40 to 04:40",
-      "code": "EE1001",
-      "course": "Linear Circuit Analysis",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00",
-      "code": "ME2002",
-      "course": "Applied Thermodynamics",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "9:00 to 10:00",
-      "code": "MT2013",
-      "course": "Complex Variables and Transforms",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B; BEE-A,B,C"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "10:20 to 11:20",
-      "code": "EE2012",
-      "course": "Computer Organization and Architecture",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BCE-A"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "11:40 to 12:40",
-      "code": "SS1005",
-      "course": "English Language",
-      "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "01:00 to 02:00",
-      "code": "EE3005",
-      "course": "Electromagnetic Theory",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "02:30 to 03:30",
-      "code": "MT1004",
-      "course": "Linear Algebra",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B,C"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40",
       "code": "EE3006",
       "course": "Embedded Systems",
       "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A"
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!L8",
+      "source_text": "EE3006 Embedded Systems\nBEE-A\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "9:00 to 10:00",
+      "code": "NS1002",
+      "course": "Physics for Engineers",
+      "batch": "2026",
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B10",
+      "source_text": "NS1002 Physics for Engineers\nBCE-A\nBEE-A,B,C\n2026"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "10:20 to 11:20",
+      "code": "SS2007",
+      "course": "Technical and Business Writing",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!D10",
+      "source_text": "SS2007 Technical and Business Writing\nBEE-A,B\n2023"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "11:40 to 12:40",
+      "code": "CY4054",
+      "course": "Blockchain Technologies and Applications",
+      "batch": "2024",
+      "sections": {
+        "CE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!F10",
+      "source_text": "CY4054 Blockchain Technologies and Applications\nBCE-A\n2024"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "02:30 to 03:30",
+      "code": "EE1004",
+      "course": "Electronic Devices and Circuits",
+      "batch": "2025",
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!J10",
+      "source_text": "EE1004 Electronic Devices and Circuits\nBCE-A,B\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "03:40 to 04:40",
+      "code": "EE3002",
+      "course": "µP Interfacing and Programming",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!L10",
+      "source_text": "EE3002 µP Interfacing and Programming\nBEE-A,B\n2023"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "10:20 to 11:20",
+      "code": "EE2004",
+      "course": "Electrical Network Analysis",
+      "batch": "2025",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!D11",
+      "source_text": "EE2004 Electrical Network Analysis\nBEE-A,B\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "11:40 to 12:40",
+      "code": "ME2002",
+      "course": "Applied Thermodynamics",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!F11",
+      "source_text": "ME2002 Applied Thermodynamics\nBEE-A\n2023"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "02:30 to 03:30",
+      "code": "CS2021",
+      "course": "Object Oriented Data Structures",
+      "batch": "2025",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!J11",
+      "source_text": "CS2021 Object Oriented Data Structures\nBEE-A,B\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "03:40 to 04:40",
+      "code": "EE3012",
+      "course": "µP Interfacing and Programming",
+      "batch": "2024",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!L11",
+      "source_text": "EE3012 µP Interfacing and Programming\nBEE-A,B\n2024"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "02:30 to 03:30",
+      "code": "CS1002",
+      "course": "Programming Fundamentals",
+      "batch": "2025",
+      "sections": {
+        "CE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J12",
+      "source_text": "CS1002 Programming Fundamentals\nBCE-A\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "02:30 to 03:30",
+      "code": "CS1011",
+      "course": "Programming for Engineers",
+      "batch": "2025",
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J13",
+      "source_text": "CS1011 Programming for Engineers\nBEE-A\n2025"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "9:00 to 10:00",
+      "code": "MT2013",
+      "course": "Complex Variables and Transforms",
+      "batch": "2025",
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B15",
+      "source_text": "MT2013 Complex Variables and Transforms\nBCE-A,B\nBEE-A,B,C\n2025"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "10:20 to 11:20",
+      "code": "EE2012",
+      "course": "Computer Organization and Architecture",
+      "batch": "2024",
+      "sections": {
+        "CE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!D15",
+      "source_text": "EE2012 Computer Organization and Architecture\nBCE-A\n2024"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "11:40 to 12:40",
+      "code": "SS1005",
+      "course": "English Language",
+      "batch": "2026",
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!F15",
+      "source_text": "SS1005 English Language\nBCE-A\nBEE-A,B,C\n2026"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "01:00 to 02:00",
+      "code": "EE3005",
+      "course": "Electromagnetic Theory",
+      "batch": "2024",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!H15",
+      "source_text": "EE3005 Electromagnetic Theory\nBEE-A,B\n2024"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "02:30 to 03:30",
+      "code": "MT1004",
+      "course": "Linear Algebra",
+      "batch": "2025",
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!J15",
+      "source_text": "MT1004 Linear Algebra\nBCE-A,B\n2025"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "9:00 to 10:00",
       "code": "MT2011",
       "course": "Complex Variables and Transforms",
       "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A,B,C"
+      "sections": {
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B16",
+      "source_text": "MT2011 Complex Variables and Transforms\nBEE-A,B,C\n2024"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "10:20 to 11:20",
       "code": "NS1007",
       "course": "Applied Physics",
       "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A"
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!D16",
+      "source_text": "NS1007 Applied Physics\nBEE-A\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "11:40 to 12:40",
-      "code": "CS2011",
-      "course": "Fundamentals of Databases",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "02:30 to 03:30",
-      "code": "MT1009",
-      "course": "Linear Algebra and Diff. Equations",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A"
+      "code": "MT1004",
+      "course": "Linear Algebra",
+      "batch": "2025",
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J16",
+      "source_text": "MT1004 Linear Algebra\nBEE-A\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "9:00 to 10:00",
       "code": "MT2003",
       "course": "Complex Variables and Transforms",
       "batch": "2023",
-      "sections": {},
-      "notes": "BEE-B,C"
+      "sections": {
+        "EE": [
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B17",
+      "source_text": "MT2003 Complex Variables and Transforms\nBEE-B,C\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "11:40 to 12:40",
       "code": "EE2031",
       "course": "Instrumentation and Measurements",
       "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A"
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!F17",
+      "source_text": "EE2031 Instrumentation and Measurements\nBEE-A\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "02:30 to 03:30",
+      "code": "CS2011",
+      "course": "Fundamentals of Databases",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J17",
+      "source_text": "CS2011 Fundamentals of Databases\nBEE-A\n2023"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "9:00 to 10:00",
       "code": "CS1009",
       "course": "Applications of Information Communication Technologies",
       "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!B19",
+      "source_text": "CS1009 Applications of Information Communication Technologies\nBCE-A\nBEE-A,B,C\n2026\n"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "10:20 to 11:20",
       "code": "CS1005",
       "course": "Discrete Structures",
       "batch": "2025",
-      "sections": {},
-      "notes": "BCE-A,B"
+      "sections": {
+        "CE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!D19",
+      "source_text": "CS1005 Discrete Structures\nBCE-A,B\n2025"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40",
       "code": "ME2001",
       "course": "Basic Mechanical Engineering",
       "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A,B"
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!F19",
+      "source_text": "ME2001 Basic Mechanical Engineering\nBEE-A,B\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "01:00 to 02:00",
-      "code": "SS1021",
-      "course": "- Understanding of Holy Quran I/Introduction to Major World Religions I",
+      "code": "SS1022",
+      "course": "Understanding of Holy Quran I/Introduction to Major World Religions I",
       "batch": "2025",
-      "sections": {},
-      "notes": "BEE-A,B"
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!H19",
+      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions I\nBEE-A,B\n2025"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30",
       "code": "EE3003",
       "course": "Analogue and Digital Communication",
       "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A,B"
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!J19",
+      "source_text": "EE3003 Analogue and Digital Communication\nBEE-A,B\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "03:40 to 04:40",
       "code": "SS1015",
       "course": "Pakistan Studies",
       "batch": "2026",
-      "sections": {},
-      "notes": "BCE-A; BEE-A,B,C"
+      "sections": {
+        "CE": [
+          "A"
+        ],
+        "EE": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSE!L19",
+      "source_text": "SS1015 Pakistan Studies\nBCE-A\nBEE-A,B,C\n2026"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
-      "time": "10:20 to 11:20",
-      "code": "AI4003",
-      "course": "Applied Machine Learning",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BEE-A,B"
-    },
-    {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40",
       "code": "EE3031",
       "course": "Digital Signal Processing",
       "batch": "2024",
-      "sections": {},
-      "notes": "BCE-A"
+      "sections": {
+        "CE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!F20",
+      "source_text": "EE3031 Digital Signal Processing\nBCE-A\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30",
       "code": "EE3010",
       "course": "Analogue and Digital Communication",
       "batch": "2024",
-      "sections": {},
-      "notes": "BEE-A,B"
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!J20",
+      "source_text": "EE3010 Analogue and Digital Communication\nBEE-A,B\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "11:40 to 12:40",
+      "code": "AI4003",
+      "course": "Applied Machine Learning",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!F21",
+      "source_text": "AI4003 Applied Machine Learning\nBEE-A,B\n2023"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30",
       "code": "CS2008",
       "course": "Numerical Computing",
       "batch": "2024",
-      "sections": {},
-      "notes": "BCE-A"
+      "sections": {
+        "CE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J21",
+      "source_text": "CS2008 Numerical Computing\nBCE-A\n2024"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "02:30 to 03:30",
+      "code": "EE1001",
+      "course": "Linear Circuit Analysis",
+      "batch": "2025",
+      "sections": {
+        "EE": [
+          "A"
+        ]
+      },
+      "source_cell": "FSE!J22",
+      "source_text": "EE1001 Linear Circuit Analysis\nBEE-A\n2025"
     }
   ],
   "flat_exams": []
 }
-

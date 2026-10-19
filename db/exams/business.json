@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-09-10T00:00:00+05:00",
-  "source_subject": "1st Sessional Exams Schedule Fall 2026 (Draft Version)",
-  "source_filename": "1st Sessional Exams Schedule Fall 2026 (Draft Version).xlsx",
-  "count": 97,
+  "updated_at": "2026-10-19T13:22:51.142994+00:00",
+  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft Version)",
+  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft Version) as on 19-10-2026.xlsx",
+  "count": 99,
   "exams": [
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "9:00 to 10:00 AM",
       "code": "AF1003",
       "course": "Introduction to Financial Accounting",
@@ -22,6 +22,11 @@
           "C",
           "D"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
@@ -29,14 +34,15 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!B5",
+      "source_text": "AF1003 Introduction to Financial Accounting\nBS(AF)  A,B\nBS(FT)-A,B,C,D\nBBA-A,B,C\nBS(BA) A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20 AM",
-      "code": "SS1021",
-      "course": "- Understanding of Holy Quran I/Introduction to Major World Religions I",
+      "code": "SS1022",
+      "course": "Understanding of Holy Quran I/Introduction to Major World Religions I\tI",
       "batch": "2025",
       "sections": {
         "AF": [
@@ -48,11 +54,13 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!D5",
+      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions I\tI\nBS(AF)  A,B\nBS(BA) A,B,C\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "11:40 to 12:40 PM",
       "code": "AF3001",
       "course": "Financial Management",
@@ -63,17 +71,23 @@
           "B",
           "C"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
           "C"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!F5",
+      "source_text": "AF3001 Financial Management\nBS(AF)  A,B,C\nBBA-A,B,C\nBS(BA) A,B,C\n2024"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "01:00 to 02:00 PM",
       "code": "AF1002",
       "course": "Financial Accounting",
@@ -85,26 +99,41 @@
         "AF": [
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!H5",
+      "source_text": "AF1002 Financial Accounting\nBS(FT)-A\nBS(AF)  B\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "02:30 to 03:30 PM",
       "code": "AF2003",
       "course": "Management Accounting",
       "batch": "2025",
-      "sections": {},
-      "notes": "BBA-A,B,C,D"
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "source_cell": "FSM!J5",
+      "source_text": "AF2003 Management Accounting\nBBA-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "SS1007",
       "course": "Islamic Studies/Ethics",
       "batch": "2026",
       "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "FT": [
           "A",
           "B",
@@ -112,64 +141,87 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!L5",
+      "source_text": "SS1007 Islamic Studies/Ethics\nBBA-A,B,C\nBS(FT)-A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "5:00 to 6:00 PM",
-      "code": "MG4066",
-      "course": "Managing Virtual Global Teams",
+      "code": "AF4016",
+      "course": "Applied Financial Management",
       "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A"
+      "sections": {
+        "AF": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!N5",
+      "source_text": "AF4016 Applied Financial Management\nBS(AF)  A\n2023"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "6:20 to 7:20 PM",
       "code": "BA5006",
       "course": "Advanced Data Analysis",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P5",
+      "source_text": "BA5006 Advanced Data Analysis\nMSBA-1A\n2026",
       "notes": "MSBA-1A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20 AM",
       "code": "SS2041",
       "course": "Critical Thinking",
       "batch": "2025",
-      "sections": {},
-      "notes": "BBA-A,B,C,D"
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "source_cell": "FSM!D6",
+      "source_text": "SS2041 Critical Thinking\nBBA-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "01:00 to 02:00 PM",
       "code": "AF1001",
       "course": "Fundamentals of Accounting",
       "batch": "2025",
-      "sections": {},
-      "notes": "BAF-A"
-    },
-    {
-      "date": "2026-09-19",
-      "day": "Saturday",
-      "time": "02:30 to 03:30 PM",
-      "code": "SS1018",
-      "course": "Understanding Holy Quran",
-      "batch": "2024",
       "sections": {
-        "BA": [
+        "AF": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!H6",
+      "source_text": "AF1001 Fundamentals of Accounting\nBAF-A\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
+      "time": "02:30 to 03:30 PM",
+      "code": "MG4067",
+      "course": "Strategic Diversity, Equity and Inclusion",
+      "batch": "2023",
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!J6",
+      "source_text": "MG4067 Strategic Diversity, Equity and Inclusion\nBBA-A\n2023"
+    },
+    {
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "SS2019",
       "course": "Psychology",
@@ -179,41 +231,52 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!L6",
+      "source_text": "SS2019 Psychology\nBS(AF)  A,B\n2026"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "5:00 to 6:00 PM",
-      "code": "MG5066",
-      "course": "Strategy for Virtual Global Teams",
+      "code": "AF5007",
+      "course": "Advanced Financial Management",
       "batch": "2025",
       "sections": {},
-      "notes": "MB-3A"
+      "source_cell": "FSM!N6",
+      "source_text": "AF5007 Advanced Financial Management\nMB-3A\nMSBA-3A\n2025",
+      "notes": "MB-3A; MSBA-3A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "6:20 to 7:20 PM",
       "code": "AF4001",
       "course": "Accounting for Managers",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P6",
+      "source_text": "AF4001 Accounting for Managers\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20 AM",
       "code": "SS2051",
       "course": "Critical Thinking",
       "batch": null,
-      "sections": {},
-      "notes": "BBA-9A"
+      "sections": {
+        "BBA": [
+          "9A"
+        ]
+      },
+      "source_cell": "FSM!D7",
+      "source_text": "SS2051 Critical Thinking\nBBA-9A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "11:40 to 12:40 PM",
       "code": "AF2004",
       "course": "Business Finance",
@@ -225,11 +288,13 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!F7",
+      "source_text": "AF2004 Business Finance\nBS(FT)-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "01:00 to 02:00 PM",
       "code": "FT4005",
       "course": "Digital Banking and Payment Industry",
@@ -238,21 +303,13 @@
         "FT": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!H7",
+      "source_text": "FT4005 Digital Banking and Payment Industry\nBS(FT)-A\n2023"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
-      "time": "02:30 to 03:30 PM",
-      "code": "MG4067",
-      "course": "Strategic Diversity, Equity and Inclusion",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A"
-    },
-    {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "SS2019",
       "course": "Psychology",
@@ -264,34 +321,37 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!L7",
+      "source_text": "SS2019 Psychology\nBS(FT) A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "5:00 to 6:00 PM",
-      "code": "AF4016",
-      "course": "Applied Financial Management",
-      "batch": "2023",
-      "sections": {
-        "AF": [
-          "A"
-        ]
-      }
+      "code": "MG4009",
+      "course": "Managerial Economics",
+      "batch": "2026",
+      "sections": {},
+      "source_cell": "FSM!N7",
+      "source_text": "MG4009 Managerial Economics\nMB-1A\n2026",
+      "notes": "MB-1A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "6:20 to 7:20 PM",
       "code": "MG5015",
       "course": "Strategic HR and Leadership",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P7",
+      "source_text": "MG5015 Strategic HR and Leadership\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "10:20 to 11:20 AM",
       "code": "MG3012",
       "course": "Blockchain Technology for Business",
@@ -303,11 +363,13 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!D8",
+      "source_text": "MG3012 Blockchain Technology for Business\nBS(FT)-A,B,C,D\n2024"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "11:40 to 12:40 PM",
       "code": "AF4006",
       "course": "Investment Anal. and Mgmt.",
@@ -317,11 +379,13 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!F8",
+      "source_text": "AF4006 Investment Anal. and Mgmt.\nBS(AF)  A,B\n2023"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "SS2019",
       "course": "Psychology",
@@ -330,21 +394,13 @@
         "FT": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!L8",
+      "source_text": "SS2019 Psychology\nBS(FT) A\n2024"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
-      "time": "5:00 to 6:00 PM",
-      "code": "AF5007",
-      "course": "Advanced Financial Management",
-      "batch": "2025",
-      "sections": {},
-      "notes": "MB-3A; MSBA-3A"
-    },
-    {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "BA4009",
       "course": "Design Thinking in Business Analytics",
@@ -353,41 +409,62 @@
         "BA": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!L9",
+      "source_text": "BA4009 Design Thinking in Business Analytics\nBS(BA) A\n2023 (2 Hours Exam)"
     },
     {
-      "date": "2026-09-19",
-      "day": "Saturday",
-      "time": "5:00 to 6:00 PM",
-      "code": "MG4009",
-      "course": "Managerial Economics",
-      "batch": "2026",
-      "sections": {},
-      "notes": "MB-1A"
-    },
-    {
-      "date": "2026-09-19",
-      "day": "Saturday",
+      "date": "2026-10-29",
+      "day": "Thursday",
       "time": "03:40 to 04:40 PM",
       "code": "BA5009",
       "course": "Design Thinking, Analytics and Business",
       "batch": "2025",
       "sections": {},
+      "source_cell": "FSM!L10",
+      "source_text": "BA5009 Design Thinking, Analytics and Business\nMSBA-3A\n2025  (2 Hours Exam)",
       "notes": "MSBA-3A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-29",
+      "day": "Thursday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS5016",
+      "course": "Understanding of Holy Quran I/Comparative Study of Religions II  MB-3A",
+      "batch": null,
+      "sections": {},
+      "source_cell": "FSM!L11",
+      "source_text": "SS5016 - Understanding of Holy Quran I/Comparative Study of Religions II  MB-3A"
+    },
+    {
+      "date": "2026-10-29",
+      "day": "Thursday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS6008",
+      "course": "Understanding of Holy Quran I/Philosophy of Religions II  PMG-1A",
+      "batch": null,
+      "sections": {},
+      "source_cell": "FSM!L12",
+      "source_text": "\tSS6008 - Understanding of Holy Quran I/Philosophy of Religions II  PMG-1A"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "9:00 to 10:00 AM",
       "code": "SS2042",
       "course": "Community Service",
       "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A"
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!B15",
+      "source_text": "SS2042 Community Service\nBBA-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "10:20 to 11:20 AM",
       "code": "MG1011",
       "course": "Business Mathematics",
@@ -409,11 +486,13 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!D15",
+      "source_text": "MG1011 Business Mathematics\nBS(AF)  A,B,\nBS(FT)-A,B,C,D\nBS(BA) A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "11:40 to 12:40 PM",
       "code": "MG4011",
       "course": "Entrepreneurship",
@@ -425,85 +504,88 @@
           "C",
           "D"
         ]
-      }
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00 PM",
-      "code": "MG1001",
-      "course": "Fundamentals of Management",
-      "batch": "2026",
-      "sections": {
-        "BA": [
-          "A",
-          "B",
-          "C",
-          "D"
-        ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!F15",
+      "source_text": "MG4011 Entrepreneurship\nBS(FT)-A,B,C,D\n2024"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "02:30 to 03:30 PM",
       "code": "MG2003",
       "course": "Consumer Behaviour",
       "batch": "2024",
       "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
           "C"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!J15",
+      "source_text": "MG2003 Consumer Behaviour\nBBA-A,B,C\nBS(BA) A,B,C\n2024"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "03:40 to 04:40 PM",
       "code": "MG4523",
       "course": "Conflict Resolution and Negotiation Skills",
       "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "5:00 to 6:00 PM",
-      "code": "MT2004",
-      "course": "Business Math � II",
-      "batch": "2025",
       "sections": {
-        "FT": [
-          "A",
-          "B",
-          "C",
-          "D"
+        "BBA": [
+          "A"
         ]
-      }
+      },
+      "source_cell": "FSM!L15",
+      "source_text": "MG4523 Conflict Resolution and Negotiation Skills\nBBA-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "5:00 to 6:00 PM",
+      "code": "BA4006",
+      "course": "Contextual Marketing and Product Analytics",
+      "batch": "2023",
+      "sections": {
+        "BA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!N15",
+      "source_text": "BA4006 Contextual Marketing and Product Analytics\nBS(BA) A\n2023"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "6:20 to 7:20 PM",
       "code": "MG5011",
       "course": "Advanced Research Methods",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P15",
+      "source_text": "MG5011 Advanced Research Methods\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "9:00 to 10:00 AM",
       "code": "SS2043",
       "course": "Civics and Community Engagement",
       "batch": "2025",
       "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
         "FT": [
           "A",
           "B",
@@ -511,11 +593,12 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C,D"
+      "source_cell": "FSM!B16",
+      "source_text": "SS2043 Civics and Community Engagement\nBBA-A,B,C,D\nBS(FT)-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "11:40 to 12:40 PM",
       "code": "MG4011",
       "course": "Entrepreneurship",
@@ -529,21 +612,13 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!F16",
+      "source_text": "MG4011 Entrepreneurship\nBS(AF)  A,B\nBS(BA) A,B\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "01:00 to 02:00 PM",
-      "code": "MG4062",
-      "course": "Brand Management",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A"
-    },
-    {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "02:30 to 03:30 PM",
       "code": "SS2006",
       "course": "Macro Economics",
@@ -555,44 +630,49 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!J16",
+      "source_text": "SS2006 Macro Economics\nBS(FT)-A,B,C,D\n2024"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "03:40 to 04:40 PM",
       "code": "MG5103",
       "course": "Negotiation and Conflict Management",
       "batch": "2025",
       "sections": {},
+      "source_cell": "FSM!L16",
+      "source_text": "MG5103 Negotiation and Conflict Management\nMB-3A\n2025",
       "notes": "MB-3A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "5:00 to 6:00 PM",
-      "code": "MG1004",
-      "course": "Business Calculus II",
-      "batch": "2023",
-      "sections": {
-        "FT": [
-          "A"
-        ]
-      }
+      "code": "BA5011",
+      "course": "Context-Driven Marketing and Product Analytics",
+      "batch": "2025",
+      "sections": {},
+      "source_cell": "FSM!N16",
+      "source_text": "BA5011 Context-Driven Marketing and Product Analytics\nMSBA-3A\n2025",
+      "notes": "MSBA-3A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "6:20 to 7:20 PM",
-      "code": "CS4089",
-      "course": "Programming for Business Applications",
+      "code": "MG4010",
+      "course": "Marketing",
       "batch": "2026",
       "sections": {},
-      "notes": "MSBA-1A"
+      "source_cell": "FSM!P16",
+      "source_text": "MG4010 Marketing\nMB-1A\n2026",
+      "notes": "MB-1A"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "9:00 to 10:00 AM",
       "code": "MG2011",
       "course": "Environmental Science and Sustainability for Business",
@@ -607,21 +687,46 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!B17",
+      "source_text": "MG2011 Environmental Science and Sustainability for Business\nBS(AF)  A,B\nBS(BA) A,B,C\n2025"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MT1002",
+      "course": "Business Math – I",
+      "batch": "2025",
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!D17",
+      "source_text": "MT1002 Business Math – I\nBBA-A\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "11:40 to 12:40 PM",
       "code": "MG2001",
       "course": "Organizational Behaviour",
       "batch": "2025",
-      "sections": {},
-      "notes": "BBA-A,B,C,D"
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "source_cell": "FSM!F17",
+      "source_text": "\nMG2001 Organizational Behaviour\nBBA-A,B,C,D\n2025\n"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "02:30 to 03:30 PM",
       "code": "MG3002",
       "course": "Business Law",
@@ -632,61 +737,127 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!J17",
+      "source_text": "MG3002 Business Law\nBS(AF)  A,B,C\n2024"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MT2004",
+      "course": "Business Math – II",
+      "batch": "2025",
+      "sections": {
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "source_cell": "FSM!L17",
+      "source_text": "MT2004 Business Math – II\nBS(FT)-A,B,C,D\n2025"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "5:00 to 6:00 PM",
-      "code": "BA4006",
-      "course": "Contextual Marketing and Product Analytics",
+      "code": "CS4089",
+      "course": "Programming for Business Applications",
+      "batch": "2026",
+      "sections": {},
+      "source_cell": "FSM!N17",
+      "source_text": "CS4089 Programming for Business Applications\nMSBA-1A\n2026",
+      "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG4062",
+      "course": "Brand Management",
       "batch": "2023",
       "sections": {
-        "BA": [
+        "BBA": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!D18",
+      "source_text": "MG4062 Brand Management\nBBA-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "11:40 to 12:40 PM",
       "code": "AF2001",
-      "course": "Corporate Accounting � I",
+      "course": "Corporate Accounting – I",
       "batch": "2025",
       "sections": {
         "AF": [
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!F18",
+      "source_text": "AF2001 Corporate Accounting – I\nBS(AF)  A,B\n2025"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "02:30 to 03:30 PM",
-      "code": "AF4017",
-      "course": "Digital Assets and Cryptocurrencies; Conventiontional and Shariah Persepectives",
+      "code": "MG1001",
+      "course": "Fundamentals of Management",
+      "batch": "2026",
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "source_cell": "FSM!J18",
+      "source_text": "MG1001 Fundamentals of Management\nBBA-A,B,C\nBS(BA) A,B,C,D\n2026"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "03:40 to 04:40 PM",
+      "code": "MG1004",
+      "course": "Business Calculus II",
       "batch": "2023",
       "sections": {
         "FT": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!L18",
+      "source_text": "MG1004 Business Calculus II\nBS(FT)-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "5:00 to 6:00 PM",
-      "code": "BA5011",
-      "course": "Context-Driven Marketing and Product Analytics",
-      "batch": "2025",
-      "sections": {},
-      "notes": "MSBA-3A"
+      "code": "MG4066",
+      "course": "Managing Virtual Global Teams",
+      "batch": "2023",
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!N18",
+      "source_text": "MG4066 Managing Virtual Global Teams\nBBA-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
+      "date": "2026-10-30",
+      "day": "Friday",
       "time": "9:00 to 10:00 AM",
       "code": "AF3006",
       "course": "Financing New Ventures",
@@ -695,21 +866,51 @@
         "FT": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!B19",
+      "source_text": "AF3006 Financing New Ventures\nBS(FT)-A\n2023"
     },
     {
-      "date": "2026-09-21",
-      "day": "Monday",
-      "time": "5:00 to 6:00 PM",
-      "code": "MG4010",
-      "course": "Marketing",
-      "batch": "2026",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "10:20 to 11:20 AM",
+      "code": "AF4017",
+      "course": "Digital Assets and Cryptocurrencies; Conventiontional and Shariah Persepectives",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!D19",
+      "source_text": "AF4017 Digital Assets and Cryptocurrencies; Conventiontional and Shariah Persepectives\nBS(FT)-A\n2023"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "03:40 to 04:40 PM",
+      "code": "SS1021",
+      "course": "Introduction to Major World Religions I(For Non Muslim only)",
+      "batch": null,
       "sections": {},
-      "notes": "MB-1A"
+      "source_cell": "FSM!L19",
+      "source_text": "SS1021 - Introduction to Major World Religions I(For Non Muslim only)"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "5:00 to 6:00 PM",
+      "code": "MG5066",
+      "course": "Strategy for Virtual Global Teams",
+      "batch": "2025",
+      "sections": {},
+      "source_cell": "FSM!N19",
+      "source_text": "MG5066 Strategy for Virtual Global Teams\nMB-3A\n2025",
+      "notes": "MB-3A"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "9:00 to 10:00 AM",
       "code": "SS1016",
       "course": "English - I",
@@ -725,6 +926,11 @@
           "C",
           "D"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
@@ -732,11 +938,12 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!B22",
+      "source_text": "SS1016 English - I\nBS(AF)  A,B\nBS(FT)-A,B,C,D\nBBA-A,B,C\nBS(BA) A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "10:20 to 11:20 AM",
       "code": "BA3002",
       "course": "Business Data and Text Mining",
@@ -746,11 +953,13 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!D22",
+      "source_text": "BA3002 Business Data and Text Mining\nBS(BA) A,B\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "11:40 to 12:40 PM",
       "code": "MG2009",
       "course": "Data Analysis for Business II",
@@ -760,17 +969,24 @@
           "A",
           "B"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
         "BA": [
           "A",
           "B",
           "C"
         ]
       },
-      "notes": "BBA-A,B,C,D"
+      "source_cell": "FSM!F22",
+      "source_text": "MG2009 Data Analysis for Business II\nBS(AF)  A,B\nBBA-A,B,C,D\nBS(BA) A,B,C\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "01:00 to 02:00 PM",
       "code": "SS1015",
       "course": "Pakistan Studies",
@@ -780,22 +996,30 @@
           "A",
           "B"
         ],
-        "FT": [
+        "BA": [
           "A",
           "B",
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!H22",
+      "source_text": "SS1015 Pakistan Studies\nBS(AF)  A,B\nBS(BA)-A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "02:30 to 03:30 PM",
       "code": "SS1013",
       "course": "Ideology and Constitution of Pakistan",
       "batch": "2025",
       "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
         "FT": [
           "A",
           "B",
@@ -803,11 +1027,12 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C,D"
+      "source_cell": "FSM!J22",
+      "source_text": "SS1013 Ideology and Constitution of Pakistan\nBBA-A,B,C,D\nBS(FT)-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "03:40 to 04:40 PM",
       "code": "CS2003",
       "course": "Data Structures and Business Applications",
@@ -818,41 +1043,52 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!L22",
+      "source_text": "CS2003 Data Structures and Business Applications\nBS(BA) A,B,C\n2024"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "5:00 to 6:00 PM",
       "code": "MG4006",
       "course": "Management and Org. Behaviour",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!N22",
+      "source_text": "MG4006 Management and Org. Behaviour\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "6:20 to 7:20 PM",
       "code": "MG5050",
       "course": "Econometrics",
       "batch": "2025",
       "sections": {},
+      "source_cell": "FSM!P22",
+      "source_text": "MG5050 Econometrics\nMSBA-3A\n2025",
       "notes": "MSBA-3A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "10:20 to 11:20 AM",
-      "code": "MT1002",
-      "course": "Business Math � I",
-      "batch": "2025",
-      "sections": {},
-      "notes": "BBA-A"
+      "code": "CY4053",
+      "course": "Cybersecurity for FinTech",
+      "batch": "2023",
+      "sections": {
+        "FT": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!D23",
+      "source_text": "CY4053 Cybersecurity for FinTech\nBS(FT)-A\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "01:00 to 02:00 PM",
       "code": "CS3011",
       "course": "Enterprise Information System",
@@ -861,24 +1097,30 @@
         "FT": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!H23",
+      "source_text": "CS3011 Enterprise Information System\nBS(FT)-A\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "02:30 to 03:30 PM",
-      "code": "CY4053",
-      "course": "Cybersecurity for FinTech",
-      "batch": "2023",
+      "code": "MG3006",
+      "course": "Operations Management",
+      "batch": "2024",
       "sections": {
-        "FT": [
-          "A"
+        "BBA": [
+          "A",
+          "B",
+          "C"
         ]
-      }
+      },
+      "source_cell": "FSM!J23",
+      "source_text": "MG3006 Operations Management\nBBA-A,B,C\n2024"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "03:40 to 04:40 PM",
       "code": "CS2016",
       "course": "Programming for Business",
@@ -889,51 +1131,52 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!L23",
+      "source_text": "CS2016 Programming for Business\nBS(BA) A,B,C\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "5:00 to 6:00 PM",
       "code": "MG4005",
       "course": "Business Economics for Managers",
       "batch": null,
       "sections": {},
+      "source_cell": "FSM!N23",
+      "source_text": "MG4005 Business Economics for Managers\nMB-9A",
       "notes": "MB-9A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "6:20 to 7:20 PM",
       "code": "CS5059",
       "course": "Database System",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P23",
+      "source_text": "CS5059 Database System\nMSBA-1A\n2026",
       "notes": "MSBA-1A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "10:20 to 11:20 AM",
       "code": "SS3001",
-      "course": "Business Communication�II",
+      "course": "Business Communication–II",
       "batch": null,
-      "sections": {},
-      "notes": "BBA-9A"
+      "sections": {
+        "BBA": [
+          "9A"
+        ]
+      },
+      "source_cell": "FSM!D24",
+      "source_text": "SS3001 Business Communication–II\nBBA-9A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "11:40 to 12:40 PM",
-      "code": "AF3003",
-      "course": "Financial Institutions and Markets",
-      "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A,B"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "01:00 to 02:00 PM",
       "code": "CS3017",
       "course": "Enterprise Systems and Applications",
@@ -945,21 +1188,29 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!H24",
+      "source_text": "CS3017 Enterprise Systems and Applications\nBS(FT)-A,B,C,D\n2024"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "02:30 to 03:30 PM",
-      "code": "MG3006",
-      "course": "Operations Management",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BBA-A,B,C"
+      "code": "AF4005",
+      "course": "Audit and Assurance",
+      "batch": "2023",
+      "sections": {
+        "AF": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSM!J24",
+      "source_text": "AF4005 Audit and Assurance\nBS(AF)  A,B\n2023"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "03:40 to 04:40 PM",
       "code": "CS3003",
       "course": "Management Information Systems",
@@ -970,46 +1221,26 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!L24",
+      "source_text": "CS3003 Management Information Systems\nBS(AF)  A,B,C\n2024"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "6:20 to 7:20 PM",
       "code": "MG5017",
       "course": "Strategic Marketing",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!P24",
+      "source_text": "MG5017 Strategic Marketing\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "10:20 to 11:20 AM",
-      "code": "MG3014",
-      "course": "Advanced Business Communications",
-      "batch": "2024",
-      "sections": {},
-      "notes": "BBA-A,B,C"
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "02:30 to 03:30 PM",
-      "code": "AF4005",
-      "course": "Audit and Assurance",
-      "batch": "2023",
-      "sections": {
-        "AF": [
-          "A",
-          "B"
-        ]
-      }
-    },
-    {
-      "date": "2026-09-22",
-      "day": "Tuesday",
-      "time": "03:40 to 04:40 PM",
       "code": "CS2012",
       "course": "Introduction to Object-Oriented Programming",
       "batch": "2025",
@@ -1020,11 +1251,29 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!D25",
+      "source_text": "CS2012 Introduction to Object-Oriented Programming\nBS(FT)-A,B,C,D\n2025"
     },
     {
-      "date": "2026-09-22",
-      "day": "Tuesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "01:00 to 02:00 PM",
+      "code": "AF3003",
+      "course": "Financial Institutions and Markets",
+      "batch": "2023",
+      "sections": {
+        "BBA": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSM!H25",
+      "source_text": "AF3003 Financial Institutions and Markets\nBBA-A,B\n2023"
+    },
+    {
+      "date": "2026-10-31",
+      "day": "Saturday",
       "time": "02:30 to 03:30 PM",
       "code": "MG2010",
       "course": "Business Communication",
@@ -1034,11 +1283,30 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!J25",
+      "source_text": "MG2010 Business Communication\nBS(AF)  A,B\n2025"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-10-31",
+      "day": "Saturday",
+      "time": "10:20 to 11:20 AM",
+      "code": "MG3014",
+      "course": "Advanced Business Communications",
+      "batch": "2024",
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSM!D26",
+      "source_text": "MG3014 Advanced Business Communications\nBBA-A,B,C\n2024"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "9:00 to 10:00 AM",
       "code": "CS1001",
       "course": "IT in Business",
@@ -1050,6 +1318,11 @@
           "C",
           "D"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
@@ -1057,11 +1330,12 @@
           "D"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!B29",
+      "source_text": "CS1001 IT in Business\nBS(FT)-A,B,C,D\nBBA-A,B,C\nBS(BA) A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "10:20 to 11:20 AM",
       "code": "MG4522",
       "course": "Islamic Banking and Finance",
@@ -1070,11 +1344,13 @@
         "AF": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!D29",
+      "source_text": "MG4522 Islamic Banking and Finance\nBS(AF)  A\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40 PM",
       "code": "MG2012",
       "course": "Business Economics",
@@ -1090,17 +1366,24 @@
           "C",
           "D"
         ],
+        "BBA": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
         "BA": [
           "A",
           "B",
           "C"
         ]
       },
-      "notes": "BBA-A,B,C,D"
+      "source_cell": "FSM!F29",
+      "source_text": "MG2012 Business Economics\nBS(AF)  A,B\nBS(FT)-A,B,C,D\nBBA-A,B,C,D\nBS(BA) A,B,C\n2025"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "01:00 to 02:00 PM",
       "code": "MG4045",
       "course": "Strategic Business Reporting",
@@ -1109,11 +1392,13 @@
         "AF": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!H29",
+      "source_text": "MG4045 Strategic Business Reporting\nBS(AF)  A\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "MG1002",
       "course": "Marketing Management",
@@ -1129,11 +1414,13 @@
           "C",
           "D"
         ]
-      }
+      },
+      "source_cell": "FSM!J29",
+      "source_text": "MG1002 Marketing Management\nBS(AF)  A,B\nBS(FT)-A,B,C,D\n2026"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "03:40 to 04:40 PM",
       "code": "MG3003",
       "course": "Basic Econometrics",
@@ -1155,41 +1442,52 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!L29",
+      "source_text": "MG3003 Basic Econometrics\nBS(AF)  A,B,C\nBS(FT)-A,B,C,D\nBS(BA) A,B,C\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "5:00 to 6:00 PM",
       "code": "BA5005",
       "course": "Applied Calculus for Business",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!N29",
+      "source_text": "BA5005 Applied Calculus for Business\nMSBA-1A\n2026",
       "notes": "MSBA-1A"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "6:20 to 7:20 PM",
       "code": "MG5055",
       "course": "Ethics in Business Analytics",
       "batch": "2025",
       "sections": {},
+      "source_cell": "FSM!P29",
+      "source_text": "MG5055 Ethics in Business Analytics\nMSBA-3A\n2025",
       "notes": "MSBA-3A"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "10:20 to 11:20 AM",
       "code": "SS2002",
       "course": "Micro Economics",
       "batch": "2024",
-      "sections": {},
-      "notes": "BBA-A"
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!D30",
+      "source_text": "SS2002 Micro Economics\nBBA-A\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "01:00 to 02:00 PM",
       "code": "AF2005",
       "course": "Cost and Management Accounting",
@@ -1200,41 +1498,54 @@
           "B",
           "C"
         ]
-      }
+      },
+      "source_cell": "FSM!H30",
+      "source_text": "AF2005 Cost and Management Accounting\nBS(AF)  A,B,C\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "SS2018",
       "course": "Sociology",
       "batch": "2026",
-      "sections": {},
-      "notes": "BBA-A,B,C"
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSM!J30",
+      "source_text": "SS2018 Sociology\nBBA-A,B,C\n2026"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "5:00 to 6:00 PM",
       "code": "AF5003",
       "course": "Financial Reporting and Analysis",
       "batch": "2026",
       "sections": {},
+      "source_cell": "FSM!N30",
+      "source_text": "AF5003 Financial Reporting and Analysis\nMB-1A\n2026",
       "notes": "MB-1A"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "6:20 to 7:20 PM",
-      "code": "AF4010",
-      "course": "Accounting and Finance for Managers",
+      "code": "MG4004",
+      "course": "Applied Statistics for Business",
       "batch": "2026",
       "sections": {},
-      "notes": "MSBA-1A"
+      "source_cell": "FSM!P30",
+      "source_text": "MG4004 Applied Statistics for Business\nMB-1A\n2026",
+      "notes": "MB-1A"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40 PM",
       "code": "BA4007",
       "course": "Empowering Organizations with Analytics and Data Visualization",
@@ -1243,11 +1554,13 @@
         "BA": [
           "A"
         ]
-      }
+      },
+      "source_cell": "FSM!F31",
+      "source_text": "BA4007 Empowering Organizations with Analytics and Data Visualization\nBS(BA) A\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "01:00 to 02:00 PM",
       "code": "AF4011",
       "course": "Investment and Portfolio Analytics",
@@ -1257,57 +1570,78 @@
           "A",
           "B"
         ]
-      }
+      },
+      "source_cell": "FSM!H31",
+      "source_text": "AF4011 Investment and Portfolio Analytics\nBS(FT)-A,B\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "SS2018",
       "course": "Sociology",
       "batch": "2024",
-      "sections": {},
-      "notes": "BBA-A"
+      "sections": {
+        "BBA": [
+          "A"
+        ]
+      },
+      "source_cell": "FSM!J31",
+      "source_text": "SS2018 Sociology\nBBA-A\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "03:40 to 04:40 PM",
       "code": "MG4003",
       "course": "Strategic Management",
       "batch": "2023",
-      "sections": {},
-      "notes": "BBA-A,B"
+      "sections": {
+        "BBA": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSM!L31",
+      "source_text": "MG4003 Strategic Management\nBBA-A,B\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
-      "time": "6:20 to 7:20 PM",
-      "code": "MG4004",
-      "course": "Applied Statistics for Business",
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "AF4010",
+      "course": "Accounting and Finance for Managers",
       "batch": "2026",
       "sections": {},
-      "notes": "MB-1A"
+      "source_cell": "FSM!N31",
+      "source_text": "AF4010 Accounting and Finance for Managers\nMSBA-1A\n2026",
+      "notes": "MSBA-1A"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "01:00 to 02:00 PM",
       "code": "MG3004",
       "course": "Human Resource Mgmt.",
       "batch": "2024",
       "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ],
         "BA": [
           "A",
           "B",
           "C"
         ]
       },
-      "notes": "BBA-A,B,C"
+      "source_cell": "FSM!H32",
+      "source_text": "MG3004 Human Resource Mgmt.\nBBA-A,B,C\nBS(BA) A,B,C\n2024"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "MG4521",
       "course": "Digital Marketing",
@@ -1315,21 +1649,26 @@
       "sections": {
         "BA": [
           "A"
+        ],
+        "BBA": [
+          "A"
         ]
       },
-      "notes": "BBA-A"
+      "source_cell": "FSM!J32",
+      "source_text": "MG4521 Digital Marketing\nBS(BA) A\nBBA-A\n2023"
     },
     {
-      "date": "2026-09-23",
-      "day": "Wednesday",
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "AF3005",
       "course": "Programming for Finance",
       "batch": null,
       "sections": {},
+      "source_cell": "FSM!J33",
+      "source_text": "AF3005 Programming for Finance\nBFT-9A",
       "notes": "BFT-9A"
     }
   ],
   "flat_exams": []
 }
-
