@@ -77,7 +77,7 @@
 /* Guests have no timetable of their own, so the per-student controls on
    Today give way to the guest landing (js/mobile.js guestHomeHTML). */
 .m-app.is-guest #m-courses-btn,.m-app.is-guest #m-friends-btn,
-.m-app.is-guest #m-today:not(.is-nascon) .m-seg{display:none!important}
+.m-app.is-guest #m-today .m-seg{display:none!important}
 
 /* ── Shared pieces, roomier ──────────────────────────────────────────── */
 .m-btn-primary,.m-btn-ghost{transition:background .16s,transform .16s}
@@ -150,7 +150,7 @@
 /* ── Overlays: arcade, My courses, friends ───────────────────────────── */
 .m-arcade-head,.m-arcade-body{width:100%;max-width:820px;margin:0 auto}
 .m-arcade-body{padding-bottom:40px}
-.m-stage-holder canvas{border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);box-shadow:0 18px 44px rgba(58,15,16,.18)}
+.m-stage-holder canvas{border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);box-shadow:0 18px 44px rgba(22,45,18,.18)}
 .m-stage-x{top:24px;right:24px}
 
 /* The install bar floats bottom-right instead of above a tab bar. */
