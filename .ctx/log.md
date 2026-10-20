@@ -73,3 +73,6 @@ Deleted marketing/poster/ (VTABLE x NASCON promo poster: poster.html, nascon-log
 
 ## 2026-10-20T12:00:00+05:00
 Sign-in screen: "Continue as guest" moved to the top of the sign-in card and made a full-size 62px pill (green outline on tint) instead of the small underlined link at the bottom; its note sits under it, then an "or log in" divider before the NU ID field. Bumped to v=64. Checked at 375px and 1280px.
+
+## 2026-10-20T13:00:00+05:00
+Guests land on Lookup: "Continue as guest" now goes to #/lookup instead of Today, and a returning phone guest (no profile, vtable_skipped_login set, no hash) opens on Lookup too. Desktop guests keep the guest landing on Today. Bumped to v=65. Checked at 375px: click -> Lookup, relaunch -> Lookup.

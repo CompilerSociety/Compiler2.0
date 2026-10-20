@@ -2624,8 +2624,9 @@
     $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
     $('m-guest-btn').addEventListener('click',()=>{
       // Remembered, so a guest is not sent back to sign-in on every launch.
+      // Lookup, not Today: a guest has no timetable of their own to show.
       setSkipped(true);
-      go('today',true);
+      go('lookup',true);
     });
     $('m-manual-go').addEventListener('click',saveManual);
     $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });
@@ -2704,9 +2705,11 @@
     }
     // render() decides sign-in vs app from the stored profile, so "today" is
     // just the default landing spot — a signed-in user goes straight there and
-    // never sees the sign-in screen. No minimum splash time: the app opens
-    // the moment this script has run.
-    route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:'today';
+    // never sees the sign-in screen. A returning phone guest opens on Lookup
+    // instead (desktop guests keep their landing on Today). No minimum splash
+    // time: the app opens the moment this script has run.
+    const home=(!profile()&&skipped()&&!DESK.matches)?'lookup':'today';
+    route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:home;
     render();
   }
 
