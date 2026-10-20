@@ -32,6 +32,12 @@
       <p class="m-hero-sub">Your timetable, free rooms, faculty and exams — in one place.</p>
     </div>
     <div class="m-signin-bottom">
+      <!-- Guest: no NU ID. Lookup, Free Rooms, Faculty and Exams all work
+           without a profile; Today asks them to log in, and so does Profile.
+           First and full size, so nobody without an NU ID stalls on the form. -->
+      <button class="m-guest-btn" id="m-guest-btn" type="button">Continue as guest</button>
+      <div class="m-guest-note">No NU ID needed — you can log in later from your profile.</div>
+      <div class="m-signin-or" aria-hidden="true">or log in</div>
       <!-- Only the FSC roster is published as a lookup table, so the roll-no
            path can only resolve FSC students. FSE/FSM pick their section by
            hand on the #m-manual screen instead. -->
@@ -45,10 +51,6 @@
       <div class="m-signin-status" id="m-signin-status" role="status" aria-live="polite"></div>
       <button class="m-btn-primary" id="m-signin-btn" type="button">Continue</button>
       <button class="m-btn-ghost" id="m-manual-btn" type="button">FOR FSE &amp; FSM</button>
-      <!-- Guest: no NU ID. Lookup, Free Rooms, Faculty and Exams all work
-           without a profile; Today asks them to log in, and so does Profile. -->
-      <button class="m-guest-btn" id="m-guest-btn" type="button">Continue as guest</button>
-      <div class="m-guest-note">No NU ID needed — you can log in later from your profile.</div>
       <div class="m-signin-foot">Built with love by Compiler Society</div>
     </div>
   </section>

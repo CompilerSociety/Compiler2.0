@@ -70,3 +70,6 @@ Removed NASCON '26 after the fest (Oct 16-18). Mobile Today/Week are the class t
 
 ## 2026-10-19T12:30:00+05:00
 Deleted marketing/poster/ (VTABLE x NASCON promo poster: poster.html, nascon-logo.png, vtable-x-nascon-poster.png) at the user's request; nothing referenced it. No NASCON content left in the repo outside .ctx/log.md history.
+
+## 2026-10-20T12:00:00+05:00
+Sign-in screen: "Continue as guest" moved to the top of the sign-in card and made a full-size 62px pill (green outline on tint) instead of the small underlined link at the bottom; its note sits under it, then an "or log in" divider before the NU ID field. Bumped to v=64. Checked at 375px and 1280px.

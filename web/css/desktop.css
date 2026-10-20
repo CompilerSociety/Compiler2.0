@@ -82,7 +82,7 @@
 /* ── Shared pieces, roomier ──────────────────────────────────────────── */
 .m-btn-primary,.m-btn-ghost{transition:background .16s,transform .16s}
 .m-btn-primary:hover{background:var(--green-deep);transform:translateY(-1px)}
-.m-btn-ghost:hover{background:var(--tint-hover)}
+.m-btn-ghost:hover,.m-guest-btn:hover{background:var(--tint-hover)}
 .m-seg{max-width:460px}
 /* Chips wrap instead of scrolling sideways: there is room, and a mouse has
    no swipe. */

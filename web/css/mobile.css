@@ -61,9 +61,12 @@ body.has-pwa-bar{padding-bottom:0!important}
 .m-hero{font-family:var(--mono);font-weight:500;font-size:38px;line-height:1.08;letter-spacing:-.03em;margin-top:28px}
 .m-hero-sub{font-size:14px;line-height:1.5;color:var(--mute-2);margin-top:14px;max-width:30ch}
 .m-signin-bottom{padding-bottom:12px}
-.m-guest-btn{display:block;width:100%;margin-top:14px;padding:8px;border:none;background:none;color:var(--green-deep);font-family:var(--mono);font-weight:500;font-size:14px;letter-spacing:.03em;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
-.m-guest-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:999px}
-.m-guest-note{text-align:center;font-size:11.5px;line-height:1.4;color:var(--mute-2);margin-top:2px}
+.m-guest-btn{display:block;width:100%;height:62px;border:1.5px solid var(--green);border-radius:999px;background:var(--tint);color:var(--green-deep);font-family:var(--mono);font-weight:500;font-size:16px;letter-spacing:.04em;cursor:pointer;transition:background .16s,transform .16s}
+.m-guest-btn:active{background:var(--tint-hover);transform:translateY(-2px)}
+.m-guest-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.m-guest-note{text-align:center;font-size:11.5px;line-height:1.4;color:var(--mute-2);margin-top:8px}
+.m-signin-or{display:flex;align-items:center;gap:12px;margin:20px 0 16px;font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute)}
+.m-signin-or::before,.m-signin-or::after{content:"";flex:1;height:1px;background:var(--line)}
 .m-field-label{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute);display:block;margin-bottom:8px}
 .m-input-wrap{display:flex;align-items:center;gap:8px;height:58px;border:1px solid var(--line-strong);border-radius:999px;padding:0 18px;background:var(--surface)}
 .m-input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:var(--mono);font-size:17px;color:var(--ink)}
