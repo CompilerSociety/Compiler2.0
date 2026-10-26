@@ -2800,6 +2800,30 @@
     const home=(!profile()&&skipped()&&!DESK.matches)?'lookup':'today';
     route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:home;
     render();
+    dropUnverifiedProfile();
+  }
+
+  // A profile saved before email verification existed (or on a session that
+  // has since expired) would otherwise count as signed in forever. Only a
+  // definite 401 clears it: offline or a server error keeps the profile, so
+  // the installed app still opens without a connection. Manual FSE/FSM
+  // profiles carry no NU ID and never had a session to check.
+  async function dropUnverifiedProfile(){
+    const p=profile();
+    if(!p||!p.nuid||p.manual) return;
+    let res;
+    try{ res=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'}); }
+    catch(e){ return; }
+    if(res.status!==401) return;
+    if(typeof clearProfileCookie==='function') clearProfileCookie();
+    if(typeof clearProfileStorage==='function') clearProfileStorage();
+    resetSigninCode();
+    if(DESK.matches){ go('today',true); return; }
+    route='signin';
+    render();
+    const input=$('m-nuid');
+    if(input) input.value=p.nuid;
+    signinStatus('Please verify your university email to continue.');
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
