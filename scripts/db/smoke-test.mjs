@@ -75,15 +75,17 @@ async function main() {
       String(get.body?.detail || '').includes('MONGODB_URI'), get.body?.detail);
   }
 
-  // --- Validation is storage-independent ----------------------------------
-  const badId = await call({ method: 'POST', body: { nuid: 'not-an-id', score: 5 } });
-  check('POST with a malformed NU ID is rejected',
-    badId.statusCode === 400 || badId.statusCode === 503,
-    `got ${badId.statusCode}`);
+  // --- Identity is a session, not a body field ---------------------------
+  // Body identity (nuid/name/...) is ignored now. Without a verified session
+  // cookie the endpoint must refuse before reading or writing the board.
+  const anonymous = await call({ method: 'POST', body: { game: 'compiler_run', score: 5 } });
+  check('POST without a verified session is rejected',
+    anonymous.statusCode === 401 || anonymous.statusCode === 503,
+    `got ${anonymous.statusCode}`);
 
   if (!live) {
     // --- Fallback contract ------------------------------------------------
-    const post = await call({ method: 'POST', body: { nuid: '25I-0632', score: 999999 } });
+    const post = await call({ method: 'POST', body: { score: 999999 } });
     check('POST without MONGODB_URI returns 503', post.statusCode === 503, `got ${post.statusCode}`);
     check('503 carries a blameless player-facing message',
       typeof post.body?.message === 'string' && !post.body.message.includes('MONGODB'),
@@ -93,13 +95,12 @@ async function main() {
       post.body?.detail);
   } else {
     // --- Live path --------------------------------------------------------
-    // Uses a real NU ID from the roster so the identity check passes, and a
-    // score of 1 so it can never displace a genuine player from the board.
-    const low = await call({ method: 'POST', body: { nuid: '25I-0632', name: 'smoke test', score: 1 } });
-    check('POST of a low score returns 200', low.statusCode === 200, `got ${low.statusCode}`);
-    check('POST of a low score is not counted as improved', low.body?.improved === false,
-      JSON.stringify(low.body)?.slice(0, 160));
-    check('POST still returns the current board', Array.isArray(low.body?.leaderboard));
+    // A real save now needs a verified session, which this storage smoke test
+    // does not mint (that would create account rows without mailbox proof).
+    // The authenticated write path is exercised through /api/auth/*.
+    check('POST without a verified session is unauthenticated',
+      anonymous.statusCode === 401 && anonymous.body?.error === 'unauthenticated',
+      JSON.stringify(anonymous.body));
   }
 
   console.log(failures ? `\n${failures} check(s) FAILED` : '\nAll checks passed.');

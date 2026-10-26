@@ -46,6 +46,16 @@ const CACHE = {
   leaderboards: [0, 0], // live, never edge-cached
 };
 
+// Rollout switch for the publishable roster. The replacement is /api/auth/me
+// plus the session-gated /api/roster/lookup endpoint; deploy those and the
+// clients that use them before setting ALLOW_PUBLIC_ROSTER=0. Unset keeps the
+// old behaviour so a cached client is not cut off during that first deploy.
+function publicRosterEnabled() {
+  const value = process.env.ALLOW_PUBLIC_ROSTER;
+  if (value === undefined || value === '') return true;
+  return !['0', 'false', 'off', 'no'].includes(String(value).trim().toLowerCase());
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -79,6 +89,13 @@ export default async function handler(req, res) {
     let payload = null;
 
     if (kind === 'students') {
+      if (!publicRosterEnabled()) {
+        res.setHeader('Cache-Control', 'no-store');
+        return res.status(403).json({
+          error: 'roster_requires_auth',
+          message: 'Student roster reads require a verified session.',
+        });
+      }
       payload = await getRoster(name);
     } else if (kind === 'leaderboards') {
       const game = GAMES[name];

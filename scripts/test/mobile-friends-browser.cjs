@@ -7,7 +7,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '../..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const app = read('web/js/app.js');
-const shared = ['formatNuid', 'validateNuid', 'profileFullBatch', 'parseProfileFromStudent', 'deptCodeToLabel', 'getProfileDataFileForNuid', 'stripNote'].map(name => {
+const shared = ['formatNuid', 'validateNuid', 'profileFullBatch', 'parseProfileFromStudent', 'deptCodeToLabel', 'stripNote'].map(name => {
   const start = app.indexOf(`function ${name}(`);
   return app.slice(start, app.indexOf('\n}', start) + 2);
 }).join('\n');
@@ -47,7 +47,12 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset=
       if (request.method() !== 'GET') writes.push(request.url());
       if (request.url().includes('/api/timetable?school=business')) return businessFails
         ? route.fulfill({status:503,json:{ok:false}}) : route.fulfill({json:{ok:true,tt:business}});
-      if (request.url().includes('/db/students/')) return route.fulfill({ json: { students: [{ nuid: '25I-1234', name: 'Roster Friend', department: 'CS', batch: '25', section: 'B' }] } });
+      if (request.url().includes('/api/roster/lookup')) {
+        const target = new URL(request.url()).searchParams.get('nuid');
+        return target === '25I-1234'
+          ? route.fulfill({ json: { ok: true, found: true, student: { name: 'Roster Friend', department: 'CS', batch: '25' } } })
+          : route.fulfill({ json: { ok: true, found: false } });
+      }
       return route.fulfill({ contentType: 'text/html', body: html });
     });
     await page.goto('http://vtable.test/#/profile');
@@ -104,6 +109,9 @@ const html = `<!doctype html><html data-mobile-theme="dark"><head><meta charset=
     await page.locator('#m-friend-find').click();
     await page.locator('#m-friend-name').waitFor();
     assert.equal(await page.locator('#m-friend-name').inputValue(), 'Roster Friend');
+    assert.equal(await page.locator('#m-friend-save').isDisabled(), true, 'Lookup returns no section; the user picks it from the timetable');
+    await pick('section','B');
+    assert.equal(await page.locator('#m-friend-save').isDisabled(), false);
     await page.getByRole('button', { name: 'Save friend', exact: true }).click();
     assert.equal(await page.locator('[data-friend]').count(), 1);
     await page.locator('#m-friends-close').click();

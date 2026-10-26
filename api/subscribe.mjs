@@ -17,18 +17,20 @@ import {
   rosterHas as dbRosterHas, enrolStudent, getSubscription, upsertSubscription,
   removeSubscription, countSubscriptions, rateLimitCheck, rateLimitNote,
 } from '../lib/db/repos.mjs';
+import { requireSession, rejectCrossOrigin } from '../lib/auth/guard.mjs';
 import { sanitizeCoursePrefs } from '../lib/notification-courses.mjs';
 import { isComputingDept } from '../lib/schools.mjs';
 
 /* ── Security: input validation, identity check, rate limiting ──────────
-   - NUID_RE requires a well-formed NU ID, which also rules out junk keys.
-   - The identity step reads the published roster for the ID's batch
-     (db/students/<batch>.json). A roll no that is NOT on it is ENROLLED
-     rather than rejected: the roster only ever holds whoever the seating-plan
-     email happened to name, so it lags every new intake (26.json held 3
-     students while the whole 26 batch was trying to sign up) and a hard gate
-     locked out real students with no way in. See enrolStudent for what that
-     write is and is not allowed to do.
+   - Creating or changing a subscription requires a verified session. The
+     NU ID comes from that session, never from the request body, so a client
+     cannot attach a device to someone else's roll number.
+   - NUID_RE still checks the session's roll no defensively and its first two
+     digits choose the roster batch.
+   - A verified roll no that is NOT on the roster is ENROLLED rather than
+     rejected: the roster only ever holds whoever the seating-plan email
+     happened to name, so it lags every new intake. See enrolStudent for what
+     that write is and is not allowed to do.
    - Rate limiting is per-IP: an in-process burst guard rejects fast repeats
      without touching the database, and the `rate_limit` collection enforces
      the same window across instances. The identity step runs AFTER it, so the
@@ -126,7 +128,11 @@ function isValidSubscription(subscription) {
 
 
 function parseBody(req) {
-  return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  try {
+    return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  } catch {
+    return {};
+  }
 }
 
 // DELETE — the user turned notifications off.
@@ -141,6 +147,15 @@ function parseBody(req) {
 // targeting the device; the client also unsubscribes locally, which is what
 // stops delivery outright.
 async function handleUnsubscribe(req, res) {
+  if (!isEnabled()) {
+    return res.status(503).json({
+      ok: false,
+      error: 'unsubscribe_unavailable',
+      message: "Notifications can't be changed right now — this is on us, not you.",
+      detail: 'MONGODB_URI is not set on the server.',
+    });
+  }
+
   const payload = parseBody(req);
   const endpoint = String(payload.endpoint || payload?.subscription?.endpoint || '').trim();
   if (!endpoint || !isValidEndpoint(endpoint)) {
@@ -170,15 +185,6 @@ async function handleUnsubscribe(req, res) {
     });
   }
 
-  if (!isEnabled()) {
-    return res.status(503).json({
-      ok: false,
-      error: 'unsubscribe_unavailable',
-      message: "Notifications can't be changed right now — this is on us, not you.",
-      detail: 'MONGODB_URI is not set on the server.',
-    });
-  }
-
   // One targeted delete, keyed by the endpoint. No read-modify-write of the
   // whole subscription list, so there is no sha to race and nothing to retry.
   // Already gone — report success rather than 404. Turning something off twice
@@ -189,22 +195,32 @@ async function handleUnsubscribe(req, res) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST' && req.method !== 'DELETE') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
+  if (rejectCrossOrigin(req, res)) return;
 
   try {
     if (req.method === 'DELETE') return await handleUnsubscribe(req, res);
 
+    if (!isEnabled()) {
+      return res.status(503).json({
+        ok: false,
+        error: 'subscribe_unavailable',
+        message: "Notifications can't be enabled right now — this is on us, not you.",
+        detail: 'MONGODB_URI is not set on the server.',
+      });
+    }
+
+    const session = await requireSession(req, res);
+    if (!session) return;
+
     const payload = parseBody(req);
-    const nuid = String(payload.nuid || '').trim().toUpperCase();
+    const nuid = String(session.account.nuid || '').trim().toUpperCase();
     const name = String(payload.name || '').trim();
     const department = String(payload.department || '').trim();
-    const batch = String(payload.batch || '').trim();
     const section = String(payload.section || '').trim();
     const subscription = payload.subscription;
     const prefs = sanitizePrefs(payload.prefs);
@@ -213,8 +229,8 @@ export default async function handler(req, res) {
       try { coursePrefs = sanitizeCoursePrefs(payload.coursePrefs); }
       catch { return res.status(400).json({ ok: false, error: 'invalid_course_preferences' }); }
     }
-    if (!nuid || !subscription || !subscription.endpoint) {
-      return res.status(400).json({ ok: false, error: 'nuid and a valid subscription are required' });
+    if (!subscription || !subscription.endpoint) {
+      return res.status(400).json({ ok: false, error: 'a valid subscription is required' });
     }
 
     // 0) Endpoint + shape: only real web-push endpoints from known push
@@ -280,24 +296,14 @@ export default async function handler(req, res) {
       nuid,
       name: name.slice(0, 60),
       department: department.slice(0, 20),
-      batch: batch.slice(0, 8),
+      batch: rosterBatch,
       section: section.slice(0, 10),
       subscription,
       updated_at: Date.now(),
     };
 
-    if (!isEnabled()) {
-      // `message` is shown to the user, so it stays plain and blameless.
-      // `detail` carries the operator-facing cause.
-      return res.status(503).json({
-        ok: false,
-        error: 'subscribe_unavailable',
-        message: "Notifications can't be enabled right now — this is on us, not you.",
-        detail: 'MONGODB_URI is not set on the server.',
-      });
-    }
-
-    // 5) Identity: on the roster already, or enrol them onto it now.
+    // 5) Identity: the session already proved the roll no; the roster is only
+    //    used to avoid re-appending someone already stored.
     //    A roster miss is not a rejection any more — the seating-plan email is
     //    the only thing that ever populates db/students/, so it lags every new
     //    intake and used to lock those students out entirely.

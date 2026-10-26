@@ -19,21 +19,22 @@
 //   MONGODB_DB  - database name (optional, default "compiler2")
 
 /* ── Security ────────────────────────────────────────────────────────────
-   This endpoint takes anonymous writes, so it is deliberately narrow:
+   Registration now requires a verified session:
 
-   - NUID_RE fixes the shape of a roll no, and its captured first two digits —
-     NOT anything the client sends — choose the roster file. A client cannot
-     name the file it writes to.
-   - The write is APPEND-ONLY. An existing row is never edited or replaced, so
-     re-POSTing another student's roll no cannot overwrite their name, section
-     or assigned seat; the worst case is a row that was not there before.
-   - Every stored string is length-capped, and only the five known fields are
-     kept, so the file cannot be grown into a blob store.
+   - The roll no comes from the session the server minted after university
+     mailbox verification, never from the request body. A client cannot enrol
+     another student's NU ID.
+   - NUID_RE still fixes the shape of that roll no, and its first two digits
+     choose the batch. The batch is never taken from the payload.
+   - The write is APPEND-ONLY. An existing row is never edited or replaced.
+   - Every stored string is length-capped, and only the four known fields are
+     kept, so the record cannot be grown into a blob store.
    - Per-IP rate limiting, in-process for bursts plus a database-backed
      window shared with /api/subscribe. */
 
 import { isEnabled } from '../lib/db/mongo.mjs';
 import { enrolStudent, rateLimitCheck, rateLimitNote } from '../lib/db/repos.mjs';
+import { requireSession, rejectCrossOrigin } from '../lib/auth/guard.mjs';
 import { isComputingDept } from '../lib/schools.mjs';
 
 const NUID_RE = /^(\d{2})[A-Za-z]{1,4}-\d{4}$/;
@@ -69,21 +70,34 @@ function burstAllowed(ip) {
    $setOnInsert means an existing row is never touched. */
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  if (rejectCrossOrigin(req, res)) return;
+
+  if (!isEnabled()) {
+    // `message` is shown to the user, so it stays plain and blameless.
+    // `detail` carries the operator-facing cause.
+    return res.status(503).json({
+      ok: false,
+      error: 'register_unavailable',
+      message: "Your profile couldn't be published right now — this is on us, not you.",
+      detail: 'MONGODB_URI is not set on the server.',
+    });
+  }
 
   try {
+    const session = await requireSession(req, res);
+    if (!session) return;
+
     const payload = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    const nuid = String(payload.nuid || '').trim().toUpperCase();
     const name = String(payload.name || '').trim().slice(0, 60);
     const department = String(payload.department || '').trim().slice(0, 20);
     const section = String(payload.section || '').trim().toUpperCase().slice(0, 10);
 
-    // 1) Shape. The batch comes from the roll no, never from the payload, so
-    //    the client cannot choose which file it lands in.
+    // 1) Identity and batch come from the verified session, never from the
+    //    payload, so a client cannot enrol someone else or pick a batch.
+    const nuid = String(session.account.nuid || '').trim().toUpperCase();
     const parts = NUID_RE.exec(nuid);
     if (!parts) {
       return res.status(400).json({
@@ -135,17 +149,6 @@ export default async function handler(req, res) {
         ok: false,
         error: 'rate_limited',
         message: "You're sending requests too quickly. Wait a moment and try again.",
-      });
-    }
-
-    if (!isEnabled()) {
-      // `message` is shown to the user, so it stays plain and blameless.
-      // `detail` carries the operator-facing cause.
-      return res.status(503).json({
-        ok: false,
-        error: 'register_unavailable',
-        message: "Your profile couldn't be published right now — this is on us, not you.",
-        detail: 'MONGODB_URI is not set on the server.',
       });
     }
 

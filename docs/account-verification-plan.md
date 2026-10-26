@@ -1,7 +1,7 @@
 # VTable account verification and database migration plan
 
 Date: 2026-09-06
-Status: Implementation plan only. Authentication is not implemented by this document.
+Status: Backend authentication, desktop/mobile OTP sign-in, protected registration/subscriptions, account-scoped profile reads and the session-gated friend lookup are implemented. The public roster gate is deployed but the `ALLOW_PUBLIC_ROSTER` switch still needs to be flipped off after the client rollout, then the rewrites removed. Account migration, batch 26 registration and friendships are still to come.
 
 ## Objective and agreed decisions
 
@@ -16,6 +16,9 @@ Every friendship requires recipient acceptance. After verification, MongoDB beco
 | Action | Requirement |
 | --- | --- |
 | Browse public timetables and play without publishing scores | No verification |
+| Read your own roster row | Verified session for that account |
+| Look up a student by exact NU ID | Verified session, exact match, per-account limits |
+| Download a batch or the full roster | Not public; no endpoint |
 | Record batch 26 initial login/registration | Narrow unverified exception |
 | Publish a score, including batch 26 | Verified session |
 | Edit stored profile, courses or account preferences | Verified session belonging to that account |
@@ -101,8 +104,75 @@ Monitor delivery failures and quota exhaustion without recording codes, tokens o
 
 ## Email setup and configuration
 
-See [Compiler Society Gmail setup](compilersociety-gmail-setup.txt). Proposed server variables are `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `APP_ORIGIN` and `OTP_PEPPER`, alongside existing `MONGODB_URI` and `MONGODB_DB`. These names are a planned contract, not settings already consumed by the current app.
+See [Compiler Society Gmail setup](compilersociety-gmail-setup.txt). The auth slice consumes `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `APP_ORIGIN`, `OTP_PEPPER` and `SESSION_PEPPER`, alongside existing `MONGODB_URI` and `MONGODB_DB`. SMTP delivery itself still needs to be exercised against a real inbox.
 
 Gmail is the initial low-volume sender. Google documents possible sending restrictions above 500 emails in a day; resends and ordinary society mail also consume capacity. Use a conservative configurable application budget and migrate delivery to a dedicated provider before a large rollout. [Google sending limits](https://support.google.com/mail/answer/22839)
 
 The sender account's SMTP authentication is separate from student authentication: students still verify using university-email OTP. Gmail supports SMTP with TLS. [Google SMTP documentation](https://developers.google.com/workspace/gmail/imap/imap-smtp)
+
+## Implemented backend slice (2026-10-26)
+
+The OTP + session loop now exists end to end at the API layer.
+
+**Endpoints**
+
+- `POST /api/auth/request-code` — validates the NU ID, derives the university mailbox on the server, stores a keyed code digest, emails a six-digit code, and sets a browser-bound nonce cookie.
+- `POST /api/auth/verify` — checks the code against the challenge and nonce, claims the challenge atomically, creates the account, and sets an HttpOnly session cookie.
+- `GET /api/auth/me` — resolves the account from the session cookie; never from a client-supplied NU ID. It also returns that account's roster row (`name`, `department`, `batch`, `section`) or `student: null`, which replaces the client-side batch-roster read.
+- `GET /api/roster/lookup?nuid=...` — verified-session exact-match friend lookup. Returns `name`, `department` and `batch` only; there is no prefix search, batch listing, section or seat in the response.
+- `POST /api/auth/logout` — revokes the session row and clears the cookie.
+- `POST /api/leaderboard` — now requires a verified session. Score identity and display fields come from the session and roster, not the request body.
+
+**Code**
+
+- `lib/auth/nuid.mjs` — the ID → mailbox rule. Islamabad (`…I-…` → `i<batch><serial>@isb.nu.edu.pk`) is the only enabled campus; other campuses return `campus_not_supported` until their mapping is confirmed.
+- `lib/auth/otp.mjs`, `lib/auth/tokens.mjs` — code generation, keyed digests, constant-time comparison.
+- `lib/auth/session.mjs`, `lib/auth/cookies.mjs` — opaque server-side sessions, cookie handling.
+- `lib/auth/mailer.mjs` — SMTP delivery; without credentials it prints the code to the server console **only when not on Vercel**.
+- `lib/auth/guard.mjs` — origin check, session guard, production config check.
+- `lib/db/collections.mjs` — `accounts`, `auth_challenges`, `auth_sessions`, `auth_rate_limits`, `roster_lookup_events` plus TTL/unique indexes (created by `ensureIndexes`, i.e. run the migration/setup path on a new database).
+- `lib/db/repos.mjs` — `findStudentRow` supplies the session account's own row; `findStudentForFriend` is the minimal exact-match projection; `rosterLookupCheck`/`rosterLookupNote` keep weighted per-account counters in Mongo.
+
+**Configuration**
+
+- Required in production: `OTP_PEPPER`, `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` (plus existing `MONGODB_URI`).
+- Optional: `SMTP_PORT` (default 587), `SMTP_SECURE`, `SMTP_FROM`, `SESSION_PEPPER` (defaults to `OTP_PEPPER`), `APP_ORIGIN`.
+- Rollout switches: `ALLOW_PUBLIC_ROSTER=0` closes `api/db.mjs?doc=students/*`; unset keeps the old read available for the first deploy so cached clients are not cut off. `ROSTER_LOOKUP_ENABLED=0` disables the friend lookup without a deploy.
+- If `OTP_PEPPER` or SMTP is missing on Vercel, auth returns 503 rather than silently using weaker defaults.
+
+## Implemented sign-in and protected writes (2026-10-26)
+
+**Frontend**
+
+- Desktop profile modal: NU ID -> send code -> enter the six-digit code -> verified session -> own roster row from `/api/auth/me`. `/api/auth/me` also restores the session when the modal opens, and "Sign out" revokes it and clears the cached profile.
+- Mobile sign-in: the same two-step flow inline on `#m-signin`, reusing an existing session instead of sending a second code.
+- Registration and profile saving now require the typed NU ID to match the verified session. A session for one account cannot publish another account's profile.
+- `/api/register` and `/api/subscribe` calls send the session cookie; `web/js/app.js` no longer sends identity fields for those writes.
+
+**Server**
+
+- `POST /api/register` requires a session. The roll number and batch come from the session; the body only supplies name, department and section.
+- `POST /api/subscribe` requires a session. The roll number and batch come from the session; the display fields, endpoint, preferences and course overlay still come from the body.
+- `DELETE /api/subscribe` deliberately remains capability-based: the unguessable push endpoint is the authorization, which lets a student turn notifications off even when signed out. Local unsubscribe is the authoritative off switch.
+- CORS wildcards were removed from both routes; state-changing requests are same-origin checked.
+- `api/db.mjs?doc=students/*` is behind `ALLOW_PUBLIC_ROSTER`. When closed it returns 403 before touching the roster, and no legacy `/db/students/*.json` rewrite can bypass the check.
+- Friend lookup is session-gated and exact-match only. It is weighted per account (60/hour, 200/day, a miss costs five) in `roster_lookup_events`, logs account/target/result, and stores events with a 24-hour TTL.
+- `/api/auth/me` and the friend flow fail closed: there is no public-roster fallback when auth or the database is unavailable.
+- The OTP request limiter also fails closed. If the per-IP or per-NU-ID counters cannot be read or written, the request returns 503 and no code is created or emailed. Accepted attempts are booked before the email is sent.
+
+**Verification**
+
+- `npm run auth:smoke` and `npm run db:smoke` pass. The auth smoke test also checks that `/api/register`, `POST /api/subscribe` and `/api/roster/lookup` never accept an anonymous caller.
+- `node --check` passes on the modified `.mjs` and frontend `.js` files.
+- Local dev-server checks: `/api/auth/me` returns 401 signed out; register, subscribe, request-code and friend lookup return 503 without `MONGODB_URI`; static pages still load.
+- `auth:smoke` also checks that an unreadable auth limiter returns 503, sets no nonce cookie, and that rate-limit booking surfaces storage faults.
+- The in-memory Mongo integration test now asserts `students/26` is denied when `ALLOW_PUBLIC_ROSTER=0`, and the mobile friend browser test mocks the authenticated lookup response.
+
+**Still pending**
+
+- Flip `ALLOW_PUBLIC_ROSTER=0` after the new clients are live, then remove the `/db/students/*.json` rewrites in a later release. An old cached client will otherwise lose profile sync at the flip.
+- Purge the CDN copies of `/db/students/*.json` after flipping the flag; the old 200 response had `s-maxage=300, stale-while-revalidate=3600`.
+- Importing existing browser profile/course/preferences into the account after verification.
+- Batch 26 unverified initial-registration exception.
+- Friendships and permission-aware reads, beyond the exact friend lookup above.
+- End-to-end integration test against a real MongoDB database and a test SMTP inbox (`npm run auth:smoke` covers the pure helpers and anonymous endpoint guards, not the DB-backed session path).

@@ -59,6 +59,8 @@ const timeFormatter=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE
 /* Extracted from index.html; order intentionally preserved for behavioural compatibility. */
 
 let PROFILE_SYNC_IN_PROGRESS=false;
+let PROFILE_AUTH_ACCOUNT=null;
+let PROFILE_AUTH_PENDING=null;
 const PROFILE_STORAGE_KEY='vtable_profile_nuid';
 const PROFILE_COOKIE_KEY='vtable_profile';
 let PROFILE_SUCCESS_TIMEOUT=null;
@@ -230,12 +232,150 @@ function resetProfileModal(){
   const registration=document.getElementById('profile-registration');
   if(input) input.value='';
   clearRegistrationFields();
+  PROFILE_AUTH_PENDING=null;
+  hideProfileCodeStep();
   if(card) card.hidden=true;
   if(registration) registration.hidden=true;
   setProfileSyncVisible(true);
   showProfileActions(false,false);
+  updateProfileAuthUi();
   if(status) status.textContent='Type your NU ID and press sync.';
 }
+/* ── Verified email sign-in ───────────────────────────────────────────────
+   The server mints the session; this layer only carries the challenge id and
+   the code between the two endpoints. The NU ID sent to request-code is
+   validated server-side and the recipient is derived there, never here. */
+async function refreshAuthSession(){
+  try{
+    const res=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'});
+    if(!res.ok){ PROFILE_AUTH_ACCOUNT=null; return null; }
+    const data=await res.json().catch(()=>null);
+    PROFILE_AUTH_ACCOUNT=(data&&data.account)||null;
+    return PROFILE_AUTH_ACCOUNT;
+  }catch(err){
+    PROFILE_AUTH_ACCOUNT=null;
+    return null;
+  }
+}
+function profileAuthMatches(nuid){
+  if(!PROFILE_AUTH_ACCOUNT) return false;
+  return String(PROFILE_AUTH_ACCOUNT.nuid||'').trim().toUpperCase()===String(nuid||'').trim().toUpperCase();
+}
+async function requestAuthCode(nuid){
+  const res=await fetch('/api/auth/request-code',{
+    method:'POST',credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({nuid})
+  });
+  let data=null;
+  try{ data=await res.json(); }catch(err){ /* non-JSON error body */ }
+  if(!res.ok||!data||data.ok!==true){
+    const error=new Error((data&&data.message)||'Could not send the code.');
+    error.status=res.status;
+    error.code=(data&&data.error)||'';
+    throw error;
+  }
+  return data;
+}
+async function verifyAuthCode(challengeId,code){
+  const res=await fetch('/api/auth/verify',{
+    method:'POST',credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({challenge_id:challengeId,code})
+  });
+  let data=null;
+  try{ data=await res.json(); }catch(err){ /* non-JSON error body */ }
+  if(!res.ok||!data||data.ok!==true){
+    throw new Error((data&&data.message)||'That code could not be verified.');
+  }
+  PROFILE_AUTH_ACCOUNT=(data&&data.account)||null;
+  return PROFILE_AUTH_ACCOUNT;
+}
+function showProfileCodeStep(email){
+  const row=document.getElementById('profile-code-row');
+  const help=document.getElementById('profile-code-help');
+  const input=document.getElementById('profile-code');
+  if(row) row.hidden=false;
+  if(help){
+    help.hidden=false;
+    help.textContent=`We sent a 6-digit code to ${email||'your university email'}. It expires in 10 minutes.`;
+  }
+  if(input){ input.value=''; input.focus(); }
+}
+function hideProfileCodeStep(){
+  const row=document.getElementById('profile-code-row');
+  const help=document.getElementById('profile-code-help');
+  const input=document.getElementById('profile-code');
+  if(row) row.hidden=true;
+  if(help){ help.hidden=true; help.textContent=''; }
+  if(input) input.value='';
+}
+function updateProfileAuthUi(){
+  const state=document.getElementById('profile-auth-state');
+  const signout=document.getElementById('profile-signout-btn');
+  if(state){
+    state.hidden=!PROFILE_AUTH_ACCOUNT;
+    state.textContent=PROFILE_AUTH_ACCOUNT?`Verified as ${PROFILE_AUTH_ACCOUNT.nuid}.`:'';
+  }
+  if(signout) signout.hidden=!PROFILE_AUTH_ACCOUNT;
+}
+async function verifyProfileCode(){
+  const status=document.getElementById('profile-status');
+  const input=document.getElementById('profile-code');
+  const code=String(input?.value||'').trim();
+  if(!PROFILE_AUTH_PENDING){
+    if(status){ status.textContent='Press sync to send a code first.'; status.classList.add('is-error'); }
+    return;
+  }
+  if(!/^\d{6}$/.test(code)){
+    if(status){ status.textContent='Enter the 6-digit code from your email.'; status.classList.add('is-error'); }
+    return;
+  }
+  if(PROFILE_SYNC_IN_PROGRESS) return;
+  PROFILE_SYNC_IN_PROGRESS=true;
+  if(status){ status.textContent='Verifying...'; status.classList.remove('is-error'); }
+  const pending=PROFILE_AUTH_PENDING;
+  try{
+    await verifyAuthCode(pending.challengeId,code);
+    PROFILE_AUTH_PENDING=null;
+    hideProfileCodeStep();
+    updateProfileAuthUi();
+    if(status) status.textContent='Verified. Loading your profile...';
+    PROFILE_SYNC_IN_PROGRESS=false;
+    await syncProfile();
+  }catch(err){
+    if(status){ status.textContent=err.message||'That code could not be verified.'; status.classList.add('is-error'); }
+  }finally{
+    PROFILE_SYNC_IN_PROGRESS=false;
+  }
+}
+function clearProfileStorage(){
+  try{
+    localStorage.removeItem(PROFILE_STORAGE_KEY);
+    // These are seeded from the profile, so the next user on a shared device
+    // must not inherit the previous account's department/batch/section.
+    localStorage.removeItem('fast_timetable_prefs');
+    localStorage.removeItem('fast_showup_prefs');
+    localStorage.removeItem('fast_exam_prefs');
+  }catch(err){ /* ignore */ }
+}
+async function signOutProfile(){
+  // Clear the device first: the revoke is best-effort and a slow network must
+  // not leave the previous account's profile on screen.
+  PROFILE_AUTH_ACCOUNT=null;
+  clearProfileCookie();
+  clearProfileStorage();
+  resetProfileModal();
+  const status=document.getElementById('profile-status');
+  if(status) status.textContent='Signed out. Verify your university email to sign in again.';
+  renderMyCoursesList();
+  try{ refreshTTFilters(); if(document.getElementById('p0')?.classList.contains('on')) loadTT(); }catch(err){ /* timetable not loaded yet */ }
+  showProfileSuccessToast('Signed out');
+  try{ await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'}); }catch(err){ /* already gone */ }
+}
+window.verifyProfileCode=verifyProfileCode;
+window.signOutProfile=signOutProfile;
+window.clearProfileStorage=clearProfileStorage;
 // ── Use the saved profile to pre-select the schedule tabs ──────────────
 // School of Computing. PCS belongs here too - it appears as "BS PCS" in the
 // computing timetable - and omitting it would cut those students out of the
@@ -344,7 +484,7 @@ function deleteSavedProfile(){
   // timetable has to be rebuilt afterwards or it would keep offering the
   // "My Courses" department for a list that no longer exists.
   clearProfileCookie();
-  try{ localStorage.removeItem(PROFILE_STORAGE_KEY); }catch(err){ /* ignore */ }
+  clearProfileStorage();
   const input=document.getElementById('profile-nuid');
   if(input) input.value='';
   resetProfileModal();
@@ -364,6 +504,9 @@ function openProfileModal(){
   const modal=document.querySelector('.profile-modal');
   PROFILE_MODAL_RETURN_FOCUS=document.activeElement instanceof HTMLElement ? document.activeElement : null;
   if(backdrop){ backdrop.hidden=false; }
+  PROFILE_AUTH_PENDING=null;
+  hideProfileCodeStep();
+  updateProfileAuthUi();
   const savedProfile=getProfileCookie();
   const savedNuid=localStorage.getItem(PROFILE_STORAGE_KEY)||'';
   renderNotificationPrefs();
@@ -371,18 +514,38 @@ function openProfileModal(){
     input.value=savedProfile?.nuid || savedNuid || '';
   }
   if(savedProfile){
-    setProfileSyncVisible(false);
+    const verified=profileAuthMatches(savedProfile.nuid);
+    setProfileSyncVisible(!verified);
     renderProfileCard(savedProfile);
     showProfileActions(false,true);
     if(card) card.hidden=false;
     if(registration) registration.hidden=true;
+    if(status){
+      status.textContent=verified
+        ? `Verified as ${savedProfile.nuid}.`
+        : 'Verify your university email to save scores and notifications.';
+    }
   }else{
     setProfileSyncVisible(true);
     if(card) card.hidden=true;
     if(registration) registration.hidden=true;
     showProfileActions(false,false);
-    if(status) status.textContent='Type your NU ID and press sync.';
+    if(status) status.textContent='Type your NU ID. We will email you a 6-digit code.';
   }
+  // /api/auth/me is authoritative; the local cache may be stale after a cookie
+  // expiry or a logout in another tab.
+  refreshAuthSession().then(()=>{
+    if(!backdrop || backdrop.hidden) return;
+    updateProfileAuthUi();
+    if(!savedProfile) return;
+    const verified=profileAuthMatches(savedProfile.nuid);
+    setProfileSyncVisible(!verified);
+    if(status){
+      status.textContent=verified
+        ? `Verified as ${savedProfile.nuid}.`
+        : 'Verify your university email to save scores and notifications.';
+    }
+  });
   const focusTarget=(savedProfile && card && !card.hidden)
     ? (document.getElementById('profile-save-btn') || document.getElementById('profile-delete-btn') || modal)
     : input || modal;
@@ -421,6 +584,8 @@ function openProfileModal(){
 function closeProfileModal(){
   const backdrop=document.getElementById('profile-modal-backdrop');
   if(backdrop){ backdrop.hidden=true; }
+  PROFILE_AUTH_PENDING=null;
+  hideProfileCodeStep();
   document.body.style.overflow='';
   if(PROFILE_MODAL_RETURN_FOCUS instanceof HTMLElement){
     PROFILE_MODAL_RETURN_FOCUS.focus({preventScroll:true});
@@ -465,8 +630,10 @@ function deptLabelToCode(label){
 // never leaves it.
 //
 // Strictly additive: the caller has already saved the profile locally, and a
-// failure here must not cost the user that profile or block the UI. Every
-// failure path is a console warning and a false return, never a throw.
+// failure here must not cost the user that profile or block the UI. The server
+// takes the roll no from the verified session; this only supplies the profile
+// fields. Every failure path is a console warning and a false return, never a
+// throw.
 async function publishProfileToRoster(profile){
   try{
     if(!profileIsComputing(profile)){
@@ -481,8 +648,9 @@ async function publishProfileToRoster(profile){
     if(!nuid||!name||!section||!department) return false;
     const res=await fetch('/api/register',{
       method:'POST',
+      credentials:'same-origin',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({nuid,name,section,department})
+      body:JSON.stringify({name,section,department})
     });
     // On a static host with no serverless layer the catch-all rewrite answers
     // /api/register with index.html and a 200, so "did it work" has to be the
@@ -528,12 +696,6 @@ function parseProfileFromStudent(student){
     room: student.class || '-'
   };
 }
-function getProfileDataFileForNuid(nuid){
-  const match=String(nuid||'').trim().match(/^(\d{2})/);
-  const year=match ? match[1] : '';
-  if(['22','23','24','25','26'].includes(year)) return `/db/students/${year}.json`;
-  return '/db/seating/plan.json';
-}
 function formatNuid(raw){
   const cleaned=String(raw||'').trim().toUpperCase().replace(/\s+/g,'');
   // Accept forms like 25i0632, 25I0632, 25-I-0632, 25I-0632 -> 25I-0632
@@ -574,23 +736,6 @@ function updateProfileRegistrationFields(nuid){
   // Do NOT reveal the form here; it is only shown after a lookup finds no match,
   // otherwise it flashes on screen while the data is still loading.
 }
-// Sign-in must see the roster as it is in the database right now: a row that
-// was just deleted (or just registered) has to count immediately. The CDN
-// keeps /db/students/*.json for minutes, so each lookup carries a unique
-// query string — a fresh cache key the edge has never stored — and nothing is
-// remembered in the page between attempts either.
-async function loadProfileStudents(nuid){
-  const sourceFile=getProfileDataFileForNuid(nuid);
-  try{
-    const res=await fetch(`${sourceFile}?fresh=${Date.now()}`,{cache:'no-store'});
-    if(!res.ok) throw new Error('Profile data unavailable');
-    const data=await res.json();
-    return Array.isArray(data.students)?data.students:[];
-  }catch(err){
-    console.warn('Profile sync failed:', err);
-    return [];
-  }
-}
 async function syncProfile(){
   if(PROFILE_SYNC_IN_PROGRESS) return;
   const input=document.getElementById('profile-nuid');
@@ -610,6 +755,32 @@ async function syncProfile(){
   const nuid=formatNuid(input?.value||'');
   if(input) input.value=nuid;
   if(status) status.classList.remove('is-error');
+  if(!PROFILE_AUTH_ACCOUNT) await refreshAuthSession();
+  if(!profileAuthMatches(nuid)){
+    // Everything that reads or writes a profile needs proof that the mailbox
+    // belongs to this roll no. Request the code first, then rerun this function
+    // after verifyProfileCode() has a session.
+    if(card) card.hidden=true;
+    if(registration) registration.hidden=true;
+    if(status) status.textContent='Sending a code to your university email...';
+    PROFILE_SYNC_IN_PROGRESS=true;
+    try{
+      const info=await requestAuthCode(nuid);
+      PROFILE_AUTH_PENDING={nuid,challengeId:info.challenge_id};
+      updateProfileRegistrationFields(nuid);
+      localStorage.setItem(PROFILE_STORAGE_KEY,nuid);
+      showProfileCodeStep(info.email);
+      if(status) status.textContent='Enter the 6-digit code we emailed you.';
+      return;
+    }catch(err){
+      // Fail closed. The public roster fallback is gone, and an auth outage
+      // means there is no verified session to read this account with.
+      if(status){ status.textContent=err.message||'Could not send the code.'; status.classList.add('is-error'); }
+      return;
+    }finally{
+      PROFILE_SYNC_IN_PROGRESS=false;
+    }
+  }
   updateProfileRegistrationFields(nuid);
   localStorage.setItem(PROFILE_STORAGE_KEY,nuid);
   // Clean loading state: hide both the card and the registration form while fetching.
@@ -618,8 +789,15 @@ async function syncProfile(){
   if(status) status.textContent='Syncing profile...';
   PROFILE_SYNC_IN_PROGRESS=true;
   try{
-    const students=await loadProfileStudents(nuid);
-    const match=students.find(student=>String(student.nuid||'').trim().toUpperCase()===nuid);
+    // /api/auth/me returns the roster row for the SESSION account only. The
+    // batch-file read that used to live here is gone.
+    const account=await refreshAuthSession();
+    if(!account || !profileAuthMatches(nuid)){
+      if(status){ status.textContent='We could not verify your session right now. Please try again.'; status.classList.add('is-error'); }
+      if(card) card.hidden=true;
+      return;
+    }
+    const match=account.student||null;
     if(!match){
       if(status) status.textContent='No student found for that NU ID.';
       if(card) card.hidden=true;
@@ -633,7 +811,7 @@ async function syncProfile(){
     showProfileActions(!hasSavedProfile, hasSavedProfile);
     if(status) status.textContent=hasSavedProfile ? 'Profile synced successfully. Your saved profile is shown.' : 'Profile synced successfully. Save it locally to keep it on this browser.';
   }catch(err){
-    if(status) status.textContent='Unable to load profile right now.';
+    if(status){ status.textContent='Unable to load profile right now.'; status.classList.add('is-error'); }
     if(card) card.hidden=true;
   }finally{
     PROFILE_SYNC_IN_PROGRESS=false;
@@ -645,6 +823,10 @@ function registerProfile(){
   const validationError=validateNuid(nuid);
   if(validationError){
     if(status){ status.textContent=validationError; status.classList.add('is-error'); }
+    return;
+  }
+  if(!profileAuthMatches(nuid)){
+    if(status){ status.textContent='Verify your university email before saving this profile.'; status.classList.add('is-error'); }
     return;
   }
   const name=(document.getElementById('profile-name')?.value||'').trim();
@@ -750,12 +932,11 @@ function renderNotificationPrefs(){
 // so the server record can never drift between the two paths.
 async function postPushSubscription(profile,sub,prefs){
   const res=await fetch(PUSH_SUBSCRIBE_URL,{
-    method:'POST', headers:{'Content-Type':'application/json'},
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      nuid:profile.nuid,
       name:profile.name||'',
       department:profile.department||'',
-      batch:profile.batch||'',
       section:profile.section||'',
       prefs,
       coursePrefs:{removed:profile.courseRemoved||[],added:profile.courses||[],revision:profile.coursePrefsRevision||0},
@@ -829,6 +1010,12 @@ function setPushStatus(msg){
 async function enableSeatAlerts(){
   const profile=getProfileCookie();
   if(!profile||!profile.nuid){ setPushStatus('Save your profile first, then enable alerts.'); return; }
+  // No sender targets FSE or FSM, and /api/subscribe now needs a verified
+  // session. Say why here instead of letting them hit a 401 they cannot fix.
+  if(!profileIsComputing(profile)){
+    setPushStatus('Class alerts are only sent to School of Computing students. Your timetable works exactly the same either way.');
+    return false;
+  }
   if(!('serviceWorker' in navigator)||!('PushManager' in window)){
     setPushStatus('This browser does not support notifications.'); return;
   }
@@ -869,7 +1056,7 @@ async function enableSeatAlerts(){
    server record can be found by, and unsubscribing destroys it. */
 async function deletePushSubscription(endpoint){
   const res=await fetch(PUSH_SUBSCRIBE_URL,{
-    method:'DELETE',
+    method:'DELETE', credentials:'same-origin',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({endpoint})
   });
@@ -1120,21 +1307,24 @@ const LB_STATIC_PATHS={
    the next time the game was opened, long after the run it belonged to. */
 async function submitLeaderboardScore(game,profile,score){
   try{
+    // Identity is the session cookie, not this payload. The server derives the
+    // roll number and display fields from it, so nothing here can claim to be
+    // another student.
     const res=await fetch('/api/leaderboard',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({game,nuid:profile.nuid,name:profile.name,section:profile.section,
-        department:profile.department,batch:profile.batch,score})
+      credentials:'same-origin',
+      body:JSON.stringify({game,score})
     });
     let data=null;
     try{ data=await res.json(); }catch(e){ /* non-JSON error body */ }
     if(!res.ok){
-      // 503 means the server knows it cannot save (bad or missing credential).
-      // Players see data.message, which is written to be plain and blameless —
-      // a student cannot act on "the credential was rejected" and should not be
-      // left thinking they broke something. The operator-facing cause comes
-      // back as data.detail and goes to the console for diagnosis.
+      // 401 means no verified session: saving a public score requires sign-in.
+      // Every other error carries a message written to be plain and blameless;
+      // the operator-facing cause comes back as data.detail for the console.
       if(data&&data.detail) console.warn('Leaderboard save unavailable:',data.detail);
-      const msg=(res.status===503&&data&&data.message)?data.message:'Could not submit score.';
+      let msg='Could not submit score.';
+      if(res.status===401) msg='Sign in to save your score.';
+      else if(data&&data.message) msg=data.message;
       let entries=[];
       try{ entries=await fetchLeaderboard(game); }catch(e){ /* leave empty */ }
       return {entries,status:msg};
@@ -5662,6 +5852,8 @@ window.setGameField=function(canvasId,w,h){
   window.closeFlappy=function(){ overlay.classList.remove('on'); cancelAnimationFrame(rafId); clearInterval(lbPollId); lbPollId=null; };
 })();
 
+// Restore the verified-session state before the profile modal is opened.
+refreshAuthSession();
 // Sync existing installs and retry local choices after reconnecting.
 queueMicrotask(()=>syncNotificationPrefs());
 window.addEventListener('online',()=>syncNotificationPrefs());

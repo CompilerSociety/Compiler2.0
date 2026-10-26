@@ -76,3 +76,9 @@ Sign-in screen: "Continue as guest" moved to the top of the sign-in card and mad
 
 ## 2026-10-20T13:00:00+05:00
 Guests land on Lookup: "Continue as guest" now goes to #/lookup instead of Today, and a returning phone guest (no profile, vtable_skipped_login set, no hash) opens on Lookup too. Desktop guests keep the guest landing on Today. Bumped to v=65. Checked at 375px: click -> Lookup, relaunch -> Lookup.
+
+## 2026-10-26T12:00:00+05:00
+Roster reads narrowed. `/api/auth/me` now returns the session account's own roster row (`student`), replacing `loadProfileStudents`/`getProfileDataFileForNuid` in desktop sign-in and mobile `finishSignIn`; auth outages fail closed with no public fallback. Mobile friend lookup now calls the new verified-session, exact-match `/api/roster/lookup` (name/department/batch only; 60 weighted/hour, 200/day, misses cost 5, events TTL 24h, `ROSTER_LOOKUP_ENABLED=0` kill switch). `api/db.mjs?doc=students/*` is behind `ALLOW_PUBLIC_ROSTER`; unset still allows for the first deploy, set 0 to deny. Integration test asserts the deny path; friend browser test mocks the new lookup. Bumped to v=67. Full DB/OTP and Playwright suites not run here (missing mongodb-memory-server and playwright).
+
+## 2026-10-26T13:00:00+05:00
+Auth OTP rate limiting now fails closed. `authRateCheck` and `authRateNote` in `lib/db/repos.mjs` throw on a storage fault instead of silently allowing the request, and `/api/auth/request-code` books both per-IP and per-NU-ID attempts before creating or emailing a code, so an unrecorded email can no longer bypass the counters. `auth:smoke` now asserts request-code returns 503 with no nonce cookie when the limiter is unreadable, and that rate booking propagates the failure. No frontend change, so no asset bump.

@@ -87,12 +87,22 @@ function sendFile(res, full) {
 // Vercel hands the handler a Node req/res with a few extras bolted on
 // (req.query, parsed req.body, res.status().json()). Recreate just those.
 async function runApi(name, req, res, query) {
+  // `name` is the path under /api/ and may contain slashes, so nested Vercel
+  // functions (api/auth/request-code.mjs) resolve the same way they do in
+  // production. Reject traversal segments before touching the filesystem.
+  const segments = String(name || '').split('/').filter(Boolean);
+  if (!segments.length || segments.some((s) => s === '.' || s === '..' || s.includes('\\'))) {
+    return false;
+  }
+  const base = path.join(ROOT, 'api', ...segments);
+  if (!base.startsWith(path.join(ROOT, 'api'))) return false;
+
   // .mjs first: the handlers that use ESM carry that extension so Vercel treats
   // them as modules (package.json declares no "type", so a bare .js is CommonJS
   // there and an `import` is a syntax error). The older CommonJS handlers are
   // still plain .js.
   const file = ['.mjs', '.js']
-    .map((ext) => path.join(ROOT, 'api', `${name}${ext}`))
+    .map((ext) => `${base}${ext}`)
     .find((p) => fs.existsSync(p));
   if (!file) return false;
 
@@ -127,7 +137,7 @@ const server = http.createServer(async (req, res) => {
   try {
     // 1. Functions win, exactly as they do on Vercel.
     if (pathname.startsWith('/api/')) {
-      const name = pathname.slice(5).split('/')[0];
+      const name = pathname.slice(5);
       if (await runApi(name, req, res, query)) return;
       res.writeHead(404, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ ok: false, error: `No api/${name}.(mjs|js)` }));
@@ -151,7 +161,7 @@ const server = http.createServer(async (req, res) => {
       // every piece of data on the page.
       const [destPath, destQuery = ''] = dest.split('?');
       if (destPath.startsWith('/api/')) {
-        const name = destPath.slice(5).split('/')[0];
+        const name = destPath.slice(5);
         // The rewrite's own query merges UNDER the caller's, so an explicit
         // ?doc= in the request cannot be silently overridden by the rule.
         const merged = { ...Object.fromEntries(new URLSearchParams(destQuery)), ...query };

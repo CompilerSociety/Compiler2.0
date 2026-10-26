@@ -57,12 +57,13 @@ check('timetable returns 200', r.statusCode === 200, `${r.statusCode}`);
 check('timetable is byte-identical to what was stored',
   JSON.stringify(r.body) === JSON.stringify(tt), JSON.stringify(r.body)?.slice(0, 120));
 
+// The publishable roster is closed once clients use /api/auth/me and
+// /api/roster/lookup. Keep this flag off for the rest of the suite.
+process.env.ALLOW_PUBLIC_ROSTER = '0';
 r = await call('students/26');
-check('roster returns the old file shape',
-  r.statusCode === 200 && r.body.count === 1
-    && r.body.students[0].nuid === '26I-0001'
-    && 'updated_at' in r.body && 'source_subject' in r.body,
-  JSON.stringify(r.body)?.slice(0, 160));
+check('public roster is denied when the flag is off',
+  r.statusCode === 403 && r.body?.error === 'roster_requires_auth',
+  `${r.statusCode} ${JSON.stringify(r.body)?.slice(0, 120)}`);
 
 r = await call('leaderboards/compiler-run');
 check('leaderboard returns { players, leaderboard }',
@@ -98,8 +99,10 @@ let unroutable = [];
 for (const route of docRoutes) {
   const doc = decodeURIComponent(route.destination.split('doc=')[1]);
   const res = await call(doc);
-  // 404 is fine (nothing seeded); 400/503 would mean the route is malformed.
-  if (![200, 404].includes(res.statusCode)) unroutable.push(`${route.source} -> ${res.statusCode}`);
+  // 404 is fine (nothing seeded); 403 is expected for the now-gated roster;
+  // 400/503 would mean the route is malformed.
+  const expected = doc.startsWith('students/') ? [403] : [200, 404];
+  if (!expected.includes(res.statusCode)) unroutable.push(`${route.source} -> ${res.statusCode}`);
 }
 check('every rewrite maps to a dataset api/db understands',
   unroutable.length === 0, unroutable.join(', '));

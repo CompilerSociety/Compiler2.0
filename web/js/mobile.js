@@ -88,6 +88,7 @@
   // On desktop the sign-in screen is a page you visit, not a gate, so it gets
   // a history entry and Back returns to wherever the student was.
   function openSignin(){
+    if(typeof resetSigninCode==='function') resetSigninCode();
     if(DESK.matches) go('signin');
     else { route='signin'; render(); }
   }
@@ -323,6 +324,42 @@
     el.classList.toggle('is-error',Boolean(isError));
   }
   let signingIn=false;
+  let signinChallenge=null;
+
+  function resetSigninCode(){
+    signinChallenge=null;
+    const wrap=$('m-code-wrap');
+    const code=$('m-code');
+    const btn=$('m-signin-btn');
+    if(wrap) wrap.hidden=true;
+    if(code) code.value='';
+    if(btn && !signingIn) btn.textContent='Continue';
+  }
+
+  async function finishSignIn(nuid){
+    // /api/auth/me is the only profile read now: it returns the roster row for
+    // the account the session resolved, never a downloadable batch.
+    const account=await refreshAuthSession();
+    if(!account || String(account.nuid||'').trim().toUpperCase()!==nuid){
+      throw new Error('Your session could not be verified. Please try again.');
+    }
+    const match=account.student||null;
+    if(!match){
+      // Not a dead end: the roster lags every new intake (26-* is published
+      // months after they can log in), so collect the details instead —
+      // the same thing the desktop registration form does.
+      startRegistration(nuid);
+      return;
+    }
+    const p=parseProfileFromStudent(match);
+    setProfileCookie(p);
+    seedProfileSchedulePrefs(p,true);
+    setSkipped(false);
+    renderOnboard(p);
+    route='onboard';
+    render();
+  }
+
   async function doSignIn(){
     if(signingIn) return;
     const input=$('m-nuid');
@@ -332,32 +369,63 @@
     const nuid=(typeof formatNuid==='function')?formatNuid(raw):String(raw).toUpperCase();
     if(input) input.value=nuid;
 
-    signingIn=true;
     const btn=$('m-signin-btn');
-    if(btn){ btn.disabled=true; btn.innerHTML='<span class="m-spinner"></span>Checking…'; }
-    signinStatus('');
-    try{
-      const students=await loadProfileStudents(nuid);
-      const match=students.find(s=>String(s.nuid||'').trim().toUpperCase()===nuid);
-      if(!match){
-        // Not a dead end: the roster lags every new intake (26-* is published
-        // months after they can log in), so collect the details instead —
-        // the same thing the desktop registration form does.
-        startRegistration(nuid);
+    // Second press: verify the emailed code, then continue with the roster.
+    if(signinChallenge){
+      const code=String($('m-code')?.value||'').trim();
+      if(!/^\d{6}$/.test(code)){
+        signinStatus('Enter the 6-digit code we emailed you.',true);
         return;
       }
-      const p=parseProfileFromStudent(match);
-      setProfileCookie(p);
-      seedProfileSchedulePrefs(p,true);
-      setSkipped(false);
-      renderOnboard(p);
-      route='onboard';
-      render();
+      signingIn=true;
+      if(btn){ btn.disabled=true; btn.innerHTML='<span class="m-spinner"></span>Verifying…'; }
+      signinStatus('');
+      const challenge=signinChallenge;
+      let stage='verify';
+      try{
+        await verifyAuthCode(challenge.challengeId,code);
+        stage='profile';
+        // The code is spent and a session now exists. Clearing the challenge
+        // first means a profile-load failure can retry via the session-reuse
+        // path above instead of asking for another code.
+        resetSigninCode();
+        await finishSignIn(challenge.nuid);
+      }catch(e){
+        signinStatus(stage==='verify'
+          ? (e.message||'That code could not be verified.')
+          : 'Signed in, but your profile could not be loaded. Press Continue to retry.',true);
+      }finally{
+        signingIn=false;
+        if(btn){ btn.disabled=false; btn.textContent=signinChallenge?'Verify code':'Continue'; }
+      }
+      return;
+    }
+
+    signingIn=true;
+    if(btn){ btn.disabled=true; btn.innerHTML='<span class="m-spinner"></span>Sending code…'; }
+    signinStatus('');
+    try{
+      // A session may already exist (page reload, or coming back from the
+      // registration screen). Reuse it instead of sending another code.
+      const account=await refreshAuthSession();
+      if(account && String(account.nuid||'').trim().toUpperCase()===nuid){
+        resetSigninCode();
+        await finishSignIn(nuid);
+        return;
+      }
+      const info=await requestAuthCode(nuid);
+      signinChallenge={nuid,challengeId:info.challenge_id};
+      const wrap=$('m-code-wrap');
+      if(wrap) wrap.hidden=false;
+      const code=$('m-code');
+      if(code){ code.value=''; code.focus(); }
+      signinStatus(`Code sent to ${info.email}. It expires in 10 minutes.`);
+      if(btn) btn.textContent='Verify code';
     }catch(e){
-      signinStatus('Could not reach the student roster. Try again, or skip login.',true);
+      signinStatus(e.message||'Could not send the code.',true);
     }finally{
       signingIn=false;
-      if(btn){ btn.disabled=false; btn.textContent='Continue'; }
+      if(btn){ btn.disabled=false; if(!signinChallenge) btn.textContent='Continue'; }
     }
   }
 
@@ -414,7 +482,8 @@
      db/students/<year>.json via /api/register so the server side learns about
      the student too — without it the roster never grows, and everything keyed
      off it (notification sign-up above all) keeps treating a real student as
-     someone who does not exist. */
+     someone who does not exist. The request is made after the OTP step, and
+     /api/register takes the roll no from that session rather than this form. */
   const reg={nuid:'',batch:'',program:'',section:''};
 
   function startRegistration(nuid){
@@ -466,6 +535,10 @@
   }
 
   function saveRegistration(){
+    if(typeof profileAuthMatches!=='function' || !profileAuthMatches(reg.nuid)){
+      regStatus('Verify your university email before saving this profile.',true);
+      return;
+    }
     const name=($('m-reg-name')?$('m-reg-name').value:'').trim();
     if(!name){ regStatus('Please enter your name.',true); return; }
     if(!reg.program||!reg.section){ regStatus('Pick your department and section.',true); return; }
@@ -2099,23 +2172,29 @@
     btn.disabled=true; input.disabled=true;
     $('m-friend-details').innerHTML='';
     friendStatus('Looking up your friend...');
-    let match=null,unavailable=false;
+    let match=null,unavailable=false,authRequired=false,limited=false;
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),15000);
     try{
-      const response=await fetch(getProfileDataFileForNuid(nuid),{cache:'no-store',signal:controller.signal});
+      const response=await fetch(`/api/roster/lookup?nuid=${encodeURIComponent(nuid)}`,{
+        cache:'no-store',credentials:'same-origin',signal:controller.signal
+      });
+      if(response.status===401||response.status===403){ authRequired=true; throw new Error('Sign in required'); }
+      if(response.status===429){ limited=true; throw new Error('Lookup rate limited'); }
       if(!response.ok) throw new Error('Roster unavailable');
       const data=await response.json();
-      if(!Array.isArray(data.students)) throw new Error('Roster unavailable');
-      match=data.students.find(f=>formatNuid(f.nuid)===nuid)||null;
+      if(data&&data.ok===true&&data.found===true&&data.student) match=data.student;
+      else if(!data||data.ok!==true||data.found!==false) throw new Error('Roster unavailable');
     }catch(e){ unavailable=true; }
     finally{ clearTimeout(timeout); }
     if(request!==friendView.request||$('m-friends-sheet').hidden) return;
     btn.disabled=false; input.disabled=false;
     const p=match?parseProfileFromStudent(match):{};
-    const draft={nuid,name:p.name||'',school:match?.school||'computing',department:p.department||'',
+    const draft={nuid,name:p.name||'',school:'computing',department:p.department||'',
       batch:p.batch?profileFullBatch(p):'20'+nuid.slice(0,2),section:p.section||''};
     friendStatus(match?'Found in the roster. Check the details, then save your friend.'
+      :authRequired?'Sign in to look up the roster, or enter their details below.'
+      :limited?'Too many lookups right now. Enter their details below, or try again later.'
       :unavailable?'The roster is unavailable. Try again, or enter their details below.'
       :'This NU ID is not in the roster yet. Enter their details below.');
     renderFriendDetails(draft);
@@ -2605,9 +2684,11 @@
 
     const so=$('m-signout');
     if(so) so.addEventListener('click',()=>{
+      if(typeof signOutProfile==='function') signOutProfile();
       if(typeof clearProfileCookie==='function') clearProfileCookie();
       setSkipped(false);
       fac.selected=null;
+      resetSigninCode();
       // Desktop carries on as a guest; the phone goes back to its sign-in.
       if(DESK.matches) go('today',true);
       else { route='signin'; render(); }
@@ -2618,8 +2699,14 @@
   function wire(){
     $('m-signin-btn').addEventListener('click',doSignIn);
     $('m-nuid').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
+    $('m-nuid').addEventListener('input',()=>{
+      if(!signinChallenge) return;
+      resetSigninCode();
+      signinStatus('NU ID changed. Press Continue to send a new code.');
+    });
+    $('m-code').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
     $('m-reg-go').addEventListener('click',saveRegistration);
-    $('m-reg-back').addEventListener('click',()=>{ route='signin'; render(); });
+    $('m-reg-back').addEventListener('click',()=>{ resetSigninCode(); route='signin'; render(); });
     $('m-reg-name').addEventListener('keydown',e=>{ if(e.key==='Enter') saveRegistration(); });
     $('m-manual-btn').addEventListener('click',()=>{ route='manual'; render(); });
     $('m-guest-btn').addEventListener('click',()=>{
@@ -2629,11 +2716,13 @@
       go('lookup',true);
     });
     $('m-manual-go').addEventListener('click',saveManual);
-    $('m-manual-back').addEventListener('click',()=>{ route='signin'; render(); });
+    $('m-manual-back').addEventListener('click',()=>{ resetSigninCode(); route='signin'; render(); });
     $('m-onboard-push').addEventListener('click',()=>enablePush('m-onboard-push-status','m-onboard-push'));
     $('m-onboard-go').addEventListener('click',()=>{ go('today',true); });
     $('m-onboard-back').addEventListener('click',()=>{
       if(typeof clearProfileCookie==='function') clearProfileCookie();
+      if(typeof clearProfileStorage==='function') clearProfileStorage();
+      resetSigninCode();
       route='signin'; render();
     });
 
