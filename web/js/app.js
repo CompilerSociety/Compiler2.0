@@ -104,6 +104,9 @@ function setProfileCookie(profile){
   try{ localStorage.setItem(PROFILE_COOKIE_KEY,json); }catch(err){ /* ignore */ }
   // Also set a cookie when the protocol supports it (http/https).
   try{ document.cookie=`${PROFILE_COOKIE_KEY}=${encodeURIComponent(json)}; path=/; max-age=31536000; SameSite=Lax; Secure`; }catch(err){ /* ignore */ }
+  // Every saved change also goes to the account (see "Account sync"). Guarded
+  // because a profile heal can run before that section has initialised.
+  try{ queueAccountSync(); }catch(err){ /* not ready yet */ }
 }
 function clearProfileCookie(){
   try{ localStorage.removeItem(PROFILE_COOKIE_KEY); }catch(err){ /* ignore */ }
@@ -245,18 +248,151 @@ function resetProfileModal(){
    The server mints the session; this layer only carries the challenge id and
    the code between the two endpoints. The NU ID sent to request-code is
    validated server-side and the recipient is derived there, never here. */
-async function refreshAuthSession(){
-  try{
-    const res=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'});
-    if(!res.ok){ PROFILE_AUTH_ACCOUNT=null; return null; }
-    const data=await res.json().catch(()=>null);
-    PROFILE_AUTH_ACCOUNT=(data&&data.account)||null;
-    return PROFILE_AUTH_ACCOUNT;
-  }catch(err){
-    PROFILE_AUTH_ACCOUNT=null;
-    return null;
-  }
+// The HTTP status of the last /api/auth/me check (0 = network failure), so a
+// caller can tell "signed out" (401) apart from "offline".
+let PROFILE_AUTH_STATUS=0;
+let PROFILE_AUTH_INFLIGHT=null;
+function refreshAuthSession(){
+  // Startup, the profile modal and the mobile shell can all ask at once; one
+  // request answers them all.
+  if(PROFILE_AUTH_INFLIGHT) return PROFILE_AUTH_INFLIGHT;
+  PROFILE_AUTH_INFLIGHT=(async()=>{
+    try{
+      const res=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'});
+      PROFILE_AUTH_STATUS=res.status;
+      if(!res.ok){ PROFILE_AUTH_ACCOUNT=null; return null; }
+      const data=await res.json().catch(()=>null);
+      PROFILE_AUTH_ACCOUNT=(data&&data.account)||null;
+      if(PROFILE_AUTH_ACCOUNT) applySavedAccount(PROFILE_AUTH_ACCOUNT);
+      return PROFILE_AUTH_ACCOUNT;
+    }catch(err){
+      PROFILE_AUTH_STATUS=0;
+      PROFILE_AUTH_ACCOUNT=null;
+      return null;
+    }finally{
+      PROFILE_AUTH_INFLIGHT=null;
+    }
+  })();
+  return PROFILE_AUTH_INFLIGHT;
 }
+
+/* ── Account sync ─────────────────────────────────────────────────────────
+   The profile (section, My Courses overlay) and the friends address book are
+   stored on the signed-in account, so a logout, a cleared browser or a second
+   device gets them back. The browser copy is a cache of the account copy:
+     - /api/auth/me returns the saved copy and its revision; a newer revision
+       than this browser last saw replaces the local copy.
+     - every local change marks the cache dirty and is PUT back, quoting the
+       revision it was based on. A 409 means another device saved first, and
+       its copy wins.
+   Nothing is uploaded unless the local profile belongs to the session's NU
+   ID, so one account's data never lands on another's account. */
+const ACCOUNT_REV_KEY='vtable_account_rev';
+const ACCOUNT_DIRTY_KEY='vtable_account_dirty';
+const FRIENDS_STORAGE_KEY='vtable_friends_v1';
+const ACCOUNT_PROFILE_FIELDS=['name','school','department','batch','section','manual','courses','courseRemoved','coursePrefsRevision'];
+let ACCOUNT_SYNC_APPLYING=false;
+let ACCOUNT_SYNC_TIMER=null;
+let ACCOUNT_SYNC_QUEUE=Promise.resolve();
+
+function readAccountMarker(key){
+  try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(err){ return null; }
+}
+function writeAccountMarker(key,value){
+  try{
+    if(value===null) localStorage.removeItem(key);
+    else localStorage.setItem(key,JSON.stringify(value));
+  }catch(err){ /* storage unavailable */ }
+}
+function knownAccountRevision(nuid){
+  const rec=readAccountMarker(ACCOUNT_REV_KEY);
+  return rec&&rec.nuid===nuid?Number(rec.rev)||0:0;
+}
+function accountDirty(nuid){
+  const rec=readAccountMarker(ACCOUNT_DIRTY_KEY);
+  return Boolean(rec&&rec.nuid===nuid);
+}
+function readStoredFriends(){
+  try{
+    const list=JSON.parse(localStorage.getItem(FRIENDS_STORAGE_KEY)||'[]');
+    return Array.isArray(list)?list:[];
+  }catch(err){ return []; }
+}
+function accountOwnsLocalProfile(){
+  const nuid=String(PROFILE_AUTH_ACCOUNT?.nuid||'').toUpperCase();
+  const profile=getProfileCookie();
+  return Boolean(nuid&&profile&&String(profile.nuid||'').trim().toUpperCase()===nuid);
+}
+function accountProfilePayload(profile){
+  const out={};
+  ACCOUNT_PROFILE_FIELDS.forEach(k=>{ if(profile[k]!==undefined) out[k]=profile[k]; });
+  return out;
+}
+function adoptSavedAccount(nuid,saved){
+  ACCOUNT_SYNC_APPLYING=true;
+  try{
+    if(saved.profile) setProfileCookie({...saved.profile,nuid});
+    try{ localStorage.setItem(FRIENDS_STORAGE_KEY,JSON.stringify(saved.friends||[])); }catch(err){ /* ignore */ }
+  }finally{
+    ACCOUNT_SYNC_APPLYING=false;
+  }
+  writeAccountMarker(ACCOUNT_REV_KEY,{nuid,rev:saved.revision||0});
+  writeAccountMarker(ACCOUNT_DIRTY_KEY,null);
+  document.dispatchEvent(new CustomEvent('vtable:account'));
+}
+function applySavedAccount(account){
+  const nuid=String(account.nuid||'').toUpperCase();
+  const saved=account.saved;
+  if(!nuid||!saved) return;
+  const owns=accountOwnsLocalProfile();
+  const known=knownAccountRevision(nuid);
+  if(saved.profile&&(!owns||saved.revision>known)){
+    adoptSavedAccount(nuid,saved);
+    return;
+  }
+  // Nothing stored yet (first sign-in after this feature shipped), or edits
+  // made here that never reached the server: upload them.
+  if(owns&&(!saved.profile||accountDirty(nuid))) queueAccountSync(true);
+}
+function queueAccountSync(now){
+  if(ACCOUNT_SYNC_APPLYING) return;
+  const nuid=String(PROFILE_AUTH_ACCOUNT?.nuid||'').toUpperCase();
+  const profile=getProfileCookie();
+  const profileNuid=String(profile?.nuid||'').trim().toUpperCase();
+  // Remember the edit even when signed out, so it is uploaded on next sign-in.
+  if(profileNuid) writeAccountMarker(ACCOUNT_DIRTY_KEY,{nuid:profileNuid});
+  if(!nuid||profileNuid!==nuid) return;
+  clearTimeout(ACCOUNT_SYNC_TIMER);
+  ACCOUNT_SYNC_TIMER=setTimeout(()=>{
+    ACCOUNT_SYNC_QUEUE=ACCOUNT_SYNC_QUEUE.then(pushAccountProfile).catch(()=>{});
+  },now?0:800);
+}
+async function pushAccountProfile(){
+  if(!accountOwnsLocalProfile()) return;
+  const nuid=String(PROFILE_AUTH_ACCOUNT.nuid).toUpperCase();
+  const res=await fetch('/api/auth/me',{
+    method:'PUT',credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      revision:knownAccountRevision(nuid),
+      profile:accountProfilePayload(getProfileCookie()),
+      friends:readStoredFriends()
+    })
+  });
+  const data=await res.json().catch(()=>null);
+  if(res.ok&&data&&data.ok){
+    writeAccountMarker(ACCOUNT_REV_KEY,{nuid,rev:data.revision});
+    writeAccountMarker(ACCOUNT_DIRTY_KEY,null);
+    return;
+  }
+  if(res.status===409&&data&&data.saved){
+    adoptSavedAccount(nuid,data.saved);
+    showProfileSuccessToast('Loaded your latest profile from another device');
+  }
+  // Anything else (offline, 5xx) stays dirty and is retried on the next change
+  // or the next /api/auth/me.
+}
+window.queueAccountSync=queueAccountSync;
 function profileAuthMatches(nuid){
   if(!PROFILE_AUTH_ACCOUNT) return false;
   return String(PROFILE_AUTH_ACCOUNT.nuid||'').trim().toUpperCase()===String(nuid||'').trim().toUpperCase();
@@ -352,6 +488,9 @@ async function verifyProfileCode(){
 function clearProfileStorage(){
   try{
     localStorage.removeItem(PROFILE_STORAGE_KEY);
+    // The account holds the real copy now; the next sign-in restores it.
+    localStorage.removeItem(ACCOUNT_REV_KEY);
+    localStorage.removeItem(ACCOUNT_DIRTY_KEY);
     // These are seeded from the profile, so the next user on a shared device
     // must not inherit the previous account's department/batch/section.
     localStorage.removeItem('fast_timetable_prefs');
@@ -365,6 +504,9 @@ async function signOutProfile(){
   PROFILE_AUTH_ACCOUNT=null;
   clearProfileCookie();
   clearProfileStorage();
+  // Friends are stored on the account too, so the next person to use this
+  // device must not inherit this one's list.
+  try{ localStorage.removeItem(FRIENDS_STORAGE_KEY); }catch(err){ /* ignore */ }
   resetProfileModal();
   const status=document.getElementById('profile-status');
   if(status) status.textContent='Signed out. Verify your university email to sign in again.';
@@ -467,6 +609,14 @@ function saveProfileCookie(){
   if(!profile.nuid){
     if(status) status.textContent='Sync a profile first before saving it.';
     return;
+  }
+  // The card only shows identity fields. Saving it must not wipe the course
+  // overlay already stored for the same student.
+  const existing=getProfileCookie();
+  if(existing&&String(existing.nuid||'').trim().toUpperCase()===profile.nuid){
+    ['school','manual','courses','courseRemoved','coursePrefsRevision'].forEach(k=>{
+      if(existing[k]!==undefined) profile[k]=existing[k];
+    });
   }
   setProfileCookie(profile);
   seedProfileSchedulePrefs(profile,true);
@@ -797,14 +947,17 @@ async function syncProfile(){
       if(card) card.hidden=true;
       return;
     }
+    // A profile saved on the account (section, courses) beats the roster row:
+    // it is what the student chose, and the roster can lag or list them twice.
+    const saved=account.saved&&account.saved.profile;
     const match=account.student||null;
-    if(!match){
+    const profile=(saved&&saved.department)?{...saved,nuid}:(match?parseProfileFromStudent(match):null);
+    if(!profile){
       if(status) status.textContent='No student found for that NU ID.';
       if(card) card.hidden=true;
       if(registration) registration.hidden=false;
       return;
     }
-    const profile=parseProfileFromStudent(match);
     renderProfileCard(profile);
     const savedProfile=getProfileCookie();
     const hasSavedProfile=Boolean(savedProfile && String(savedProfile.nuid||'').trim().toUpperCase()===nuid);

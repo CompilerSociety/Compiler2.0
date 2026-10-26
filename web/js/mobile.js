@@ -343,6 +343,18 @@
     if(!account || String(account.nuid||'').trim().toUpperCase()!==nuid){
       throw new Error('Your session could not be verified. Please try again.');
     }
+    // refreshAuthSession() has already restored a profile saved on the
+    // account (section, courses, friends); use it instead of the roster row.
+    const saved=account.saved&&account.saved.profile;
+    if(saved&&saved.department){
+      const p=profile();
+      seedProfileSchedulePrefs(p,true);
+      setSkipped(false);
+      renderOnboard(p);
+      route='onboard';
+      render();
+      return;
+    }
     const match=account.student||null;
     if(!match){
       // Not a dead end: the roster lags every new intake (26-* is published
@@ -352,6 +364,12 @@
       return;
     }
     const p=parseProfileFromStudent(match);
+    // Keep a course overlay this browser already holds for the same student;
+    // it is uploaded to the account by setProfileCookie.
+    const local=profile();
+    if(local&&String(local.nuid||'').trim().toUpperCase()===nuid){
+      ['courses','courseRemoved','coursePrefsRevision'].forEach(k=>{ if(local[k]!==undefined) p[k]=local[k]; });
+    }
     setProfileCookie(p);
     seedProfileSchedulePrefs(p,true);
     setSkipped(false);
@@ -2073,13 +2091,98 @@
   function writeFriends(list){
     localStorage.setItem(FRIENDS_KEY,JSON.stringify(list));
     updateFriendsButton();
+    if(typeof queueAccountSync==='function') queueAccountSync();
+  }
+
+  /* Friendships live on the server (api/friends.mjs). The address book above
+     is what you saved; a friendship is what they agreed to. Only an accepted
+     friendship returns their saved profile, which is what shows their real
+     section and their repeat/extra courses. */
+  const friendServer={loaded:false,loading:null,error:'',friends:[],incoming:[],outgoing:[]};
+  function friendsSignedIn(){
+    return typeof PROFILE_AUTH_ACCOUNT!=='undefined'&&!!PROFILE_AUTH_ACCOUNT;
+  }
+  function loadFriendServer(){
+    if(!friendsSignedIn()){
+      Object.assign(friendServer,{loaded:false,error:'',friends:[],incoming:[],outgoing:[]});
+      return Promise.resolve();
+    }
+    if(friendServer.loading) return friendServer.loading;
+    friendServer.loading=(async()=>{
+      try{
+        const res=await fetch('/api/friends',{credentials:'same-origin',cache:'no-store'});
+        const data=await res.json().catch(()=>null);
+        if(!res.ok||!data||!data.ok) throw new Error((data&&data.message)||'Friends are unavailable right now.');
+        Object.assign(friendServer,{loaded:true,error:'',friends:data.friends||[],
+          incoming:data.incoming||[],outgoing:data.outgoing||[]});
+        mergeAcceptedFriends();
+      }catch(e){
+        friendServer.error=e.message||'Friends are unavailable right now.';
+      }finally{
+        friendServer.loading=null;
+      }
+    })();
+    return friendServer.loading;
+  }
+  // Where a saved profile's timetable lives. Same rules as profileKeys(): a
+  // hand-picked FSE/FSM batch is stored as the timetable keys it.
+  function friendScope(p){
+    if(!p) return null;
+    const dept=String(p.department||'').trim();
+    const batch=p.manual?String(p.batch||''):profileFullBatch(p);
+    const sec=String(p.section||'').trim().toUpperCase();
+    const school=p.school||(profileIsComputing(p)?'computing':'');
+    if(!dept||!batch||!sec||!school) return null;
+    return {school,dept,batch,sec};
+  }
+  // A friend accepted elsewhere (another device, or they asked you) joins the
+  // address book from their own saved profile.
+  function mergeAcceptedFriends(){
+    let list;
+    try{ list=readFriends(); }catch(e){ return; }
+    let changed=false;
+    friendServer.friends.forEach(f=>{
+      if(list.some(x=>x.nuid===f.nuid)) return;
+      const scope=friendScope(f.profile);
+      list.push({nuid:f.nuid,name:f.profile?.name||f.nuid,school:scope?.school||'computing',
+        department:scope?.dept||'',batch:scope?.batch||'',section:scope?.sec||''});
+      changed=true;
+    });
+    if(changed){ try{ writeFriends(list); }catch(e){ /* storage unavailable */ } }
+  }
+  function friendState(nuid){
+    if(friendServer.friends.some(f=>f.nuid===nuid)) return 'accepted';
+    if(friendServer.outgoing.some(f=>f.nuid===nuid)) return 'pending';
+    return 'none';
+  }
+  async function friendAction(action,nuid){
+    const res=await fetch('/api/friends',{
+      method:'POST',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action,nuid})
+    });
+    const data=await res.json().catch(()=>null);
+    if(!res.ok||!data||!data.ok){
+      const err=new Error((data&&data.message)||'That did not work. Try again.');
+      err.code=data&&data.error;
+      throw err;
+    }
+    await loadFriendServer();
+    return data;
   }
   function updateFriendsButton(){
     const btn=$('m-friends-btn');
     if(!btn) return;
+    // Waiting requests keep the button visible even with no saved friends;
+    // otherwise someone new would never see who asked them.
+    const waiting=friendsSignedIn()?friendServer.incoming.length:0;
+    const hint=btn.querySelector('small');
+    if(hint) hint.textContent=waiting
+      ?`${waiting} friend request${waiting===1?'':'s'} waiting`
+      :"View your friends' weekly timetables";
     try{
       const count=readFriends().length;
-      btn.hidden=count===0;
+      btn.hidden=count===0&&!waiting;
       $('m-friends-count').textContent=String(count);
     }catch(e){ btn.hidden=false; $('m-friends-count').textContent='!'; }
   }
@@ -2103,33 +2206,73 @@
     const status=$('m-friend-status');
     if(status) status.textContent=message;
   }
-  function renderFriendsList(){
-    friendView.request++;
+  function renderFriendsList(fresh){
+    const request=++friendView.request;
     friendView.mode='list';
     $('m-friends-title').textContent='My Friends';
     const host=$('m-friends-body');
     let friends;
     try{ friends=readFriends(); }
     catch(e){ host.innerHTML='<div class="m-empty">Saved friends could not be read on this device.</div>'; return; }
-    host.innerHTML='<p class="m-friends-copy">Choose a friend to view their published weekly timetable.</p>'
-      +'<div class="m-friend-list">'+(friends.length?friends.map(f=>`<div class="m-friend-row">
+    const signedIn=friendsSignedIn();
+    const stateLabel={accepted:'Friends &middot; sees courses',pending:'Request sent'};
+    const incoming=signedIn?friendServer.incoming:[];
+    host.innerHTML=(incoming.length?'<div class="m-section-label">Friend requests</div><div class="m-friend-list">'
+        +incoming.map(r=>`<div class="m-friend-row">
+          <div class="m-friend-open"><span class="m-course-name">${esc(r.name||r.nuid)}</span>
+            <span class="m-course-origin">${esc(r.nuid)} wants to share timetables</span></div>
+          <button class="m-chip" type="button" data-accept-friend="${esc(r.nuid)}">Accept</button>
+          <button class="m-course-remove" type="button" data-decline-friend="${esc(r.nuid)}" aria-label="Decline ${esc(r.name||r.nuid)}">&times;</button>
+        </div>`).join('')+'</div>':'')
+      +'<p class="m-friends-copy">'+(signedIn
+        ?'Choose a friend to view their week. Once they accept your request you also see their repeat and extra courses.'
+        :'Choose a friend to view their published weekly timetable. Sign in to send friend requests and see their courses.')+'</p>'
+      +'<div class="m-friend-list">'+(friends.length?friends.map(f=>{
+        const state=signedIn?friendState(f.nuid):'none';
+        return `<div class="m-friend-row">
         <button class="m-friend-open" type="button" data-friend="${esc(f.nuid)}">
           <span class="m-course-name">${esc(f.name)}</span>
-          <span class="m-course-origin">${esc(f.nuid)} &middot; ${esc(f.department)} ${esc(f.batch)}-${esc(f.section)}</span>
+          <span class="m-course-origin">${esc(f.nuid)} &middot; ${esc(f.department)} ${esc(f.batch)}-${esc(f.section)}${stateLabel[state]?' &middot; '+stateLabel[state]:''}</span>
         </button>
+        ${signedIn&&friendServer.loaded&&state==='none'?`<button class="m-chip" type="button" data-request-friend="${esc(f.nuid)}">Send request</button>`:''}
         <button class="m-course-remove" type="button" data-remove-friend="${esc(f.nuid)}" aria-label="Remove ${esc(f.name)}">&times;</button>
-      </div>`).join(''):'<div class="m-empty">No friends added yet.</div>')+'</div>'
+      </div>`;}).join(''):'<div class="m-empty">No friends added yet.</div>')+'</div>'
       +'<button class="m-btn-primary" id="m-friend-new" type="button">Add Friends</button>'
       +'<div class="m-signin-status" id="m-friend-status" role="status" aria-live="polite"></div>';
+    if(signedIn&&friendServer.error) friendStatus(friendServer.error);
     $('m-friend-new').addEventListener('click',renderFriendLookup);
     host.querySelectorAll('[data-friend]').forEach(btn=>btn.addEventListener('click',()=>{
       friendView.selected=friends.find(f=>f.nuid===btn.dataset.friend);
       renderFriendWeek();
     }));
-    host.querySelectorAll('[data-remove-friend]').forEach(btn=>btn.addEventListener('click',()=>{
-      try{ writeFriends(readFriends().filter(f=>f.nuid!==btn.dataset.removeFriend)); renderFriendsList(); toast('Friend removed'); }
+    // Every server action re-renders from fresh state, so the list never shows
+    // a status the server no longer agrees with.
+    const act=(btn,action,nuid,message)=>btn.addEventListener('click',async()=>{
+      btn.disabled=true;
+      try{ await friendAction(action,nuid); toast(message); }
+      catch(e){ friendStatus(e.message); btn.disabled=false; return; }
+      if(friendView.mode==='list'&&!$('m-friends-sheet').hidden) renderFriendsList(true);
+    });
+    host.querySelectorAll('[data-accept-friend]').forEach(btn=>act(btn,'accept',btn.dataset.acceptFriend,'Friend request accepted'));
+    host.querySelectorAll('[data-decline-friend]').forEach(btn=>act(btn,'decline',btn.dataset.declineFriend,'Request declined'));
+    host.querySelectorAll('[data-request-friend]').forEach(btn=>act(btn,'request',btn.dataset.requestFriend,'Friend request sent'));
+    host.querySelectorAll('[data-remove-friend]').forEach(btn=>btn.addEventListener('click',async()=>{
+      const nuid=btn.dataset.removeFriend;
+      const state=signedIn?friendState(nuid):'none';
+      // Removing an accepted friend ends the friendship for both of you, so
+      // they stop seeing your courses too; a pending request is withdrawn.
+      if(state!=='none'){
+        try{ await friendAction(state==='accepted'?'remove':'cancel',nuid); }
+        catch(e){ friendStatus(e.message); return; }
+      }
+      try{ writeFriends(readFriends().filter(f=>f.nuid!==nuid)); renderFriendsList(true); toast('Friend removed'); }
       catch(e){ friendStatus('Could not save the change on this device.'); }
     }));
+    if(signedIn&&!fresh){
+      loadFriendServer().then(()=>{
+        if(request===friendView.request&&friendView.mode==='list'&&!$('m-friends-sheet').hidden) renderFriendsList(true);
+      });
+    }
   }
   function renderFriendLookup(){
     friendView.request++;
@@ -2144,7 +2287,7 @@
       </form>
       <div class="m-signin-status" id="m-friend-status" role="status" aria-live="polite"></div>
       <div id="m-friend-details"></div>`;
-    $('m-friend-back').addEventListener('click',renderFriendsList);
+    $('m-friend-back').addEventListener('click',()=>renderFriendsList());
     $('m-friend-lookup').addEventListener('submit',lookupFriend);
     $('m-friend-nuid').addEventListener('input',()=>{
       friendView.request++;
@@ -2304,28 +2447,80 @@
         if(friends.some(f=>f.nuid===friend.nuid)){ friendStatus('This friend is already in your list.'); return; }
         if(friends.length>=100){ friendStatus('You can save up to 100 friends. Remove one before adding another.'); return; }
         writeFriends([...friends,friend]);
+      }catch(e){ friendStatus('Could not save this friend. Check that local storage is available.'); return; }
+      if(!friendsSignedIn()){
         renderFriendsList();
         toast('Friend saved on this device');
-      }catch(e){ friendStatus('Could not save this friend. Check that local storage is available.'); }
+        return;
+      }
+      friendAction('request',friend.nuid)
+        .then(data=>toast(data.status==='accepted'?'Friend saved':'Friend saved · request sent'))
+        .catch(e=>toast(e.code==='incoming_pending'?'Friend saved · they already asked you, accept it below':'Friend saved · request not sent, try again from the list'))
+        .finally(()=>{ if(friendView.mode!=='week'&&!$('m-friends-sheet').hidden) renderFriendsList(true); });
     });
   }
-  function renderFriendWeek(){
+  // One day of an accepted friend's classes, built the way getMyCourses()
+  // builds yours: their own section minus the courses they dropped, plus every
+  // slot of each course they added from another section (repeats, electives).
+  function friendClassesFor(scope,shared,day){
+    const sameName=(e,name)=>stripNote(entryCourse(e)).trim().toUpperCase()===name;
+    const removed=new Set((shared.courseRemoved||[]).map(n=>String(n).trim().toUpperCase()));
+    const rows=classesFor(scope.dept,scope.batch,scope.sec,day,friendSource(scope.school))
+      .filter(e=>!removed.has(stripNote(entryCourse(e)).trim().toUpperCase()));
+    (shared.courses||[]).forEach(c=>{
+      const name=String(c.name||'').trim().toUpperCase();
+      classesFor(c.dept,c.batch,c.section,day,friendSource(c.school||scope.school))
+        .filter(e=>sameName(e,name))
+        .forEach(e=>rows.push(e));
+    });
+    return sortByTime(rows);
+  }
+  function renderFriendWeek(tried=new Set()){
     const friend=friendView.selected;
     if(!friend) return renderFriendsList();
+    const request=++friendView.request;
     friendView.mode='week';
+    const accepted=friendServer.friends.find(f=>f.nuid===friend.nuid);
+    const shared=accepted&&accepted.profile;
+    const scope=friendScope(shared)||{school:friend.school,dept:friend.department,batch:friend.batch,sec:friend.section};
+    const extras=shared?(shared.courses||[]):[];
     $('m-friends-title').textContent=friend.name;
     $('m-friends-body').innerHTML=`<button class="m-back" id="m-friend-back" type="button">&lsaquo; My Friends</button>
-      <p class="m-friends-copy">${esc(friend.nuid)} &middot; ${esc(friend.department)} ${esc(friend.batch)}-${esc(friend.section)}<br>Weekly section timetable</p>
+      <p class="m-friends-copy">${esc(friend.nuid)} &middot; ${esc(scope.dept)} ${esc(scope.batch)}-${esc(scope.sec)}<br>${shared
+        ?'Their week, including repeat and extra courses'
+        :friendsSignedIn()&&friendState(friend.nuid)==='pending'
+          ?'Weekly section timetable. Their repeat and extra courses show once they accept your request.'
+          :'Weekly section timetable'}</p>
+      ${shared?`<div class="m-section-label">Repeat &amp; extra courses (${extras.length})</div>
+        <div class="m-friend-list">${extras.length?extras.map(c=>`<div class="m-friend-row"><div class="m-friend-open">
+          <span class="m-course-name">${esc(c.name)}</span>
+          <span class="m-course-origin">${esc(c.dept)} ${esc(c.batch)}-${esc(c.section)}</span></div></div>`).join('')
+          :'<div class="m-empty">No repeat or extra courses.</div>'}</div>`:''}
       <div id="m-friend-week"></div>`;
-    $('m-friend-back').addEventListener('click',renderFriendsList);
-    const source=friendSource(friend.school);
-    const keys={dept:friend.department,batch:friend.batch,sec:friend.section,tt:source};
+    $('m-friend-back').addEventListener('click',()=>renderFriendsList());
     const pane=$('m-friend-week');
-    if(!source[friend.department]?.[friend.batch]?.[friend.section]){
+    // Extra courses can come from another school's timetable; load every one
+    // this week needs before drawing it.
+    const schools=[...new Set([scope.school,...extras.map(c=>c.school||scope.school)].filter(Boolean))];
+    const missing=schools.filter(s=>!tried.has(s)&&!Object.keys(friendSource(s)).length);
+    if(missing.length){
+      missing.forEach(s=>tried.add(s));
+      pane.innerHTML='<div class="m-empty">Loading their timetable…</div>';
+      Promise.allSettled(missing.map(loadFriendSchool)).then(()=>{
+        if(request!==friendView.request||friendView.mode!=='week'||$('m-friends-sheet').hidden) return;
+        renderFriendWeek(tried);
+      });
+      return;
+    }
+    const source=friendSource(scope.school);
+    const keys={dept:scope.dept,batch:scope.batch,sec:scope.sec,tt:source};
+    if(!source[scope.dept]?.[scope.batch]?.[scope.sec]&&!extras.length){
       pane.innerHTML='<div class="m-empty">No timetable is available for this section right now. Check their details or try again after the timetable loads.</div>';
       return;
     }
-    renderWeek(keys,pane,day=>classesFor(keys.dept,keys.batch,keys.sec,day,source));
+    renderWeek(keys,pane,day=>shared
+      ?friendClassesFor(scope,shared,day)
+      :classesFor(keys.dept,keys.batch,keys.sec,day,source));
   }
   function wireFriends(){
     let dismissedQuotePointer=false;
@@ -2366,6 +2561,10 @@
     });
     window.addEventListener('storage',ev=>{
       if(ev.key!==FRIENDS_KEY) return;
+      updateFriendsButton();
+      if(!$('m-friends-sheet').hidden&&friendView.mode==='list') renderFriendsList();
+    });
+    document.addEventListener('vtable:account',()=>{
       updateFriendsButton();
       if(!$('m-friends-sheet').hidden&&friendView.mode==='list') renderFriendsList();
     });
@@ -2800,6 +2999,13 @@
     const home=(!profile()&&skipped()&&!DESK.matches)?'lookup':'today';
     route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:home;
     render();
+    // The account's saved profile replaced the local one (new device, after a
+    // logout, or edited elsewhere). Mid sign-in, finishSignIn routes instead.
+    document.addEventListener('vtable:account',()=>{
+      if(signingIn) return;
+      if(route==='signin'&&profile()) go('today',true);
+      else render();
+    });
     dropUnverifiedProfile();
   }
 
@@ -2807,14 +3013,14 @@
   // has since expired) would otherwise count as signed in forever. Only a
   // definite 401 clears it: offline or a server error keeps the profile, so
   // the installed app still opens without a connection. Manual FSE/FSM
-  // profiles carry no NU ID and never had a session to check.
+  // profiles carry no NU ID and never had a session to check. A valid session
+  // restores the account's saved profile through the 'vtable:account' event.
   async function dropUnverifiedProfile(){
+    await refreshAuthSession();
+    if(friendsSignedIn()) loadFriendServer().then(updateFriendsButton);
     const p=profile();
     if(!p||!p.nuid||p.manual) return;
-    let res;
-    try{ res=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'}); }
-    catch(e){ return; }
-    if(res.status!==401) return;
+    if(PROFILE_AUTH_STATUS!==401) return;
     if(typeof clearProfileCookie==='function') clearProfileCookie();
     if(typeof clearProfileStorage==='function') clearProfileStorage();
     resetSigninCode();
