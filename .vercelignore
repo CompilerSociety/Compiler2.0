@@ -1,0 +1,5 @@
+# Everything under api/ becomes a Serverless Function, and the Hobby plan caps
+# a deployment at 12. These are local tools, not endpoints.
+api/test.js
+api/profile.py
+api/__pycache__

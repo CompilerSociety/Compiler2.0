@@ -1,0 +1,4019 @@
+{
+ "irregular": [
+  {
+   "nuid": "19I-0479",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-9B": 1,
+    "BCS-5B": 2,
+    "BCS-7A": 1,
+    "BCS-3J": 1
+   }
+  },
+  {
+   "nuid": "20I-0461",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 3
+   }
+  },
+  {
+   "nuid": "20I-0830",
+   "chosen": "BCS-3G",
+   "seen": {
+    "BCS-5A": 1,
+    "BCS-9A": 1,
+    "BCS-7E": 1,
+    "BCS-7B": 1,
+    "BCS-3G": 1
+   }
+  },
+  {
+   "nuid": "20I-2319",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0277",
+   "chosen": "BDS-7A",
+   "seen": {
+    "BDS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0281",
+   "chosen": "BAI-8D",
+   "seen": {
+    "BAI-8D": 1
+   }
+  },
+  {
+   "nuid": "21I-0311",
+   "chosen": "BAI-8B",
+   "seen": {
+    "BAI-8B": 1
+   }
+  },
+  {
+   "nuid": "21I-0314",
+   "chosen": "BAI-8C",
+   "seen": {
+    "BAI-8C": 1
+   }
+  },
+  {
+   "nuid": "21I-0320",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 4
+   }
+  },
+  {
+   "nuid": "21I-0337",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5C": 1,
+    "BAI-5A": 2,
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "21I-0376",
+   "chosen": "BCS-8C",
+   "seen": {
+    "BCS-8C": 1
+   }
+  },
+  {
+   "nuid": "21I-0412",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 2,
+    "BCS-9A": 1,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "21I-0418",
+   "chosen": "BCS-8A",
+   "seen": {
+    "BCS-8A": 1
+   }
+  },
+  {
+   "nuid": "21I-0423",
+   "chosen": "BCS-8A",
+   "seen": {
+    "BCS-8A": 1
+   }
+  },
+  {
+   "nuid": "21I-0461",
+   "chosen": "BCS-8B",
+   "seen": {
+    "BCS-8B": 1
+   }
+  },
+  {
+   "nuid": "21I-0484",
+   "chosen": "BAI-7C",
+   "seen": {
+    "BCS-5A": 1,
+    "BAI-7C": 1,
+    "BCS-7B": 1,
+    "BCS-5D": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0488",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0520",
+   "chosen": "BCS-8A",
+   "seen": {
+    "BCS-8A": 1
+   }
+  },
+  {
+   "nuid": "21I-0525",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 3,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "21I-0602",
+   "chosen": "BCS-5A",
+   "seen": {
+    "BCS-7E": 1,
+    "BCS-7D": 1,
+    "BCS-5E": 1,
+    "BCS-5A": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0623",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "21I-0645",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7A": 1,
+    "BDS-7C": 1,
+    "BCS-7B": 2
+   }
+  },
+  {
+   "nuid": "21I-0683",
+   "chosen": "BCS-5A",
+   "seen": {
+    "BCS-5A": 1,
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0708",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 2,
+    "BCS-7C": 1,
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "21I-0722",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BAI-7B": 1,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "21I-0734",
+   "chosen": "BCS-9A",
+   "seen": {
+    "BCS-9A": 2,
+    "BCS-5A": 1,
+    "BCS-7A": 1,
+    "BCS-5B": 1
+   }
+  },
+  {
+   "nuid": "21I-0735",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 2,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "21I-0769",
+   "chosen": "BCS-5F",
+   "seen": {
+    "BCS-5F": 1,
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "21I-0794",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 2,
+    "BAI-7C": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0819",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-9A": 1,
+    "BCS-5B": 1,
+    "BCS-7A": 2,
+    "BCS-5F": 1
+   }
+  },
+  {
+   "nuid": "21I-0852",
+   "chosen": "BAI-7C",
+   "seen": {
+    "BCS-5A": 1,
+    "BAI-7C": 1,
+    "BCS-9A": 1,
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0882",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 2
+   }
+  },
+  {
+   "nuid": "21I-0896",
+   "chosen": "BCS-3G",
+   "seen": {
+    "BCS-3G": 1,
+    "BCS-7B": 1,
+    "BCS-7F": 1,
+    "BCS-5D": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-0898",
+   "chosen": "BCS-8D",
+   "seen": {
+    "BCS-8D": 1
+   }
+  },
+  {
+   "nuid": "21I-1108",
+   "chosen": "BSE-8D",
+   "seen": {
+    "BSE-8D": 1
+   }
+  },
+  {
+   "nuid": "21I-1109",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-9A": 1,
+    "BSE-7A": 3,
+    "BCY-5C": 1
+   }
+  },
+  {
+   "nuid": "21I-1117",
+   "chosen": "BCS-5C",
+   "seen": {
+    "BSE-9B": 1,
+    "BSE-7A": 1,
+    "BSE-5B": 1,
+    "BCS-5C": 1,
+    "BSE-9A": 1
+   }
+  },
+  {
+   "nuid": "21I-1231",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 2,
+    "BSE-7B": 1,
+    "BSE-5B": 1
+   }
+  },
+  {
+   "nuid": "21I-1242",
+   "chosen": "BSE-3A",
+   "seen": {
+    "BSE-7A": 1,
+    "BSE-7B": 1,
+    "BSE-3A": 1,
+    "BSE-5B": 1
+   }
+  },
+  {
+   "nuid": "21I-1351",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BDS-7A": 1,
+    "BCS-3B": 1,
+    "BDS-7C": 1
+   }
+  },
+  {
+   "nuid": "21I-1365",
+   "chosen": "BAI-8B",
+   "seen": {
+    "BAI-8B": 1
+   }
+  },
+  {
+   "nuid": "21I-1372",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7E": 1,
+    "BCS-7B": 2,
+    "BCS-7A": 1,
+    "BCS-5D": 1
+   }
+  },
+  {
+   "nuid": "21I-1562",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-1568",
+   "chosen": "BCY-5B",
+   "seen": {
+    "BCY-9A": 1,
+    "BCY-5B": 1
+   }
+  },
+  {
+   "nuid": "21I-1683",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7A": 1,
+    "BDS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-1688",
+   "chosen": "BDS-9A",
+   "seen": {
+    "BDS-9A": 2,
+    "BDS-5A": 1,
+    "BCS-7F": 1,
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "21I-1691",
+   "chosen": "BDS-7A",
+   "seen": {
+    "BDS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-1696",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 1,
+    "BDS-5B": 1,
+    "BDS-3B": 1
+   }
+  },
+  {
+   "nuid": "21I-1701",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 1,
+    "BDS-7A": 1,
+    "BDS-5B": 1,
+    "BDS-9A": 1
+   }
+  },
+  {
+   "nuid": "21I-1713",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BDS-9B": 1,
+    "BDS-7C": 1,
+    "BDS-5B": 1,
+    "BCS-3B": 1,
+    "BDS-9A": 1
+   }
+  },
+  {
+   "nuid": "21I-1729",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BDS-9B": 1,
+    "BAI-7A": 1,
+    "BDS-9A": 1
+   }
+  },
+  {
+   "nuid": "21I-1779",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BDS-9B": 1,
+    "BAI-5A": 1,
+    "BDS-5B": 1,
+    "BCS-3A": 1,
+    "BDS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-1911",
+   "chosen": "BCY-5C",
+   "seen": {
+    "BCY-7A": 1,
+    "BCY-5C": 1,
+    "BCY-9A": 1,
+    "BSE-7B": 1
+   }
+  },
+  {
+   "nuid": "21I-2517",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-7F": 1,
+    "BCS-3B": 1,
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "21I-2525",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "21I-2529",
+   "chosen": "BCS-5C",
+   "seen": {
+    "BCS-7C": 1,
+    "BCS-7A": 1,
+    "BCS-5C": 1
+   }
+  },
+  {
+   "nuid": "21I-2567",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BDS-7C": 1,
+    "BCS-7A": 2,
+    "BCS-3H": 1
+   }
+  },
+  {
+   "nuid": "21I-2670",
+   "chosen": "BDS-7B",
+   "seen": {
+    "BDS-7A": 1,
+    "BDS-7B": 2,
+    "BDS-5B": 1,
+    "BDS-5A": 1
+   }
+  },
+  {
+   "nuid": "21I-2710",
+   "chosen": "BSE-8F",
+   "seen": {
+    "BSE-8F": 1
+   }
+  },
+  {
+   "nuid": "21I-2721",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 1,
+    "BCS-7D": 1
+   }
+  },
+  {
+   "nuid": "21I-2956",
+   "chosen": "BCS-8A",
+   "seen": {
+    "BCS-8A": 1
+   }
+  },
+  {
+   "nuid": "21I-2998",
+   "chosen": "BCS-5F",
+   "seen": {
+    "BCS-7A": 1,
+    "BCS-7B": 1,
+    "BCS-5F": 1
+   }
+  },
+  {
+   "nuid": "22I-0460",
+   "chosen": "BCS-7D",
+   "seen": {
+    "BDS-7C": 1,
+    "BCS-7D": 1
+   }
+  },
+  {
+   "nuid": "22I-0480",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BDS-7A": 1,
+    "BAI-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-0483",
+   "chosen": "BAI-5C",
+   "seen": {
+    "BAI-5C": 1,
+    "BAI-7B": 1,
+    "BSE-7A": 1,
+    "BCY-7A": 1,
+    "BCS-7D": 1
+   }
+  },
+  {
+   "nuid": "22I-0510",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7B": 1,
+    "BAI-7A": 2
+   }
+  },
+  {
+   "nuid": "22I-0515",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7C": 1,
+    "BAI-7A": 3
+   }
+  },
+  {
+   "nuid": "22I-0516",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7B": 1,
+    "BAI-7A": 2
+   }
+  },
+  {
+   "nuid": "22I-0543",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-5C": 1,
+    "BDS-7A": 1,
+    "BAI-7A": 2,
+    "BCS-7F": 1
+   }
+  },
+  {
+   "nuid": "22I-0547",
+   "chosen": "BAI-5B",
+   "seen": {
+    "BAI-5C": 1,
+    "BCS-7F": 1,
+    "BCS-7B": 1,
+    "BAI-5B": 1,
+    "BAI-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-0579",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7A": 3,
+    "BAI-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-0606",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7C": 1,
+    "BDS-5A": 1,
+    "BAI-7A": 3
+   }
+  },
+  {
+   "nuid": "22I-0609",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-0644",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BAI-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-0764",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-0771",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-0796",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-5A": 1,
+    "BCS-7A": 2,
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-0800",
+   "chosen": "BCS-5C",
+   "seen": {
+    "BCS-7A": 1,
+    "BCS-5C": 1,
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-0802",
+   "chosen": "BCS-3J",
+   "seen": {
+    "BCS-3J": 1,
+    "BCS-5D": 1,
+    "BCY-5C": 1,
+    "BCS-5F": 1
+   }
+  },
+  {
+   "nuid": "22I-0817",
+   "chosen": "BDS-7B",
+   "seen": {
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-0823",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 3
+   }
+  },
+  {
+   "nuid": "22I-0867",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-5B": 2,
+    "BCS-7E": 1,
+    "BCS-5E": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-0922",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 1,
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-0929",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-5B": 1,
+    "BCS-3B": 1,
+    "BCS-5F": 1,
+    "BCY-5C": 1,
+    "BCS-5D": 1
+   }
+  },
+  {
+   "nuid": "22I-0944",
+   "chosen": "BCS-3D",
+   "seen": {
+    "BCS-7F": 1,
+    "BCS-5F": 1,
+    "BCS-3D": 1,
+    "BCS-5B": 1
+   }
+  },
+  {
+   "nuid": "22I-0971",
+   "chosen": "BCS-7C",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7C": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1002",
+   "chosen": "BCS-7C",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7C": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1038",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-3B": 1,
+    "BCS-5F": 1,
+    "BCY-5C": 1,
+    "BCS-3F": 1,
+    "BCS-5D": 1
+   }
+  },
+  {
+   "nuid": "22I-1064",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1067",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1128",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-5B": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1130",
+   "chosen": "BCS-7C",
+   "seen": {
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-1152",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1157",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "22I-1171",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-5B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1199",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 2
+   }
+  },
+  {
+   "nuid": "22I-1201",
+   "chosen": "BCS-5F",
+   "seen": {
+    "BDS-7A": 1,
+    "BCS-5F": 1,
+    "BCS-7A": 1,
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-1221",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1264",
+   "chosen": "BCS-5E",
+   "seen": {
+    "BCS-7D": 1,
+    "BCS-7G": 1,
+    "BCS-5F": 1,
+    "BCY-5A": 1,
+    "BCS-5E": 1
+   }
+  },
+  {
+   "nuid": "22I-1295",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1298",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1325",
+   "chosen": "BAI-7B",
+   "seen": {
+    "BCS-7B": 1,
+    "BAI-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1329",
+   "chosen": "BCS-7F",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7F": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1330",
+   "chosen": "BCS-3A",
+   "seen": {
+    "BCS-3A": 1,
+    "BCS-7A": 1,
+    "BCS-3G": 1,
+    "BCS-5B": 1
+   }
+  },
+  {
+   "nuid": "22I-1357",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1377",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 2,
+    "BCS-7C": 1,
+    "BCS-7F": 2
+   }
+  },
+  {
+   "nuid": "22I-1378",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7B": 2,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1507",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 2,
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1545",
+   "chosen": "BDS-7B",
+   "seen": {
+    "BSE-7B": 1,
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1587",
+   "chosen": "BCY-6A",
+   "seen": {
+    "BCY-6A": 1
+   }
+  },
+  {
+   "nuid": "22I-1606",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-1648",
+   "chosen": "BCY-7A",
+   "seen": {
+    "BCY-7A": 3,
+    "BCY-5B": 1
+   }
+  },
+  {
+   "nuid": "22I-1768",
+   "chosen": "BCY-7B",
+   "seen": {
+    "BCY-7B": 2,
+    "BAI-7C": 1,
+    "BCY-7A": 1,
+    "BSE-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-1927",
+   "chosen": "BDS-7A",
+   "seen": {
+    "BDS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2040",
+   "chosen": "BAI-5C",
+   "seen": {
+    "BDS-7A": 1,
+    "BDS-5B": 1,
+    "BCY-5B": 1,
+    "BAI-5C": 1,
+    "BDS-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-2041",
+   "chosen": "BDS-7C",
+   "seen": {
+    "BDS-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-2062",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BDS-7C": 1,
+    "BDS-7A": 1,
+    "BAI-7A": 2
+   }
+  },
+  {
+   "nuid": "22I-2128",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 2,
+    "BCS-5E": 1,
+    "BCY-5C": 1,
+    "BCS-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-2138",
+   "chosen": "BAI-7C",
+   "seen": {
+    "BAI-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-2147",
+   "chosen": "BAI-7A",
+   "seen": {
+    "BAI-7A": 3,
+    "BCS-7E": 1
+   }
+  },
+  {
+   "nuid": "22I-2304",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-3G": 1,
+    "BCS-7A": 2,
+    "BCS-7G": 2
+   }
+  },
+  {
+   "nuid": "22I-2308",
+   "chosen": "BCS-5D",
+   "seen": {
+    "BCS-5F": 1,
+    "BCS-7A": 1,
+    "BCS-5D": 1,
+    "BCS-7C": 1
+   }
+  },
+  {
+   "nuid": "22I-2311",
+   "chosen": "BCS-3H",
+   "seen": {
+    "BCS-3H": 1,
+    "BCS-7D": 1,
+    "BCS-5C": 1,
+    "BDS-7A": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2341",
+   "chosen": "BCS-3A",
+   "seen": {
+    "BCS-5B": 1,
+    "BCS-3A": 1,
+    "BCS-7A": 1,
+    "BCS-3J": 1,
+    "BCS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-2354",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BDS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2375",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2388",
+   "chosen": "BCS-3E",
+   "seen": {
+    "BCS-3E": 1,
+    "BCS-5B": 1,
+    "BCS-5E": 1
+   }
+  },
+  {
+   "nuid": "22I-2392",
+   "chosen": "BCS-3G",
+   "seen": {
+    "BCS-3G": 1,
+    "BCS-3J": 1
+   }
+  },
+  {
+   "nuid": "22I-2405",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2432",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2522",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-2537",
+   "chosen": "BDS-7B",
+   "seen": {
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-2574",
+   "chosen": "BSE-7B",
+   "seen": {
+    "BSE-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-2632",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 2,
+    "BSE-7B": 2,
+    "BDS-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-2643",
+   "chosen": "BCS-5G",
+   "seen": {
+    "BSE-7A": 1,
+    "BSE-7B": 1,
+    "BCS-5G": 1
+   }
+  },
+  {
+   "nuid": "22I-2645",
+   "chosen": "BSE-7B",
+   "seen": {
+    "BSE-7B": 1
+   }
+  },
+  {
+   "nuid": "22I-2662",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-4947",
+   "chosen": "BCY-5A",
+   "seen": {
+    "BCY-7B": 1,
+    "BCY-5A": 1
+   }
+  },
+  {
+   "nuid": "22I-7424",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-7427",
+   "chosen": "BAI-5C",
+   "seen": {
+    "BCY-5B": 1,
+    "BCY-3B": 1,
+    "BDS-5A": 1,
+    "BAI-5C": 1
+   }
+  },
+  {
+   "nuid": "22I-7439",
+   "chosen": "BCY-5C",
+   "seen": {
+    "BCY-7B": 1,
+    "BCY-5C": 1
+   }
+  },
+  {
+   "nuid": "22I-7444",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BSE-7A": 1
+   }
+  },
+  {
+   "nuid": "22I-8787",
+   "chosen": "BSE-7A",
+   "seen": {
+    "BDS-7C": 1,
+    "BSE-7A": 2,
+    "BSE-7B": 1
+   }
+  },
+  {
+   "nuid": "22P-0507",
+   "chosen": "BCS-7B",
+   "seen": {
+    "BCS-7A": 1,
+    "BCS-7B": 2
+   }
+  },
+  {
+   "nuid": "22P-9430",
+   "chosen": "BCS-7A",
+   "seen": {
+    "BCS-7B": 1,
+    "BCS-7A": 1
+   }
+  },
+  {
+   "nuid": "23I-0024",
+   "chosen": "BAI-5B",
+   "seen": {
+    "BAI-5B": 3,
+    "BAI-5A": 2
+   }
+  },
+  {
+   "nuid": "23I-0140",
+   "chosen": "BAI-5B",
+   "seen": {
+    "BAI-5B": 3,
+    "BAI-5A": 1,
+    "BAI-3A": 1
+   }
+  },
+  {
+   "nuid": "23I-0584",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-5B": 2,
+    "BCY-5C": 1
+   }
+  },
+  {
+   "nuid": "23I-0654",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-5B": 1,
+    "BCY-5C": 1,
+    "BCS-3B": 1,
+    "BCS-3J": 1
+   }
+  },
+  {
+   "nuid": "23I-0795",
+   "chosen": "BCS-3E",
+   "seen": {
+    "BCS-5A": 1,
+    "BCS-5F": 1,
+    "BCS-3E": 1,
+    "BCS-5C": 1
+   }
+  },
+  {
+   "nuid": "23I-0830",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-5B": 1,
+    "BCY-5C": 1,
+    "BCS-3B": 1,
+    "BCS-3J": 1
+   }
+  },
+  {
+   "nuid": "23I-0852",
+   "chosen": "BCS-5A",
+   "seen": {
+    "BCS-5A": 2,
+    "BCS-5B": 2,
+    "BCS-3D": 1
+   }
+  },
+  {
+   "nuid": "23I-2532",
+   "chosen": "BDS-3A",
+   "seen": {
+    "BDS-3A": 3,
+    "BDS-5A": 2
+   }
+  },
+  {
+   "nuid": "23I-2604",
+   "chosen": "BDS-5B",
+   "seen": {
+    "BDS-5B": 2,
+    "BDS-3B": 1,
+    "BAI-5A": 1,
+    "BDS-5A": 1
+   }
+  },
+  {
+   "nuid": "23I-2612",
+   "chosen": "BDS-5A",
+   "seen": {
+    "BAI-5A": 1,
+    "BDS-5A": 3,
+    "BDS-5B": 1
+   }
+  },
+  {
+   "nuid": "23I-2636",
+   "chosen": "BAI-5A",
+   "seen": {
+    "BDS-5B": 1,
+    "BAI-5A": 1,
+    "BAI-5B": 1,
+    "BDS-5A": 1
+   }
+  },
+  {
+   "nuid": "23I-6028",
+   "chosen": "BCS-5B",
+   "seen": {
+    "BCS-5B": 2,
+    "BCS-3A": 1,
+    "BCY-5C": 1,
+    "BCS-5A": 1
+   }
+  },
+  {
+   "nuid": "23I-7612",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "23I-7813",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MSE-2A": 1,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "23I-8019",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "23I-8020",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "23I-8210",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1
+   }
+  },
+  {
+   "nuid": "23K-2062",
+   "chosen": "BDS-5B",
+   "seen": {
+    "BDS-5B": 3,
+    "BAI-5A": 1,
+    "BCS-1Z": 1
+   }
+  },
+  {
+   "nuid": "24F-7806",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCY-2A": 2
+   }
+  },
+  {
+   "nuid": "24I-0008",
+   "chosen": "BAI-3C",
+   "seen": {
+    "BCS-3E": 1,
+    "BCS-3A": 1,
+    "BCS-3Z": 1,
+    "BAI-3C": 1
+   }
+  },
+  {
+   "nuid": "24I-0123",
+   "chosen": "BAI-2A",
+   "seen": {
+    "BAI-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-0131",
+   "chosen": "BAI-1A",
+   "seen": {
+    "BSE-1B": 1,
+    "BAI-1A": 1,
+    "BCS-3Z": 1
+   }
+  },
+  {
+   "nuid": "24I-2028",
+   "chosen": "BAI-3B",
+   "seen": {
+    "BAI-3B": 3
+   }
+  },
+  {
+   "nuid": "24I-2512",
+   "chosen": "BCS-3B",
+   "seen": {
+    "BCS-3G": 1,
+    "BCS-3B": 1,
+    "BDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7602",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7612",
+   "chosen": "MAI-1A",
+   "seen": {
+    "MAI-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7613",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7616",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7620",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7624",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7626",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 2
+   }
+  },
+  {
+   "nuid": "24I-7636",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7638",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7639",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 2
+   }
+  },
+  {
+   "nuid": "24I-7709",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1,
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7714",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7724",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-7731",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-7733",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCY-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7734",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-7800",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCY-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7806",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "24I-7811",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCY-2A": 2,
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7817",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 2
+   }
+  },
+  {
+   "nuid": "24I-7827",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7840",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCY-2A": 1,
+    "MSE-2A": 1,
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-7852",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCS-1A": 2,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-8002",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-8004",
+   "chosen": "MDS-9A",
+   "seen": {
+    "MDS-9A": 1
+   }
+  },
+  {
+   "nuid": "24I-8010",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8011",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "24I-8015",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1,
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8017",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8020",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8023",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2,
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8028",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8029",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MAI-1B": 1,
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8030",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1,
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8033",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8035",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1,
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8049",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8050",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8053",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "24I-8056",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-8058",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8060",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8061",
+   "chosen": "MAI-3A",
+   "seen": {
+    "MAI-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8063",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8066",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8067",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8070",
+   "chosen": "MDS-3A",
+   "seen": {
+    "MDS-3A": 1
+   }
+  },
+  {
+   "nuid": "24I-8076",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "24I-8203",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-8208",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "24I-8213",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "24I-8220",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 2
+   }
+  },
+  {
+   "nuid": "24K-7713",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "24P-0608",
+   "chosen": "BAI-1A",
+   "seen": {
+    "BCY-3B": 1,
+    "BSE-1C": 1,
+    "BAI-1A": 1,
+    "BCS-3Z": 1
+   }
+  },
+  {
+   "nuid": "25I-3022",
+   "chosen": "BSE-1B",
+   "seen": {
+    "BSE-1E": 1,
+    "BSE-1B": 1
+   }
+  },
+  {
+   "nuid": "25I-3132",
+   "chosen": "BSE-1B",
+   "seen": {
+    "BSE-1B": 2
+   }
+  },
+  {
+   "nuid": "25I-7601",
+   "chosen": "MAI-1A",
+   "seen": {
+    "MAI-1A": 3
+   }
+  },
+  {
+   "nuid": "25I-7602",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MDS-1A": 1,
+    "MAI-1B": 1
+   }
+  },
+  {
+   "nuid": "25I-7607",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MAI-1B": 2
+   }
+  },
+  {
+   "nuid": "25I-7608",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MAI-1B": 2
+   }
+  },
+  {
+   "nuid": "25I-7612",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 2,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7621",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MAI-1B": 2
+   }
+  },
+  {
+   "nuid": "25I-7625",
+   "chosen": "MAI-1A",
+   "seen": {
+    "MAI-1B": 1,
+    "MAI-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7626",
+   "chosen": "MAI-1B",
+   "seen": {
+    "MAI-1B": 1
+   }
+  },
+  {
+   "nuid": "25I-7637",
+   "chosen": "MAI-1A",
+   "seen": {
+    "MAI-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7701",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 1,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7703",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-7708",
+   "chosen": "MCY-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-7709",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 2,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7713",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 2,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7716",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-2A": 1,
+    "MCY-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7717",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCY-2A": 1,
+    "MCY-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-7725",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-1A": 2,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7727",
+   "chosen": "MCY-1A",
+   "seen": {
+    "MCY-1A": 3,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7801",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7802",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-1A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-7803",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7804",
+   "chosen": "MSE-1A",
+   "seen": {
+    "MSE-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7805",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7806",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7807",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1,
+    "MCY-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7810",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7813",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7815",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1,
+    "MCY-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-7816",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7817",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7820",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7821",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MCY-2A": 1,
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7824",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1,
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-7826",
+   "chosen": "MCS-1A",
+   "seen": {
+    "MCS-1A": 1,
+    "MCY-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8001",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8002",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 3
+   }
+  },
+  {
+   "nuid": "25I-8006",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8007",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8008",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8015",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8016",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8019",
+   "chosen": "MCS-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8022",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8023",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 1
+   }
+  },
+  {
+   "nuid": "25I-8025",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8030",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8031",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2,
+    "MCS-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8041",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8042",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8045",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 4
+   }
+  },
+  {
+   "nuid": "25I-8047",
+   "chosen": "MDS-1A",
+   "seen": {
+    "MDS-1A": 2
+   }
+  },
+  {
+   "nuid": "25I-8200",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8202",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8203",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8206",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8207",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8209",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MSE-2A": 1
+   }
+  },
+  {
+   "nuid": "25I-8210",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8211",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8213",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8215",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8216",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "25I-8217",
+   "chosen": "MSE-2A",
+   "seen": {
+    "MCS-2A": 1,
+    "MSE-2A": 2
+   }
+  },
+  {
+   "nuid": "26I-7740",
+   "chosen": "BSE-3A",
+   "seen": {
+    "BSE-3A": 1
+   }
+  },
+  {
+   "nuid": "26I-9008",
+   "chosen": "PCS-2A",
+   "seen": {
+    "PCS-2A": 3
+   }
+  }
+ ],
+ "multi_section": 1373,
+ "name_variants": [
+  {
+   "nuid": "21I-0412",
+   "chosen": "Syed Umar Javed",
+   "seen": [
+    "Syed Umar Javed",
+    "Umar Javed"
+   ]
+  },
+  {
+   "nuid": "21I-0708",
+   "chosen": "Raja Muhammad Abdullah Tahir",
+   "seen": [
+    "Abdullah Tahir",
+    "Raja Muhammad Abdullah Tahir"
+   ]
+  },
+  {
+   "nuid": "22I-0450",
+   "chosen": "Abubakar Bilal Qureshi",
+   "seen": [
+    "Abubakar Bilal",
+    "Abubakar Bilal Qureshi"
+   ]
+  },
+  {
+   "nuid": "22I-0477",
+   "chosen": "Ammad Nasir Tarar",
+   "seen": [
+    "Ammad Nasir",
+    "Ammad Nasir Tarar"
+   ]
+  },
+  {
+   "nuid": "22I-0493",
+   "chosen": "Sameer Asif Qureshi",
+   "seen": [
+    "Sameer Asif",
+    "Sameer Asif Qureshi"
+   ]
+  },
+  {
+   "nuid": "22I-0513",
+   "chosen": "Muhammad Moeez Jamal",
+   "seen": [
+    "Moeez Jamal",
+    "Muhammad Moeez Jamal"
+   ]
+  },
+  {
+   "nuid": "22I-0516",
+   "chosen": "Mohammad Haroon Rasheed Khan",
+   "seen": [
+    "Haroon Rasheed",
+    "Mohammad Haroon Rasheed Khan"
+   ]
+  },
+  {
+   "nuid": "22I-0522",
+   "chosen": "Mian Murtaza Nawaz",
+   "seen": [
+    "Mian Murtaza Nawaz",
+    "Murtaza Nawaz"
+   ]
+  },
+  {
+   "nuid": "22I-0533",
+   "chosen": "Ch Faizan Zahid",
+   "seen": [
+    "Ch Faizan Zahid",
+    "Faizan Zahid"
+   ]
+  },
+  {
+   "nuid": "22I-0576",
+   "chosen": "Shahzaib Ali Khan",
+   "seen": [
+    "Shahzaib Ali",
+    "Shahzaib Ali Khan"
+   ]
+  },
+  {
+   "nuid": "22I-0579",
+   "chosen": "Ali Farqaleet Khan",
+   "seen": [
+    "Ali Farqaleet",
+    "Ali Farqaleet Khan"
+   ]
+  },
+  {
+   "nuid": "22I-0606",
+   "chosen": "Abeer Bin Umair",
+   "seen": [
+    "Abeer Bin Umair",
+    "Abeer Umair"
+   ]
+  },
+  {
+   "nuid": "22I-0609",
+   "chosen": "Ahmad Abdul Hameed",
+   "seen": [
+    "Ahmad Abdul",
+    "Ahmad Abdul Hameed"
+   ]
+  },
+  {
+   "nuid": "22I-0802",
+   "chosen": "Muhammad Abdullah Ahsen",
+   "seen": [
+    "Abdullah Ahsen",
+    "Muhammad Abdullah Ahsen"
+   ]
+  },
+  {
+   "nuid": "22I-0817",
+   "chosen": "Mohammad Fahad Faisal",
+   "seen": [
+    "Fahad Faisal",
+    "Mohammad Fahad Faisal"
+   ]
+  },
+  {
+   "nuid": "22I-0823",
+   "chosen": "Muhammad Abdul Waseh Zafar",
+   "seen": [
+    "Abdul Waseh",
+    "Muhammad Abdul Waseh Zafar"
+   ]
+  },
+  {
+   "nuid": "22I-0854",
+   "chosen": "Muhammad Momin Munir Misbah",
+   "seen": [
+    "Momin Munir",
+    "Muhammad Momin Munir Misbah"
+   ]
+  },
+  {
+   "nuid": "22I-0928",
+   "chosen": "Ibrahim Azhar Biabani",
+   "seen": [
+    "Ibrahim Azhar",
+    "Ibrahim Azhar Biabani"
+   ]
+  },
+  {
+   "nuid": "22I-1003",
+   "chosen": "Hamza Ahmad Mir",
+   "seen": [
+    "Hamza Ahmad",
+    "Hamza Ahmad Mir"
+   ]
+  },
+  {
+   "nuid": "22I-1068",
+   "chosen": "Muhammad Awab Ur Rehman",
+   "seen": [
+    "Awab Ur Rehman",
+    "Muhammad Awab Ur Rehman"
+   ]
+  },
+  {
+   "nuid": "22I-1097",
+   "chosen": "Muhammad Ayan Asif",
+   "seen": [
+    "Ayan Asif",
+    "Muhammad Ayan Asif"
+   ]
+  },
+  {
+   "nuid": "22I-1248",
+   "chosen": "Sardar Ubaid Ullah Rafique",
+   "seen": [
+    "Sardar Ubaid",
+    "Sardar Ubaid Ullah Rafique"
+   ]
+  },
+  {
+   "nuid": "22I-1509",
+   "chosen": "Muhammad Usman Baig",
+   "seen": [
+    "Muhammad Usman Baig",
+    "Usman Baig"
+   ]
+  },
+  {
+   "nuid": "22I-1581",
+   "chosen": "Sheikh Faieq Bin Imtiaz",
+   "seen": [
+    "Faieq Imtiaz",
+    "Sheikh Faieq Bin Imtiaz"
+   ]
+  },
+  {
+   "nuid": "22I-1582",
+   "chosen": "Syed Ahmad Ali",
+   "seen": [
+    "Ahmad Ali",
+    "Syed Ahmad Ali"
+   ]
+  },
+  {
+   "nuid": "22I-1592",
+   "chosen": "Muhammad Huzaifa Afzal",
+   "seen": [
+    "Huzaifa Afzal",
+    "Muhammad Huzaifa Afzal"
+   ]
+  },
+  {
+   "nuid": "22I-1622",
+   "chosen": "Abdul Mueed Malik",
+   "seen": [
+    "Abdul Mueed",
+    "Abdul Mueed Malik"
+   ]
+  },
+  {
+   "nuid": "22I-1642",
+   "chosen": "Muhammad Hassaan Siddiqui",
+   "seen": [
+    "Hassaan Siddiqui",
+    "Muhammad Hassaan Siddiqui"
+   ]
+  },
+  {
+   "nuid": "22I-1695",
+   "chosen": "Muhammad Nameer Khan",
+   "seen": [
+    "Muhammad Nameer Khan",
+    "Nameer Khan"
+   ]
+  },
+  {
+   "nuid": "22I-1737",
+   "chosen": "Syed Ibtihaj Haider Kazmi",
+   "seen": [
+    "Ibtihaj Haider",
+    "Syed Ibtihaj Haider Kazmi"
+   ]
+  },
+  {
+   "nuid": "22I-1769",
+   "chosen": "Muhammad Azaan Naveed",
+   "seen": [
+    "Azaan Naveed",
+    "Muhammad Azaan Naveed"
+   ]
+  },
+  {
+   "nuid": "22I-1921",
+   "chosen": "Muhammad Mudassir Ali",
+   "seen": [
+    "Mudassir Ali",
+    "Muhammad Mudassir Ali"
+   ]
+  },
+  {
+   "nuid": "22I-1985",
+   "chosen": "Syeda Maida Tahir Bukhari",
+   "seen": [
+    "Maida Tahir",
+    "Syeda Maida Tahir Bukhari"
+   ]
+  },
+  {
+   "nuid": "22I-2130",
+   "chosen": "Mohammad Mohsin Abbas",
+   "seen": [
+    "Mohammad Mohsin Abbas",
+    "Mohsin Abbas"
+   ]
+  },
+  {
+   "nuid": "22I-2147",
+   "chosen": "Syed Aon Mehdi",
+   "seen": [
+    "Aon Mehdi",
+    "Syed Aon Mehdi"
+   ]
+  },
+  {
+   "nuid": "22I-2358",
+   "chosen": "Abdul Sami Shahid",
+   "seen": [
+    "Abdul Sami",
+    "Abdul Sami Shahid"
+   ]
+  },
+  {
+   "nuid": "22I-2362",
+   "chosen": "Fazal Zaman Khan",
+   "seen": [
+    "Fazal Zaman",
+    "Fazal Zaman Khan"
+   ]
+  },
+  {
+   "nuid": "22I-2431",
+   "chosen": "Muhammad Hanzala Usman",
+   "seen": [
+    "Hanzala Usman",
+    "Muhammad Hanzala Usman"
+   ]
+  },
+  {
+   "nuid": "22I-2432",
+   "chosen": "Muhammad Hasnain Ahmed",
+   "seen": [
+    "Hasnain Ahmed",
+    "Muhammad Hasnain Ahmed"
+   ]
+  },
+  {
+   "nuid": "22I-2436",
+   "chosen": "Muhammad Zayam Adeel",
+   "seen": [
+    "Muhammad Zayam Adeel",
+    "Zayam Adeel"
+   ]
+  },
+  {
+   "nuid": "22I-2453",
+   "chosen": "Muhammad Zain Amjad",
+   "seen": [
+    "Muhammad Zain Amjad",
+    "Zain Amjad"
+   ]
+  },
+  {
+   "nuid": "22I-2463",
+   "chosen": "Zain Ul Abdin Jadoon",
+   "seen": [
+    "Zain Ul Abdin",
+    "Zain Ul Abdin Jadoon"
+   ]
+  },
+  {
+   "nuid": "22I-2466",
+   "chosen": "Rubban Iftikhar Ahmed",
+   "seen": [
+    "Rubban Iftikhar",
+    "Rubban Iftikhar Ahmed"
+   ]
+  },
+  {
+   "nuid": "22I-2502",
+   "chosen": "Muhammad Talha Aamir",
+   "seen": [
+    "Muhammad Talha Aamir",
+    "Talha Aamir"
+   ]
+  },
+  {
+   "nuid": "22I-2522",
+   "chosen": "Muhammad Dawood Qamar",
+   "seen": [
+    "Dawood Qamar",
+    "Muhammad Dawood Qamar"
+   ]
+  },
+  {
+   "nuid": "22I-2533",
+   "chosen": "Hamza Ahmed Siddiquie",
+   "seen": [
+    "Hamza Ahmed",
+    "Hamza Ahmed Siddiquie"
+   ]
+  },
+  {
+   "nuid": "22I-2537",
+   "chosen": "Muhammad Hammad Idrees",
+   "seen": [
+    "Hammad Idrees",
+    "Muhammad Hammad Idrees"
+   ]
+  },
+  {
+   "nuid": "22I-2547",
+   "chosen": "Ali Mehmood Khan",
+   "seen": [
+    "Ali Khan",
+    "Ali Mehmood Khan"
+   ]
+  },
+  {
+   "nuid": "22I-2556",
+   "chosen": "Shafiq Ullah Khan",
+   "seen": [
+    "Shafiq Ullah",
+    "Shafiq Ullah Khan"
+   ]
+  },
+  {
+   "nuid": "22I-2563",
+   "chosen": "Malik Noman Ahmed Baghoor",
+   "seen": [
+    "Malik Noman Ahmed Baghoor",
+    "Noman Ahmed"
+   ]
+  },
+  {
+   "nuid": "22I-2566",
+   "chosen": "Ali Hamza Shahid",
+   "seen": [
+    "Ali Hamza",
+    "Ali Hamza Shahid"
+   ]
+  },
+  {
+   "nuid": "22I-2574",
+   "chosen": "Syed Muhammad Shabeeb Asghar Abidi",
+   "seen": [
+    "Shabeeb Asghar",
+    "Syed Muhammad Shabeeb Asghar Abidi"
+   ]
+  },
+  {
+   "nuid": "22I-2588",
+   "chosen": "Mir Hussain Jan",
+   "seen": [
+    "Mir Hussain",
+    "Mir Hussain Jan"
+   ]
+  },
+  {
+   "nuid": "22I-2608",
+   "chosen": "M Umer Khalil Ch",
+   "seen": [
+    "M Umer Khalil",
+    "M Umer Khalil Ch"
+   ]
+  },
+  {
+   "nuid": "22I-2611",
+   "chosen": "Muhammad Ammar Yasar",
+   "seen": [
+    "Ammar Yasar",
+    "Muhammad Ammar Yasar"
+   ]
+  },
+  {
+   "nuid": "22I-2622",
+   "chosen": "Malik Murtaza Kamal",
+   "seen": [
+    "Malik Murtaza Kamal",
+    "Murtaza Kamal"
+   ]
+  },
+  {
+   "nuid": "22I-2624",
+   "chosen": "Zain Ali Khan",
+   "seen": [
+    "Zain Ali",
+    "Zain Ali Khan"
+   ]
+  },
+  {
+   "nuid": "22I-2645",
+   "chosen": "Muhammad Arfeen Dildar",
+   "seen": [
+    "Arfeen Dildar",
+    "Muhammad Arfeen Dildar"
+   ]
+  },
+  {
+   "nuid": "22I-2661",
+   "chosen": "Muhammad Saim Zia",
+   "seen": [
+    "Muhammad Saim Zia",
+    "Saim Zia"
+   ]
+  },
+  {
+   "nuid": "22I-2662",
+   "chosen": "Muhammad Hammad Ur Rehman",
+   "seen": [
+    "Hammad Ur Rehman",
+    "Muhammad Hammad Ur Rehman"
+   ]
+  },
+  {
+   "nuid": "22I-2675",
+   "chosen": "Muhammad Shayan Asghar",
+   "seen": [
+    "Muhammad Shayan Asghar",
+    "Shayan Asghar"
+   ]
+  },
+  {
+   "nuid": "22I-2688",
+   "chosen": "Muhammad Awais Akbar",
+   "seen": [
+    "Awais Akbar",
+    "Muhammad Awais Akbar"
+   ]
+  },
+  {
+   "nuid": "22I-2693",
+   "chosen": "Muhammad Abubakar Ali",
+   "seen": [
+    "Abubakar Ali",
+    "Muhammad Abubakar Ali"
+   ]
+  },
+  {
+   "nuid": "22I-2697",
+   "chosen": "Muhammad Haroon Aziz",
+   "seen": [
+    "Haroon Aziz",
+    "Muhammad Haroon Aziz"
+   ]
+  },
+  {
+   "nuid": "22I-2717",
+   "chosen": "Muhammad Sami Naveed",
+   "seen": [
+    "Muhammad Sami Naveed",
+    "Sami Naveed"
+   ]
+  },
+  {
+   "nuid": "22I-2724",
+   "chosen": "Muhammad Ehsan Umran",
+   "seen": [
+    "Ehsan Umran",
+    "Muhammad Ehsan Umran"
+   ]
+  },
+  {
+   "nuid": "22I-2730",
+   "chosen": "Syed Burhan Haider",
+   "seen": [
+    "Burhan Haider",
+    "Syed Burhan Haider"
+   ]
+  },
+  {
+   "nuid": "22I-2739",
+   "chosen": "Ahmed Taimoor Rizwan",
+   "seen": [
+    "Ahmed Taimoor",
+    "Ahmed Taimoor Rizwan"
+   ]
+  },
+  {
+   "nuid": "22I-7423",
+   "chosen": "Hassan Ali Qureshi",
+   "seen": [
+    "Hassan Ali",
+    "Hassan Ali Qureshi"
+   ]
+  },
+  {
+   "nuid": "22I-7439",
+   "chosen": "Syed Inshal Yousaf",
+   "seen": [
+    "Inshal Yousaf",
+    "Syed Inshal Yousaf"
+   ]
+  },
+  {
+   "nuid": "22I-8773",
+   "chosen": "Muhammad Uzair Younis",
+   "seen": [
+    "Muhammad Uzair Younis",
+    "Uzair Younis"
+   ]
+  },
+  {
+   "nuid": "22I-8816",
+   "chosen": "Rayyan Hafeez Khan Lodhi",
+   "seen": [
+    "Rayyan Hafeez",
+    "Rayyan Hafeez Khan Lodhi"
+   ]
+  },
+  {
+   "nuid": "23I-0811",
+   "chosen": "Noor Fatima Usmani",
+   "seen": [
+    "Noor Fatima",
+    "Noor Fatima Usmani"
+   ]
+  },
+  {
+   "nuid": "23I-2000",
+   "chosen": "Syed Mueez Hassan",
+   "seen": [
+    "Mueez Hassan",
+    "Syed Mueez Hassan"
+   ]
+  },
+  {
+   "nuid": "23I-2001",
+   "chosen": "Syed Muhammad Saad Bukhari",
+   "seen": [
+    "Saad Bukhari",
+    "Syed Muhammad Saad Bukhari"
+   ]
+  },
+  {
+   "nuid": "23I-2004",
+   "chosen": "Muhammad Bilal Ali Saif",
+   "seen": [
+    "Bilal Saif",
+    "Muhammad Bilal Ali Saif"
+   ]
+  },
+  {
+   "nuid": "23I-2007",
+   "chosen": "Rohaan Shafi Joeyah",
+   "seen": [
+    "Rohaan Shafi",
+    "Rohaan Shafi Joeyah"
+   ]
+  },
+  {
+   "nuid": "23I-2016",
+   "chosen": "Syeda Shanzay Shah",
+   "seen": [
+    "Shanzay Shah",
+    "Syeda Shanzay Shah"
+   ]
+  },
+  {
+   "nuid": "23I-2020",
+   "chosen": "Musa Ali Khan",
+   "seen": [
+    "Musa Ali",
+    "Musa Ali Khan"
+   ]
+  },
+  {
+   "nuid": "23I-2021",
+   "chosen": "Muhammad Tahir Minhas",
+   "seen": [
+    "Muhammad Tahir Minhas",
+    "Tahir Minhas"
+   ]
+  },
+  {
+   "nuid": "23I-2036",
+   "chosen": "Touqeer Ahmed Khan",
+   "seen": [
+    "Touqeer Ahmed",
+    "Touqeer Ahmed Khan"
+   ]
+  },
+  {
+   "nuid": "23I-2045",
+   "chosen": "Hammad Ahmed Cheema",
+   "seen": [
+    "Hammad Ahmed",
+    "Hammad Ahmed Cheema"
+   ]
+  },
+  {
+   "nuid": "23I-2046",
+   "chosen": "Fatima Binte Naeem",
+   "seen": [
+    "Fatima Binte Naeem",
+    "Fatima Naeem"
+   ]
+  },
+  {
+   "nuid": "23I-2054",
+   "chosen": "Subhan Umer Farooq",
+   "seen": [
+    "Subhan Umer",
+    "Subhan Umer Farooq"
+   ]
+  },
+  {
+   "nuid": "23I-2056",
+   "chosen": "Muhammad Saad Ahmad",
+   "seen": [
+    "Muhammad Saad Ahmad",
+    "Saad Ahmad"
+   ]
+  },
+  {
+   "nuid": "23I-2057",
+   "chosen": "Rania Muskan Malik",
+   "seen": [
+    "Rania Muskan",
+    "Rania Muskan Malik"
+   ]
+  },
+  {
+   "nuid": "23I-2060",
+   "chosen": "Muhammad Omar Malik",
+   "seen": [
+    "Muhammad Omar Malik",
+    "Omar Malik"
+   ]
+  },
+  {
+   "nuid": "23I-2072",
+   "chosen": "Syed Muhammad Umair",
+   "seen": [
+    "Muhammad Umair",
+    "Syed Muhammad Umair"
+   ]
+  },
+  {
+   "nuid": "23I-2074",
+   "chosen": "Muhammad Faizan Shakeel",
+   "seen": [
+    "Faizan Shakeel",
+    "Muhammad Faizan Shakeel"
+   ]
+  },
+  {
+   "nuid": "23I-2077",
+   "chosen": "Khawaja Fashi-Ud-Din Abdullah",
+   "seen": [
+    "Khawaja Fashi-Ud-Din",
+    "Khawaja Fashi-Ud-Din Abdullah"
+   ]
+  },
+  {
+   "nuid": "23I-2081",
+   "chosen": "Muhammad Momin Amin",
+   "seen": [
+    "Momin Amin",
+    "Muhammad Momin Amin"
+   ]
+  },
+  {
+   "nuid": "23I-2083",
+   "chosen": "Muhammad Shahzaib Khan",
+   "seen": [
+    "Muhammad Shahzaib Khan",
+    "Shahzaib Khan"
+   ]
+  },
+  {
+   "nuid": "23I-2093",
+   "chosen": "Muhammad Hamiz Rathore",
+   "seen": [
+    "Hamiz Rathore",
+    "Muhammad Hamiz Rathore"
+   ]
+  },
+  {
+   "nuid": "23I-2095",
+   "chosen": "Muhammad Huzaifa Bin Amir",
+   "seen": [
+    "Huzaifa Amir",
+    "Muhammad Huzaifa Bin Amir"
+   ]
+  },
+  {
+   "nuid": "23I-2100",
+   "chosen": "Faizan Saeed Laghari",
+   "seen": [
+    "Faizan Saeed",
+    "Faizan Saeed Laghari"
+   ]
+  },
+  {
+   "nuid": "23I-2101",
+   "chosen": "Muhammad Hadi Waqar",
+   "seen": [
+    "Hadi Waqar",
+    "Muhammad Hadi Waqar"
+   ]
+  },
+  {
+   "nuid": "23I-2109",
+   "chosen": "Aabish Noor Khattak",
+   "seen": [
+    "Aabish Noor",
+    "Aabish Noor Khattak"
+   ]
+  },
+  {
+   "nuid": "23I-2110",
+   "chosen": "Muhammad Akash Waris",
+   "seen": [
+    "Akash Waris",
+    "Muhammad Akash Waris"
+   ]
+  },
+  {
+   "nuid": "23I-2116",
+   "chosen": "Syed Ali Shah",
+   "seen": [
+    "Ali Shah",
+    "Syed Ali Shah"
+   ]
+  },
+  {
+   "nuid": "23I-2117",
+   "chosen": "Muhammad Saim Sawaid",
+   "seen": [
+    "Muhammad Saim",
+    "Muhammad Saim Sawaid"
+   ]
+  },
+  {
+   "nuid": "23I-2118",
+   "chosen": "Muhammad Noor-Ul-Azeem",
+   "seen": [
+    "Muhammad Noor-Ul-Azeem",
+    "Noor Ul Azeem"
+   ]
+  },
+  {
+   "nuid": "23I-2119",
+   "chosen": "Muhammad Ahsan Izhar",
+   "seen": [
+    "Muhammad Ahsan",
+    "Muhammad Ahsan Izhar"
+   ]
+  },
+  {
+   "nuid": "23I-2124",
+   "chosen": "Oswa Muhammad Saleem",
+   "seen": [
+    "Oswa",
+    "Oswa Muhammad Saleem"
+   ]
+  },
+  {
+   "nuid": "23I-2125",
+   "chosen": "Muhammad Ammar Shahid",
+   "seen": [
+    "Ammar Shahid",
+    "Muhammad Ammar Shahid"
+   ]
+  },
+  {
+   "nuid": "23I-4586",
+   "chosen": "Muhammad Ahmed Bhatti",
+   "seen": [
+    "Ahmed Bhatti",
+    "Muhammad Ahmed Bhatti"
+   ]
+  },
+  {
+   "nuid": "25I-0035",
+   "chosen": "Muhammad Ahmad Sarwar",
+   "seen": [
+    "Ahmad Sarwar",
+    "Muhammad Ahmad Sarwar"
+   ]
+  },
+  {
+   "nuid": "25I-0055",
+   "chosen": "Sarah Shafqat",
+   "seen": [
+    "Sarah Shafqat",
+    "Sarahshafqat"
+   ]
+  },
+  {
+   "nuid": "25I-0085",
+   "chosen": "Muhammad Dawood Abdullah",
+   "seen": [
+    "Dawood Abdullah",
+    "Muhammad Dawood Abdullah"
+   ]
+  },
+  {
+   "nuid": "25I-0088",
+   "chosen": "Muhammad Taha Iqbal",
+   "seen": [
+    "Muhammad Taha Iqbal",
+    "Taha Iqbal"
+   ]
+  },
+  {
+   "nuid": "25I-0096",
+   "chosen": "Khawaja Salman Ahmad",
+   "seen": [
+    "Khawaja Salman Ahmad",
+    "Salman Ahmad"
+   ]
+  },
+  {
+   "nuid": "25I-0116",
+   "chosen": "Muhammad Hussain",
+   "seen": [
+    "Hussain",
+    "Muhammad Hussain"
+   ]
+  },
+  {
+   "nuid": "25I-0149",
+   "chosen": "Muhammad Omer",
+   "seen": [
+    "Muhammad Omer",
+    "Omer"
+   ]
+  },
+  {
+   "nuid": "25I-0510",
+   "chosen": "Syed Saad Kamal Zaidi",
+   "seen": [
+    "Saad Kamal",
+    "Syed Saad Kamal Zaidi"
+   ]
+  },
+  {
+   "nuid": "25I-0511",
+   "chosen": "Hamza Zahid Abbasi",
+   "seen": [
+    "Hamza Zahid",
+    "Hamza Zahid Abbasi"
+   ]
+  },
+  {
+   "nuid": "25I-0512",
+   "chosen": "Muhammad Shahmeer Shah",
+   "seen": [
+    "Muhammad Shahmeer Shah",
+    "Shahmeer Shah"
+   ]
+  },
+  {
+   "nuid": "25I-0513",
+   "chosen": "Mohammad Ahmad Zeb",
+   "seen": [
+    "Ahmad Zeb",
+    "Mohammad Ahmad Zeb"
+   ]
+  },
+  {
+   "nuid": "25I-0520",
+   "chosen": "Muhammad Adil Saleem",
+   "seen": [
+    "Adil Saleem",
+    "Muhammad Adil Saleem"
+   ]
+  },
+  {
+   "nuid": "25I-0531",
+   "chosen": "Meshaim Abbasi",
+   "seen": [
+    "Meshaim Abbasi",
+    "Meshsim Abbasi"
+   ]
+  },
+  {
+   "nuid": "25I-0533",
+   "chosen": "Sumaan Dawood",
+   "seen": [
+    "Sumaan Dawood",
+    "Sumaandawood"
+   ]
+  },
+  {
+   "nuid": "25I-0542",
+   "chosen": "Muhammad Khubaib Khalil",
+   "seen": [
+    "Khubaib Khalil",
+    "Muhammad Khubaib Khalil"
+   ]
+  },
+  {
+   "nuid": "25I-0546",
+   "chosen": "Abdullah Azmeer Butt",
+   "seen": [
+    "Abdullah Azmeer",
+    "Abdullah Azmeer Butt"
+   ]
+  },
+  {
+   "nuid": "25I-0566",
+   "chosen": "Tasmeet Zahra Khan",
+   "seen": [
+    "Tasmeet Zahra",
+    "Tasmeet Zahra Khan"
+   ]
+  },
+  {
+   "nuid": "25I-0589",
+   "chosen": "Haad Saeed Afzal Khan",
+   "seen": [
+    "Haad Saeed",
+    "Haad Saeed Afzal Khan"
+   ]
+  },
+  {
+   "nuid": "25I-0592",
+   "chosen": "Muhammad Usman Khan",
+   "seen": [
+    "Muhammad Usman Khan",
+    "Usman Khan"
+   ]
+  },
+  {
+   "nuid": "25I-0594",
+   "chosen": "Muhammad Ahmad Baig",
+   "seen": [
+    "Ahmad Baig",
+    "Muhammad Ahmad Baig"
+   ]
+  },
+  {
+   "nuid": "25I-0603",
+   "chosen": "Muhammad Talal Malik",
+   "seen": [
+    "Muhammad Talal Malik",
+    "Talal Malik"
+   ]
+  },
+  {
+   "nuid": "25I-0607",
+   "chosen": "Muhammad Abdullah Cheema",
+   "seen": [
+    "Abdullah Cheema",
+    "Muhammad Abdullah Cheema"
+   ]
+  },
+  {
+   "nuid": "25I-0614",
+   "chosen": "Muhammad Ali Hassan",
+   "seen": [
+    "Ali Hassan",
+    "Muhammad Ali Hassan"
+   ]
+  },
+  {
+   "nuid": "25I-0627",
+   "chosen": "Filza Shumail",
+   "seen": [
+    "Filza Shumail",
+    "Filzashumail"
+   ]
+  },
+  {
+   "nuid": "25I-0637",
+   "chosen": "Muhammad Moosa Aasim",
+   "seen": [
+    "Moosa Aasim",
+    "Muhammad Moosa Aasim"
+   ]
+  },
+  {
+   "nuid": "25I-0654",
+   "chosen": "Muhammad Abuzar",
+   "seen": [
+    "Abuzar",
+    "Muhammad Abuzar"
+   ]
+  },
+  {
+   "nuid": "25I-0665",
+   "chosen": "Shahzaib Ali Khan",
+   "seen": [
+    "Shahzaib Ali",
+    "Shahzaib Ali Khan"
+   ]
+  },
+  {
+   "nuid": "25I-0673",
+   "chosen": "Aliya Kausar",
+   "seen": [
+    "Aliya Kausar",
+    "Aliyakausar"
+   ]
+  },
+  {
+   "nuid": "25I-0675",
+   "chosen": "Malik Ali Hassan",
+   "seen": [
+    "Ali Hassan",
+    "Malik Ali Hassan"
+   ]
+  },
+  {
+   "nuid": "25I-0680",
+   "chosen": "Muhammad Abdullah Zafar",
+   "seen": [
+    "Abdullah Zafar",
+    "Muhammad Abdullah Zafar"
+   ]
+  },
+  {
+   "nuid": "25I-0703",
+   "chosen": "Muhammad Rayan Asim",
+   "seen": [
+    "Muhammad Rayan Asim",
+    "Rayan Asim"
+   ]
+  },
+  {
+   "nuid": "25I-0716",
+   "chosen": "Fatima Zahid",
+   "seen": [
+    "Fatima Zahid",
+    "Fatimazahid"
+   ]
+  },
+  {
+   "nuid": "25I-0717",
+   "chosen": "Muhammad Shamir Ali Shah",
+   "seen": [
+    "Muhammad Shamir Ali Shah",
+    "Shamir Ali"
+   ]
+  },
+  {
+   "nuid": "25I-0719",
+   "chosen": "Muhammad Rehan",
+   "seen": [
+    "Muhammad Rehan",
+    "Rehan"
+   ]
+  },
+  {
+   "nuid": "25I-0722",
+   "chosen": "Laiba Mubashir",
+   "seen": [
+    "Laiba Mubashir",
+    "Laibamubashir"
+   ]
+  },
+  {
+   "nuid": "25I-0733",
+   "chosen": "Khawaja Muhammad Umer",
+   "seen": [
+    "Khawaja Muhammad Umer",
+    "Khawaja Umer"
+   ]
+  },
+  {
+   "nuid": "25I-0747",
+   "chosen": "Abdul Rehman Raja",
+   "seen": [
+    "Abdul Rehman",
+    "Abdul Rehman Raja"
+   ]
+  },
+  {
+   "nuid": "25I-0754",
+   "chosen": "Talha Tariq Abbasi",
+   "seen": [
+    "Talha Tariq",
+    "Talha Tariq Abbasi"
+   ]
+  },
+  {
+   "nuid": "25I-0771",
+   "chosen": "Muhammad Abdullah",
+   "seen": [
+    "Abdullah",
+    "Muhammad Abdullah"
+   ]
+  },
+  {
+   "nuid": "25I-0775",
+   "chosen": "Mahad Kashif Siddique",
+   "seen": [
+    "Mahad Kashif",
+    "Mahad Kashif Siddique"
+   ]
+  },
+  {
+   "nuid": "25I-0776",
+   "chosen": "Ammad Ud Din Muhammad",
+   "seen": [
+    "Ammad Ud",
+    "Ammad Ud Din Muhammad"
+   ]
+  },
+  {
+   "nuid": "25I-0790",
+   "chosen": "Syeda Aleena Shahid",
+   "seen": [
+    "Aleena Shahid",
+    "Syeda Aleena Shahid"
+   ]
+  },
+  {
+   "nuid": "25I-0800",
+   "chosen": "Ayesha Hassan",
+   "seen": [
+    "Ayesha Hassan",
+    "Ayeshahassan"
+   ]
+  },
+  {
+   "nuid": "25I-0802",
+   "chosen": "Muhammad Ali Haider",
+   "seen": [
+    "Ali Haider",
+    "Muhammad Ali Haider"
+   ]
+  },
+  {
+   "nuid": "25I-0803",
+   "chosen": "Muhammad Faizan",
+   "seen": [
+    "Faizan",
+    "Muhammad Faizan"
+   ]
+  },
+  {
+   "nuid": "25I-0805",
+   "chosen": "Muhammad Rohaib Nasir",
+   "seen": [
+    "Muhammad Rohaib Nasir",
+    "Rohaib Nasir"
+   ]
+  },
+  {
+   "nuid": "25I-0824",
+   "chosen": "Muhammad Asad Ali",
+   "seen": [
+    "Asad Ali",
+    "Muhammad Asad Ali"
+   ]
+  },
+  {
+   "nuid": "25I-0828",
+   "chosen": "Syed Hassan Abbas",
+   "seen": [
+    "Hassan Abbas",
+    "Syed Hassan Abbas"
+   ]
+  },
+  {
+   "nuid": "25I-0836",
+   "chosen": "Muhammad Wajahat Jamshed Tawakkaly",
+   "seen": [
+    "Muhammad Wajahat Jamshed Tawakkaly",
+    "Wajahat Jamshed"
+   ]
+  },
+  {
+   "nuid": "25I-0844",
+   "chosen": "Muhammad Abdullah Khalid",
+   "seen": [
+    "Abdullah Khalid",
+    "Muhammad Abdullah Khalid"
+   ]
+  },
+  {
+   "nuid": "25I-0855",
+   "chosen": "Ahmad Musa Nazir",
+   "seen": [
+    "Ahmad Musa Nazir",
+    "Ahmadmusanazir"
+   ]
+  },
+  {
+   "nuid": "25I-0859",
+   "chosen": "Atta Ur Rehman",
+   "seen": [
+    "Atta Ur",
+    "Atta Ur Rehman"
+   ]
+  },
+  {
+   "nuid": "25I-0862",
+   "chosen": "Muhammad Bin Naveed",
+   "seen": [
+    "Bin Naveed",
+    "Muhammad Bin Naveed"
+   ]
+  },
+  {
+   "nuid": "25I-0877",
+   "chosen": "Muhammad Daniyal Alam Khan",
+   "seen": [
+    "Daniyal Alam",
+    "Muhammad Daniyal Alam Khan"
+   ]
+  },
+  {
+   "nuid": "25I-0882",
+   "chosen": "Muhammad Hashim Yaseen",
+   "seen": [
+    "Hashim Yaseen",
+    "Muhammad Hashim Yaseen"
+   ]
+  },
+  {
+   "nuid": "25I-0889",
+   "chosen": "Muhammad Ali Mehdi",
+   "seen": [
+    "Ali Mehdi",
+    "Muhammad Ali Mehdi"
+   ]
+  },
+  {
+   "nuid": "25I-0894",
+   "chosen": "Muhammad Mudassir Zia",
+   "seen": [
+    "Mudassir Zia",
+    "Muhammad Mudassir Zia"
+   ]
+  },
+  {
+   "nuid": "25I-0896",
+   "chosen": "Muhammad Arqum Mehtab",
+   "seen": [
+    "Arqum Mehtab",
+    "Muhammad Arqum Mehtab"
+   ]
+  },
+  {
+   "nuid": "25I-0905",
+   "chosen": "Abdullah Bin Tahir",
+   "seen": [
+    "Abdullah Bin Tahir",
+    "Abdullah Tahir"
+   ]
+  },
+  {
+   "nuid": "25I-0911",
+   "chosen": "Muhammad Ayan Rafiq",
+   "seen": [
+    "Ayan Rafiq",
+    "Muhammad Ayan Rafiq"
+   ]
+  },
+  {
+   "nuid": "25I-0934",
+   "chosen": "Muhammad Saqib Khurshid",
+   "seen": [
+    "Muhammad Saqib Khurshid",
+    "Saqib Khurshid"
+   ]
+  },
+  {
+   "nuid": "25I-0939",
+   "chosen": "Ahsan Mukhtiar",
+   "seen": [
+    "Ahsan Mukhtiar",
+    "Ahsanmukhtiar"
+   ]
+  },
+  {
+   "nuid": "25I-0943",
+   "chosen": "Muhammad Saim Iqbal",
+   "seen": [
+    "Muhammad Saim Iqbal",
+    "Saim Iqbal"
+   ]
+  },
+  {
+   "nuid": "25I-0967",
+   "chosen": "Arif Hussain",
+   "seen": [
+    "Arif Hussain",
+    "Arifhussain"
+   ]
+  },
+  {
+   "nuid": "25I-0972",
+   "chosen": "Muhammad Mobeen Ahmed",
+   "seen": [
+    "Mobeen Ahmed",
+    "Muhammad Mobeen Ahmed"
+   ]
+  },
+  {
+   "nuid": "25I-0976",
+   "chosen": "Aoun Muhammad Saleh",
+   "seen": [
+    "Aoun Muhammad Saleh",
+    "Aoun Saleh"
+   ]
+  },
+  {
+   "nuid": "25I-0980",
+   "chosen": "Muhammad Aashir Paracha",
+   "seen": [
+    "Aashir Paracha",
+    "Muhammad Aashir Paracha"
+   ]
+  },
+  {
+   "nuid": "25I-0986",
+   "chosen": "Ameer Abdullah Khan",
+   "seen": [
+    "Ameer Abdullah",
+    "Ameer Abdullah Khan"
+   ]
+  },
+  {
+   "nuid": "25I-1017",
+   "chosen": "Abdullah Bin Mohsin",
+   "seen": [
+    "Abdullah",
+    "Abdullah Bin Mohsin"
+   ]
+  },
+  {
+   "nuid": "25I-1021",
+   "chosen": "Bilal Ahmad Mian",
+   "seen": [
+    "Bilal Ahmad",
+    "Bilal Ahmad Mian"
+   ]
+  },
+  {
+   "nuid": "25I-1032",
+   "chosen": "Muhammad Ahmad Yousaf",
+   "seen": [
+    "Ahmad Yousaf",
+    "Muhammad Ahmad Yousaf"
+   ]
+  },
+  {
+   "nuid": "25I-2000",
+   "chosen": "Muhammad Abdullah",
+   "seen": [
+    "Abdullah",
+    "Muhammad Abdullah"
+   ]
+  },
+  {
+   "nuid": "25I-2038",
+   "chosen": "Muneba Siddique",
+   "seen": [
+    "Muneba",
+    "Muneba Siddique"
+   ]
+  },
+  {
+   "nuid": "25I-2043",
+   "chosen": "Muhammad Taha Sohail",
+   "seen": [
+    "Muhammad Taha Sohail",
+    "Taha Sohail"
+   ]
+  },
+  {
+   "nuid": "25I-2074",
+   "chosen": "Mahnoor Zafar",
+   "seen": [
+    "Mahnoor Zafar",
+    "Mahnoorzafar"
+   ]
+  },
+  {
+   "nuid": "25I-2089",
+   "chosen": "Muhammad Ahmed Shahbaz",
+   "seen": [
+    "Ahmed Shahbaz",
+    "Muhammad Ahmed Shahbaz"
+   ]
+  },
+  {
+   "nuid": "25I-2096",
+   "chosen": "Khadija Tul Kubra",
+   "seen": [
+    "Khadija Tul Kubra",
+    "Khadijatulkubra"
+   ]
+  },
+  {
+   "nuid": "25I-2196",
+   "chosen": "Abdul Hadi Bukhari",
+   "seen": [
+    "Abdul Hadi",
+    "Abdul Hadi Bukhari"
+   ]
+  },
+  {
+   "nuid": "25I-2554",
+   "chosen": "Muhammad Abdullah Bin Khalid",
+   "seen": [
+    "Abdullah Khalid",
+    "Muhammad Abdullah Bin Khalid"
+   ]
+  },
+  {
+   "nuid": "25I-2555",
+   "chosen": "Aiman Noor",
+   "seen": [
+    "Aiman Noor",
+    "Aimannoor"
+   ]
+  },
+  {
+   "nuid": "25I-2558",
+   "chosen": "Muhammad Hussain Khan",
+   "seen": [
+    "Hussain Khan",
+    "Muhammad Hussain Khan"
+   ]
+  },
+  {
+   "nuid": "25I-2561",
+   "chosen": "Muhammad Waseem Iqbal",
+   "seen": [
+    "Muhammad Waseem Iqbal",
+    "Waseem Iqbal"
+   ]
+  },
+  {
+   "nuid": "25I-2572",
+   "chosen": "Muhammad Sohaib Sheikh",
+   "seen": [
+    "Muhammad Sohaib Sheikh",
+    "Sohaib Sheikh"
+   ]
+  },
+  {
+   "nuid": "25I-2597",
+   "chosen": "Muhammad Zunoorain",
+   "seen": [
+    "Muhammad Zunoorain",
+    "Zunoorain"
+   ]
+  },
+  {
+   "nuid": "25I-2600",
+   "chosen": "Muhammad Abdullah Tahir",
+   "seen": [
+    "Abdullah Tahir",
+    "Muhammad Abdullah Tahir"
+   ]
+  },
+  {
+   "nuid": "25I-3001",
+   "chosen": "Ayesha Naveed Abbasi",
+   "seen": [
+    "Ayesha Naveed",
+    "Ayesha Naveed Abbasi"
+   ]
+  },
+  {
+   "nuid": "25I-3005",
+   "chosen": "Tayyab Shabbir",
+   "seen": [
+    "Tayyab Shabbir",
+    "Tayyabshabbir"
+   ]
+  },
+  {
+   "nuid": "25I-3022",
+   "chosen": "Muhammad Faraz Abdullah",
+   "seen": [
+    "Faraz Abdullah",
+    "Muhammad Faraz Abdullah"
+   ]
+  },
+  {
+   "nuid": "25I-3036",
+   "chosen": "Muhammad Huzaifa Azam Malik",
+   "seen": [
+    "Huzaifa Azam",
+    "Muhammad Huzaifa Azam Malik"
+   ]
+  },
+  {
+   "nuid": "25I-3043",
+   "chosen": "Mehreen Zakauallah",
+   "seen": [
+    "Mehreen Zakauallah",
+    "Mehreenzakauallah"
+   ]
+  },
+  {
+   "nuid": "25I-3093",
+   "chosen": "Muhammad Ahmad Habib",
+   "seen": [
+    "Ahmad Habib",
+    "Muhammad Ahmad Habib"
+   ]
+  },
+  {
+   "nuid": "25I-3099",
+   "chosen": "Emaan Nayyar Khan",
+   "seen": [
+    "Emaan Nayyar",
+    "Emaan Nayyar Khan"
+   ]
+  },
+  {
+   "nuid": "25I-3104",
+   "chosen": "Usman Khan",
+   "seen": [
+    "Usman",
+    "Usman Khan"
+   ]
+  },
+  {
+   "nuid": "25I-3132",
+   "chosen": "Abdul Muqeet Sajjad",
+   "seen": [
+    "Abdul Muqeet",
+    "Abdul Muqeet Sajjad"
+   ]
+  },
+  {
+   "nuid": "25I-3134",
+   "chosen": "Chaudhry Muhammad Irtaza",
+   "seen": [
+    "Chaudhry Irtaza",
+    "Chaudhry Muhammad Irtaza"
+   ]
+  },
+  {
+   "nuid": "25I-3142",
+   "chosen": "Muhammad Ali Tahir",
+   "seen": [
+    "Ali Tahir",
+    "Muhammad Ali Tahir"
+   ]
+  },
+  {
+   "nuid": "25I-3157",
+   "chosen": "Zunaira Mukhtar",
+   "seen": [
+    "Zunaira",
+    "Zunaira Mukhtar"
+   ]
+  },
+  {
+   "nuid": "25I-3164",
+   "chosen": "Muhammad Ahad Farooq",
+   "seen": [
+    "Mahadfarooq",
+    "Muhammad Ahad Farooq"
+   ]
+  },
+  {
+   "nuid": "25I-3167",
+   "chosen": "Muhammad Ibtisam Haider Hashmi",
+   "seen": [
+    "Ibtisam Hashmi",
+    "Muhammad Ibtisam Haider Hashmi"
+   ]
+  },
+  {
+   "nuid": "25I-3168",
+   "chosen": "Azam Khan",
+   "seen": [
+    "Azam",
+    "Azam Khan"
+   ]
+  },
+  {
+   "nuid": "25I-3201",
+   "chosen": "Fazal Ur Rehman",
+   "seen": [
+    "Fazal Ur Rehman",
+    "Fazalurrehman"
+   ]
+  }
+ ],
+ "unparsable_program": [],
+ "count": 5027,
+ "by_batch": {
+  "19": 1,
+  "20": 3,
+  "21": 58,
+  "22": 978,
+  "23": 702,
+  "24": 830,
+  "25": 1093,
+  "26": 1362
+ },
+ "by_department": {
+  "CS": 1744,
+  "SE": 1033,
+  "CY": 719,
+  "AI": 659,
+  "DS": 435,
+  "MAI": 138,
+  "MDS": 92,
+  "MCY": 66,
+  "MCS": 55,
+  "MSE": 33,
+  "PCS": 23,
+  "MCI": 13,
+  "MAAIHS": 13,
+  "PSE": 4
+ }
+}
