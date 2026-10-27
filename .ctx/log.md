@@ -82,3 +82,8 @@ Roster reads narrowed. `/api/auth/me` now returns the session account's own rost
 
 ## 2026-10-26T13:00:00+05:00
 Auth OTP rate limiting now fails closed. `authRateCheck` and `authRateNote` in `lib/db/repos.mjs` throw on a storage fault instead of silently allowing the request, and `/api/auth/request-code` books both per-IP and per-NU-ID attempts before creating or emailing a code, so an unrecorded email can no longer bypass the counters. `auth:smoke` now asserts request-code returns 503 with no nonce cookie when the limiter is unreadable, and that rate booking propagates the failure. No frontend change, so no asset bump.
+
+## 2026-10-27T12:00:00+05:00
+Removed OTP from sign-in at the user's request. `/api/auth/request-code` now validates the NU ID, rate-limits per IP/NU ID, upserts the account, mints the session cookie and returns `{ok, verified, account}`; no email, challenge or nonce. Desktop `syncProfile` and mobile `doSignIn` call it and continue straight to `/api/auth/me`; code-entry UI is never shown. `/api/auth/verify`, otp.mjs, mailer.mjs and `scripts/auth/smoke-test.mjs` are left in place but unused/stale (smoke test still expects the OTP flow). Security note: anyone who knows an NU ID can now sign in as that student. Not committed; no asset version bump yet.
+
+Bumped asset version to v=69 (OTP removal ships to browsers).

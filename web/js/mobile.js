@@ -420,7 +420,7 @@
     }
 
     signingIn=true;
-    if(btn){ btn.disabled=true; btn.innerHTML='<span class="m-spinner"></span>Sending code…'; }
+    if(btn){ btn.disabled=true; btn.innerHTML='<span class="m-spinner"></span>Signing in…'; }
     signinStatus('');
     try{
       // A session may already exist (page reload, or coming back from the
@@ -431,16 +431,11 @@
         await finishSignIn(nuid);
         return;
       }
-      const info=await requestAuthCode(nuid);
-      signinChallenge={nuid,challengeId:info.challenge_id};
-      const wrap=$('m-code-wrap');
-      if(wrap) wrap.hidden=false;
-      const code=$('m-code');
-      if(code){ code.value=''; code.focus(); }
-      signinStatus(`Code sent to ${info.email}. It expires in 10 minutes.`);
-      if(btn) btn.textContent='Verify code';
+      // No OTP: the server signs this NU ID in directly.
+      await requestAuthCode(nuid);
+      await finishSignIn(nuid);
     }catch(e){
-      signinStatus(e.message||'Could not send the code.',true);
+      signinStatus(e.message||'Could not sign in.',true);
     }finally{
       signingIn=false;
       if(btn){ btn.disabled=false; if(!signinChallenge) btn.textContent='Continue'; }

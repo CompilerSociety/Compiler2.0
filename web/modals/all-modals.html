@@ -160,17 +160,17 @@
       <button class="profile-close" type="button" onclick="closeProfileModal()" aria-label="Close profile"><span aria-hidden="true">×</span></button>
     </div>
     <div class="profile-modal-body">
-      <div class="profile-help" id="profile-sync-help">Enter your NU ID. We will email a 6-digit code to your university address.</div>
+      <div class="profile-help" id="profile-sync-help">Enter your NU ID to load your profile.</div>
       <div class="profile-input-row" id="profile-sync-row">
         <input class="profile-input" id="profile-nuid" type="text" placeholder="Enter NU ID (e.g. 25I-0000)" maxlength="20" onkeydown="if(event.key==='Enter')syncProfile()">
-        <button class="profile-sync-btn" type="button" onclick="syncProfile()">Send code</button>
+        <button class="profile-sync-btn" type="button" onclick="syncProfile()">Sync</button>
       </div>
       <div class="profile-input-row" id="profile-code-row" hidden>
         <input class="profile-input" id="profile-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit code" onkeydown="if(event.key==='Enter')verifyProfileCode()">
         <button class="profile-sync-btn" type="button" onclick="verifyProfileCode()">Verify</button>
       </div>
       <div class="profile-help" id="profile-code-help" hidden></div>
-      <div class="profile-status" id="profile-status">Type your NU ID and press send code.</div>
+      <div class="profile-status" id="profile-status">Type your NU ID and press sync.</div>
       <div class="profile-form" id="profile-registration" hidden>
         <div class="profile-form-title">Add your profile</div>
         <div class="profile-help">We could not find your NU ID yet. Enter your details below.</div>

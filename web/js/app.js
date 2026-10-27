@@ -680,7 +680,7 @@ function openProfileModal(){
     if(card) card.hidden=true;
     if(registration) registration.hidden=true;
     showProfileActions(false,false);
-    if(status) status.textContent='Type your NU ID. We will email you a 6-digit code.';
+    if(status) status.textContent='Type your NU ID and press sync.';
   }
   // /api/auth/me is authoritative; the local cache may be stale after a cookie
   // expiry or a logout in another tab.
@@ -912,16 +912,16 @@ async function syncProfile(){
     // after verifyProfileCode() has a session.
     if(card) card.hidden=true;
     if(registration) registration.hidden=true;
-    if(status) status.textContent='Sending a code to your university email...';
+    if(status) status.textContent='Signing in...';
     PROFILE_SYNC_IN_PROGRESS=true;
+    let signedIn=false;
     try{
+      // No OTP: the server signs this NU ID in directly.
       const info=await requestAuthCode(nuid);
-      PROFILE_AUTH_PENDING={nuid,challengeId:info.challenge_id};
-      updateProfileRegistrationFields(nuid);
-      localStorage.setItem(PROFILE_STORAGE_KEY,nuid);
-      showProfileCodeStep(info.email);
-      if(status) status.textContent='Enter the 6-digit code we emailed you.';
-      return;
+      PROFILE_AUTH_ACCOUNT=info.account||null;
+      signedIn=Boolean(PROFILE_AUTH_ACCOUNT);
+      updateProfileAuthUi();
+      if(!signedIn) throw new Error('Could not sign in.');
     }catch(err){
       // Fail closed. The public roster fallback is gone, and an auth outage
       // means there is no verified session to read this account with.

@@ -11,14 +11,11 @@
 
 import { isEnabled } from '../../lib/db/mongo.mjs';
 import { parseNuid } from '../../lib/auth/nuid.mjs';
-import { newOtp, hashOtp, OTP_TTL_MS } from '../../lib/auth/otp.mjs';
-import { randomToken, hashWithPepper } from '../../lib/auth/tokens.mjs';
-import { setNonceCookie } from '../../lib/auth/session.mjs';
-import { sendOtpEmail } from '../../lib/auth/mailer.mjs';
+import { setSessionCookie, createSession } from '../../lib/auth/session.mjs';
 import {
-  createAuthChallenge, deleteAuthChallenge, authRateCheck, authRateNote,
+  upsertVerifiedAccount, authRateCheck, authRateNote,
 } from '../../lib/db/repos.mjs';
-import { rejectCrossOrigin, clientIp, authConfigError } from '../../lib/auth/guard.mjs';
+import { rejectCrossOrigin, clientIp } from '../../lib/auth/guard.mjs';
 
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const MAX_PER_IP = 10;
@@ -58,13 +55,14 @@ export default async function handler(req, res) {
       detail: 'MONGODB_URI is not set on the server.',
     });
   }
-  const configError = authConfigError();
-  if (configError) {
+  // OTP verification is disabled: no email is sent, so only the session pepper
+  // is required on a deployed server.
+  if (process.env.VERCEL && !(process.env.SESSION_PEPPER || process.env.OTP_PEPPER)) {
     return res.status(503).json({
       ok: false,
       error: 'auth_unavailable',
       message: "Sign-in can't work right now — this is on us, not you.",
-      detail: configError,
+      detail: 'SESSION_PEPPER or OTP_PEPPER is not set on the server.',
     });
   }
 
@@ -102,47 +100,20 @@ export default async function handler(req, res) {
     await authRateNote(`otp-ip:${ip}`);
     await authRateNote(`otp-nuid:${parsed.nuid}`);
 
-    const pepper = process.env.OTP_PEPPER || '';
-    const nonce = randomToken(18);
-    const challengeId = randomToken(18);
-    const code = newOtp();
-    const now = Date.now();
-
-    await createAuthChallenge({
-      _id: challengeId,
-      nuid: parsed.nuid,
-      email: parsed.email,
-      code_hash: hashOtp({ challengeId, nuid: parsed.nuid, code, pepper }),
-      // Binds the challenge to this browser. A challenge id leaked from one
-      // device cannot be completed from another.
-      browser_hash: hashWithPepper(nonce, pepper),
-      attempts: 0,
-      consumed: false,
-      created_at: new Date(now),
-      expires_at: new Date(now + OTP_TTL_MS),
-    });
-
-    try {
-      await sendOtpEmail({ to: parsed.email, code, nuid: parsed.nuid });
-    } catch (err) {
-      // No code went out, so leave no live challenge behind that could still be
-      // guessed at.
-      await deleteAuthChallenge(challengeId).catch(() => {});
-      console.error('auth mail delivery failed:', err?.message);
-      return res.status(503).json({
-        ok: false,
-        error: 'delivery_failed',
-        message: "We couldn't send your code right now — this is on us, not you.",
-      });
-    }
-
-    setNonceCookie(res, nonce);
+    // No OTP: the NU ID alone signs the browser in.
+    const account = await upsertVerifiedAccount(parsed.nuid, parsed.email);
+    const token = await createSession(parsed.nuid, req);
+    setSessionCookie(res, token);
 
     return res.status(200).json({
       ok: true,
-      challenge_id: challengeId,
-      expires_in: Math.floor(OTP_TTL_MS / 1000),
-      email: parsed.maskedEmail,
+      verified: true,
+      account: {
+        nuid: account.nuid,
+        email: account.email,
+        batch: String(account.nuid).slice(0, 2),
+        verified_at: account.verified_at,
+      },
     });
   } catch (err) {
     console.error('request-code API error:', err);
