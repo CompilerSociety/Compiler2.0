@@ -1428,7 +1428,7 @@
   }
 
   /* ══ EXAMS ═════════════════════════════════════════════════════════ */
-  const ex={tab:'schedule',school:'computing',dept:'',batch:''};
+  const ex={tab:'schedule',school:'computing',dept:'',batch:'',seatQuery:''};
 
   function examType(doc){
     const f=String((doc&&(doc.source_filename||doc.source_subject))||'').toLowerCase();
@@ -1449,13 +1449,14 @@
   }
 
   function renderExams(){
-    ['schedule','showup'].forEach(t=>{
+    ['schedule','seating','showup'].forEach(t=>{
       const btn=$('m-seg-'+t);
       btn.classList.toggle('is-active',ex.tab===t);
       btn.setAttribute('aria-selected',String(ex.tab===t));
     });
     seedExamFilters();
-    if(ex.tab==='showup') renderShowup();
+    if(ex.tab==='seating') renderSeating();
+    else if(ex.tab==='showup') renderShowup();
     else renderExamSchedule();
   }
 
@@ -2942,7 +2943,7 @@
 
     $('m-seg-today').addEventListener('click',()=>{ weekMode=false; renderToday(); });
     $('m-seg-week').addEventListener('click',()=>{ weekMode=true; renderToday(); });
-    ['schedule','showup'].forEach(t=>{
+    ['schedule','seating','showup'].forEach(t=>{
       $('m-seg-'+t).addEventListener('click',()=>{ ex.tab=t; $('m-exam-out').innerHTML=''; renderExams(); });
     });
 
@@ -2983,7 +2984,7 @@
     const old=String(location.hash||'').replace(/^#/,'');
     if(!r&&legacy[old]){
       r=legacy[old];
-      if(old==='showup') ex.tab='showup';
+      if(old==='showup'||old==='seating') ex.tab=old;
       history.replaceState(null,'','#/'+r);
     }
     // render() decides sign-in vs app from the stored profile, so "today" is

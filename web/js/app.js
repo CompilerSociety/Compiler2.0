@@ -1060,6 +1060,7 @@ const NOTIFICATION_CATEGORIES=[
   {key:'cls',label:'Class changes',help:'Cancelled or rescheduled classes for your section.'},
   {key:'exam',label:'Exam schedule',help:'When a new exam schedule is published.'},
   {key:'show',label:'Show-up schedule',help:'When your show-up time or venue changes.'},
+  {key:'seat',label:'Seating plan',help:'When your exam seat is assigned or moved.'},
   {key:'room',label:'Free-room digest',help:'Not built yet — this switch is reserved.',dead:true}
 ];
 const NOTIF_PREFS_DEFAULT={cls:true,exam:true,show:true,seat:true,room:false};
@@ -1664,7 +1665,7 @@ async function refreshRoomExamData(){
     const schools=['computing','business','engineering'];
     const results=await Promise.allSettled([
       ...schools.map(s=>fetchDoc('/api/db?doc=exams/'+s)),
-      fetchDoc('/db/seating/plan.json')
+      fetchDoc('/api/db?doc=seating/plan')
     ]);
     const schedules=results.slice(0,3);
     const valid=schedules.every(r=>r.status==='fulfilled'&&(Array.isArray(r.value?.exams)||Array.isArray(r.value?.flat_exams)));
@@ -4380,7 +4381,9 @@ function initExamSchedulePanel(){
 /* ══════════════════════════════════════════
    SEATING PLAN
 ══════════════════════════════════════════ */
-const SEATING_PLAN_URL=`/db/seating/plan.json?cachebust=${Date.now()}`;
+// Use MongoDB directly: the tracked db/seating/plan.json mirror is served as a
+// static file ahead of any rewrite, so it shadowed newer plans.
+const SEATING_PLAN_URL=`/api/db?doc=seating/plan&cachebust=${Date.now()}`;
 let _seatingData=null;
 let _seatingLoadPromise=null;
 

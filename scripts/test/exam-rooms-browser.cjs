@@ -21,9 +21,9 @@ const seating={room_occupancy:{version:1,complete:true,dates:['2025-12-15'],scho
       const url=new URL(route.request().url()),p=url.pathname;
       const json=data=>route.fulfill({json:data});
       if(p==='/js/status.js') return route.fulfill({contentType:'text/javascript',body:'window.SITE_STATUS={isLive:()=>true};'});
-      if(p==='/db/seating/plan.json') return missing?route.fulfill({status:404}):json(seating);
       if(p==='/api/db'){
         const doc=url.searchParams.get('doc');
+        if(doc==='seating/plan') return missing?route.fulfill({status:404}):json(seating);
         examDocs.push(doc);
         if(!['exams/computing','exams/business','exams/engineering'].includes(doc)) return route.fulfill({status:404});
         if(examFailure) return route.fulfill({status:503});

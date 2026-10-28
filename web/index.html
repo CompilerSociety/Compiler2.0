@@ -28,15 +28,15 @@
        file under /css or /js. Browsers (especially installed PWAs, which
        revalidate far less eagerly than a normal tab) otherwise keep serving
        an old cached bundle indefinitely, silently masking bug fixes. -->
-  <link rel="stylesheet" href="/css/main.css?v=70">
+  <link rel="stylesheet" href="/css/main.css?v=71">
   <!-- The app UI. mobile.css is the base (phone) layout at every width;
        desktop.css re-lays it out for wide windows. -->
-  <link rel="stylesheet" href="/css/mobile.css?v=70">
-  <link rel="stylesheet" href="/css/desktop.css?v=70">
-  <link rel="stylesheet" href="/css/announcement.css?v=70">
+  <link rel="stylesheet" href="/css/mobile.css?v=71">
+  <link rel="stylesheet" href="/css/desktop.css?v=71">
+  <link rel="stylesheet" href="/css/announcement.css?v=71">
   <!-- Launch switch. Plain script so it runs before the deferred /js/main.js
        module and can gate the whole app. See js/status.js. -->
-  <script src="/js/status.js?v=70"></script>
+  <script src="/js/status.js?v=71"></script>
   <script>
     (function () {
       try {
@@ -46,6 +46,7 @@
           freerooms: 'freerooms',
           showup: 'showup',
           exams: 'exams',
+          seating: 'seating',
           faculty: 'faculty'
         };
         if (routes[path] && location.hash !== '#' + routes[path]) {
@@ -78,6 +79,6 @@
     <div id="mobile-container"></div>
     <div id="mascot" class="mascot" aria-hidden="true"><span class="mascot-emoji">🐰</span></div>
   </div>
-  <script type="module" src="/js/main.js?v=70"></script>
+  <script type="module" src="/js/main.js?v=71"></script>
 </body>
 </html>
