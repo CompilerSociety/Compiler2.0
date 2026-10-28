@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-10-19T13:22:51.135792+00:00",
-  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft Version)",
-  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft Version) as on 19-10-2026.xlsx",
-  "count": 116,
+  "updated_at": "2026-10-28T13:40:15.776221+00:00",
+  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft 2)",
+  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx",
+  "count": 118,
   "exams": [
     {
       "date": "2026-10-29",
@@ -106,7 +106,7 @@
         ]
       },
       "source_cell": "FSC!H5",
-      "source_text": "SE4009 Process Mining and Simulation\\\n  BS(SE) A \n2023"
+      "source_text": "SE4009 Process Mining and Simulation\n  BS(SE) A \n2023"
     },
     {
       "date": "2026-10-29",
@@ -636,29 +636,17 @@
       "date": "2026-10-30",
       "day": "Friday",
       "time": "03:40 to 04:40 PM",
-      "code": "SS1022",
-      "course": "Understanding of Holy Quran I/Introduction to Major World Religions II",
-      "batch": "2025",
+      "code": "CS4049",
+      "course": "Blockchain and Cryptocurrency",
+      "batch": "2023",
       "sections": {
-        "CS": [
+        "CY": [
           "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "Z"
-        ],
-        "DS": [
-          "A",
-          "B",
-          "C"
+          "B"
         ]
       },
       "source_cell": "FSC!L11",
-      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions II  \nBS(CS) (A,B,C,D,E,F,G,H,Z)     \nBS(DS) (A,B,C)\n2025"
+      "source_text": "CS4049 Blockchain and Cryptocurrency \nBS(CY) (A,B)\n  2023"
     },
     {
       "date": "2026-10-30",
@@ -732,17 +720,18 @@
       "date": "2026-10-30",
       "day": "Friday",
       "time": "03:40 to 04:40 PM",
-      "code": "CS4049",
-      "course": "Blockchain and Cryptocurrency",
-      "batch": "2023",
+      "code": "CS3002",
+      "course": "Information Security",
+      "batch": "2024",
       "sections": {
         "CY": [
           "A",
-          "B"
+          "B",
+          "C"
         ]
       },
       "source_cell": "FSC!L12",
-      "source_text": "CS4049 Blockchain and Cryptocurrency \nBS(CY) (A,B)\n  2023"
+      "source_text": "CS3002 Information Security \nBS(CY) (A,B,C) \n 2024"
     },
     {
       "date": "2026-10-30",
@@ -808,16 +797,24 @@
       "time": "03:40 to 04:40 PM",
       "code": "CS3002",
       "course": "Information Security",
-      "batch": "2024",
+      "batch": "2023",
       "sections": {
-        "CY": [
+        "CS": [
           "A",
           "B",
-          "C"
+          "C",
+          "D",
+          "E",
+          "F",
+          "G"
+        ],
+        "SE": [
+          "A",
+          "B"
         ]
       },
       "source_cell": "FSC!L13",
-      "source_text": "CS3002 Information Security \nBS(CY) (A,B,C) \n 2024"
+      "source_text": "CS3002 Information Security \nBS(CS) (A,B,C,D,,E,F,G)\nBS(SE) (A,B) \n 2023"
     },
     {
       "date": "2026-10-30",
@@ -912,45 +909,26 @@
           "D",
           "E",
           "F"
-        ],
-        "AI": [
-          "A",
-          "B",
-          "C"
-        ],
-        "DS": [
-          "A",
-          "B",
-          "C"
         ]
       },
       "source_cell": "FSC!J14",
-      "source_text": "CL1002 Programming Fundamentals Lab             BS(SE) (A,B, C,D,E,F) \nBS(AI) (A,B,C)\nBS(DS) (A,B,C)\n2026"
+      "source_text": "CL1002 Programming Fundamentals Lab            \n BS(SE) (A,B, C,D,E,F) \n2026"
     },
     {
       "date": "2026-10-30",
       "day": "Friday",
       "time": "03:40 to 04:40 PM",
-      "code": "CS3002",
-      "course": "Information Security",
+      "code": "CS4059",
+      "course": "Fundamentals of Computer Vision",
       "batch": "2023",
       "sections": {
-        "CS": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "SE": [
+        "DS": [
           "A",
           "B"
         ]
       },
       "source_cell": "FSC!L14",
-      "source_text": "CS3002 Information Security \nBS(CS) (A,B,C,D,,E,F,G)\nBS(SE) (A,B) \n 2023"
+      "source_text": "CS4059  Fundamentals of Computer Vision\nBS(DS) (A,B)\n  2023"
     },
     {
       "date": "2026-10-30",
@@ -999,17 +977,23 @@
       "date": "2026-10-30",
       "day": "Friday",
       "time": "03:40 to 04:40 PM",
-      "code": "CS4059",
-      "course": "Fundamentals of Computer Vision",
-      "batch": "2023",
+      "code": "CL1002",
+      "course": "Programming Fundamentals Lab",
+      "batch": "2026",
       "sections": {
+        "AI": [
+          "A",
+          "B",
+          "C"
+        ],
         "DS": [
           "A",
-          "B"
+          "B",
+          "C"
         ]
       },
       "source_cell": "FSC!L15",
-      "source_text": "CS4059  Fundamentals of Computer Vision\nBS(DS) (A,B)\n  2023"
+      "source_text": "CL1002 Programming Fundamentals Lab             \nBS(AI) (A,B,C)\nBS(DS) (A,B,C)\n2026"
     },
     {
       "date": "2026-10-30",
@@ -1022,6 +1006,23 @@
       "source_cell": "FSC!N15",
       "source_text": "CS5005 Advanced Analysis of Algorithms MS(CS) A",
       "notes": "MS(CS) A"
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "9:00 to 10:00 AM",
+      "code": "CY2004",
+      "course": "Cyber Security",
+      "batch": "2025",
+      "sections": {
+        "CY": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSC!B16",
+      "source_text": "CY2004 Cyber Security\n BS(CY)-A,B,C   2025"
     },
     {
       "date": "2026-10-30",
@@ -1046,6 +1047,23 @@
       },
       "source_cell": "FSC!F16",
       "source_text": "CS1004 Object Oriented Programming  \nBS(CS) (A,B,C,D)     \n BS(SE) (A)\n BS(AI) (A)\n 2025 "
+    },
+    {
+      "date": "2026-10-30",
+      "day": "Friday",
+      "time": "02:30 to 03:30 PM",
+      "code": "CL3001",
+      "course": "Computer Networks Lab",
+      "batch": "2024",
+      "sections": {
+        "AI": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSC!J16",
+      "source_text": "CL3001 \nComputer Networks Lab           \nBS(AI) (A,B,C)\n 2024 4"
     },
     {
       "date": "2026-10-30",
@@ -1453,18 +1471,17 @@
       "date": "2026-10-31",
       "day": "Saturday",
       "time": "10:20 to 11:20 AM",
-      "code": "CY2004",
-      "course": "Cyber Security",
-      "batch": "2025",
+      "code": "DS2003",
+      "course": "Advanced Statistics",
+      "batch": "2024",
       "sections": {
-        "CY": [
+        "DS": [
           "A",
-          "B",
-          "C"
+          "B"
         ]
       },
       "source_cell": "FSC!D21",
-      "source_text": "CY2004 Cyber Security\n BS(CY)-A,B,C   2025"
+      "source_text": "DS2003 Advanced Statistics\nBS(DS) (A,B)\n  2024"
     },
     {
       "date": "2026-10-31",
@@ -1529,17 +1546,45 @@
       "date": "2026-10-31",
       "day": "Saturday",
       "time": "10:20 to 11:20 AM",
-      "code": "DS2003",
-      "course": "Advanced Statistics",
-      "batch": "2024",
+      "code": "SS1022",
+      "course": "Understanding of Holy Quran I/Introduction to Major World Religions II",
+      "batch": "2025",
       "sections": {
+        "CS": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "J",
+          "Z"
+        ],
         "DS": [
           "A",
           "B"
+        ],
+        "AI": [
+          "A",
+          "B",
+          "C"
+        ],
+        "CY": [
+          "A",
+          "B",
+          "C"
+        ],
+        "SE": [
+          "A",
+          "B",
+          "C",
+          "D"
         ]
       },
       "source_cell": "FSC!D22",
-      "source_text": "DS2003 Advanced Statistics\nBS(DS) (A,B)\n  2024"
+      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions II  \nBS(CS) (A,B,C,D,E,F,G,H,J, Z)     \nBS(DS) (A,B)\n BS(AI) (A,B,C)\n BS(CY) (A,B,C)\nBS(SE) (A,B,C,D)\n2025"
     },
     {
       "date": "2026-10-31",
@@ -1577,28 +1622,6 @@
     {
       "date": "2026-10-31",
       "day": "Saturday",
-      "time": "02:30 to 03:30 PM",
-      "code": "CL1002",
-      "course": "Programming Fundamentals Lab",
-      "batch": "2026",
-      "sections": {
-        "AI": [
-          "A",
-          "B",
-          "C"
-        ],
-        "DS": [
-          "A",
-          "B",
-          "C"
-        ]
-      },
-      "source_cell": "FSC!J22",
-      "source_text": "CL1002 Programming Fundamentals Lab             \nBS(AI) (A,B,C)\nBS(DS) (A,B,C)\n2026"
-    },
-    {
-      "date": "2026-10-31",
-      "day": "Saturday",
       "time": "03:40 to 04:40 PM",
       "code": "CS4032",
       "course": "Web Programming",
@@ -1612,26 +1635,6 @@
       },
       "source_cell": "FSC!L22",
       "source_text": "CS4032 Web Programming\nBS(CY) A,B,C\n 2024"
-    },
-    {
-      "date": "2026-10-31",
-      "day": "Saturday",
-      "time": "03:40 to 04:40 PM",
-      "code": "CL1002",
-      "course": "Programming Fundamentals Lab",
-      "batch": "2026",
-      "sections": {
-        "SE": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F"
-        ]
-      },
-      "source_cell": "FSC!L23",
-      "source_text": "CL1002 Programming Fundamentals Lab            \n BS(SE) (A,B, C,D,E,F) \n2026"
     },
     {
       "date": "2026-11-02",
@@ -1910,6 +1913,23 @@
     {
       "date": "2026-11-02",
       "day": "Monday",
+      "time": "10:20 to 11:20 AM",
+      "code": "CL3001",
+      "course": "Computer Networks Lab",
+      "batch": "2023",
+      "sections": {
+        "DS": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSC!D27",
+      "source_text": "CL3001 Computer Networks Lab\n BS(DS)A,B,C\n2023"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40 PM",
       "code": "SE4033",
       "course": "Formal Methods in Software Engineering",
@@ -2100,13 +2120,13 @@
       "date": "2026-11-02",
       "day": "Monday",
       "time": "5:00 to 6:00 PM",
-      "code": "CS4002",
-      "course": "Applied Programming",
+      "code": "CS6018",
+      "course": "Recent Advances in Deep Learning",
       "batch": null,
       "sections": {},
       "source_cell": "FSC!N28",
-      "source_text": "CS4002 Applied Programming \nMS(AI)-A,B\nMS(CS)-A,\nMS(CY)-A\nMS(DS)-A\nMS(SE)-A",
-      "notes": "MS(AI)-A,B; MS(CS)-A,; MS(CY)-A; MS(DS)-A; MS(SE)-A"
+      "source_text": "CS6018 Recent Advances in Deep Learning  \nPhD (CS & SE)",
+      "notes": "PhD (CS & SE)"
     },
     {
       "date": "2026-11-02",
@@ -2140,7 +2160,7 @@
       "day": "Monday",
       "time": "02:30 to 03:30 PM",
       "code": "CL1002",
-      "course": "Programming Fundamentals",
+      "course": "Programming Fundamentals  Lab",
       "batch": "2026",
       "sections": {
         "CS": [
@@ -2155,7 +2175,7 @@
         ]
       },
       "source_cell": "FSC!J29",
-      "source_text": "CL 1002   Programming Fundamentals        \nBS(CS) (A,B,C,D,E,F,G,H)\n2026"
+      "source_text": "CL 1002   Programming Fundamentals  Lab   \nBS(CS) (A,B,C,D,E,F,G,H)\n2026"
     },
     {
       "date": "2026-11-02",
@@ -2173,6 +2193,18 @@
       },
       "source_cell": "FSC!L29",
       "source_text": "SE3002 Software Quality Engineering   BS(SE)(A,B,C) \n2024"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "5:00 to 6:00 PM",
+      "code": "CS4002",
+      "course": "Applied Programming",
+      "batch": null,
+      "sections": {},
+      "source_cell": "FSC!N29",
+      "source_text": "CS4002 Applied Programming \nMS(AI)-A,B\nMS(CS)-A,\nMS(CY)-A\nMS(DS)-A\nMS(SE)-A",
+      "notes": "MS(AI)-A,B; MS(CS)-A,; MS(CY)-A; MS(DS)-A; MS(SE)-A"
     },
     {
       "date": "2026-11-02",

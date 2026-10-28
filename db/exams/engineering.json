@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-10-19T13:22:51.145611+00:00",
-  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft Version)",
-  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft Version) as on 19-10-2026.xlsx",
-  "count": 44,
+  "updated_at": "2026-10-28T13:40:15.785629+00:00",
+  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft 2)",
+  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx",
+  "count": 43,
   "exams": [
     {
       "date": "2026-10-29",
@@ -92,17 +92,16 @@
       "date": "2026-10-29",
       "day": "Thursday",
       "time": "03:40 to 04:40",
-      "code": "SS2043",
-      "course": "Civics and Community Engagement",
-      "batch": "2025",
+      "code": "EE3006",
+      "course": "Embedded Systems",
+      "batch": "2023",
       "sections": {
-        "CE": [
-          "A",
-          "B"
+        "EE": [
+          "A"
         ]
       },
       "source_cell": "FSE!L5",
-      "source_text": "SS2043 Civics and Community Engagement\nBCE-A,B\n2025"
+      "source_text": "EE3006 Embedded Systems\nBEE-A\n2023"
     },
     {
       "date": "2026-10-29",
@@ -161,21 +160,6 @@
       "source_cell": "FSE!L7",
       "source_text": "\tSS6008 - Understanding of Holy Quran I/Philosophy of Religions II\nPEE-1A\n2026",
       "notes": "PEE-1A"
-    },
-    {
-      "date": "2026-10-29",
-      "day": "Thursday",
-      "time": "03:40 to 04:40",
-      "code": "EE3006",
-      "course": "Embedded Systems",
-      "batch": "2023",
-      "sections": {
-        "EE": [
-          "A"
-        ]
-      },
-      "source_cell": "FSE!L8",
-      "source_text": "EE3006 Embedded Systems\nBEE-A\n2023"
     },
     {
       "date": "2026-10-30",
@@ -591,7 +575,7 @@
       "day": "Monday",
       "time": "01:00 to 02:00",
       "code": "SS1022",
-      "course": "Understanding of Holy Quran I/Introduction to Major World Religions I",
+      "course": "Understanding of Holy Quran I/Introduction to Major World Religions II",
       "batch": "2025",
       "sections": {
         "EE": [
@@ -600,7 +584,7 @@
         ]
       },
       "source_cell": "FSE!H19",
-      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions I\nBEE-A,B\n2025"
+      "source_text": "SS1022 - Understanding of Holy Quran I/Introduction to Major World Religions II\nBEE-A,B\n2025"
     },
     {
       "date": "2026-11-02",
@@ -641,7 +625,7 @@
     {
       "date": "2026-11-02",
       "day": "Monday",
-      "time": "11:40 to 12:40",
+      "time": "10:20 to 11:20",
       "code": "EE3031",
       "course": "Digital Signal Processing",
       "batch": "2024",
@@ -650,8 +634,24 @@
           "A"
         ]
       },
-      "source_cell": "FSE!F20",
+      "source_cell": "FSE!D20",
       "source_text": "EE3031 Digital Signal Processing\nBCE-A\n2024"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "11:40 to 12:40",
+      "code": "AI4003",
+      "course": "Applied Machine Learning",
+      "batch": "2023",
+      "sections": {
+        "EE": [
+          "A",
+          "B"
+        ]
+      },
+      "source_cell": "FSE!F20",
+      "source_text": "AI4003 Applied Machine Learning\nBEE-A,B\n2023"
     },
     {
       "date": "2026-11-02",
@@ -668,22 +668,6 @@
       },
       "source_cell": "FSE!J20",
       "source_text": "EE3010 Analogue and Digital Communication\nBEE-A,B\n2024"
-    },
-    {
-      "date": "2026-11-02",
-      "day": "Monday",
-      "time": "11:40 to 12:40",
-      "code": "AI4003",
-      "course": "Applied Machine Learning",
-      "batch": "2023",
-      "sections": {
-        "EE": [
-          "A",
-          "B"
-        ]
-      },
-      "source_cell": "FSE!F21",
-      "source_text": "AI4003 Applied Machine Learning\nBEE-A,B\n2023"
     },
     {
       "date": "2026-11-02",

@@ -6,17 +6,18 @@ to a dry run. Importing does not send push notifications.
 
 ## Current workbook
 
-The root workbook `1st Sessional  Exams Schedule Fall 2026 (Draft 2) as on 11-09-2026.xlsx`
-contains 109 Computing, 98 Management and 45 Engineering exam entries, on
-September 19, 21, 22 and 23, 2026. Computing and Management have eight slots;
-Engineering has six. Source cells and their original text are retained for review.
-Some entries omit batches or undergraduate scopes, including postgraduate
-papers. They are preserved and reported, without inventing student assignments.
+The root workbook `2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx`
+contains 118 Computing, 97 Management and 43 Engineering exam entries, on
+October 29, 30, 31 and November 2, 2026. Computing and Management have eight
+slots; Engineering has six. Source cells and their original text are retained
+for review. Some entries omit batches or undergraduate scopes, including
+postgraduate papers. They are preserved and reported, without inventing student
+assignments. `EXAM_SEASON` in `web/js/app.js` holds the same date range.
 
 ```powershell
 python -m pip install -r requirements.txt
-python python/schedule_sync.py "1st Sessional  Exams Schedule Fall 2026 (Draft 2) as on 11-09-2026.xlsx" --output .cache/exam-import-preview.json
-python python/schedule_sync.py "1st Sessional  Exams Schedule Fall 2026 (Draft 2) as on 11-09-2026.xlsx" --write --source-time "2026-09-11T00:00:00+05:00" --env-file .env.local
+python python/schedule_sync.py "2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx" --output .cache/exam-import-preview.json
+python python/schedule_sync.py "2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx" --write --source-time "2026-10-21T00:00:00+05:00" --env-file .env.local
 ```
 
 The ignored environment file needs `MONGODB_URI` and optionally `MONGODB_DB`

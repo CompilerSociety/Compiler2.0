@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-10-19T13:22:51.142994+00:00",
-  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft Version)",
-  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft Version) as on 19-10-2026.xlsx",
-  "count": 99,
+  "updated_at": "2026-10-28T13:40:15.780700+00:00",
+  "source_subject": "2nd Sessional Exams Schedule Fall 2026 (Draft 2)",
+  "source_filename": "2nd Sessional  Exams Schedule Fall 2026 (Draft 2) as on 21-10-2026.xlsx",
+  "count": 97,
   "exams": [
     {
       "date": "2026-10-29",
@@ -451,16 +451,22 @@
       "date": "2026-10-30",
       "day": "Friday",
       "time": "9:00 to 10:00 AM",
-      "code": "SS2042",
-      "course": "Community Service",
-      "batch": "2023",
+      "code": "MG2011",
+      "course": "Environmental Science and Sustainability for Business",
+      "batch": "2025",
       "sections": {
-        "BBA": [
-          "A"
+        "AF": [
+          "A",
+          "B"
+        ],
+        "BA": [
+          "A",
+          "B",
+          "C"
         ]
       },
       "source_cell": "FSM!B15",
-      "source_text": "SS2042 Community Service\nBBA-A\n2023"
+      "source_text": "MG2011 Environmental Science and Sustainability for Business\nBS(AF)  A,B\nBS(BA) A,B,C\n2025"
     },
     {
       "date": "2026-10-30",
@@ -575,30 +581,6 @@
     {
       "date": "2026-10-30",
       "day": "Friday",
-      "time": "9:00 to 10:00 AM",
-      "code": "SS2043",
-      "course": "Civics and Community Engagement",
-      "batch": "2025",
-      "sections": {
-        "BBA": [
-          "A",
-          "B",
-          "C",
-          "D"
-        ],
-        "FT": [
-          "A",
-          "B",
-          "C",
-          "D"
-        ]
-      },
-      "source_cell": "FSM!B16",
-      "source_text": "SS2043 Civics and Community Engagement\nBBA-A,B,C,D\nBS(FT)-A,B,C,D\n2025"
-    },
-    {
-      "date": "2026-10-30",
-      "day": "Friday",
       "time": "11:40 to 12:40 PM",
       "code": "MG4011",
       "course": "Entrepreneurship",
@@ -674,22 +656,16 @@
       "date": "2026-10-30",
       "day": "Friday",
       "time": "9:00 to 10:00 AM",
-      "code": "MG2011",
-      "course": "Environmental Science and Sustainability for Business",
-      "batch": "2025",
+      "code": "AF3006",
+      "course": "Financing New Ventures",
+      "batch": "2023",
       "sections": {
-        "AF": [
-          "A",
-          "B"
-        ],
-        "BA": [
-          "A",
-          "B",
-          "C"
+        "FT": [
+          "A"
         ]
       },
       "source_cell": "FSM!B17",
-      "source_text": "MG2011 Environmental Science and Sustainability for Business\nBS(AF)  A,B\nBS(BA) A,B,C\n2025"
+      "source_text": "AF3006 Financing New Ventures\nBS(FT)-A\n2023"
     },
     {
       "date": "2026-10-30",
@@ -854,21 +830,6 @@
       },
       "source_cell": "FSM!N18",
       "source_text": "MG4066 Managing Virtual Global Teams\nBBA-A\n2023"
-    },
-    {
-      "date": "2026-10-30",
-      "day": "Friday",
-      "time": "9:00 to 10:00 AM",
-      "code": "AF3006",
-      "course": "Financing New Ventures",
-      "batch": "2023",
-      "sections": {
-        "FT": [
-          "A"
-        ]
-      },
-      "source_cell": "FSM!B19",
-      "source_text": "AF3006 Financing New Ventures\nBS(FT)-A\n2023"
     },
     {
       "date": "2026-10-30",
@@ -1163,16 +1124,19 @@
       "date": "2026-10-31",
       "day": "Saturday",
       "time": "10:20 to 11:20 AM",
-      "code": "SS3001",
-      "course": "Business Communication–II",
-      "batch": null,
+      "code": "CS2012",
+      "course": "Introduction to Object-Oriented Programming",
+      "batch": "2025",
       "sections": {
-        "BBA": [
-          "9A"
+        "FT": [
+          "A",
+          "B",
+          "C",
+          "D"
         ]
       },
       "source_cell": "FSM!D24",
-      "source_text": "SS3001 Business Communication–II\nBBA-9A"
+      "source_text": "CS2012 Introduction to Object-Oriented Programming\nBS(FT)-A,B,C,D\n2025"
     },
     {
       "date": "2026-10-31",
@@ -1240,24 +1204,6 @@
     {
       "date": "2026-10-31",
       "day": "Saturday",
-      "time": "10:20 to 11:20 AM",
-      "code": "CS2012",
-      "course": "Introduction to Object-Oriented Programming",
-      "batch": "2025",
-      "sections": {
-        "FT": [
-          "A",
-          "B",
-          "C",
-          "D"
-        ]
-      },
-      "source_cell": "FSM!D25",
-      "source_text": "CS2012 Introduction to Object-Oriented Programming\nBS(FT)-A,B,C,D\n2025"
-    },
-    {
-      "date": "2026-10-31",
-      "day": "Saturday",
       "time": "01:00 to 02:00 PM",
       "code": "AF3003",
       "course": "Financial Institutions and Markets",
@@ -1286,23 +1232,6 @@
       },
       "source_cell": "FSM!J25",
       "source_text": "MG2010 Business Communication\nBS(AF)  A,B\n2025"
-    },
-    {
-      "date": "2026-10-31",
-      "day": "Saturday",
-      "time": "10:20 to 11:20 AM",
-      "code": "MG3014",
-      "course": "Advanced Business Communications",
-      "batch": "2024",
-      "sections": {
-        "BBA": [
-          "A",
-          "B",
-          "C"
-        ]
-      },
-      "source_cell": "FSM!D26",
-      "source_text": "MG3014 Advanced Business Communications\nBBA-A,B,C\n2024"
     },
     {
       "date": "2026-11-02",
@@ -1546,6 +1475,23 @@
     {
       "date": "2026-11-02",
       "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "MG3014",
+      "course": "Advanced Business Communications",
+      "batch": "2024",
+      "sections": {
+        "BBA": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "source_cell": "FSM!B31",
+      "source_text": "MG3014 Advanced Business Communications\nBBA-A,B,C\n2024"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
       "time": "11:40 to 12:40 PM",
       "code": "BA4007",
       "course": "Empowering Organizations with Analytics and Data Visualization",
@@ -1616,6 +1562,21 @@
       "source_cell": "FSM!N31",
       "source_text": "AF4010 Accounting and Finance for Managers\nMSBA-1A\n2026",
       "notes": "MSBA-1A"
+    },
+    {
+      "date": "2026-11-02",
+      "day": "Monday",
+      "time": "9:00 to 10:00 AM",
+      "code": "SS3001",
+      "course": "Business Communication–II",
+      "batch": null,
+      "sections": {
+        "BBA": [
+          "9A"
+        ]
+      },
+      "source_cell": "FSM!B32",
+      "source_text": "SS3001 Business Communication–II\nBBA-9A"
     },
     {
       "date": "2026-11-02",
