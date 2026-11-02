@@ -1609,9 +1609,12 @@ const BLOCK_SOURCES={A:['computing','business'],B:['computing','engineering'],C:
 let isExamSeason=false;
 // Exam period (campus dates, inclusive). Inside it Free Rooms reads room
 // bookings from the seating plan instead of the class timetables, and the
-// phone's Today screen stops showing lecture cards. Set both to '' after the
-// exams to switch the override off. 2nd Sessional, Fall 2026 (Draft 2, 21-10-2026).
-const EXAM_SEASON={start:'2026-10-29',end:'2026-11-02'};
+// phone's Today screen stops showing lecture cards. Both '' switches exam
+// mode off entirely: Free Rooms runs on the class timetables, even on dates
+// the published exam schedules or seating plan still cover. Off since the
+// 2nd Sessional, Fall 2026 (Oct 29 - Nov 2), ended.
+const EXAM_SEASON={start:'',end:''};
+const EXAM_MODE=Boolean(EXAM_SEASON.start&&EXAM_SEASON.end);
 let ROOM_EXAMS=[],ROOM_SEATING=null,roomExamStatus='loading',roomExamUpdated=0,roomExamRequest=null;
 let roomCoverageCache=null,examRoomInventory=null,examRoomFloors=null;
 function roomDateForDay(day){
@@ -1623,8 +1626,8 @@ function roomDateForDay(day){
   return date.toISOString().slice(0,10);
 }
 function updateRoomMode(date=roomDateForDay()){
-  const inWindow=Boolean(EXAM_SEASON.start&&EXAM_SEASON.end&&date>=EXAM_SEASON.start&&date<=EXAM_SEASON.end);
-  isExamSeason=inWindow||ExamRooms.inSeason(date,ROOM_EXAMS,ROOM_SEATING);
+  const inWindow=EXAM_MODE&&date>=EXAM_SEASON.start&&date<=EXAM_SEASON.end;
+  isExamSeason=EXAM_MODE&&(inWindow||ExamRooms.inSeason(date,ROOM_EXAMS,ROOM_SEATING));
   return isExamSeason;
 }
 function canonicalExamRoom(room){
@@ -1638,6 +1641,9 @@ function canonicalExamRoom(room){
 function roomAvailabilityMessage(day){
   const date=roomDateForDay(day);
   updateRoomMode(date);
+  // With exam mode off, rooms come from the class timetables alone, so the
+  // exam-data checks below have nothing to hold back.
+  if(!EXAM_MODE) return '';
   if(roomExamStatus==='error'){
     return 'Could not check exam dates. Room availability is temporarily unavailable. The check will retry automatically.';
   }

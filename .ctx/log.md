@@ -87,3 +87,6 @@ Auth OTP rate limiting now fails closed. `authRateCheck` and `authRateNote` in `
 Removed OTP from sign-in at the user's request. `/api/auth/request-code` now validates the NU ID, rate-limits per IP/NU ID, upserts the account, mints the session cookie and returns `{ok, verified, account}`; no email, challenge or nonce. Desktop `syncProfile` and mobile `doSignIn` call it and continue straight to `/api/auth/me`; code-entry UI is never shown. `/api/auth/verify`, otp.mjs, mailer.mjs and `scripts/auth/smoke-test.mjs` are left in place but unused/stale (smoke test still expects the OTP flow). Security note: anyone who knows an NU ID can now sign in as that student. Not committed; no asset version bump yet.
 
 Bumped asset version to v=69 (OTP removal ships to browsers).
+
+## 2026-11-02T14:45:00+05:00
+Exam mode off after the 2nd Sessional (Oct 29 - Nov 2): EXAM_SEASON is {start:'',end:''} and the new EXAM_MODE flag gates everything, so isExamSeason stays false even on dates the exam schedules/seating plan still cover, and roomAvailabilityMessage no longer blocks Free Rooms while exam data loads or fails. Free Rooms is back on the class timetables (8 class / 4 lab slots); phone Today shows lecture cards again. Bumped to v=72. Checked at 375px: before = "Could not check exam dates..." (local API 503), after = block/floor picker and room bars.
