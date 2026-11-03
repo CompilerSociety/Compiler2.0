@@ -38,10 +38,9 @@
       <button class="m-guest-btn" id="m-guest-btn" type="button">Continue as guest</button>
       <div class="m-guest-note">No NU ID needed — you can log in later from your profile.</div>
       <div class="m-signin-or" aria-hidden="true">or log in</div>
-      <!-- Only the FSC roster is published as a lookup table, so the roll-no
-           path can only resolve FSC students. FSE/FSM pick their section by
-           hand on the #m-manual screen instead. -->
-      <label class="m-field-label" for="m-nuid">YOUR NU ID (FOR FSC STUDENTS ONLY)</label>
+      <!-- FSC and FSM are on the roster, so the roll-no path resolves both.
+           FSE students pick their section by hand on the #m-manual screen. -->
+      <label class="m-field-label" for="m-nuid">YOUR NU ID (FOR FSC &amp; FSM STUDENTS)</label>
       <!-- No "@nu.edu.pk" suffix: this field takes a ROLL NUMBER, not an email
            address, and showing a domain next to it had people typing one. -->
       <div class="m-input-wrap">
@@ -57,7 +56,7 @@
       </div>
       <div class="m-signin-status" id="m-signin-status" role="status" aria-live="polite"></div>
       <button class="m-btn-primary" id="m-signin-btn" type="button">Continue</button>
-      <button class="m-btn-ghost" id="m-manual-btn" type="button">FOR FSE &amp; FSM</button>
+      <button class="m-btn-ghost" id="m-manual-btn" type="button">FOR FSE</button>
       <div class="m-signin-foot">Built with love by Compiler Society</div>
     </div>
   </section>
@@ -82,14 +81,14 @@
     <button class="m-btn-ghost" id="m-reg-back" type="button">Back to NU ID</button>
   </section>
 
-  <!-- ── Manual setup (FSE / FSM) ────────────────────────────────────────
-       No roster lookup for these two schools, so the student picks school →
-       department → batch → section themselves. The result is kept in the same
+  <!-- ── Manual setup (FSE) ──────────────────────────────────────────────
+       No roster lookup for FSE, so the student picks department → batch →
+       section themselves. The result is kept in the same
        profile cookie the roll-no flow writes; nothing is sent anywhere. -->
   <section class="m-screen m-onboard" id="m-manual">
-    <div class="m-kicker">FSE &amp; FSM</div>
+    <div class="m-kicker">FSE</div>
     <h2 class="m-title-lg">Pick your section.</h2>
-    <p class="m-onboard-copy">Your school isn’t on the roll-no roster yet, so choose it here. This stays on your phone.</p>
+    <p class="m-onboard-copy">FSE isn’t on the roll-no roster yet, so choose your section here. This stays on your phone.</p>
     <div id="m-manual-fields"></div>
     <div class="m-signin-status" id="m-manual-status" role="status" aria-live="polite"></div>
     <button class="m-btn-primary" id="m-manual-go" type="button">Save and continue</button>

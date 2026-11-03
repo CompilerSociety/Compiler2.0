@@ -503,6 +503,9 @@
      someone who does not exist. The request is made after the OTP step, and
      /api/register takes the roll no from that session rather than this form. */
   const reg={nuid:'',batch:'',program:'',section:''};
+  // Which school's timetable each offered program came from, so the saved
+  // profile reads FSM classes from the business timetable.
+  let regSchoolOf={};
 
   function startRegistration(nuid){
     reg.nuid=nuid;
@@ -527,11 +530,20 @@
     const full=regFullBatch();
     $('m-reg-kicker').textContent='NEW STUDENT · '+reg.nuid;
     // Only offer departments that actually publish this batch, so a new
-    // intake never lands on a section with no timetable behind it.
-    const programs=Object.keys(TT||{}).filter(p=>TT[p]&&TT[p][full]);
+    // intake never lands on a section with no timetable behind it. FSC and
+    // FSM both sign in by roll no, so both schools' programs are offered.
+    const sources={computing:TT||{},business:ttFor('business')||{}};
+    regSchoolOf={};
+    const programs=[];
+    Object.entries(sources).forEach(([school,src])=>{
+      Object.keys(src).forEach(p=>{
+        if(src[p]&&src[p][full]&&!regSchoolOf[p]){ regSchoolOf[p]=school; programs.push(p); }
+      });
+    });
     if(reg.program&&!programs.includes(reg.program)) reg.program='';
+    const regSrc=reg.program?sources[regSchoolOf[reg.program]]:{};
     const sections=reg.program
-      ? Object.keys(TT[reg.program][full]||{}).filter(s=>s!==ALL_SECTIONS)
+      ? Object.keys(regSrc[reg.program][full]||{}).filter(s=>s!==ALL_SECTIONS)
           .sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
       : [];
     if(reg.section&&!sections.includes(reg.section)) reg.section='';
@@ -564,6 +576,7 @@
     // Two-digit batch and no manual flag, so this profile behaves exactly like
     // one resolved from the roster (profileFullBatch expands "26" -> "2026").
     const p={nuid:reg.nuid,name,department:reg.program,batch:reg.batch,section:reg.section};
+    if(regSchoolOf[reg.program]==='business') p.school='business';
     setProfileCookie(p);
     // Fire-and-forget: the profile is already saved locally, so a failed
     // publish must not strand the user on the registration screen.
@@ -575,12 +588,15 @@
     render();
   }
 
-  /* ══ MANUAL SETUP (FSE / FSM) ══════════════════════════════════════
-     Only FSC publishes a roll-no → student roster, so these two schools
-     choose their section by hand. The result goes into the same profile
-     cookie the roll-no flow writes — it never leaves the device. */
+  /* ══ MANUAL SETUP (FSE) ════════════════════════════════════════════
+     FSC and FSM sign in from the roll-no roster; FSE has none yet, so its
+     students choose their section by hand. The result goes into the same
+     profile cookie the roll-no flow writes — it never leaves the device.
+     FSM stays in the map so profiles hand-picked before the FSM roster
+     existed still show their school. */
   const MANUAL_SCHOOLS={engineering:'FSE',business:'FSM'};
-  const mn={school:'',program:'',batch:'',section:''};
+  const MANUAL_PICKABLE=['engineering'];
+  const mn={school:'engineering',program:'',batch:'',section:''};
 
   function renderManual(){
     const src=mn.school?ttFor(mn.school):{};
@@ -598,7 +614,7 @@
       ? 'Still loading this school’s timetable — give it a moment.' : 'Pick a school first.';
     $('m-manual-fields').innerHTML=[
       fieldHTML('School','school',mn.school?MANUAL_SCHOOLS[mn.school]:'',
-                Object.keys(MANUAL_SCHOOLS),mn.school,k=>MANUAL_SCHOOLS[k]),
+                MANUAL_PICKABLE,mn.school,k=>MANUAL_SCHOOLS[k]),
       fieldHTML('Department','program',mn.program,programs,mn.program,null,schoolEmpty),
       fieldHTML('Batch','batch',mn.batch,batches,mn.batch,null,'Pick a department first.'),
       fieldHTML('Section','section',mn.section,sections,mn.section,null,'Pick a batch first.')

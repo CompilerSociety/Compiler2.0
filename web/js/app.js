@@ -534,6 +534,27 @@ function profileFullBatch(profile){
 function profileIsComputing(profile){
   return COMPUTING_DEPTS.includes(profileDeptCode(profile));
 }
+// School of Management. Roster rows carry the seating-plan program code
+// (BAF-1A -> BAF), while the business timetable keys the four BS programs by
+// full name. MB, MSBA and PMG have no timetable, so they keep the bare code.
+// Kept in step with lib/schools.mjs.
+const BUSINESS_DEPT_LABELS={
+  BAF:'BS Accounting & Finance',
+  BBA:'BS Business Administration',
+  BFT:'BS Fintech',
+  BSBA:'BS Business Analytics'
+};
+const BUSINESS_DEPTS=[...Object.keys(BUSINESS_DEPT_LABELS),'MB','MSBA','PMG'];
+// "BAF" or "BS Accounting & Finance" -> "BAF"; anything else -> "".
+function businessDeptCode(department){
+  const up=String(department||'').trim().toUpperCase();
+  if(BUSINESS_DEPTS.includes(up)) return up;
+  return Object.keys(BUSINESS_DEPT_LABELS).find(k=>BUSINESS_DEPT_LABELS[k].toUpperCase()===up)||'';
+}
+function profileIsBusiness(profile){
+  if(profile?.school) return profile.school==='business';
+  return Boolean(businessDeptCode(profile?.department));
+}
 function currentWeekdayName(){
   const d=new Intl.DateTimeFormat('en-US',{timeZone:ISLAMABAD_TIMEZONE,weekday:'long'}).format(new Date());
   return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].includes(d)?d:'';
@@ -556,6 +577,7 @@ function seedProfileSchedulePrefs(profile,force){
   const tt=(force||!ttExisting)?{}:{...ttExisting};
   if(force||!ttExisting){
     if(computing) tt.school='computing';
+    else if(profileIsBusiness(profile)) tt.school='business';
     tt.dept=deptLabel; tt.batch=fullBatch; tt.sec=sec; tt.course=tt.course||'';
   }
   if(today) tt.day=today; // requirement: default the timetable to the current day
@@ -743,6 +765,7 @@ function closeProfileModal(){
 }
 function deptCodeToLabel(code){
   const normalized=(code||'').toUpperCase();
+  if(BUSINESS_DEPT_LABELS[normalized]) return BUSINESS_DEPT_LABELS[normalized];
   switch(normalized){
     // Every roster row writes AI, never BAI — the timetable keys it "BS AI", so
     // without this case an AI profile carries a department no timetable has and
@@ -766,16 +789,14 @@ function deptLabelToCode(label){
   // profileDeptCode() feeds the show-up and exam tabs. "BS AI" used to be
   // special-cased to BAI, which no roster row, COMPUTING_DEPTS or
   // api/timetable.js ever recognised.
-  return String(label||'').trim().toUpperCase().replace(/^BS\s+/,'');
+  return businessDeptCode(label)||String(label||'').trim().toUpperCase().replace(/^BS\s+/,'');
 }
 // Publish a just-registered student to the server-side roster so it knows they
 // exist — the seating-plan email is otherwise the only thing that ever adds
 // anyone, and it trails each new intake by months.
 //
-// COMPUTING ONLY. The roster exists to drive notifications: seat alerts, exam
-// and show-up reminders, class cancellations. None of that is sent to FSE or
-// FSM students, so storing their name and roll number server-side would be
-// collecting personal data the system has no use for. They get exactly the same
+// FSC AND FSM ONLY. Both schools sign in from the roster, so a student it has
+// not caught up with is added here. FSE students get exactly the same
 // timetable features — their profile just lives in this browser's cookie and
 // never leaves it.
 //
@@ -786,9 +807,9 @@ function deptLabelToCode(label){
 // throw.
 async function publishProfileToRoster(profile){
   try{
-    if(!profileIsComputing(profile)){
+    if(!profileIsComputing(profile)&&!profileIsBusiness(profile)){
       // Not an error, and not worth a warning — this is the designed path for
-      // two of the three schools.
+      // FSE.
       return false;
     }
     const nuid=String(profile&&profile.nuid||'').trim().toUpperCase();
@@ -843,7 +864,10 @@ function parseProfileFromStudent(student){
     department: deptCodeToLabel(department),
     batch,
     section: sectionLabel,
-    room: student.class || '-'
+    room: student.class || '-',
+    // FSM classes live in the business timetable; FSC profiles have always
+    // been read as computing without a school field.
+    ...(businessDeptCode(department) ? {school:'business'} : {})
   };
 }
 function formatNuid(raw){
@@ -991,10 +1015,11 @@ function registerProfile(){
     return;
   }
   if(status) status.classList.remove('is-error');
-  // The profile lives in this browser. For computing students it is also
-  // published to the server-side roster so notifications can reach them; FSE
-  // and FSM students are cookie-only (see publishProfileToRoster).
+  // The profile lives in this browser. For FSC and FSM students it is also
+  // published to the server-side roster; FSE students are cookie-only (see
+  // publishProfileToRoster).
   const profile={ nuid, name, section, batch, department: deptCodeToLabel(departmentRaw) };
+  if(businessDeptCode(departmentRaw)) profile.school='business';
   setProfileCookie(profile);
   publishProfileToRoster(profile);
   seedProfileSchedulePrefs(profile,true);
