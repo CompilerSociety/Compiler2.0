@@ -16,6 +16,11 @@ import {
   randomToken, randomDigits, hashWithPepper, timingSafeEqualHex,
 } from '../../lib/auth/tokens.mjs';
 import { parseCookies, serializeCookie, appendSetCookie } from '../../lib/auth/cookies.mjs';
+import {
+  OTP_DEFAULT_DAILY_MAX, OTP_MAX_DAILY_MAX, OTP_DEFAULT_MAX_PER_IP,
+  OTP_MAX_MAX_PER_IP, otpDailyMax, otpMaxPerIp,
+} from '../../lib/auth/limits.mjs';
+import { emailProvider, emailConfigError } from '../../lib/auth/email-config.mjs';
 
 let failures = 0;
 function check(label, cond, detail) {
@@ -58,6 +63,55 @@ check('another NU ID cannot reuse the digest',
   otpMatches({ ...base, nuid: '22I-0507', expectedHash: hash }) === false);
 check('a different pepper changes the digest',
   hashOtp({ ...base, pepper: 'other' }) !== hash);
+
+// ── OTP policy ──────────────────────────────────────────────────────────
+check('daily budget defaults when unset', otpDailyMax('') === OTP_DEFAULT_DAILY_MAX);
+check('daily budget ignores non-positive values', otpDailyMax('0') === OTP_DEFAULT_DAILY_MAX);
+check('daily budget clamps oversized values', otpDailyMax('9999') === OTP_MAX_DAILY_MAX);
+check('per-IP limit defaults above the old campus-NAT limit',
+  otpMaxPerIp('') === OTP_DEFAULT_MAX_PER_IP && OTP_DEFAULT_MAX_PER_IP > 10);
+check('per-IP limit clamps oversized values', otpMaxPerIp('9999') === OTP_MAX_MAX_PER_IP);
+
+// ── Email provider selection ─────────────────────────────────────────────
+const savedEmailEnv = {
+  EMAIL_PROVIDER: process.env.EMAIL_PROVIDER,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PASS: process.env.SMTP_PASS,
+  SMTP_FROM: process.env.SMTP_FROM,
+  VERCEL: process.env.VERCEL,
+};
+function restoreEmailEnv() {
+  for (const [key, value] of Object.entries(savedEmailEnv)) {
+    if (value === undefined) delete process.env[key];
+    else process.env[key] = value;
+  }
+}
+for (const key of Object.keys(savedEmailEnv)) delete process.env[key];
+check('no provider is selected without credentials', emailProvider() === 'none');
+
+process.env.RESEND_API_KEY = 're_test';
+process.env.EMAIL_FROM = 'VTable <no-reply@vtable.site>';
+check('Resend is selected from its API key', emailProvider() === 'resend');
+check('local development does not require email config', emailConfigError() === null);
+process.env.VERCEL = '1';
+check('deployed Resend config is accepted', emailConfigError() === null);
+delete process.env.EMAIL_FROM;
+check('deployed Resend requires a from address', /EMAIL_FROM/.test(emailConfigError() || ''));
+
+delete process.env.RESEND_API_KEY;
+process.env.EMAIL_PROVIDER = 'smtp';
+process.env.SMTP_HOST = 'smtp.example.com';
+process.env.SMTP_USER = 'user@example.com';
+process.env.SMTP_PASS = 'secret';
+process.env.SMTP_FROM = 'VTable <user@example.com>';
+check('SMTP is selected when requested', emailProvider() === 'smtp');
+check('deployed SMTP config is accepted', emailConfigError() === null);
+delete process.env.SMTP_PASS;
+check('deployed SMTP requires a password', /SMTP_PASS/.test(emailConfigError() || ''));
+restoreEmailEnv();
 
 // ── Tokens ──────────────────────────────────────────────────────────────
 check('randomToken is unique', randomToken() !== randomToken());

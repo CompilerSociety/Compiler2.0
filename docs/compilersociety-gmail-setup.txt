@@ -6,8 +6,10 @@ Send student verification codes from Compilersociety@gmail.com.
 Students receive codes at their university address; for example,
 25I-0816 maps to i250816@isb.nu.edu.pk.
 
-Status: This prepares the sender account. The OTP application code still
-needs to be implemented. Adding settings alone will not enable OTP today.
+Status: Gmail SMTP is no longer the production sender. On 2026-10-27 Gmail's
+outbound filter blocked OTP messages to @isb.nu.edu.pk with error 69585
+("Message blocked"). Use a transactional provider for production; the App
+Password setup below is only an emergency fallback.
 
 1. SIGN INTO THE CORRECT GOOGLE ACCOUNT
 
@@ -109,6 +111,43 @@ create a replacement, update SMTP_PASS and redeploy. Changing the main
 Google account password also revokes App Passwords. Keep ownership and
 recovery access documented securely when society maintainers change.
 
-Ready when: two-step verification is enabled, the App Password is stored
-securely in Vercel, the proposed settings match the implementation, and a
-real university-mailbox test passes after deployment.
+9. PRODUCTION DELIVERY: USE A TRANSACTIONAL PROVIDER
+
+Gmail blocked the first OTP launch. The society inbox shows 29 OTP sends on
+2026-10-26/27 and 9 Delivery Status Notification bounces from
+mailer-daemon@googlemail.com starting at 03:23 PKT on 2026-10-27. Each bounce
+says "Message blocked" for an @isb.nu.edu.pk recipient and links to Gmail
+error 69585. The App Password still works for a single local test, so this was
+not a credential or code bug: Gmail's outbound anti-spam filter rejected the
+burst. Do not relaunch OTP on Gmail SMTP.
+
+Recommended: Resend (or an equivalent transactional provider) with the
+vtable.site domain verified and its SPF/DKIM records published. A verified
+domain gives the OTP sender its own reputation instead of sharing a personal
+Gmail account.
+
+Vercel Production variables:
+  EMAIL_PROVIDER = resend
+  RESEND_API_KEY = [server-only API key]
+  EMAIL_FROM     = VTable <no-reply@vtable.site>
+  OTP_DAILY_MAX  = 100        (optional; Resend's free tier is 100/day)
+  OTP_MAX_PER_IP = 60         (optional; raise for large campus NATs)
+
+Resend's free tier requires the from-domain to be verified before it will send
+to arbitrary recipients. Do not use a Gmail address in EMAIL_FROM. Keep
+SMTP_* configured only if you want an emergency fallback; when both are
+present, EMAIL_PROVIDER decides which one is used.
+
+The daily budget is a hard server-side cap. A request that would exceed it
+returns 429 daily_limit and no email is attempted. The per-NU-ID limit is 3
+per 15 minutes with a 60-second cooldown; the per-IP limit is 60 per 15
+minutes by default.
+
+Local development needs no provider: with no credentials the code is printed
+to the server console and no real email is sent. To test real delivery, use a
+transactional key and an address you control; never log or screenshot the code
+or provider key.
+
+Ready when: the transactional domain is verified, EMAIL_PROVIDER/RESEND_API_KEY/
+EMAIL_FROM are set in Vercel Production, and a real university-mailbox test
+passes after deployment.

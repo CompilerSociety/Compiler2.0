@@ -11,14 +11,20 @@
 
 import { isEnabled } from '../../lib/db/mongo.mjs';
 import { parseNuid } from '../../lib/auth/nuid.mjs';
-import { setSessionCookie, createSession } from '../../lib/auth/session.mjs';
+import { newOtp, hashOtp, OTP_TTL_MS } from '../../lib/auth/otp.mjs';
+import { randomToken, hashWithPepper } from '../../lib/auth/tokens.mjs';
+import { setNonceCookie } from '../../lib/auth/session.mjs';
+import { sendOtpEmail } from '../../lib/auth/mailer.mjs';
 import {
-  upsertVerifiedAccount, authRateCheck, authRateNote,
+  createAuthChallenge, deleteAuthChallenge, authRateCheck, authRateNote,
+  consumeAuthEmailBudget,
 } from '../../lib/db/repos.mjs';
-import { rejectCrossOrigin, clientIp } from '../../lib/auth/guard.mjs';
+import { rejectCrossOrigin, clientIp, authConfigError } from '../../lib/auth/guard.mjs';
+import {
+  OTP_COOLDOWN_MS, OTP_RATE_WINDOW_MS, OTP_DAILY_TTL_MS,
+  otpDailyMax, otpMaxPerIp,
+} from '../../lib/auth/limits.mjs';
 
-const RATE_WINDOW_MS = 15 * 60 * 1000;
-const MAX_PER_IP = 10;
 const MAX_PER_NUID = 3;
 
 function parseBody(req) {
@@ -35,6 +41,15 @@ function rateLimited(res, retryAfter) {
     ok: false,
     error: 'rate_limited',
     message: "That's a lot of attempts. Wait a few minutes and try again.",
+  });
+}
+
+function dailyLimitReached(res) {
+  res.setHeader('Retry-After', '3600');
+  return res.status(429).json({
+    ok: false,
+    error: 'daily_limit',
+    message: 'Too many sign-in codes have been requested today. Try again tomorrow, or contact Compiler Society.',
   });
 }
 
@@ -55,14 +70,13 @@ export default async function handler(req, res) {
       detail: 'MONGODB_URI is not set on the server.',
     });
   }
-  // OTP verification is disabled: no email is sent, so only the session pepper
-  // is required on a deployed server.
-  if (process.env.VERCEL && !(process.env.SESSION_PEPPER || process.env.OTP_PEPPER)) {
+  const configError = authConfigError();
+  if (configError) {
     return res.status(503).json({
       ok: false,
       error: 'auth_unavailable',
       message: "Sign-in can't work right now — this is on us, not you.",
-      detail: 'SESSION_PEPPER or OTP_PEPPER is not set on the server.',
+      detail: configError,
     });
   }
 
@@ -86,34 +100,84 @@ export default async function handler(req, res) {
   try {
     const ip = clientIp(req);
     const limits = [
-      [`otp-ip:${ip}`, MAX_PER_IP],
-      [`otp-nuid:${parsed.nuid}`, MAX_PER_NUID],
+      // One code per minute per roll number. This is separate from the wider
+      // window so a student cannot spam their own inbox by retrying quickly.
+      [`otp-cool:${parsed.nuid}`, 1, OTP_COOLDOWN_MS],
+      [`otp-ip:${ip}`, otpMaxPerIp(), OTP_RATE_WINDOW_MS],
+      [`otp-nuid:${parsed.nuid}`, MAX_PER_NUID, OTP_RATE_WINDOW_MS],
     ];
-    for (const [key, max] of limits) {
-      const retryAfter = await authRateCheck(key, max, RATE_WINDOW_MS);
+    for (const [key, max, windowMs] of limits) {
+      const retryAfter = await authRateCheck(key, max, windowMs);
       if (retryAfter !== null) return rateLimited(res, retryAfter);
     }
+
+    // Reserve from the global daily budget before touching the mail provider.
+    // A provider quota or an abuse burst must not turn into an unbounded send
+    // loop. The budget is intentionally charged even if delivery later fails:
+    // repeated provider faults must not become unlimited attempts.
+    const day = `otp:${new Date().toISOString().slice(0, 10)}`;
+    const reserved = await consumeAuthEmailBudget(day, otpDailyMax(), OTP_DAILY_TTL_MS);
+    if (!reserved) return dailyLimitReached(res);
 
     // Book the attempt BEFORE creating or emailing a code. If the counters
     // cannot be written, fail closed: sending a code the limiter never saw
     // would let repeated storage faults turn into unlimited emails.
+    await authRateNote(`otp-cool:${parsed.nuid}`);
     await authRateNote(`otp-ip:${ip}`);
     await authRateNote(`otp-nuid:${parsed.nuid}`);
 
-    // No OTP: the NU ID alone signs the browser in.
-    const account = await upsertVerifiedAccount(parsed.nuid, parsed.email);
-    const token = await createSession(parsed.nuid, req);
-    setSessionCookie(res, token);
+    const pepper = process.env.OTP_PEPPER || '';
+    const nonce = randomToken(18);
+    const challengeId = randomToken(18);
+    const code = newOtp();
+    const now = Date.now();
+
+    await createAuthChallenge({
+      _id: challengeId,
+      nuid: parsed.nuid,
+      email: parsed.email,
+      code_hash: hashOtp({ challengeId, nuid: parsed.nuid, code, pepper }),
+      // Binds the challenge to this browser. A challenge id leaked from one
+      // device cannot be completed from another.
+      browser_hash: hashWithPepper(nonce, pepper),
+      attempts: 0,
+      consumed: false,
+      created_at: new Date(now),
+      expires_at: new Date(now + OTP_TTL_MS),
+    });
+
+    try {
+      await sendOtpEmail({
+        to: parsed.email,
+        code,
+        nuid: parsed.nuid,
+        idempotencyKey: challengeId,
+      });
+    } catch (err) {
+      // No code went out, so leave no live challenge behind that could still be
+      // guessed at.
+      await deleteAuthChallenge(challengeId).catch(() => {});
+      // Log only provider-neutral fields: never the code, recipient, or the
+      // provider's raw response body.
+      console.error('auth mail delivery failed:', JSON.stringify({
+        provider: err?.provider || 'unknown',
+        code: err?.code || 'unknown',
+        status: err?.status || 0,
+      }));
+      return res.status(503).json({
+        ok: false,
+        error: 'delivery_failed',
+        message: "We couldn't send your code right now — this is on us, not you.",
+      });
+    }
+
+    setNonceCookie(res, nonce);
 
     return res.status(200).json({
       ok: true,
-      verified: true,
-      account: {
-        nuid: account.nuid,
-        email: account.email,
-        batch: String(account.nuid).slice(0, 2),
-        verified_at: account.verified_at,
-      },
+      challenge_id: challengeId,
+      expires_in: Math.floor(OTP_TTL_MS / 1000),
+      email: parsed.maskedEmail,
     });
   } catch (err) {
     console.error('request-code API error:', err);
