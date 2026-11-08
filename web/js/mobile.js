@@ -89,6 +89,7 @@
   // a history entry and Back returns to wherever the student was.
   function openSignin(){
     if(typeof resetSigninCode==='function') resetSigninCode();
+    restoreSigninCode();
     if(DESK.matches) go('signin');
     else { route='signin'; render(); }
   }
@@ -326,6 +327,33 @@
   let signingIn=false;
   let signinChallenge=null;
 
+  function showSigninCode(pending,message){
+    signinChallenge=pending;
+    const wrap=$('m-code-wrap');
+    if(wrap) wrap.hidden=false;
+    const code=$('m-code');
+    if(code){ code.value=''; code.focus(); }
+    signinStatus(message||'Enter the 6-digit code we emailed you.');
+    const btn=$('m-signin-btn');
+    if(btn) btn.textContent='Verify code';
+  }
+
+  // A code requested earlier in this tab (before a reload, or before leaving
+  // the sign-in screen) is still valid: give its field back rather than make
+  // the student wait out the cooldown for a new one.
+  function restoreSigninCode(){
+    if(signinChallenge||typeof readAuthPending!=='function') return;
+    const stored=readAuthPending();
+    const waiting=stored&&authPendingFor(stored.nuid);
+    if(!waiting) return;
+    const input=$('m-nuid');
+    if(!input) return;
+    const typed=String(input.value||'').trim().toUpperCase();
+    if(typed&&typed!==String(waiting.nuid).toUpperCase()) return;
+    input.value=waiting.nuid;
+    showSigninCode(waiting,`Enter the code we emailed${waiting.email?` to ${waiting.email}`:' you'}.`);
+  }
+
   function resetSigninCode(){
     signinChallenge=null;
     const wrap=$('m-code-wrap');
@@ -401,7 +429,7 @@
       const challenge=signinChallenge;
       let stage='verify';
       try{
-        await verifyAuthCode(challenge.challengeId,code);
+        await verifyAuthCode(challenge,code);
         stage='profile';
         // The code is spent and a session now exists. Clearing the challenge
         // first means a profile-load failure can retry via the session-reuse
@@ -409,6 +437,9 @@
         resetSigninCode();
         await finishSignIn(challenge.nuid);
       }catch(e){
+        // Expired or out of attempts: this code can never work, so the next
+        // press should send a new one rather than retry it.
+        if(stage==='verify'&&e&&e.restart) resetSigninCode();
         signinStatus(stage==='verify'
           ? (e.message||'That code could not be verified.')
           : 'Signed in, but your profile could not be loaded. Press Continue to retry.',true);
@@ -431,14 +462,11 @@
         await finishSignIn(nuid);
         return;
       }
-      const info=await requestAuthCode(nuid);
-      signinChallenge={nuid,challengeId:info.challenge_id};
-      const wrap=$('m-code-wrap');
-      if(wrap) wrap.hidden=false;
-      const code=$('m-code');
-      if(code){ code.value=''; code.focus(); }
-      signinStatus(`Code sent to ${info.email}. It expires in 10 minutes.`);
-      if(btn) btn.textContent='Verify code';
+      // Resolves whenever a code may be on its way (including a lost reply or
+      // a cooldown refusal while an earlier code is still valid), so the
+      // field is always shown for a code that could be in the inbox.
+      const result=await requestAuthCode(nuid);
+      showSigninCode(result.pending,result.message);
     }catch(e){
       signinStatus(e.message||'Could not send the code.',true);
     }finally{
@@ -2917,6 +2945,12 @@
     $('m-nuid').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
     $('m-nuid').addEventListener('input',()=>{
       if(!signinChallenge) return;
+      // Android keyboards fire `input` when composition ends on blur, i.e.
+      // the moment the code box takes focus. Only a real change to the NU ID
+      // may drop the code step, or the field vanishes as it appears.
+      const raw=$('m-nuid').value;
+      const now=(typeof formatNuid==='function')?formatNuid(raw):String(raw).toUpperCase();
+      if(String(now).trim().toUpperCase()===String(signinChallenge.nuid).toUpperCase()) return;
       resetSigninCode();
       signinStatus('NU ID changed. Press Continue to send a new code.');
     });
@@ -3016,6 +3050,7 @@
     const home=(!profile()&&skipped()&&!DESK.matches)?'lookup':'today';
     route=(r&&['today','lookup','rooms','faculty','exams','profile','signin'].includes(r))?r:home;
     render();
+    if(!profile()) restoreSigninCode();
     // The account's saved profile replaced the local one (new device, after a
     // logout, or edited elsewhere). Mid sign-in, finishSignIn routes instead.
     document.addEventListener('vtable:account',()=>{

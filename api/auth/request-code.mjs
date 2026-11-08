@@ -12,7 +12,7 @@
 import { isEnabled } from '../../lib/db/mongo.mjs';
 import { parseNuid } from '../../lib/auth/nuid.mjs';
 import { newOtp, hashOtp, OTP_TTL_MS } from '../../lib/auth/otp.mjs';
-import { randomToken, hashWithPepper } from '../../lib/auth/tokens.mjs';
+import { randomToken, hashWithPepper, validClientNonce } from '../../lib/auth/tokens.mjs';
 import { setNonceCookie } from '../../lib/auth/session.mjs';
 import { sendOtpEmail } from '../../lib/auth/mailer.mjs';
 import {
@@ -127,7 +127,9 @@ export default async function handler(req, res) {
     await authRateNote(`otp-nuid:${parsed.nuid}`);
 
     const pepper = process.env.OTP_PEPPER || '';
-    const nonce = randomToken(18);
+    // Prefer the nonce the browser generated: it then holds the binding secret
+    // before this reply arrives, so a lost reply cannot strand a sent code.
+    const nonce = validClientNonce(payload.client_nonce) || randomToken(18);
     const challengeId = randomToken(18);
     const code = newOtp();
     const now = Date.now();
@@ -146,6 +148,7 @@ export default async function handler(req, res) {
       expires_at: new Date(now + OTP_TTL_MS),
     });
 
+    let delivery = 'sent';
     try {
       await sendOtpEmail({
         to: parsed.email,
@@ -154,23 +157,30 @@ export default async function handler(req, res) {
         idempotencyKey: challengeId,
       });
     } catch (err) {
-      // No code went out, so leave no live challenge behind that could still be
-      // guessed at.
-      await deleteAuthChallenge(challengeId).catch(() => {});
       // Log only provider-neutral fields: never the code, recipient, or the
       // provider's raw response body.
       console.error('auth mail delivery failed:', JSON.stringify({
         provider: err?.provider || 'unknown',
         code: err?.code || 'unknown',
         status: err?.status || 0,
+        definite: Boolean(err?.definite),
       }));
-      return res.status(503).json({
-        ok: false,
-        error: 'delivery_failed',
-        message: "We couldn't send your code right now — this is on us, not you.",
-      });
+      if (err?.definite) {
+        // No code went out, so leave no live challenge behind that could still
+        // be guessed at.
+        await deleteAuthChallenge(challengeId).catch(() => {});
+        return res.status(503).json({
+          ok: false,
+          error: 'delivery_failed',
+          message: "We couldn't send your code right now — this is on us, not you.",
+        });
+      }
+      // A timeout or dropped connection: the provider may well have delivered
+      // it. Keep the challenge and let the student enter the code if it
+      // arrives; the cooldown stops them requesting another straight away, so
+      // deleting the challenge here would strand a code they already hold.
+      delivery = 'uncertain';
     }
-
     setNonceCookie(res, nonce);
 
     return res.status(200).json({
@@ -178,6 +188,7 @@ export default async function handler(req, res) {
       challenge_id: challengeId,
       expires_in: Math.floor(OTP_TTL_MS / 1000),
       email: parsed.maskedEmail,
+      delivery,
     });
   } catch (err) {
     console.error('request-code API error:', err);

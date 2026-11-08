@@ -13,7 +13,7 @@
 import { parseNuid, maskEmail, normalizeNuid } from '../../lib/auth/nuid.mjs';
 import { newOtp, hashOtp, otpMatches, OTP_LENGTH } from '../../lib/auth/otp.mjs';
 import {
-  randomToken, randomDigits, hashWithPepper, timingSafeEqualHex,
+  randomToken, randomDigits, hashWithPepper, timingSafeEqualHex, validClientNonce,
 } from '../../lib/auth/tokens.mjs';
 import { parseCookies, serializeCookie, appendSetCookie } from '../../lib/auth/cookies.mjs';
 import {
@@ -205,6 +205,34 @@ check('roster lookup refuses requests without a verified session',
 check('roster lookup never returns a student anonymously',
   anonLookup.body?.found !== true && anonLookup.body?.ok !== true,
   JSON.stringify(anonLookup.body));
+
+// ── Browser-generated OTP nonce ────────────────────────────────────────
+// The browser makes its own nonce so a lost request-code reply cannot strand
+// a code that was already emailed.
+check('accepts a 32-char base64url client nonce', validClientNonce('A'.repeat(32)) === 'A'.repeat(32));
+check('rejects a short client nonce', validClientNonce('abc') === '');
+check('rejects a client nonce with other characters', validClientNonce(`${'A'.repeat(30)}=;`) === '');
+
+// ── Mail failures: only a clear refusal counts as "nothing sent" ───────────
+{
+  const { sendOtpEmail } = await import('../../lib/auth/mailer.mjs');
+  const saved = { fetch: globalThis.fetch, provider: process.env.EMAIL_PROVIDER, key: process.env.RESEND_API_KEY };
+  process.env.EMAIL_PROVIDER = 'resend';
+  process.env.RESEND_API_KEY = 'test';
+  const attempt = async (impl) => {
+    globalThis.fetch = impl;
+    try { await sendOtpEmail({ to: 'a@b.c', code: '123456', nuid: '25I-0816' }); return null; } catch (err) { return err; }
+  };
+  const timeout = await attempt(async () => { const e = new Error('aborted'); e.name = 'TimeoutError'; throw e; });
+  check('a provider timeout is not a definite failure', timeout && timeout.definite === false);
+  const refused = await attempt(async () => new Response('{"name":"validation_error"}', { status: 422 }));
+  check('a provider 4xx is a definite failure', refused && refused.definite === true);
+  const flaky = await attempt(async () => new Response('{}', { status: 502 }));
+  check('a provider 5xx is not a definite failure', flaky && flaky.definite === false);
+  globalThis.fetch = saved.fetch;
+  if (saved.provider === undefined) delete process.env.EMAIL_PROVIDER; else process.env.EMAIL_PROVIDER = saved.provider;
+  if (saved.key === undefined) delete process.env.RESEND_API_KEY; else process.env.RESEND_API_KEY = saved.key;
+}
 
 // An auth limiter that cannot be read must fail closed. Use an invalid URI so
 // the failure is immediate and no real database or network is involved.

@@ -397,44 +397,134 @@ function profileAuthMatches(nuid){
   if(!PROFILE_AUTH_ACCOUNT) return false;
   return String(PROFILE_AUTH_ACCOUNT.nuid||'').trim().toUpperCase()===String(nuid||'').trim().toUpperCase();
 }
-async function requestAuthCode(nuid){
-  const res=await fetch('/api/auth/request-code',{
-    method:'POST',credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({nuid})
-  });
-  let data=null;
-  try{ data=await res.json(); }catch(err){ /* non-JSON error body */ }
-  if(!res.ok||!data||data.ok!==true){
-    const error=new Error((data&&data.message)||'Could not send the code.');
-    error.status=res.status;
-    error.code=(data&&data.error)||'';
-    throw error;
-  }
-  return data;
+/* A code request is remembered (per tab) from the moment it is sent, not from
+   the moment the reply arrives. The browser generates the binding nonce
+   itself, so if the reply is lost (timeout, flaky mobile data, a slow mail
+   provider) the email may still arrive and the student can still verify it:
+   /api/auth/verify accepts the NU ID + nonce in place of the challenge id.
+   Without this, a sent code with a lost reply left no field to type it into,
+   and the per-NU-ID cooldown then refused a new one. */
+const AUTH_PENDING_KEY='vtable_otp_pending';
+const AUTH_PENDING_TTL_MS=10*60*1000;
+function newClientNonce(){
+  const bytes=new Uint8Array(24);
+  crypto.getRandomValues(bytes);
+  let bin='';
+  bytes.forEach(b=>{ bin+=String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
-async function verifyAuthCode(challengeId,code){
+let AUTH_PENDING_MEMORY=null;
+function readAuthPending(){
+  try{
+    const stored=JSON.parse(sessionStorage.getItem(AUTH_PENDING_KEY)||'null');
+    if(stored) return stored;
+  }catch(err){ /* storage unavailable */ }
+  return AUTH_PENDING_MEMORY;
+}
+function writeAuthPending(pending){
+  AUTH_PENDING_MEMORY=pending||null;
+  try{
+    if(pending) sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify(pending));
+    else sessionStorage.removeItem(AUTH_PENDING_KEY);
+  }catch(err){ /* storage unavailable: the in-memory copy still works */ }
+}
+// The live code request for this NU ID in this tab, or null.
+function authPendingFor(nuid){
+  const p=readAuthPending();
+  if(!p||String(p.nuid||'').toUpperCase()!==String(nuid||'').trim().toUpperCase()) return null;
+  if(!(Date.now()-Number(p.at)<AUTH_PENDING_TTL_MS)){ writeAuthPending(null); return null; }
+  return p;
+}
+function clearAuthPending(){ writeAuthPending(null); }
+function waitText(seconds){
+  return seconds<90?`${seconds}s`:`${Math.ceil(seconds/60)} min`;
+}
+// Resolves to {pending, info, message}. Whenever it resolves, a code may be on
+// its way and the caller must show the code field. It throws only when no code
+// can have been sent for this request (bad NU ID, daily limit, provider
+// refusal) and no earlier code for this NU ID is still waiting.
+async function requestAuthCode(nuid){
+  const pending={nuid,nonce:newClientNonce(),challengeId:null,email:'',at:Date.now()};
+  const earlier=authPendingFor(nuid);
+  let res=null;
+  let data=null;
+  try{
+    res=await fetch('/api/auth/request-code',{
+      method:'POST',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nuid,client_nonce:pending.nonce})
+    });
+    try{ data=await res.json(); }catch(err){ /* non-JSON error body */ }
+  }catch(err){ /* network failure: the request may still have been served */ }
+
+  if(res&&res.ok&&data&&data.ok===true){
+    pending.challengeId=data.challenge_id||null;
+    pending.email=data.email||'';
+    writeAuthPending(pending);
+    return {pending,info:data,message:data.delivery==='uncertain'
+      ? `Your code is on its way to ${data.email||'your university email'}. It can take a minute or two to arrive.`
+      : `Code sent to ${data.email||'your university email'}. It expires in 10 minutes.`};
+  }
+  // No reply, or a gateway error page instead of our JSON: the server may have
+  // emailed a code before the reply was lost. Assume it did.
+  if(!res||!data||res.status===504){
+    writeAuthPending(pending);
+    return {pending,info:null,
+      message:'The connection dropped, but your code may already be on its way. Enter it below when it arrives.'};
+  }
+  // Refused by the cooldown: a code from an earlier request is still valid.
+  // Keep its field on screen rather than stranding it.
+  if(res.status===429&&data.error==='rate_limited'&&earlier){
+    const wait=Number(res.headers.get('Retry-After'))||0;
+    return {pending:earlier,info:null,
+      message:`We already emailed you a code${earlier.email?` at ${earlier.email}`:''}. Enter it below`
+        +(wait?`, or request a new one in ${waitText(wait)}.`:'.')};
+  }
+  // A definite refusal for this request; an earlier code (if any) still works.
+  if(earlier){
+    return {pending:earlier,info:null,
+      message:`${(data&&data.message)||'Could not send a new code.'} Your earlier code still works, so enter it below.`};
+  }
+  const error=new Error((data&&data.message)||'Could not send the code.');
+  error.status=res.status;
+  error.code=(data&&data.error)||'';
+  throw error;
+}
+async function verifyAuthCode(pending,code){
   const res=await fetch('/api/auth/verify',{
     method:'POST',credentials:'same-origin',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({challenge_id:challengeId,code})
+    body:JSON.stringify({
+      challenge_id:pending.challengeId||undefined,
+      nuid:pending.nuid,
+      client_nonce:pending.nonce,
+      code
+    })
   });
   let data=null;
   try{ data=await res.json(); }catch(err){ /* non-JSON error body */ }
   if(!res.ok||!data||data.ok!==true){
-    throw new Error((data&&data.message)||'That code could not be verified.');
+    const error=new Error((data&&data.message)||'That code could not be verified.');
+    error.code=(data&&data.error)||'';
+    // The code can never succeed now; the next press should request a new one.
+    if(error.code==='invalid_challenge'||error.code==='too_many_attempts'){
+      clearAuthPending();
+      error.restart=true;
+    }
+    throw error;
   }
+  clearAuthPending();
   PROFILE_AUTH_ACCOUNT=(data&&data.account)||null;
   return PROFILE_AUTH_ACCOUNT;
 }
-function showProfileCodeStep(email){
+function showProfileCodeStep(message){
   const row=document.getElementById('profile-code-row');
   const help=document.getElementById('profile-code-help');
   const input=document.getElementById('profile-code');
   if(row) row.hidden=false;
   if(help){
     help.hidden=false;
-    help.textContent=`We sent a 6-digit code to ${email||'your university email'}. It expires in 10 minutes.`;
+    help.textContent=message||'We sent a 6-digit code to your university email. It expires in 10 minutes.';
   }
   if(input){ input.value=''; input.focus(); }
 }
@@ -472,7 +562,7 @@ async function verifyProfileCode(){
   if(status){ status.textContent='Verifying...'; status.classList.remove('is-error'); }
   const pending=PROFILE_AUTH_PENDING;
   try{
-    await verifyAuthCode(pending.challengeId,code);
+    await verifyAuthCode(pending,code);
     PROFILE_AUTH_PENDING=null;
     hideProfileCodeStep();
     updateProfileAuthUi();
@@ -480,6 +570,11 @@ async function verifyProfileCode(){
     PROFILE_SYNC_IN_PROGRESS=false;
     await syncProfile();
   }catch(err){
+    if(err&&err.restart){
+      // Expired or out of attempts: drop the field so sync asks for a new code.
+      PROFILE_AUTH_PENDING=null;
+      hideProfileCodeStep();
+    }
     if(status){ status.textContent=err.message||'That code could not be verified.'; status.classList.add('is-error'); }
   }finally{
     PROFILE_SYNC_IN_PROGRESS=false;
@@ -516,6 +611,7 @@ async function signOutProfile(){
   try{ await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'}); }catch(err){ /* already gone */ }
 }
 window.verifyProfileCode=verifyProfileCode;
+window.authPendingFor=authPendingFor;
 window.signOutProfile=signOutProfile;
 window.clearProfileStorage=clearProfileStorage;
 // ── Use the saved profile to pre-select the schedule tabs ──────────────
@@ -684,6 +780,14 @@ function openProfileModal(){
   renderNotificationPrefs();
   if(input){
     input.value=savedProfile?.nuid || savedNuid || '';
+  }
+  // A code requested before the modal was closed (or the page reloaded) is
+  // still valid; give its field back instead of making the student wait out
+  // the cooldown for a new one.
+  const waiting=authPendingFor(input?.value||'');
+  if(waiting&&!profileAuthMatches(waiting.nuid)){
+    PROFILE_AUTH_PENDING=waiting;
+    showProfileCodeStep(`Enter the code we emailed${waiting.email?` to ${waiting.email}`:' you'}.`);
   }
   if(savedProfile){
     const verified=profileAuthMatches(savedProfile.nuid);
@@ -939,12 +1043,16 @@ async function syncProfile(){
     if(status) status.textContent='Sending a code to your university email...';
     PROFILE_SYNC_IN_PROGRESS=true;
     try{
-      const info=await requestAuthCode(nuid);
-      PROFILE_AUTH_PENDING={nuid,challengeId:info.challenge_id};
-      updateProfileRegistrationFields(nuid);
-      localStorage.setItem(PROFILE_STORAGE_KEY,nuid);
-      showProfileCodeStep(info.email);
-      if(status) status.textContent='Enter the 6-digit code we emailed you.';
+      const result=await requestAuthCode(nuid);
+      // Show the field first: nothing after this may stand between a sent
+      // code and somewhere to type it.
+      PROFILE_AUTH_PENDING=result.pending;
+      showProfileCodeStep(result.message);
+      if(status){ status.textContent='Enter the 6-digit code we emailed you.'; status.classList.remove('is-error'); }
+      try{
+        updateProfileRegistrationFields(nuid);
+        localStorage.setItem(PROFILE_STORAGE_KEY,nuid);
+      }catch(err){ /* storage unavailable; the code step is already shown */ }
       return;
     }catch(err){
       // Fail closed. The public roster fallback is gone, and an auth outage
