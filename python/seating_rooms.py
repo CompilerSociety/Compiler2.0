@@ -15,25 +15,53 @@ from pathlib import Path
 
 import pdfplumber
 
+# Exam dates are typed by hand, so spacing and separators vary from sheet to
+# sheet: "Sat,19,Sep,26", "Sat, 19 Sep 26", "Sat19,Sep,26", "19Sep2026",
+# "Saturday 19-Sep-2026", "Sep 19, 2026", "2026-09-19", "19/09/2026".  Accept
+# any mix of spaces, commas, dots, dashes or slashes (or none at all).
+_WEEKDAY = r"(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*\.?"
+_MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?"
+_SEP = r"[\s,./\-]*"
 DATE = re.compile(
-    r"\b([A-Za-z]{3,9}\s*,\s*\d{1,2}\s*,\s*[A-Za-z]{3,9}\s*,\s*\d{2}|"
-    r"[A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2}|"
-    r"\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|20\d{2}-\d{2}-\d{2})\b"
+    rf"(?<![A-Za-z0-9])(?:"
+    rf"(?:{_WEEKDAY}{_SEP})?\d{{1,2}}(?:st|nd|rd|th)?{_SEP}{_MONTH}{_SEP}(?:20)?\d{{2}}(?!\d)|"
+    rf"(?:{_WEEKDAY}{_SEP})?{_MONTH}{_SEP}\d{{1,2}}(?:st|nd|rd|th)?[\s,./\-]+(?:20)?\d{{2}}(?!\d)|"
+    rf"20\d{{2}}-\d{{1,2}}-\d{{1,2}}(?!\d)|"
+    rf"\d{{1,2}}[./\-]\d{{1,2}}[./\-](?:20)?\d{{2}}(?!\d))",
+    re.I,
 )
-TIME = re.compile(r"\b(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:to|[-–—])\s*(\d{1,2}:\d{2})\s*(AM|PM)?\b", re.I)
+DATE_FIELD = re.compile(r"Date\s*:?\s*(.*?)(?=Slot|Venue|Time|$)", re.I | re.M)
+TIME = re.compile(r"(?<!\d)(\d{1,2}:\d{2})\s*(?:(AM|PM)(?![A-Za-z]))?\s*(?:to|[-–—])\s*(\d{1,2}:\d{2})\s*(?:(AM|PM)(?![A-Za-z]))?", re.I)
 ROOM = re.compile(r"(?:Room\s*No\.?\s*:?|Venue\s*:)\s*(.+?)(?=\s+\d+(?:st|nd|rd|th)\s+Floor|\n|$)", re.I)
 STUDENT = re.compile(r"^\d+\s+(\d{2}[A-Za-z]-\d{4})\s+(.+?)\s+(C\d+R\d+|Chair\s*\d+|Extra\s*\d+|\d+)\s*$", re.I)
 
 
+_MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+
+
 def iso_date(value):
-    value = re.sub(r"\s+", " ", value.replace(',', ' ')).strip()
-    for fmt in ('%a %d %b %y', '%A %d %B %Y', '%a %d %b %Y',
-                '%b %d %Y', '%B %d %Y', '%d %B %Y', '%d %b %Y', '%Y-%m-%d'):
-        try:
-            return datetime.strptime(value, fmt).date().isoformat()
-        except ValueError:
-            pass
-    raise ValueError(f'Unrecognized exam date: {value}')
+    """Read a hand-typed exam date regardless of spacing or separators."""
+    from datetime import date
+    text = value.strip()
+    iso = re.fullmatch(r"(20\d{2})-(\d{1,2})-(\d{1,2})", text)
+    tokens = re.findall(r"[A-Za-z]+|\d+", text)
+    months = [_MONTHS.index(t[:3].lower()) + 1 for t in tokens if t.isalpha() and t[:3].lower() in _MONTHS
+              and not re.fullmatch(r"(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*", t, re.I)]
+    numbers = [int(t) for t in tokens if t.isdigit()]
+    try:
+        if iso:
+            year, month, day = map(int, iso.groups())
+        elif months and len(numbers) >= 2:
+            month, (day, year) = months[0], numbers[:2]
+        elif not months and len(numbers) >= 3:
+            day, month, year = numbers[:3]
+        else:
+            raise ValueError
+        if year < 100:
+            year += 2000
+        return date(year, month, day).isoformat()
+    except ValueError:
+        raise ValueError(f'Unrecognized exam date: {value}') from None
 
 
 def time_range(match):
@@ -82,7 +110,9 @@ def parse_pages(texts):
             else:
                 ignored.append(number)
             continue
-        date, slot = DATE.search(header), TIME.search(header)
+        field = DATE_FIELD.search(header)
+        date = (field and DATE.search(field.group(1))) or DATE.search(header)
+        slot = TIME.search(header)
         if not (room and date and slot):
             errors.append({'page': number, 'reason': 'Missing room, date or time header'})
             continue

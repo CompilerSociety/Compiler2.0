@@ -37,6 +37,15 @@ class SeatingRoomsTest(unittest.TestCase):
         self.assertFalse(broken['complete'])
         self.assertEqual(free_rooms(broken, ['C-306'], '2025-12-15', 600)['status'], 'unknown')
 
+    def test_hand_typed_date_spacing(self):
+        page = ('SEATING PLAN\nDate: {} Slot:9:00-10:00Venue: C 302\n'
+                'S# Roll No. Student Name Seat\n1 23I-0001 Example Student 1')
+        for typed in ['Sat,19,Sep,26', 'Sat,19Sep,26', 'Sat19,Sep,26', 'Sat 19Sep26', '19Sep2026',
+                      'Saturday 19-Sep-2026', 'Sep 19,2026', '19/09/2026', 'Sat , 19 , Sept , 2026']:
+            plan, _ = parse_pages([page.format(typed)])
+            self.assertTrue(plan['complete'], typed)
+            self.assertEqual(plan['dates'], ['2026-09-19'], typed)
+
     def test_example_pdfs(self):
         root = Path(__file__).resolve().parents[1]
         examples = sorted(root.glob('Seating Plan of Final Exam*.pdf'))
