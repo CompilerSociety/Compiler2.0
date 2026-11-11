@@ -55,12 +55,62 @@ async function loadTimetable(school) {
   );
   const data = row?.data;
   if (!data?.tt || typeof data.tt !== "object") return null;
+  const tt = applySubstitutions(data.tt);
   return {
-    tt: data.tt,
-    count: Number.isFinite(data.count) ? data.count : countEntries(data.tt),
+    tt,
+    count: tt === data.tt && Number.isFinite(data.count) ? data.count : countEntries(tt),
     generatedAt: data.generatedAt || null,
     storedAt: row.updatedAt || null,
   };
+}
+
+// One-off weekday swaps announced by the university: on the given date the
+// named weekday follows another day's timetable.  Each swap is served only
+// from the Monday of its week through the date itself (Pakistan time), so it
+// expires on its own and never touches the generated data in MongoDB.
+const DAY_SUBSTITUTIONS = Object.freeze({
+  "2026-11-14": "Monday", // Saturday follows Monday's timetable
+});
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function pakistanToday(now = new Date()) {
+  return new Date(now.getTime() + 5 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function activeSubstitutions(now = new Date()) {
+  const today = pakistanToday(now);
+  const active = [];
+  for (const [iso, sourceDay] of Object.entries(DAY_SUBSTITUTIONS)) {
+    const date = new Date(`${iso}T00:00:00Z`);
+    const weekday = date.getUTCDay();
+    const monday = new Date(date.getTime() - ((weekday + 6) % 7) * 86400000);
+    if (today >= monday.toISOString().slice(0, 10) && today <= iso) {
+      active.push({ targetDay: WEEKDAYS[weekday], sourceDay });
+    }
+  }
+  return active;
+}
+
+function applySubstitutions(tt, now = new Date()) {
+  const swaps = activeSubstitutions(now);
+  if (!swaps.length) return tt;
+  const out = {};
+  for (const [dept, batches] of Object.entries(tt || {})) {
+    out[dept] = {};
+    for (const [batch, sections] of Object.entries(batches || {})) {
+      out[dept][batch] = {};
+      for (const [section, days] of Object.entries(sections || {})) {
+        const next = { ...days };
+        for (const { targetDay, sourceDay } of swaps) {
+          const source = days?.[sourceDay];
+          if (source?.length) next[targetDay] = source.map((entry) => ({ ...entry }));
+          else delete next[targetDay];
+        }
+        out[dept][batch][section] = next;
+      }
+    }
+  }
+  return out;
 }
 
 function normaliseRoom(room) {
@@ -159,3 +209,4 @@ module.exports = async (req, res) => {
 
 module.exports.buildCDRoomOccupancy = buildCDRoomOccupancy;
 module.exports.countEntries = countEntries;
+module.exports.applySubstitutions = applySubstitutions;
