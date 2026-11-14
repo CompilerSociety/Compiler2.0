@@ -16,3 +16,15 @@
   .class-notice h2{font-size:27px;font-weight:500;letter-spacing:-.03em;line-height:1.2}
   html[data-mobile-theme="dark"] .class-notice{color-scheme:dark;--surface-strong:#141414;--surface:#29231e;--text:#f5eee8;--muted:#c0afa1;--accent:#c47d46;--border:rgba(245,238,232,.16);--notice-on-accent:#211307}
 }
+/* Vexilot sponsor poster (js/promo.js) */
+.promo-poster{--pp-w:min(440px,calc(100vw - 32px),calc((100dvh - 120px) * .8));box-sizing:border-box;width:var(--pp-w);max-width:none;max-height:calc(100dvh - 24px);margin:auto;padding:0;border:0;border-radius:20px;background:transparent;overflow:visible;position:relative}
+.promo-poster::backdrop{background:rgba(10,12,10,.7);backdrop-filter:blur(4px)}
+.promo-poster-link{display:block;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35);background:#f4f4f5}
+.promo-poster-link img{display:block;width:100%;height:auto}
+.promo-poster-close{position:absolute;top:10px;right:10px;z-index:1;display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:rgba(20,20,20,.72);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.promo-poster-actions{display:flex;gap:10px;margin-top:12px}
+.promo-poster-actions>*{flex:1;display:grid;place-items:center;min-height:46px;border-radius:999px;font:600 14px 'Figtree','Inter',system-ui,sans-serif;text-decoration:none;cursor:pointer}
+.promo-poster-later{border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff}
+.promo-poster-go{border:0;background:#fff;color:#1f1f1f}
+.promo-poster button:hover,.promo-poster-go:hover{filter:brightness(1.1)}
+.promo-poster :focus-visible{outline:3px solid #b8860b;outline-offset:3px}
